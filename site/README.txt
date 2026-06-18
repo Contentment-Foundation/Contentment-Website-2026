@@ -11,7 +11,7 @@ REPOSITORY LAYOUT
   site/
     index.html     ← primary editable build (~48 KB)
     assets/        ← images referenced by index.html (~2.8 MB)
-    README.txt     ← this file
+    README.txt     ← this file (mirror of ../README.md for local reference)
 
   contentment-home.html   ← single-file build at repo root (~3.8 MB)
                             All images embedded as base64. Use for email,
