@@ -17,9 +17,9 @@
       --mono:'JetBrains Mono','Courier New',monospace;
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink);background:var(--paper);}
+    body{font-family:var(--body);font-size:14px;line-height:1.6;color:var(--ink);background:var(--paper);}
     @media print{
-      body{font-size:11px;background:#fff;}
+      body{font-size:12px;background:#fff;}
       .no-print{display:none;}
       section,table,.phase,.journey-band{break-inside:avoid;}
       @page{margin:14mm 13mm;size:A4;}
@@ -31,11 +31,11 @@
     .doc-nav a:hover{color:var(--teal);}
 
     /* HEADER */
-    .page-header{background:linear-gradient(155deg,var(--green) 0%,var(--green2) 60%,var(--deep) 100%);padding:36px 0 32px;}
+    .page-header{background:linear-gradient(165deg,var(--deep) 0%,var(--deep2) 100%);padding:36px 0 32px;}
     .page-header .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;}
     .wordmark{font-family:'Varela Round',sans-serif;font-size:11.5px;color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
     .page-header h1{font-family:var(--display);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:500;color:#fff;line-height:1.2;}
-    .page-header h1 span{color:#bfeef5;}
+    .page-header h1 span{color:var(--teal);}
     .meta{font-size:11px;color:rgba(255,255,255,.5);text-align:right;line-height:1.8;flex-shrink:0;}
     .meta strong{color:rgba(255,255,255,.8);font-weight:600;}
 
@@ -55,11 +55,11 @@
     .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 
     /* SECTION TITLE */
-    .section-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--green2);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+    .section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--ocean);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
     .section-title::after{content:'';flex:1;height:1px;background:var(--line);}
 
     /* TABLES */
-    table{width:100%;border-collapse:collapse;font-size:12px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
+    table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
     thead tr{background:var(--deep);color:#fff;}
     thead th{padding:8px 12px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
     tbody tr{border-bottom:1px solid var(--line);}
@@ -93,7 +93,6 @@
     .j-drop-head{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
 
     /* META DESCRIPTIONS */
-    .meta-table table thead tr{background:var(--green2);}
     .char-ok{color:var(--green);font-weight:600;}
 
     /* AIO CARDS */
@@ -148,7 +147,7 @@
     /* FOOTER */
     .page-footer{background:var(--deep2);color:rgba(255,255,255,.45);font-size:11px;text-align:center;padding:14px 32px;line-height:1.7;}
     .page-footer strong{color:rgba(255,255,255,.7);}
-    .print-btn{position:fixed;bottom:24px;right:24px;background:var(--green2);color:#fff;border:none;border-radius:999px;padding:11px 20px;font-family:var(--body);font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(60,142,116,.4);transition:transform .15s;}
+    .print-btn{position:fixed;bottom:24px;right:24px;background:var(--ocean);color:#fff;border:none;border-radius:999px;padding:11px 20px;font-family:var(--body);font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(0,128,176,.35);transition:transform .15s,box-shadow .15s;}
     .print-btn:hover{transform:translateY(-2px);}
   </style>
 </head>
@@ -583,9 +582,9 @@
   <section>
     <div class="section-title">Full Detail — Where to Look</div>
     <div class="docs-grid">
-      <div class="doc-card"><h4>Messaging &amp; Copy</h4><p>Taglines, CTAs, banned words — canonical authority for all copy on the site</p><code>docs/MESSAGING-AND-COPY.md</code></div>
-      <div class="doc-card"><h4>Evidence &amp; Research</h4><p>DOIs for Jennings, Durlak — use for citation strategy and AIO factual density</p><code>docs/EVIDENCE-AND-RESEARCH.md</code></div>
-      <div class="doc-card"><h4>Website Architecture</h4><p>Full URL inventory, sitemap structure, campaign page plans</p><code>docs/WEBSITE-ARCHITECTURE.md</code></div>
+      <div class="doc-card"><h4>Messaging &amp; Copy</h4><p>Taglines, CTAs, banned words — canonical authority for all copy on the site</p><code>docs/research/MESSAGING-AND-COPY.md</code></div>
+      <div class="doc-card"><h4>Evidence &amp; Research</h4><p>DOIs for Jennings, Durlak — use for citation strategy and AIO factual density</p><code>docs/research/EVIDENCE-AND-RESEARCH.md</code></div>
+      <div class="doc-card"><h4>Website Architecture</h4><p>Full URL inventory, sitemap structure, campaign page plans</p><code>docs/research/WEBSITE-ARCHITECTURE.md</code></div>
       <div class="doc-card"><h4>PRD</h4><p>Success metrics, feature list, user flows — source for conversion targets</p><code>docs/planning/PRD.md</code></div>
       <div class="doc-card"><h4>Frontend Specification</h4><p>Analytics event implementation, OG tag structure, share button spec</p><code>docs/planning/FRONTEND-SPECIFICATION.md</code></div>
       <div class="doc-card"><h4>Feature Tickets</h4><p>TICKET-080 (analytics) and TICKET-081 (SEO meta) — engineering acceptance criteria</p><code>docs/planning/FEATURE-TICKETS.md</code></div>
