@@ -8,14 +8,14 @@
  * Paste the URL below. Leave '' to hide that link until ready.
  */
 window.TCF_DRIVE_LINKS = {
-  /** Optional: Drive folder for exported brief PDFs/Docs only */
-  folder: '',
+  /** All brief .docx exports — June 2026 */
+  folder: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
 
-  /** The four HTML briefs — link to PDF, Word, or Google Doc export (not .md) */
-  teamBrief: '',
-  techBrief: '',
-  growthBrief: '',
-  automationBrief: '',
+  /** Per-brief: same folder until individual file links are added */
+  teamBrief: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
+  techBrief: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
+  growthBrief: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
+  automationBrief: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
 };
 
 (function () {
