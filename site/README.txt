@@ -17,6 +17,9 @@ REPOSITORY LAYOUT
                             All images embedded as base64. Use for email,
                             offline preview, or sharing one file.
 
+  docs/
+    index.html, *-BRIEF.html   ← source for /docs/* routes (see DEPLOY)
+
 
 WHICH FILE TO EDIT
 ------------------
@@ -34,22 +37,39 @@ WHICH FILE TO EDIT
 PREVIEW LOCALLY
 ---------------
 
-  From the site/ folder:
+  Homepage — from the site/ folder:
 
     python3 -m http.server 8080
 
   Then open http://localhost:8080
 
-  (Or open index.html directly in a browser — external images still load.)
+  Project docs — copy from docs/ first, then serve site/:
+
+    mkdir -p site/docs/tech-brief site/docs/team-brief site/docs/growth-brief && \
+    cp docs/index.html site/docs/index.html && \
+    cp docs/TECH-BRIEF.html site/docs/tech-brief/index.html && \
+    cp docs/TEAM-BRIEF.html site/docs/team-brief/index.html && \
+    cp docs/GROWTH-BRIEF.html site/docs/growth-brief/index.html && \
+    cd site && python3 -m http.server 8080
+
+  Then open http://localhost:8080/docs
 
 
 DEPLOY
 ------
 
-  Upload the entire site/ folder to any static host (Vercel, Netlify,
-  Cloudflare Pages, S3, etc.). index.html is the entry point.
+  Netlify (netlify.toml): publishes site/ and copies docs/*.html into
+  site/docs/ on build. Push to deploy.
 
-  Root domain should serve site/index.html.
+    /              Homepage
+    /docs          Project docs hub
+    /docs/team-brief
+    /docs/tech-brief
+    /docs/growth-brief
+
+  Preview: https://contentmentweb2.netlify.app/docs
+
+  Other hosts: run the docs copy command above, then upload site/.
 
 
 PAGE SECTIONS (anchor links)

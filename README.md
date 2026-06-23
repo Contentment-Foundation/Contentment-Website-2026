@@ -10,6 +10,13 @@ site/
   assets/        ← images referenced by index.html (~2.8 MB)
   README.txt     ← detailed notes (same content as this file)
 
+docs/
+  index.html           ← project docs hub (source for /docs)
+  TEAM-BRIEF.html      ← team brief (source for /docs/team-brief)
+  TECH-BRIEF.html      ← tech brief (source for /docs/tech-brief)
+  GROWTH-BRIEF.html    ← growth brief (source for /docs/growth-brief)
+  *.md                 ← planning & copy reference (repo only)
+
 contentment-home.html   ← single-file build at repo root (~3.8 MB)
                           All images embedded as base64. Use for email,
                           offline preview, or sharing one file.
@@ -23,7 +30,7 @@ contentment-home.html   ← single-file build at repo root (~3.8 MB)
 
 ## Preview locally
 
-From the `site/` folder:
+**Homepage** — from the `site/` folder:
 
 ```bash
 python3 -m http.server 8080
@@ -33,11 +40,34 @@ Then open http://localhost:8080
 
 (Or open `index.html` directly in a browser — external images still load.)
 
+**Project docs** — copy HTML from `docs/` into `site/docs/`, then serve `site/`:
+
+```bash
+mkdir -p site/docs/tech-brief site/docs/team-brief site/docs/growth-brief && \
+cp docs/index.html site/docs/index.html && \
+cp docs/TECH-BRIEF.html site/docs/tech-brief/index.html && \
+cp docs/TEAM-BRIEF.html site/docs/team-brief/index.html && \
+cp docs/GROWTH-BRIEF.html site/docs/growth-brief/index.html && \
+cd site && python3 -m http.server 8080
+```
+
+Then open http://localhost:8080/docs
+
 ## Deploy
 
-Upload the entire `site/` folder to any static host (Vercel, Netlify, Cloudflare Pages, S3, etc.). `index.html` is the entry point.
+**Netlify** (configured in `netlify.toml`): publishes `site/` and runs a build step that copies `docs/*.html` into `site/docs/` before deploy. Push to the connected branch to deploy.
 
-Root domain should serve `site/index.html`.
+| URL | Page |
+|-----|------|
+| `/` | Homepage (`site/index.html`) |
+| `/docs` | Project docs hub |
+| `/docs/team-brief` | Team brief |
+| `/docs/tech-brief` | Technical development brief |
+| `/docs/growth-brief` | Growth, SEO & analytics brief |
+
+Preview deploy: https://contentmentweb2.netlify.app/docs
+
+**Other hosts:** upload the `site/` folder after running the docs copy command above. `index.html` is the homepage entry point.
 
 ## Page sections (anchor links)
 

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contentment.org — Custom Automation & Integrations Brief · Q2 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=Varela+Round&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal:#1FAFC0;--ocean:#0080B0;--deep:#024E70;--deep2:#02374f;
+      --green:#4FA98C;--green2:#3C8E74;--slate:#3C3B43;--ink:#23252b;
+      --paper:#FBFAF7;--paper2:#F2F0EA;--mist:#E8F1F2;--line:rgba(2,78,112,.12);
+      --shadow:0 14px 40px -16px rgba(2,55,79,.18);
+      --orange:#F97316;--orange2:#C2410C;
+      --display:'Newsreader',Georgia,serif;--body:'Inter',system-ui,sans-serif;
+      --mono:'JetBrains Mono','Courier New',monospace;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink);background:var(--paper);}
+    @media print{
+      body{font-size:11px;background:#fff;}
+      .no-print{display:none;}
+      section,table,.flow-block,.sprint-row{break-inside:avoid;}
+      @page{margin:14mm 13mm;size:A4;}
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:0 30px;}
+
+    /* HEADER */
+    .page-header{background:linear-gradient(155deg,var(--ocean) 0%,var(--deep) 60%,var(--deep2) 100%);padding:36px 0 32px;}
+    .page-header .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;}
+    .wordmark{font-family:'Varela Round',sans-serif;font-size:11.5px;color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+    .page-header h1{font-family:var(--display);font-size:clamp(1.4rem,3vw,2.1rem);font-weight:500;color:#fff;line-height:1.2;}
+    .page-header h1 span{color:#7dd3fc;}
+    .meta-tag{font-size:11px;color:rgba(255,255,255,.5);text-align:right;line-height:1.8;flex-shrink:0;}
+    .meta-tag strong{color:rgba(255,255,255,.8);font-weight:600;}
+
+    /* PILL BAND */
+    .pill-band{background:var(--deep2);padding:13px 0;}
+    .pill-band .wrap{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .pill{font-size:11px;font-weight:600;padding:4px 12px;border-radius:99px;white-space:nowrap;}
+    .pill-slack{background:rgba(74,21,75,.45);color:#e879f9;border:1px solid rgba(233,121,249,.3);}
+    .pill-zoom{background:rgba(37,99,235,.2);color:#93c5fd;border:1px solid rgba(37,99,235,.3);}
+    .pill-google{background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.25);}
+    .pill-keela{background:rgba(31,175,192,.2);color:var(--teal);border:1px solid rgba(31,175,192,.3);}
+    .pill-zapier{background:rgba(249,115,22,.15);color:#fdba74;border:1px solid rgba(249,115,22,.25);}
+    .pill-flodesk{background:rgba(236,72,153,.15);color:#f9a8d4;border:1px solid rgba(236,72,153,.25);}
+
+    /* LAYOUT */
+    .main{padding:30px 0 44px;}
+    section{margin-bottom:28px;}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+    /* SECTION TITLE */
+    .section-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+    .section-title::after{content:'';flex:1;height:1px;background:var(--line);}
+
+    /* TABLES */
+    table{width:100%;border-collapse:collapse;font-size:12px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
+    thead tr{background:var(--deep);color:#fff;}
+    thead th{padding:8px 12px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+    tbody tr{border-bottom:1px solid var(--line);}
+    tbody tr:last-child{border-bottom:none;}
+    tbody tr:nth-child(even){background:var(--paper2);}
+    td{padding:8px 12px;color:var(--slate);vertical-align:top;}
+    td strong{color:var(--ink);}
+    td code{font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);}
+
+    /* CODE BLOCKS */
+    .code-block{background:#0f1923;border-radius:12px;padding:15px 18px;font-family:var(--mono);font-size:11px;line-height:1.9;overflow-x:auto;box-shadow:var(--shadow);color:#94a3b8;}
+    .c-key{color:#7dd3fc;} .c-val{color:#86efac;} .c-str{color:#fca5a5;}
+    .c-fn{color:#fcd34d;} .c-comment{color:#3d5670;} .c-op{color:#64748b;}
+    .c-purple{color:#c4b5fd;} .c-teal{color:#5eead4;} .c-orange{color:#fdba74;}
+
+    /* PLATFORM BADGE */
+    .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:.05em;}
+    .b-slack{background:rgba(74,21,75,.15);color:#e879f9;border:1px solid rgba(233,121,249,.2);}
+    .b-zoom{background:rgba(37,99,235,.1);color:#93c5fd;border:1px solid rgba(37,99,235,.2);}
+    .b-google{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);}
+    .b-keela{background:rgba(31,175,192,.1);color:var(--teal);border:1px solid rgba(31,175,192,.2);}
+    .b-make{background:rgba(249,115,22,.1);color:#fdba74;border:1px solid rgba(249,115,22,.2);}
+    .b-flodesk{background:rgba(236,72,153,.1);color:#f9a8d4;border:1px solid rgba(236,72,153,.2);}
+    .b-vercel{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15);}
+
+    /* ARCHITECTURE DIAGRAM */
+    .arch-block{background:linear-gradient(165deg,var(--deep) 0%,var(--deep2) 100%);border-radius:14px;padding:22px 24px;margin-bottom:0;}
+    .arch-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);margin-bottom:14px;}
+    .arch-tree{font-family:var(--mono);font-size:11.5px;line-height:2;color:#94a3b8;}
+    .arch-tree .node-main{color:#e2e8f0;font-weight:600;}
+    .arch-tree .node-platform{color:var(--teal);}
+    .arch-tree .node-detail{color:#4a6480;}
+
+    /* TRIGGER CARDS */
+    .trigger-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .trigger-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
+    .trigger-card .trigger-head{font-size:11px;font-weight:700;color:var(--deep);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+    .trigger-card ul{list-style:none;}
+    .trigger-card li{font-size:11.5px;color:var(--slate);padding:3px 0;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:7px;}
+    .trigger-card li:last-child{border-bottom:none;}
+    .trigger-card li::before{content:'→';color:var(--teal);flex-shrink:0;font-weight:700;}
+
+    /* FLOW BLOCK */
+    .flow-block{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:10px;}
+    .flow-block h4{font-size:12px;font-weight:700;color:var(--deep);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+    .flow-steps{display:flex;flex-direction:column;gap:5px;}
+    .flow-step{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);}
+    .flow-step:last-child{border-bottom:none;}
+    .flow-num{width:20px;height:20px;border-radius:50%;background:var(--deep);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+    .flow-text{font-size:11.5px;color:var(--slate);line-height:1.5;}
+    .flow-text strong{color:var(--ink);}
+
+    /* SPRINT */
+    .sprint-phase{margin-bottom:16px;}
+    .phase-label{font-family:'Varela Round',sans-serif;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:8px;padding:4px 12px;background:rgba(31,175,192,.1);border-radius:6px;display:inline-block;}
+    .sprint-row{display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 14px;margin-bottom:5px;}
+    .sprint-step{width:56px;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--teal);flex-shrink:0;margin-top:2px;}
+    .sprint-text{font-size:12px;color:var(--slate);}
+    .sprint-text strong{color:var(--ink);}
+    .blocker-pill{font-size:9.5px;font-weight:700;background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.25);border-radius:5px;padding:1px 7px;margin-left:6px;text-transform:uppercase;letter-spacing:.04em;}
+
+    /* CHANNEL GRID */
+    .channel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+    .channel-card{background:linear-gradient(155deg,rgba(74,21,75,.35) 0%,var(--deep2) 100%);border-radius:10px;padding:12px 14px;border:1px solid rgba(233,121,249,.15);}
+    .channel-name{font-family:var(--mono);font-size:12px;font-weight:700;color:#e879f9;margin-bottom:4px;}
+    .channel-desc{font-size:11px;color:rgba(255,255,255,.6);}
+    .channel-audience{font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;font-style:italic;}
+
+    /* ENV BLOCK */
+    .env-section{background:#0f1923;border-radius:14px;padding:20px 22px;}
+    .env-group{margin-bottom:16px;}
+    .env-group:last-child{margin-bottom:0;}
+    .env-group-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--teal);margin-bottom:8px;border-bottom:1px solid rgba(31,175,192,.2);padding-bottom:4px;}
+    .env-row{display:flex;gap:12px;padding:4px 0;font-family:var(--mono);font-size:11px;}
+    .env-key{color:#7dd3fc;flex-shrink:0;}
+    .env-comment{color:#3d5670;}
+
+    /* DOCS */
+    .docs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .doc-card{background:linear-gradient(155deg,var(--deep) 0%,var(--deep2) 100%);border-radius:10px;padding:12px 14px;}
+    .doc-card h4{font-size:11.5px;font-weight:600;color:#bfeef5;margin-bottom:3px;}
+    .doc-card p{font-size:10.5px;color:rgba(255,255,255,.6);line-height:1.45;}
+    .doc-card code{font-family:var(--mono);font-size:10px;color:var(--teal);}
+
+    /* FOOTER */
+    .page-footer{background:var(--deep2);color:rgba(255,255,255,.45);font-size:11px;text-align:center;padding:14px 32px;line-height:1.7;}
+    .page-footer strong{color:rgba(255,255,255,.7);}
+    .print-btn{position:fixed;bottom:24px;right:24px;background:var(--ocean);color:#fff;border:none;border-radius:999px;padding:11px 20px;font-family:var(--body);font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(0,128,176,.4);transition:transform .15s;}
+    .print-btn:hover{transform:translateY(-2px);}
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="wrap">
+    <div>
+      <div class="wordmark">The Contentment Foundation</div>
+      <h1>contentment.org<br><span>Custom Automation &amp; Integrations Brief</span></h1>
+    </div>
+    <div class="meta-tag">
+      <strong>Prepared by</strong><br>
+      Somesh Bhardwaj<br>
+      Sr. System Admin · Full Stack AI Engineer<br>
+      The Contentment Foundation<br><br>
+      <strong>Q2 2026 · Engineering &amp; Operations</strong>
+    </div>
+  </div>
+</header>
+
+<div class="pill-band">
+  <div class="wrap">
+    <span class="pill pill-slack">Slack</span>
+    <span class="pill pill-zoom">Zoom</span>
+    <span class="pill pill-google">Google Workspace</span>
+    <span class="pill pill-keela">Keela</span>
+    <span class="pill pill-flodesk">Flodesk</span>
+    <span class="pill pill-zapier">Zapier / Make.com</span>
+  </div>
+</div>
+
+<main class="main">
+<div class="wrap">
+
+  <!-- PRINCIPLE + ARCHITECTURE -->
+  <section>
+    <div class="section-title">Automation Principle &amp; Architecture</div>
+    <div class="grid-2">
+      <div>
+        <div class="arch-block">
+          <div class="arch-label">Event Flow — All Integrations</div>
+          <div class="arch-tree">
+<span class="node-main">Site form / Keela webhook</span><br>
+&nbsp;&nbsp;└── <span class="node-main">Vercel Serverless Fn</span> (POST /api/*)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="node-platform">Slack Webhook</span> <span class="node-detail">— team notifications</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="node-platform">Flodesk API</span> <span class="node-detail">— segment + sequence</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="node-platform">Zoom API</span> <span class="node-detail">— webinar registration</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="node-platform">Google Sheets API</span> <span class="node-detail">— lead logging</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="node-platform">Google Calendar</span> <span class="node-detail">— event creation</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="node-platform">Google Drive</span> <span class="node-detail">— story content</span><br>
+<br>
+<span class="node-main">Third-party events</span><br>
+&nbsp;&nbsp;└── <span class="node-platform">Zapier / Make.com</span> <span class="node-detail">— no-code glue layer</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="node-platform">Keela webhook</span> → Sheets + Slack<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="node-platform">Flodesk event</span> → Sheets log<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="node-platform">Cron Monday 8am</span> → Metrics digest
+          </div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:11.5px;color:var(--slate);margin-bottom:12px;"><strong style="color:var(--ink);">Decision rule:</strong> Write a Vercel fn when the trigger is a user-facing form POST and you need rate limiting, honeypot checks, or an immediate browser response. Use Zapier/Make.com when the trigger is a third-party system event (Keela webhook, Flodesk event, Sheets row) and no browser is waiting on the result.</p>
+        <table>
+          <thead><tr><th>Trigger type</th><th>Best tool</th></tr></thead>
+          <tbody>
+            <tr><td>User-facing form POST</td><td><span class="badge b-vercel">Vercel Fn</span></td></tr>
+            <tr><td>Keela donation event</td><td><span class="badge b-make">Make.com</span> or <span class="badge b-vercel">Vercel Fn</span></td></tr>
+            <tr><td>Flodesk segment event</td><td><span class="badge b-flodesk">Flodesk native</span></td></tr>
+            <tr><td>Sheets → Slack notification</td><td><span class="badge b-make">Make.com</span></td></tr>
+            <tr><td>Cron / weekly digest</td><td><span class="badge b-make">Make.com</span></td></tr>
+            <tr><td>Event RSVP → Zoom + Sheets</td><td><span class="badge b-vercel">Vercel Fn</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTOMATION MATRIX -->
+  <section>
+    <div class="section-title">Full Automation Matrix — Triggers × Destinations</div>
+    <table>
+      <thead><tr><th>#</th><th>Trigger</th><th>Source</th><th>Slack</th><th>Zoom</th><th>G Workspace</th><th>Flodesk</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A1</strong></td><td>School form submitted</td><td><code>/api/school-inquiry</code></td><td>#partnerships</td><td>—</td><td>Sheets (leads)</td><td>Tag: school-inquiry</td></tr>
+        <tr><td><strong>A2</strong></td><td>Newsletter signup</td><td>Flodesk / <code>/api/newsletter</code></td><td>#growth</td><td>—</td><td>Sheets (email log)</td><td>Native workflow</td></tr>
+        <tr><td><strong>A3</strong></td><td>Homeroom member joined</td><td>Keela webhook</td><td>#homeroom</td><td>—</td><td>Sheets (members)</td><td>Welcome sequence</td></tr>
+        <tr><td><strong>A4</strong></td><td>Event RSVP</td><td>Form / Raisely</td><td>#events</td><td>Registrant added</td><td>Calendar invite</td><td>Confirmation email</td></tr>
+        <tr><td><strong>A5</strong></td><td>Story submitted</td><td>Google Form</td><td>#content</td><td>—</td><td>Drive (folder)</td><td>—</td></tr>
+        <tr><td><strong>A6</strong></td><td>Server error (500)</td><td>Vercel fn</td><td>#errors (P1)</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td><strong>A7</strong></td><td>Festival registration</td><td><code>/api/festival-register</code></td><td>#festival-2026</td><td>Webinar reg</td><td>Calendar invite</td><td>Festival sequence</td></tr>
+        <tr><td><strong>A8</strong></td><td>Homeroom password reset</td><td>Admin trigger</td><td>—</td><td>—</td><td>—</td><td>Magic link email</td></tr>
+        <tr><td><strong>A9</strong></td><td>Weekly digest (cron)</td><td>Make.com — Mon 8am</td><td>#metrics digest</td><td>—</td><td>Sheets summary</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SLACK -->
+  <section>
+    <div class="section-title">Slack — Notification Channels &amp; Webhooks</div>
+    <div class="channel-grid">
+      <div class="channel-card"><div class="channel-name">#homeroom</div><div class="channel-desc">New member joins; cancellation alert</div><div class="channel-audience">Core team</div></div>
+      <div class="channel-card"><div class="channel-name">#partnerships</div><div class="channel-desc">School inquiry submitted</div><div class="channel-audience">Partnerships lead + exec</div></div>
+      <div class="channel-card"><div class="channel-name">#growth</div><div class="channel-desc">Newsletter signup spikes; /why shares</div><div class="channel-audience">Marketing</div></div>
+      <div class="channel-card"><div class="channel-name">#events</div><div class="channel-desc">New RSVP; Zoom link generated</div><div class="channel-audience">Events team</div></div>
+      <div class="channel-card"><div class="channel-name">#content</div><div class="channel-desc">Educator story submitted</div><div class="channel-audience">Comms team</div></div>
+      <div class="channel-card"><div class="channel-name">#errors</div><div class="channel-desc">Form errors; API failures; P1 ping</div><div class="channel-audience">Engineering</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="section-title" style="margin-bottom:8px;">School inquiry notification (Block Kit)</div>
+        <div class="code-block" style="font-size:10.5px;">
+<span class="c-op">{</span><br>
+&nbsp;&nbsp;<span class="c-str">"text"</span>: <span class="c-val">":school: New school inquiry"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-str">"blocks"</span>: <span class="c-op">[{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"type"</span>: <span class="c-val">"section"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"fields"</span>: <span class="c-op">[</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-op">{</span><span class="c-str">"type"</span>:<span class="c-val">"mrkdwn"</span><span class="c-op">,</span><span class="c-str">"text"</span>:<span class="c-val">"*School:*\nLincoln Elementary"</span><span class="c-op">},</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-op">{</span><span class="c-str">"type"</span>:<span class="c-val">"mrkdwn"</span><span class="c-op">,</span><span class="c-str">"text"</span>:<span class="c-val">"*Country:*\nKenya"</span><span class="c-op">},</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-op">{</span><span class="c-str">"type"</span>:<span class="c-val">"mrkdwn"</span><span class="c-op">,</span><span class="c-str">"text"</span>:<span class="c-val">"*Contact:*\nAnna Mwangi"</span><span class="c-op">}</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-op">]</span><br>
+&nbsp;&nbsp;<span class="c-op">},{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"type"</span>: <span class="c-val">"actions"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"elements"</span>: <span class="c-op">[{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"type"</span>: <span class="c-val">"button"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"text"</span>: <span class="c-op">{</span><span class="c-str">"type"</span>:<span class="c-val">"plain_text"</span><span class="c-op">,</span><span class="c-str">"text"</span>:<span class="c-val">"View in Sheets"</span><span class="c-op">},</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"url"</span>: <span class="c-val">"https://docs.google.com/spreadsheets/d/..."</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-op">}]</span><br>
+&nbsp;&nbsp;<span class="c-op">}]</span><br>
+<span class="c-op">}</span>
+        </div>
+      </div>
+      <div>
+        <div class="section-title" style="margin-bottom:8px;">Error alert (P1 ping)</div>
+        <div class="code-block" style="font-size:10.5px;">
+<span class="c-op">{</span><br>
+&nbsp;&nbsp;<span class="c-str">"text"</span>: <span class="c-val">":rotating_light: *FORM ERROR* /api/school-inquiry"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-str">"attachments"</span>: <span class="c-op">[{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"color"</span>: <span class="c-val">"#e53e3e"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"fields"</span>: <span class="c-op">[{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"title"</span>: <span class="c-val">"Error"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"value"</span>: <span class="c-val">"Flodesk API returned 503"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-op">},{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"title"</span>: <span class="c-val">"Fallback sent?"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"value"</span>: <span class="c-val">"Yes — mailto shown to user"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"short"</span>: <span class="c-op">true</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-op">}]</span><br>
+&nbsp;&nbsp;<span class="c-op">}]</span><br>
+<span class="c-op">}</span>
+        </div>
+        <div style="background:rgba(31,175,192,.07);border:1px solid rgba(31,175,192,.2);border-radius:9px;padding:10px 13px;margin-top:10px;font-size:11.5px;color:var(--slate);">
+          <strong style="color:var(--deep);">Env vars — store in Vercel (server-only):</strong><br>
+          <code style="font-family:var(--mono);font-size:10.5px;color:var(--teal);">SLACK_WEBHOOK_PARTNERSHIPS</code><br>
+          <code style="font-family:var(--mono);font-size:10.5px;color:var(--teal);">SLACK_WEBHOOK_HOMEROOM</code><br>
+          <code style="font-family:var(--mono);font-size:10.5px;color:var(--teal);">SLACK_WEBHOOK_GROWTH</code><br>
+          <code style="font-family:var(--mono);font-size:10.5px;color:var(--teal);">SLACK_WEBHOOK_EVENTS &nbsp;SLACK_WEBHOOK_ERRORS &nbsp;SLACK_WEBHOOK_METRICS</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZOOM -->
+  <section>
+    <div class="section-title">Zoom — Webinar &amp; Meeting Integration</div>
+    <div class="grid-2">
+      <div>
+        <table style="margin-bottom:12px;">
+          <thead><tr><th>Use case</th><th>Zoom feature</th><th>Trigger</th></tr></thead>
+          <tbody>
+            <tr><td>Festival 2026 virtual session</td><td>Webinar</td><td>RSVP form on site</td></tr>
+            <tr><td>Monthly Homeroom Q&amp;A</td><td>Recurring meeting</td><td>Member RSVP</td></tr>
+            <tr><td>School discovery call</td><td>One-off meeting</td><td>Partnerships books</td></tr>
+            <tr><td>Educator training</td><td>Webinar</td><td>Email announcement</td></tr>
+          </tbody>
+        </table>
+        <div style="background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.15);border-radius:9px;padding:10px 13px;font-size:11.5px;color:var(--slate);">
+          <strong style="color:var(--deep);">Setup:</strong> Create a <strong>Server-to-Server OAuth app</strong> in Zoom Marketplace — no user login required. Scopes: <code>meeting:write:admin</code>, <code>webinar:write:admin</code>, <code>webinar:read:admin</code>.<br><br>
+          <code style="font-family:var(--mono);font-size:10.5px;color:#93c5fd;">ZOOM_ACCOUNT_ID · ZOOM_CLIENT_ID · ZOOM_CLIENT_SECRET · ZOOM_FESTIVAL_WEBINAR_ID</code>
+        </div>
+      </div>
+      <div>
+        <div class="flow-block">
+          <h4><span class="badge b-zoom">Zoom</span> Webinar registration flow</h4>
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-num">1</div><div class="flow-text">User fills <strong>Event RSVP form</strong> on site</div></div>
+            <div class="flow-step"><div class="flow-num">2</div><div class="flow-text"><strong>POST /api/event-rsvp</strong> — body: <code>{ event_id, first_name, last_name, email, zoom_webinar_id }</code></div></div>
+            <div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Server calls <strong>Zoom API</strong> — POST webinar registrant → returns <code>join_url</code></div></div>
+            <div class="flow-step"><div class="flow-num">4</div><div class="flow-text">Append to <strong>Google Sheets</strong> RSVP log</div></div>
+            <div class="flow-step"><div class="flow-num">5</div><div class="flow-text">POST <strong>Slack</strong> → #events channel</div></div>
+            <div class="flow-step"><div class="flow-num">6</div><div class="flow-text"><strong>Flodesk API</strong> — add to "event-attendees" segment → confirmation email with <code>join_url</code></div></div>
+            <div class="flow-step"><div class="flow-num">7</div><div class="flow-text">Browser receives 200 with <strong>join_url displayed</strong></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOOGLE WORKSPACE -->
+  <section>
+    <div class="section-title">Google Workspace — Drive · Sheets · Calendar · Forms</div>
+
+    <div class="grid-2" style="margin-bottom:14px;">
+      <div>
+        <div class="section-title" style="margin-bottom:8px;color:var(--green2);">Google Drive — Content folders</div>
+        <table>
+          <thead><tr><th>Folder</th><th>Purpose</th><th>Access</th></tr></thead>
+          <tbody>
+            <tr><td><code>/TCF Website/Stories — Submissions</code></td><td>Story submissions from Google Form</td><td>Comms team</td></tr>
+            <tr><td><code>/TCF Website/Stories — Published</code></td><td>Approved stories ready for dev handoff</td><td>Comms + Eng</td></tr>
+            <tr><td><code>/TCF Website/Design Assets</code></td><td>OG images, brand assets, event graphics</td><td>Design + Eng</td></tr>
+            <tr><td><code>/TCF Website/Analytics Reports</code></td><td>Monthly Plausible/GA4 exports</td><td>Marketing + Exec</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="section-title" style="margin-bottom:8px;color:var(--green2);">Google Sheets — Lead tracking</div>
+        <table>
+          <thead><tr><th>Sheet</th><th>Populated by</th></tr></thead>
+          <tbody>
+            <tr><td><strong>School Inquiries</strong></td><td><code>/api/school-inquiry</code> → Vercel fn</td></tr>
+            <tr><td><strong>Newsletter Signups</strong></td><td>Flodesk webhook or <code>/api/newsletter</code></td></tr>
+            <tr><td><strong>Event RSVPs</strong></td><td><code>/api/event-rsvp</code> (Zoom join_url stored)</td></tr>
+            <tr><td><strong>Homeroom Members</strong></td><td>Keela webhook → Make.com</td></tr>
+            <tr><td><strong>Weekly Metrics</strong></td><td>Make.com cron — Monday 8am</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="code-block" style="font-size:10.5px;">
+<span class="c-comment">// Append row to Google Sheets — Vercel fn (server-only, via googleapis npm package)</span><br>
+<span class="c-purple">const</span> <span class="c-fn">sheets</span> = <span class="c-fn">google</span>.<span class="c-fn">sheets</span><span class="c-op">({</span> <span class="c-key">version</span>: <span class="c-val">'v4'</span><span class="c-op">,</span> <span class="c-key">auth</span> <span class="c-op">});</span><br>
+<span class="c-purple">await</span> sheets.<span class="c-fn">spreadsheets</span>.<span class="c-fn">values</span>.<span class="c-fn">append</span><span class="c-op">({</span><br>
+&nbsp;&nbsp;<span class="c-key">spreadsheetId</span>: process.<span class="c-fn">env</span>.<span class="c-teal">GOOGLE_SCHOOL_SHEET_ID</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">range</span>: <span class="c-val">'Sheet1!A:H'</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">valueInputOption</span>: <span class="c-val">'USER_ENTERED'</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">requestBody</span>: <span class="c-op">{</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">values</span>: <span class="c-op">[[</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-purple">new</span> <span class="c-fn">Date</span><span class="c-op">().</span><span class="c-fn">toISOString</span><span class="c-op">(),</span> body.<span class="c-key">school_name</span><span class="c-op">,</span> body.<span class="c-key">contact_name</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body.<span class="c-key">contact_email</span><span class="c-op">,</span> body.<span class="c-key">role</span> ?? <span class="c-val">''</span><span class="c-op">,</span> body.<span class="c-key">country</span> ?? <span class="c-val">''</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body.<span class="c-key">message</span> ?? <span class="c-val">''</span><span class="c-op">,</span> <span class="c-val">'new'</span> <span class="c-comment">// status field</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-op">]]</span><br>
+&nbsp;&nbsp;<span class="c-op">}</span><br>
+<span class="c-op">});</span>
+    </div>
+  </section>
+
+  <!-- KEELA WEBHOOK + FLODESK -->
+  <section>
+    <div class="section-title">Keela — Webhook Events &amp; Flodesk Native Sequences</div>
+    <div class="grid-2">
+      <div>
+        <table style="margin-bottom:12px;">
+          <thead><tr><th>Keela event</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><code>donation.completed</code></td><td>Slack #homeroom + Sheets append</td></tr>
+            <tr><td><code>recurring.created</code></td><td>Flodesk: add to homeroom-members → welcome sequence</td></tr>
+            <tr><td><code>recurring.cancelled</code></td><td>Slack #homeroom alert + Flodesk: move to homeroom-churned</td></tr>
+            <tr><td><code>donation.refunded</code></td><td>Slack #errors alert</td></tr>
+          </tbody>
+        </table>
+        <div class="flow-block">
+          <h4><span class="badge b-keela">Keela</span> Webhook handler — <code>/api/keela-webhook</code></h4>
+          <div class="flow-steps">
+            <div class="flow-step"><div class="flow-num">1</div><div class="flow-text"><strong>Verify HMAC-SHA256</strong> signature using <code>KEELA_WEBHOOK_SECRET</code> — reject if invalid (prevents spoofing)</div></div>
+            <div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Parse <code>event_type</code> from payload body</div></div>
+            <div class="flow-step"><div class="flow-num">3</div><div class="flow-text"><code>recurring.created</code>: POST Slack #homeroom → append Sheets row → Flodesk add to "homeroom-members"</div></div>
+            <div class="flow-step"><div class="flow-num">4</div><div class="flow-text"><code>recurring.cancelled</code>: Slack cancellation alert → Flodesk move to "homeroom-churned"</div></div>
+            <div class="flow-step"><div class="flow-num">5</div><div class="flow-text"><strong>Return 200 OK immediately</strong> — Keela retries on non-200 responses</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-title" style="margin-bottom:8px;">Flodesk — native automation sequences</div>
+        <table>
+          <thead><tr><th>Trigger (Flodesk)</th><th>Sequence</th></tr></thead>
+          <tbody>
+            <tr><td>Added to <code>newsletter</code></td><td>Immediate welcome → Day 3 story → Day 7 community</td></tr>
+            <tr><td>Added to <code>homeroom-members</code></td><td>Founding Member welcome → Day 3 impact → Day 7 events invite → Monthly digest</td></tr>
+            <tr><td>Added to <code>school-inquiry</code></td><td>Confirmation: we received your message (partnerships follows up manually)</td></tr>
+            <tr><td>Added to <code>event-attendees</code></td><td>Confirmation + Zoom link → Day-before reminder → Post-event thank you</td></tr>
+            <tr><td>Moved to <code>homeroom-churned</code></td><td>Win-back email — Day 7 after cancellation</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZAPIER / MAKE.COM -->
+  <section>
+    <div class="section-title">Zapier / Make.com — No-Code Glue Layer</div>
+    <table style="margin-bottom:14px;">
+      <thead><tr><th>#</th><th>Trigger</th><th>Action</th><th>Tool</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Z1</strong></td><td>New row in School Inquiries Sheets</td><td>Post Slack → #partnerships</td><td><span class="badge b-make">Make.com</span></td></tr>
+        <tr><td><strong>Z2</strong></td><td>Flodesk: new subscriber joins <code>newsletter</code></td><td>Append row to Newsletter Signups sheet</td><td><span class="badge b-make">Zapier</span></td></tr>
+        <tr><td><strong>Z3</strong></td><td>Keela: donation confirmed (webhook)</td><td>Slack #homeroom + Sheets append</td><td><span class="badge b-make">Make.com</span></td></tr>
+        <tr><td><strong>Z4</strong></td><td>New row in Event RSVPs sheet</td><td>Send Gmail confirmation email</td><td><span class="badge b-make">Zapier</span></td></tr>
+        <tr><td><strong>Z5</strong></td><td>New file in Drive Stories — Submissions</td><td>Post Slack → #content</td><td><span class="badge b-make">Make.com</span></td></tr>
+        <tr><td><strong>Z6</strong></td><td>Monday 8am cron</td><td>Pull Plausible API → post digest to Slack #metrics</td><td><span class="badge b-make">Make.com</span></td></tr>
+        <tr><td><strong>Z7</strong></td><td>New calendar event created</td><td>Post Slack #events with name + link</td><td><span class="badge b-make">Zapier</span></td></tr>
+      </tbody>
+    </table>
+    <div class="grid-2">
+      <div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;">
+        <p style="font-size:11px;font-weight:700;color:var(--deep);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Zapier</p>
+        <ul style="list-style:none;font-size:11.5px;color:var(--slate);">
+          <li style="padding:4px 0;border-bottom:1px solid var(--line);">Best for simple 2-step zaps; non-technical team members</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--line);">Free tier: 100 tasks/month · Starter: ~$20/month</li>
+          <li style="padding:4px 0;">Recommended if the ops team manages automations</li>
+        </ul>
+      </div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;">
+        <p style="font-size:11px;font-weight:700;color:var(--deep);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Make.com</p>
+        <ul style="list-style:none;font-size:11.5px;color:var(--slate);">
+          <li style="padding:4px 0;border-bottom:1px solid var(--line);">Best for complex multi-step flows; conditional logic; data transforms</li>
+          <li style="padding:4px 0;border-bottom:1px solid var(--line);">Free tier: 1,000 operations/month · Core: $9/month</li>
+          <li style="padding:4px 0;">Recommended if an engineer sets up and owns the flows</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENV VARS -->
+  <section>
+    <div class="section-title">Full Environment Variable Reference — All Integrations</div>
+    <div class="env-section">
+      <div class="env-group">
+        <div class="env-group-label">Slack</div>
+        <div class="env-row"><span class="env-key">SLACK_WEBHOOK_PARTNERSHIPS</span><span class="env-comment">=  # https://hooks.slack.com/services/...</span></div>
+        <div class="env-row"><span class="env-key">SLACK_WEBHOOK_HOMEROOM</span><span class="env-comment">=     # new member / cancellation</span></div>
+        <div class="env-row"><span class="env-key">SLACK_WEBHOOK_GROWTH</span><span class="env-comment">=       # newsletter, /why share spikes</span></div>
+        <div class="env-row"><span class="env-key">SLACK_WEBHOOK_EVENTS</span><span class="env-comment">=       # RSVPs, Zoom link generated</span></div>
+        <div class="env-row"><span class="env-key">SLACK_WEBHOOK_CONTENT</span><span class="env-comment">=      # story submissions</span></div>
+        <div class="env-row"><span class="env-key">SLACK_WEBHOOK_ERRORS</span><span class="env-comment">=       # P1 server/API failures</span></div>
+        <div class="env-row"><span class="env-key">SLACK_WEBHOOK_METRICS</span><span class="env-comment">=      # Monday weekly digest</span></div>
+      </div>
+      <div class="env-group">
+        <div class="env-group-label">Zoom</div>
+        <div class="env-row"><span class="env-key">ZOOM_ACCOUNT_ID</span><span class="env-comment">=            # from Zoom Marketplace app</span></div>
+        <div class="env-row"><span class="env-key">ZOOM_CLIENT_ID</span><span class="env-comment">=             # Server-to-Server OAuth</span></div>
+        <div class="env-row"><span class="env-key">ZOOM_CLIENT_SECRET</span><span class="env-comment">=         # never in repo or client-side</span></div>
+        <div class="env-row"><span class="env-key">ZOOM_FESTIVAL_WEBINAR_ID</span><span class="env-comment">=   # pre-created in Zoom Webinars</span></div>
+      </div>
+      <div class="env-group">
+        <div class="env-group-label">Google Workspace</div>
+        <div class="env-row"><span class="env-key">GOOGLE_CALENDAR_ID</span><span class="env-comment">=         # TCF events calendar</span></div>
+        <div class="env-row"><span class="env-key">GOOGLE_SCHOOL_SHEET_ID</span><span class="env-comment">=     # School Inquiries spreadsheet</span></div>
+        <div class="env-row"><span class="env-key">GOOGLE_RSVP_SHEET_ID</span><span class="env-comment">=       # Event RSVPs spreadsheet</span></div>
+        <div class="env-row"><span class="env-key">GOOGLE_METRICS_SHEET_ID</span><span class="env-comment">=    # Weekly metrics sheet</span></div>
+        <div class="env-row"><span class="env-key">GCP_SERVICE_ACCOUNT_JSON</span><span class="env-comment">=   # (already in TECHNICAL-ARCHITECTURE.md)</span></div>
+      </div>
+      <div class="env-group">
+        <div class="env-group-label">Keela + Flodesk</div>
+        <div class="env-row"><span class="env-key">KEELA_WEBHOOK_SECRET</span><span class="env-comment">=       # HMAC-SHA256 verification key — from Keela Admin</span></div>
+        <div class="env-row"><span class="env-key">FLODESK_API_KEY</span><span class="env-comment">=            # (already in TECHNICAL-ARCHITECTURE.md)</span></div>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--slate);margin-top:10px;">All vars go in <strong>Vercel project → Settings → Environment Variables</strong>. Commit <code>.env.example</code> with all key names, no values. Never expose in client-side JavaScript or git history.</p>
+  </section>
+
+  <!-- IMPLEMENTATION SPRINT -->
+  <section>
+    <div class="section-title">Implementation Sequence</div>
+
+    <div class="sprint-phase">
+      <div class="phase-label">Phase 1 — With TICKET-070 / TICKET-080</div>
+      <div class="sprint-row"><div class="sprint-step">Step 1</div><div class="sprint-text"><strong>Slack app + Incoming Webhooks</strong> configured for all 7 channels</div></div>
+      <div class="sprint-row"><div class="sprint-step">Step 2</div><div class="sprint-text"><strong>/api/school-inquiry</strong> → Slack #partnerships + Google Sheets append</div></div>
+      <div class="sprint-row"><div class="sprint-step">Step 3</div><div class="sprint-text"><strong>/api/newsletter</strong> → Flodesk API (Option B Vercel fn)</div></div>
+      <div class="sprint-row"><div class="sprint-step">Step 4</div><div class="sprint-text"><strong>Keela webhook handler</strong> (/api/keela-webhook) — HMAC verify + Slack + Flodesk <span class="blocker-pill">Needs Keela URLs</span></div></div>
+    </div>
+
+    <div class="sprint-phase">
+      <div class="phase-label">Phase 1.5 — After Site Launch</div>
+      <div class="sprint-row"><div class="sprint-step">Step 5</div><div class="sprint-text"><strong>Zoom Server-to-Server OAuth app</strong>; Festival webinar ID created in Zoom Webinars</div></div>
+      <div class="sprint-row"><div class="sprint-step">Step 6</div><div class="sprint-text"><strong>/api/event-rsvp</strong> → Zoom registration + Sheets append + Slack #events + Flodesk confirmation</div></div>
+      <div class="sprint-row"><div class="sprint-step">Step 7</div><div class="sprint-text"><strong>Make.com:</strong> Keela webhook → Sheets (members) as backup/redundancy layer</div></div>
+      <div class="sprint-row"><div class="sprint-step">Step 8</div><div class="sprint-text"><strong>Make.com:</strong> Monday 8am cron → Plausible API → Slack #metrics weekly digest</div></div>
+    </div>
+
+    <div class="sprint-phase">
+      <div class="phase-label">Phase 2 — Homeroom Gated Hub Live</div>
+      <div class="sprint-row"><div class="sprint-step">Step 9</div><div class="sprint-text"><strong>Magic-link auth</strong> → Flodesk trigger for Homeroom member onboarding</div></div>
+      <div class="sprint-row"><div class="sprint-step">Step 10</div><div class="sprint-text"><strong>Google Drive service account</strong>: story submission workflow with Google Forms → Drive folder</div></div>
+      <div class="sprint-row"><div class="sprint-step">Step 11</div><div class="sprint-text"><strong>PostHog</strong> integration (if funnel A/B testing or feature flags required in Phase 2)</div></div>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section>
+    <div class="section-title">Security Notes</div>
+    <div class="grid-2">
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:11.5px;color:var(--slate);align-items:flex-start;">
+          <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>All Slack webhook URLs and Keela HMAC secrets stored in Vercel env — never in code or Slack messages
+        </div>
+        <div style="display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:11.5px;color:var(--slate);align-items:flex-start;">
+          <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>Zoom credentials are Server-to-Server OAuth — no user login flow, no token in browser
+        </div>
+        <div style="display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:11.5px;color:var(--slate);align-items:flex-start;">
+          <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>Google Sheets API calls through service account (<code>GCP_SERVICE_ACCOUNT_JSON</code>) — server-only
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:11.5px;color:var(--slate);align-items:flex-start;">
+          <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>Validate all inbound webhooks: HMAC for Keela; verify <code>User-Agent</code> and IP range for Zoom
+        </div>
+        <div style="display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:11.5px;color:var(--slate);align-items:flex-start;">
+          <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>Rate-limit <code>/api/event-rsvp</code> and <code>/api/keela-webhook</code> at Vercel edge (5 req / 15 min / IP)
+        </div>
+        <div style="display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-size:11.5px;color:var(--slate);align-items:flex-start;">
+          <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>Honeypot field on all site forms — checked server-side before any downstream calls fire
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOCS -->
+  <section>
+    <div class="section-title">Full Detail — Where to Look</div>
+    <div class="docs-grid">
+      <div class="doc-card"><h4>Technical Architecture</h4><p>Full stack, env var baseline, Vercel fn patterns, GCP schema</p><code>docs/planning/TECHNICAL-ARCHITECTURE.md</code></div>
+      <div class="doc-card"><h4>Tech Brief</h4><p>API specs for /api/newsletter, /api/school-inquiry, Flodesk options A/B</p><code>docs/TECH-BRIEF.md</code></div>
+      <div class="doc-card"><h4>Growth Brief</h4><p>Flodesk email sequences, UTM taxonomy, user journey maps</p><code>docs/GROWTH-BRIEF.md</code></div>
+      <div class="doc-card"><h4>Security &amp; Access</h4><p>Auth rules, rate limiting, error handling, 15-item edge-case checklist</p><code>docs/planning/SECURITY-AND-ACCESS.md</code></div>
+      <div class="doc-card"><h4>Feature Tickets</h4><p>TICKET-070 (newsletter), TICKET-080 (analytics) — acceptance criteria</p><code>docs/planning/FEATURE-TICKETS.md</code></div>
+      <div class="doc-card"><h4>PRD</h4><p>Feature definitions, success metrics, user flows — source of truth for scope</p><code>docs/planning/PRD.md</code></div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="page-footer">
+  <strong>The Contentment Foundation</strong> · contentment.org · Custom Automation &amp; Integrations Brief · Q2 2026<br>
+  Prepared by Somesh Bhardwaj · Sr. System Admin, Full Stack AI Engineer · Full docs in <code>docs/</code>
+</footer>
+
+<button class="print-btn no-print" onclick="window.print()">Save as PDF</button>
+</body>
+</html>
