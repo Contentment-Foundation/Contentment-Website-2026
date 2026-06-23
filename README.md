@@ -23,7 +23,7 @@ Phase 1 homepage prototype: static HTML, CSS, and vanilla JavaScript in `site/`.
 | `/docs/growth-brief` | Growth, SEO & analytics brief |
 | `/docs/automation-brief` | Automation & integrations brief |
 
-**Google Drive:** paste share URLs in `docs/drive-links.js` — banners appear on each brief automatically.
+**Google Drive (optional):** PDF/Doc exports of briefs only — not `.md` files. Paste URLs in `docs/drive-links.js`.
 
 ## Repository layout
 

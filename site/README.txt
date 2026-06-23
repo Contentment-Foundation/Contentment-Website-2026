@@ -25,7 +25,8 @@ DEPLOYMENT
     /docs/growth-brief
     /docs/automation-brief
 
-  Google Drive share URLs: edit docs/drive-links.js (one file, all briefs).
+  Google Drive (optional): PDF/Doc brief exports only — not .md files.
+  Edit docs/drive-links.js when share URLs are ready.
 
   Production moves to Vercel after Astro migration (TICKET-002).
 

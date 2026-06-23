@@ -18,25 +18,27 @@ HTML briefs are built from this folder and served under `/docs/` on the **Netlif
 
 Live preview (Netlify, interim): https://contentmentweb2.netlify.app/docs
 
-## Google Drive links
+## Google Drive links (optional)
 
-Upload shareable copies (PDF, Word, or Google Docs) to Google Drive, then paste **Anyone with the link** URLs in **[`drive-links.js`](./drive-links.js)**. One edit updates the docs hub and every brief banner.
+**Markdown stays private.** All `.md` files under `docs/` and `docs/planning/` remain in the GitHub repo only — do not upload them to public Google Drive.
+
+**Optional:** Export an HTML brief as PDF or Google Doc for stakeholders who need Drive access. Paste **Anyone with the link** URLs in **[`drive-links.js`](./drive-links.js)**:
 
 ```javascript
-// docs/drive-links.js — example after upload
 window.TCF_DRIVE_LINKS = {
-  folder: 'https://drive.google.com/drive/folders/…',
+  folder: 'https://drive.google.com/drive/folders/…',  // optional
   teamBrief: 'https://drive.google.com/file/d/…/view?usp=sharing',
-  techBrief: 'https://drive.google.com/file/d/…/view?usp=sharing',
-  // …
+  techBrief: '',
+  growthBrief: '',
+  automationBrief: '',
 };
 ```
 
-Leave a key as `''` to hide that link until the file is uploaded.
+Leave a key as `''` to hide that link. The web briefs on Netlify remain the primary reading experience.
 
 Production target: Vercel → `contentment.org` — see [WEBSITE-ARCHITECTURE.md](./WEBSITE-ARCHITECTURE.md) and [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md).
 
-Markdown sources (`.md`) below are for planning in-repo; they are not published to the site unless converted to HTML.
+Markdown sources (`.md`) below are for planning in-repo only — **not** published to the site or public Drive.
 
 ## Documents
 

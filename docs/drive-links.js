@@ -1,27 +1,21 @@
 /**
- * Google Drive share links for project docs.
+ * Google Drive share links — optional PDF / Word / Google Doc copies of briefs.
  *
- * After uploading to Drive: Share → Anyone with the link → Viewer.
- * Paste the share URL below. Leave '' to hide that link until ready.
+ * Do NOT upload .md planning files from docs/ or docs/planning/ to public Drive.
+ * Those stay in the private GitHub repo only.
  *
- * Edit this file only — all HTML briefs read from here.
+ * If you export a brief for stakeholders: Share → Anyone with the link → Viewer.
+ * Paste the URL below. Leave '' to hide that link until ready.
  */
 window.TCF_DRIVE_LINKS = {
-  /** Optional: folder containing all briefs + planning docs */
+  /** Optional: Drive folder for exported brief PDFs/Docs only */
   folder: '',
 
-  /** Published HTML briefs (web versions) */
+  /** The four HTML briefs — link to PDF, Word, or Google Doc export (not .md) */
   teamBrief: '',
   techBrief: '',
   growthBrief: '',
   automationBrief: '',
-
-  /** Planning markdown exports (Word/PDF on Drive — optional) */
-  websiteArchitecture: '',
-  technicalArchitecture: '',
-  decisions: '',
-  prd: '',
-  messagingCopy: '',
 };
 
 (function () {
@@ -45,17 +39,14 @@ window.TCF_DRIVE_LINKS = {
   }
 
   var labels = {
-    folder: 'All project docs (folder)',
-    teamBrief: 'Team Brief',
-    techBrief: 'Technical Development Brief',
-    growthBrief: 'Growth, SEO & Analytics Brief',
-    automationBrief: 'Automation & Integrations Brief',
-    websiteArchitecture: 'Website Architecture',
-    technicalArchitecture: 'Technical Architecture',
-    decisions: 'Open Technical Decisions',
-    prd: 'PRD',
-    messagingCopy: 'Messaging & Copy',
+    folder: 'Brief exports (folder)',
+    teamBrief: 'Team Brief (PDF / Doc)',
+    techBrief: 'Technical Brief (PDF / Doc)',
+    growthBrief: 'Growth Brief (PDF / Doc)',
+    automationBrief: 'Automation Brief (PDF / Doc)',
   };
+
+  var keys = ['folder', 'teamBrief', 'techBrief', 'growthBrief', 'automationBrief'];
 
   function esc(s) {
     return String(s)
@@ -80,7 +71,7 @@ window.TCF_DRIVE_LINKS = {
       (links.folder
         ? ' <span class="drive-muted">·</span> <a href="' +
           esc(links.folder) +
-          '" target="_blank" rel="noopener noreferrer">All docs folder ↗</a>'
+          '" target="_blank" rel="noopener noreferrer">All brief exports ↗</a>'
         : '') +
       '</div>';
 
@@ -96,19 +87,6 @@ window.TCF_DRIVE_LINKS = {
     if (!container) return;
 
     var links = window.TCF_DRIVE_LINKS || {};
-    var keys = [
-      'folder',
-      'teamBrief',
-      'techBrief',
-      'growthBrief',
-      'automationBrief',
-      'websiteArchitecture',
-      'technicalArchitecture',
-      'decisions',
-      'prd',
-      'messagingCopy',
-    ];
-
     var html = '<ul class="drive-index-list">';
     keys.forEach(function (key) {
       var url = links[key];
@@ -117,7 +95,7 @@ window.TCF_DRIVE_LINKS = {
       if (url) {
         html += '<a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' + esc(label) + ' ↗</a>';
       } else {
-        html += '<span class="pending">' + esc(label) + ' — link not set yet (edit docs/drive-links.js)</span>';
+        html += '<span class="pending">' + esc(label) + ' — optional; edit docs/drive-links.js</span>';
       }
       html += '</li>';
     });
