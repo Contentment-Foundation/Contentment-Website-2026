@@ -1,8 +1,30 @@
-THE CONTENTMENT FOUNDATION — HOMEPAGE
-=====================================
+THE CONTENTMENT FOUNDATION — contentment.org
+=============================================
 
-Static single-page site for contentment.org. No build step, no framework —
-plain HTML, CSS, and vanilla JavaScript.
+Phase 1 homepage prototype in site/ (static HTML, CSS, JS). Full multi-page
+plan: Astro on Vercel — see docs/WEBSITE-ARCHITECTURE.md and
+docs/planning/TECHNICAL-ARCHITECTURE.md.
+
+
+DEPLOYMENT
+----------
+
+  Environment          Host              URL
+  -------------------  ----------------  ----------------------------------
+  Dev preview (now)    Netlify (interim) https://contentmentweb2.netlify.app
+  Production (target)  Vercel            https://contentment.org
+  PR previews          Vercel            *.vercel.app
+
+  Netlify (netlify.toml): publishes site/ and copies docs/*.html into
+  site/docs/ on build. Push to deploy.
+
+    /              Homepage
+    /docs          Project docs hub
+    /docs/team-brief
+    /docs/tech-brief
+    /docs/growth-brief
+
+  Production moves to Vercel after Astro migration (TICKET-002).
 
 
 REPOSITORY LAYOUT
@@ -18,7 +40,8 @@ REPOSITORY LAYOUT
                             offline preview, or sharing one file.
 
   docs/
-    index.html, *-BRIEF.html   ← source for /docs/* routes (see DEPLOY)
+    index.html, *-BRIEF.html   ← source for /docs/* routes (see DEPLOYMENT)
+    planning/                  ← technical architecture, PRD, tickets
 
 
 WHICH FILE TO EDIT
@@ -58,18 +81,7 @@ PREVIEW LOCALLY
 DEPLOY
 ------
 
-  Netlify (netlify.toml): publishes site/ and copies docs/*.html into
-  site/docs/ on build. Push to deploy.
-
-    /              Homepage
-    /docs          Project docs hub
-    /docs/team-brief
-    /docs/tech-brief
-    /docs/growth-brief
-
-  Preview: https://contentmentweb2.netlify.app/docs
-
-  Other hosts: run the docs copy command above, then upload site/.
+  See DEPLOYMENT section above. Netlify is interim; Vercel is production target.
 
 
 PAGE SECTIONS (anchor links)

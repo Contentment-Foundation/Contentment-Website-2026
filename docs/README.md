@@ -6,7 +6,7 @@ Planning and content docs for the contentment.org redesign (Q2 2026). All files 
 
 ## Published briefs (web)
 
-HTML briefs are built from this folder and served under `/docs/` on the Netlify preview. **Edit the `.html` files here** — they are copied into `site/docs/` at deploy (see root [`README.md`](../README.md)).
+HTML briefs are built from this folder and served under `/docs/` on the **Netlify development preview** (interim). **Production** will deploy on **Vercel** after the Astro migration. **Edit the `.html` files here** — they are copied into `site/docs/` at Netlify deploy (see root [`README.md`](../README.md)).
 
 | Page | Source file | URL |
 |------|-------------|-----|
@@ -15,7 +15,9 @@ HTML briefs are built from this folder and served under `/docs/` on the Netlify 
 | **Tech brief** | [TECH-BRIEF.html](./TECH-BRIEF.html) | `/docs/tech-brief` |
 | **Growth brief** | [GROWTH-BRIEF.html](./GROWTH-BRIEF.html) | `/docs/growth-brief` |
 
-Live preview: https://contentmentweb2.netlify.app/docs
+Live preview (Netlify, interim): https://contentmentweb2.netlify.app/docs
+
+Production target: Vercel → `contentment.org` — see [WEBSITE-ARCHITECTURE.md](./WEBSITE-ARCHITECTURE.md) and [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md).
 
 Markdown sources (`.md`) below are for planning in-repo; they are not published to the site unless converted to HTML.
 

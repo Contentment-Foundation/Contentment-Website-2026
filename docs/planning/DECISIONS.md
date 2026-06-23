@@ -1,10 +1,11 @@
 # Open Technical Decisions — contentment.org
 
-> **Status:** Draft — must be resolved before development starts  
+> **Status:** Draft — recommendations recorded for 001–004; awaiting team sign-off  
 > **Last updated:** June 2026  
-> **Owner:** Somesh Bhardwaj · Sr. System Admin, Full Stack AI Engineer
+> **Owner:** Somesh Bhardwaj · Sr. System Admin, Full Stack AI Engineer  
+> **Location:** `docs/planning/DECISIONS.md` (also linked from [Technical Architecture](./TECHNICAL-ARCHITECTURE.md) §15)
 
-Each decision below is a blocker for at least one TICKET. The recommendation and its rationale are given. Record the decision date and chosen option when resolved.
+Each decision below is a blocker for at least one TICKET. **Recommended options for 001–004 are recorded below** — check the box and add a date when the team formally signs off.
 
 ---
 
@@ -18,10 +19,12 @@ Each decision below is a blocker for at least one TICKET. The recommendation and
 | Plausible + GA4 | Plausible as primary, GA4 only if paid Google Ads are running | Yes — GA4 sets cookies |
 | GA4 only | Full Google stack; needed for advanced audiences and Google Ads | Yes |
 
-**Recommendation:** Plausible as primary. Add GA4 only if paid ad campaigns are confirmed for Festival 2026 or Homeroom launch. Avoids cookie banner complexity for Phase 1.
+**Recommendation:** **Plausible only** for Phase 1. Add GA4 only if paid Google Ads campaigns are confirmed for Festival 2026 or Homeroom launch. **Microsoft Clarity** (heatmaps/session replay) may run alongside Plausible for CRO — it is not the primary analytics tool; see DECISION-002 for privacy wording.
+
+**Suggested choice:** Plausible only (add GA4 later if paid ads confirmed).
 
 **Decision:**
-- [ ] Resolved — option chosen: _________________
+- [ ] Signed off — option chosen: **Plausible only**
 - [ ] Date: _________________
 
 ---
@@ -37,10 +40,12 @@ Each decision below is a blocker for at least one TICKET. The recommendation and
 | GA4 added | Yes — GDPR, PECR (UK), ePrivacy (EU) | Cookiebot, Osano, or custom `<dialog>` |
 | Microsoft Clarity | No — Clarity uses session cookies but no personal data tracking by default | Check jurisdiction |
 
-**Recommendation:** Resolve DECISION-001 first. If GA4 is added, use **Osano** (free tier, GDPR/CCPA, no external scripts needed). If Plausible only: no banner, update `/privacy` to state cookieless analytics are in use.
+**Recommendation:** With **Plausible only** (DECISION-001): **no cookie banner**. Update `/privacy` to disclose Plausible (cookieless) and, if Clarity is enabled, that Clarity uses first-party session cookies for heatmaps — no personal data sold. If GA4 is added later, adopt **Osano** (free tier).
+
+**Suggested choice:** No banner for Phase 1; privacy policy disclosure only.
 
 **Decision:**
-- [ ] Resolved — option chosen: _________________
+- [ ] Signed off — option chosen: **No banner — privacy policy disclosure only**
 - [ ] Date: _________________
 
 ---
@@ -78,8 +83,10 @@ await resend.emails.send({
 
 **Env var to add:** `RESEND_API_KEY` (server-only, Vercel env)
 
+**Suggested choice:** Resend.
+
 **Decision:**
-- [ ] Resolved — option chosen: _________________
+- [ ] Signed off — option chosen: **Resend**
 - [ ] Date: _________________
 
 ---
@@ -120,8 +127,10 @@ UPSTASH_REDIS_REST_URL=     # from Upstash dashboard
 UPSTASH_REDIS_REST_TOKEN=   # from Upstash dashboard (server-only)
 ```
 
+**Suggested choice:** `@upstash/ratelimit` + Upstash Redis (free tier).
+
 **Decision:**
-- [ ] Resolved — option chosen: _________________
+- [ ] Signed off — option chosen: **@upstash/ratelimit + Upstash Redis**
 - [ ] Date: _________________
 
 ---
@@ -168,9 +177,9 @@ UPSTASH_REDIS_REST_TOKEN=   # from Upstash dashboard (server-only)
 
 | # | Decision | Status | Date | Chosen |
 |---|----------|--------|------|--------|
-| 001 | Primary analytics tool | Open | — | — |
-| 002 | Cookie consent mechanism | Open | — | — |
-| 003 | Transactional email provider | Open | — | — |
-| 004 | Rate limiting implementation | Open | — | — |
+| 001 | Primary analytics tool | **Recommended** | — | Plausible only |
+| 002 | Cookie consent mechanism | **Recommended** | — | No banner — privacy policy disclosure only |
+| 003 | Transactional email provider | **Recommended** | — | Resend |
+| 004 | Rate limiting implementation | **Recommended** | — | @upstash/ratelimit + Upstash Redis |
 | 005 | Image optimization approach | Open | — | — |
 | 006 | Error monitoring | Open | — | — |

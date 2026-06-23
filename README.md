@@ -1,6 +1,26 @@
-# The Contentment Foundation — Homepage
+# The Contentment Foundation — contentment.org
 
-Static single-page site for [contentment.org](https://contentment.org). No build step, no framework — plain HTML, CSS, and vanilla JavaScript.
+Phase 1 homepage prototype: static HTML, CSS, and vanilla JavaScript in `site/`. Full site plan (multi-page Astro on Vercel) lives in [`docs/`](./docs/).
+
+## Deployment
+
+| Environment | Host | URL | When |
+|-------------|------|-----|------|
+| **Development preview** | Netlify (interim) | [contentmentweb2.netlify.app](https://contentmentweb2.netlify.app) | Now — prototype + internal briefs |
+| **Production** | Vercel | [contentment.org](https://contentment.org) | After Astro migration (`TICKET-002`) |
+| **PR previews** | Vercel | `*.vercel.app` | Per pull request on `main` |
+
+**Now:** `netlify.toml` publishes `site/` and copies `docs/*.html` into `site/docs/` on build. Push to the connected branch to deploy the prototype.
+
+**Target:** Astro 4.x static build on Vercel — see [`docs/planning/TECHNICAL-ARCHITECTURE.md`](./docs/planning/TECHNICAL-ARCHITECTURE.md) and [`docs/WEBSITE-ARCHITECTURE.md`](./docs/WEBSITE-ARCHITECTURE.md).
+
+| Netlify path | Page |
+|--------------|------|
+| `/` | Homepage (`site/index.html`) |
+| `/docs` | Project docs hub |
+| `/docs/team-brief` | Team brief |
+| `/docs/tech-brief` | Technical development brief |
+| `/docs/growth-brief` | Growth, SEO & analytics brief |
 
 ## Repository layout
 
@@ -16,6 +36,7 @@ docs/
   TECH-BRIEF.html      ← tech brief (source for /docs/tech-brief)
   GROWTH-BRIEF.html    ← growth brief (source for /docs/growth-brief)
   *.md                 ← planning & copy reference (repo only)
+  planning/            ← PRD, technical architecture, feature tickets
 
 contentment-home.html   ← single-file build at repo root (~3.8 MB)
                           All images embedded as base64. Use for email,
@@ -53,21 +74,14 @@ cd site && python3 -m http.server 8080
 
 Then open http://localhost:8080/docs
 
-## Deploy
+## Planning docs
 
-**Netlify** (configured in `netlify.toml`): publishes `site/` and runs a build step that copies `docs/*.html` into `site/docs/` before deploy. Push to the connected branch to deploy.
-
-| URL | Page |
+| Doc | Path |
 |-----|------|
-| `/` | Homepage (`site/index.html`) |
-| `/docs` | Project docs hub |
-| `/docs/team-brief` | Team brief |
-| `/docs/tech-brief` | Technical development brief |
-| `/docs/growth-brief` | Growth, SEO & analytics brief |
-
-Preview deploy: https://contentmentweb2.netlify.app/docs
-
-**Other hosts:** upload the `site/` folder after running the docs copy command above. `index.html` is the homepage entry point.
+| Site architecture & URLs | [`docs/WEBSITE-ARCHITECTURE.md`](./docs/WEBSITE-ARCHITECTURE.md) |
+| Technical architecture | [`docs/planning/TECHNICAL-ARCHITECTURE.md`](./docs/planning/TECHNICAL-ARCHITECTURE.md) |
+| Open technical decisions | [`docs/planning/DECISIONS.md`](./docs/planning/DECISIONS.md) |
+| Docs index | [`docs/README.md`](./docs/README.md) |
 
 ## Page sections (anchor links)
 

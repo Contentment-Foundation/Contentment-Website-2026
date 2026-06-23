@@ -313,22 +313,136 @@ Content briefs for both pages must be written and approved before either is buil
 
 ## 6. Environment variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `PUBLIC_SITE_URL` | Yes | `https://contentment.org` |
-| `PUBLIC_KEELA_HOMEROOM_URL` | Yes | Keela checkout for default tier |
-| `PUBLIC_KEELA_TIER_5_URL` | Yes | $5/month product |
-| `PUBLIC_KEELA_TIER_25_URL` | Yes | $25/month |
-| `PUBLIC_KEELA_TIER_100_URL` | Yes | $100/month |
-| `PUBLIC_GA_ID` or `PUBLIC_PLAUSIBLE_DOMAIN` | Yes | Analytics |
-| `FLODESK_API_KEY` | If custom newsletter POST | Server-side only (Vercel function) |
-| `FLODESK_FORM_ID` or embed IDs | Per form | If using Flodesk embeds |
-| `RAISELY_CAMPAIGN_URL` | If fundraise page | Public campaign link |
-| `GCP_CLOUD_SQL_CONNECTION` | Phase 2 | Server-side only — Vercel → Cloud SQL |
-| `GCP_SERVICE_ACCOUNT_JSON` | Phase 2 | Server-side only — never expose to browser |
-| `HOMEROOM_GATE_PASSWORD` | Phase 2 | Vercel edge middleware — never commit |
+**Canonical reference** for all env vars. Store values in **Vercel project → Settings → Environment Variables** (production and preview). Commit `.env.example` with key names only — no values. During Netlify interim dev, only `PUBLIC_*` vars are relevant; server-side vars apply once Astro + Vercel Functions deploy.
 
-Store secrets in **Vercel project environment variables**. Use `.env.example` in repo with empty values.
+Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../AUTOMATION-BRIEF.md). Recommended tool choices: [DECISIONS.md](./DECISIONS.md).
+
+### 6.1 Public (browser-safe — `PUBLIC_` prefix)
+
+| Variable | Phase | Required | Description |
+|----------|-------|----------|-------------|
+| `PUBLIC_SITE_URL` | 1 | Yes | `https://contentment.org` |
+| `PUBLIC_KEELA_TIER_5_URL` | 1 | Yes | Keela hosted checkout — $5/month Homeroom tier |
+| `PUBLIC_KEELA_TIER_25_URL` | 1 | Yes | Keela hosted checkout — $25/month tier |
+| `PUBLIC_KEELA_TIER_100_URL` | 1 | Yes | Keela hosted checkout — $100/month tier |
+| `PUBLIC_PLAUSIBLE_DOMAIN` | 1 | Yes* | Plausible analytics domain (*recommended — see DECISION-001) |
+| `PUBLIC_GA_ID` | 1 | If GA4 added | Google Analytics 4 measurement ID — only if paid ads confirmed |
+| `PUBLIC_RAISELY_CAMPAIGN_URL` | 1.5 | If fundraise page | Raisely peer-to-peer campaign link |
+
+### 6.2 Core integrations (server-only)
+
+| Variable | Phase | Required | Description |
+|----------|-------|----------|-------------|
+| `FLODESK_API_KEY` | 1 | If custom newsletter POST | Flodesk REST API — `/api/newsletter` |
+| `FLODESK_FORM_ID` | 1 | Per embed | Flodesk embed form IDs (if using embeds instead of API) |
+
+### 6.3 Rate limiting — Upstash (server-only)
+
+| Variable | Phase | Required | Description |
+|----------|-------|----------|-------------|
+| `UPSTASH_REDIS_REST_URL` | 1+ | Yes | Upstash Redis REST URL — shared by rate limit + webhook idempotency |
+| `UPSTASH_REDIS_REST_TOKEN` | 1+ | Yes | Upstash Redis REST token — never expose to browser |
+
+Used by `@upstash/ratelimit` on all `/api/*` routes (5 req / 15 min / IP). Same Redis instance for Keela webhook deduplication (see [SECURITY-AND-ACCESS](./SECURITY-AND-ACCESS.md) §8).
+
+### 6.4 Transactional email — Resend (server-only)
+
+| Variable | Phase | Required | Description |
+|----------|-------|----------|-------------|
+| `RESEND_API_KEY` | 1+ | Yes | Resend API key — school inquiry notifications, magic-link emails (Phase 2) |
+
+Requires verified sending domain (`contentment.org`). See DECISION-003.
+
+### 6.5 Slack webhooks (server-only)
+
+| Variable | Phase | Channel | Trigger |
+|----------|-------|---------|---------|
+| `SLACK_WEBHOOK_PARTNERSHIPS` | 1+ | `#partnerships` | School form submit (`/api/school-inquiry`) |
+| `SLACK_WEBHOOK_HOMEROOM` | 1+ | `#homeroom` | Keela donation / recurring created or cancelled |
+| `SLACK_WEBHOOK_GROWTH` | 1+ | `#growth` | Newsletter signup spikes |
+| `SLACK_WEBHOOK_EVENTS` | 1.5 | `#events` | Event RSVP, Zoom link generated |
+| `SLACK_WEBHOOK_CONTENT` | 1.5 | `#content` | Educator story submitted (Google Form workflow) |
+| `SLACK_WEBHOOK_ERRORS` | 1+ | `#errors` | API 500 / form failures (P1 alert) |
+| `SLACK_WEBHOOK_METRICS` | 1.5 | `#metrics` | Weekly Plausible digest (Make.com cron) |
+
+### 6.6 Zoom — event registration (server-only)
+
+| Variable | Phase | Required | Description |
+|----------|-------|----------|-------------|
+| `ZOOM_ACCOUNT_ID` | 1.5 | If `/api/event-rsvp` | Zoom Server-to-Server OAuth account ID |
+| `ZOOM_CLIENT_ID` | 1.5 | If `/api/event-rsvp` | Zoom OAuth app client ID |
+| `ZOOM_CLIENT_SECRET` | 1.5 | If `/api/event-rsvp` | Zoom OAuth app client secret |
+| `ZOOM_FESTIVAL_WEBINAR_ID` | 1.5 | If Festival virtual | Pre-created webinar ID in Zoom dashboard |
+
+### 6.7 Keela webhooks (server-only)
+
+| Variable | Phase | Required | Description |
+|----------|-------|----------|-------------|
+| `KEELA_WEBHOOK_SECRET` | 1+ | Yes | HMAC-SHA256 secret for `/api/keela-webhook` signature verification |
+
+### 6.8 Google Workspace (server-only)
+
+| Variable | Phase | Required | Description |
+|----------|-------|----------|-------------|
+| `GCP_SERVICE_ACCOUNT_JSON` | 1+ | If Sheets/Calendar | Service account JSON — Sheets append, Calendar events |
+| `GOOGLE_SCHOOL_SHEET_ID` | 1+ | If school form → Sheets | School inquiries log spreadsheet |
+| `GOOGLE_RSVP_SHEET_ID` | 1.5 | If event RSVP | Event registration log spreadsheet |
+| `GOOGLE_METRICS_SHEET_ID` | 1.5 | If weekly digest | Metrics summary spreadsheet |
+| `GOOGLE_CALENDAR_ID` | 1.5 | If calendar sync | Public events calendar ID |
+
+### 6.9 Homeroom gate & database (Phase 2+)
+
+| Variable | Phase | Required | Description |
+|----------|-------|----------|-------------|
+| `HOMEROOM_GATE_PASSWORD` | 2 | If gated hub | Shared password for edge middleware — rotate via Vercel env |
+| `GCP_CLOUD_SQL_CONNECTION` | 2+ | If custom DB | Cloud SQL connection string — Vercel → PostgreSQL |
+| `SENTRY_DSN` | 1.5 | Optional | Error monitoring — see DECISION-006 |
+
+### 6.10 Example `.env.example` (key names only)
+
+```bash
+# Public
+PUBLIC_SITE_URL=
+PUBLIC_KEELA_TIER_5_URL=
+PUBLIC_KEELA_TIER_25_URL=
+PUBLIC_KEELA_TIER_100_URL=
+PUBLIC_PLAUSIBLE_DOMAIN=
+PUBLIC_RAISELY_CAMPAIGN_URL=
+
+# Server — core
+FLODESK_API_KEY=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+RESEND_API_KEY=
+
+# Server — Slack
+SLACK_WEBHOOK_PARTNERSHIPS=
+SLACK_WEBHOOK_HOMEROOM=
+SLACK_WEBHOOK_GROWTH=
+SLACK_WEBHOOK_EVENTS=
+SLACK_WEBHOOK_CONTENT=
+SLACK_WEBHOOK_ERRORS=
+SLACK_WEBHOOK_METRICS=
+
+# Server — Zoom (Phase 1.5)
+ZOOM_ACCOUNT_ID=
+ZOOM_CLIENT_ID=
+ZOOM_CLIENT_SECRET=
+ZOOM_FESTIVAL_WEBINAR_ID=
+
+# Server — Keela + Google
+KEELA_WEBHOOK_SECRET=
+GCP_SERVICE_ACCOUNT_JSON=
+GOOGLE_SCHOOL_SHEET_ID=
+GOOGLE_RSVP_SHEET_ID=
+GOOGLE_METRICS_SHEET_ID=
+GOOGLE_CALENDAR_ID=
+
+# Phase 2+
+HOMEROOM_GATE_PASSWORD=
+GCP_CLOUD_SQL_CONNECTION=
+SENTRY_DSN=
+```
 
 ---
 
@@ -557,3 +671,4 @@ Run in sequence. `hello@contentment.org` email must not be interrupted during cu
 | 2026-06 | Stack confirmed: Vercel deploy, Flodesk newsletter, flexible forms (Flodesk/Keela/Raisely/custom), GCP Cloud SQL optional Phase 2. |
 | 2026-06 | Committed to CMS path: markdown-in-repo (Phase 1) → Sanity (Phase 1.5); added rationale. Added /impact vs /about/impact content boundary definition to routing section. |
 | 2026-06 | Added: Astro config spec (§8), vercel.json with CSP (§9), rate limiting with @upstash/ratelimit (§10), GitHub Actions CI/CD pipeline (§11), DNS cutover runbook (§12), updated performance and observability sections. DECISIONS.md created for 6 open choices. |
+| 2026-06 | §6 env vars consolidated: Upstash, Resend, Slack, Zoom, Keela webhook, Google Workspace — single canonical table. Recommendations recorded in DECISIONS 001–004. |

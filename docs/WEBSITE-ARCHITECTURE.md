@@ -16,10 +16,10 @@ This document is the canonical reference for site structure, URL planning, conte
 |----------|------:|
 | Top-level navigation pages | 7 |
 | Sub-pages (nested under About & Get Involved) | 15 |
-| Standalone utility pages | 4 |
+| Standalone utility pages | 5 |
 | Hidden Homeroom (members-only) pages | 4 |
 | Seasonal / campaign pages (not in permanent nav) | 2+ |
-| **Approximate total URLs at launch** | **~30** |
+| **Approximate total URLs at launch** | **~31** |
 
 ---
 
@@ -72,7 +72,8 @@ flowchart TB
         schools_link["→ /schools"]
     end
 
-    subgraph utility["Standalone (4)"]
+    subgraph utility["Standalone (5)"]
+        events["/events ◆"]
         press["/press"]
         updates["/updates"]
         privacy["/privacy"]
@@ -95,7 +96,7 @@ flowchart TB
     style monthly fill:#4FA98C,color:#fff
 ```
 
-★ = Phase 1 priority
+★ = Phase 1 priority · ◆ = Phase 1.5 (target soon after launch)
 
 ---
 
@@ -177,12 +178,35 @@ Monthly giving CTAs across the site (nav pill, hero, Homeroom section) should re
 
 ---
 
-## Standalone utility pages (4)
+## Events & Experiences — `/events`
+
+Not in main nav at launch; linked from footer, Homeroom welcome emails, `/give/monthly`, and campaign pages. Belief Step 5 in the messaging brief — the retention path that makes Homeroom membership feel worth renewing.
+
+| Field | Detail |
+|-------|--------|
+| **URL** | `/events` |
+| **Phase** | **1.5** — prioritize as close to Phase 1 launch as possible |
+| **Blocker** | 2026 event calendar must be confirmed (see [TEAM-BRIEF](./TEAM-BRIEF.md)) |
+| **Purpose** | Festival block, member workshops, retreats, Community Town Hall, past recaps; RSVP for public events; member-only events show gate |
+
+**Suggested content:**
+
+- Event cards with access badges (public / members-only / invitation)
+- Contentment Festival 2026 block (links to `/festival` or `/festival/2026` when live)
+- Email capture for waitlist when dates are TBD
+- Past event recaps (archive)
+
+**Technical note:** RSVP and Zoom registration via Vercel API (`/api/event-rsvp`) — see [AUTOMATION-BRIEF](./AUTOMATION-BRIEF.md) and [Technical Architecture](./planning/TECHNICAL-ARCHITECTURE.md) §6.
+
+---
+
+## Standalone utility pages (5)
 
 Not in main nav; linked from footer, legal flows, press outreach, and campaigns.
 
 | Label | URL | Purpose |
 |-------|-----|---------|
+| **Events & Experiences** | `/events` | Workshops, Festival, retreats, member events — **Phase 1.5** |
 | **Press & Media** | `/press` | Media coverage, brand assets, press kit, journalist contact. |
 | **Newsletter Signup** | `/updates` | Dedicated opt-in page (separate from footer widget). |
 | **Privacy Policy** | `/privacy` | Privacy policy. |
@@ -264,7 +288,7 @@ These are **not** part of permanent site navigation. Built for specific moments,
 
 ## Complete URL inventory
 
-### Permanent site (~26 URLs)
+### Permanent site (~27 URLs)
 
 | URL | Nav visibility | Phase |
 |-----|----------------|-------|
@@ -286,6 +310,7 @@ These are **not** part of permanent site navigation. Built for specific moments,
 | `/give/fundraise` | Get Involved sub-nav | 2 |
 | `/give/volunteer` | Get Involved sub-nav | 2 |
 | `/give/other` | Get Involved sub-nav | 2 |
+| `/events` | Footer / cross-links | **1.5** |
 | `/press` | Footer / utility | 2 |
 | `/updates` | Footer / utility | 2 |
 | `/privacy` | Footer / legal | 2 |
@@ -313,6 +338,7 @@ These are **not** part of permanent site navigation. Built for specific moments,
 | 5 | Festival URL & versioning | `/festival` vs. `/festival/YYYY` | Open |
 | 6 | Homeroom sub-page content | 3 gated pages beyond hub | TBD |
 | 7 | `/impact` vs. `/about/impact` | Two impact surfaces — clarify content split to avoid duplication | Needs content brief |
+| 8 | Event calendar 2026 | Dates for workshops, Festival, Town Hall | Blocks `/events` build |
 
 ---
 
@@ -320,20 +346,53 @@ These are **not** part of permanent site navigation. Built for specific moments,
 
 ### Scope
 
-- **~30 URLs** at launch, including sub-pages and hidden Homeroom pages.
-- **Phase 1** focuses on five user-facing priorities (see table above); remaining pages can ship incrementally.
+- **~31 URLs** at full scope, including sub-pages, `/events`, and hidden Homeroom pages.
+- **Phase 1** focuses on five user-facing priorities (see table above); `/events` targets Phase 1.5 as close to launch as possible.
 - All URL slugs are **provisional** until brainstorm and team agreement.
 
-### Technical context (current repo)
+### Technical context (confirmed stack)
 
 | Item | Detail |
 |------|--------|
-| Stack (prototype) | Static HTML, CSS, vanilla JS — no build step |
-| Entry point | `site/index.html` |
-| Design tokens | Newsreader, Inter, Varela Round; teal/ocean/deep/green/paper palette (see `README.md`) |
-| Donations | Keela integration pending — CTAs currently placeholder `#` |
-| Newsletter | Form present; backend not wired |
-| Deploy | Upload `site/` to static host; root domain serves `index.html` |
+| **Production hosting** | **Vercel** — `main` → contentment.org; PR branches → preview URLs |
+| **Development / interim** | **Netlify** — publishes `site/` prototype + internal docs briefs (`netlify.toml`); use until Astro migration lands on Vercel |
+| **Target framework** | **Astro 4.x** — static pages + Vercel Serverless Functions for `/api/*` |
+| **Prototype (current)** | Static HTML, CSS, vanilla JS in `site/index.html` — no build step |
+| **Newsletter** | **Flodesk** — embed or `/api/newsletter` → Flodesk API |
+| **Donations** | **Keela** — redirect to hosted checkout URLs (`PUBLIC_KEELA_TIER_*_URL`) |
+| **Forms** | Flodesk / Keela / Raisely / custom Vercel API (per form) |
+| **Database** | None for Phase 1; optional **GCP Cloud SQL** Phase 2+ |
+| **CMS** | `stories.json` + markdown in repo (Phase 1) → Sanity (Phase 1.5) |
+| **Design tokens** | Newsreader, Inter, Varela Round; teal/ocean/deep/green/paper palette |
+
+Full stack, env vars, CI/CD, and DNS cutover: [`planning/TECHNICAL-ARCHITECTURE.md`](./planning/TECHNICAL-ARCHITECTURE.md). Open technical choices: [`planning/DECISIONS.md`](./planning/DECISIONS.md).
+
+### Deployment model
+
+```mermaid
+flowchart LR
+    subgraph now["Now — development"]
+        netlify["Netlify"]
+        site_proto["site/ prototype + docs briefs"]
+        site_proto --> netlify
+    end
+
+    subgraph target["Target — production"]
+        github["GitHub"]
+        vercel["Vercel"]
+        astro["Astro build"]
+        github --> vercel --> astro
+    end
+
+    now -.->|"Astro migration TICKET-002"| target
+```
+
+| Environment | Host | URL | Branch |
+|-------------|------|-----|--------|
+| Prototype preview | Netlify (interim) | `contentmentweb2.netlify.app` | Connected branch |
+| Production | Vercel | `contentment.org` | `main` |
+| PR preview | Vercel | `*.vercel.app` | PR branches |
+| Local (Astro) | `astro dev` | `localhost:4321` | — |
 
 ### Content & UX principles
 
@@ -363,6 +422,9 @@ Content teams should define clear boundaries so these pages do not duplicate eac
 | Voice & tone guide | [`VOICE-AND-TONE.md`](./VOICE-AND-TONE.md) |
 | Docs index | [`README.md`](./README.md) |
 | Planning & execution | [`planning/`](./planning/) |
+| Technical architecture | [`planning/TECHNICAL-ARCHITECTURE.md`](./planning/TECHNICAL-ARCHITECTURE.md) |
+| Open technical decisions | [`planning/DECISIONS.md`](./planning/DECISIONS.md) |
+| Automation & webhooks | [`AUTOMATION-BRIEF.md`](./AUTOMATION-BRIEF.md) |
 | Homepage build & dev notes | [`README.md`](../README.md) |
 | Local site reference | [`site/README.txt`](../site/README.txt) |
 | Homepage prototype | [`site/index.html`](../site/index.html) |
@@ -376,3 +438,4 @@ Content teams should define clear boundaries so these pages do not duplicate eac
 | 2026-06 | Initial architecture document created from planning brief. Status: draft, under review. |
 | 2026-06 | Cross-linked with Messaging & Copy brief and docs index. |
 | 2026-06 | Messaging brief renamed to `MESSAGING-AND-COPY.md`. |
+| 2026-06 | Synced with confirmed stack (Vercel production, Netlify interim dev). Added `/events` (Phase 1.5). Linked TECHNICAL-ARCHITECTURE and DECISIONS. |

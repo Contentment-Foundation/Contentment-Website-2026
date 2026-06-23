@@ -322,6 +322,8 @@ Flodesk handles email delivery natively. These workflows should be configured di
 
 ## Full Environment Variable Reference
 
+> **Canonical table:** [TECHNICAL-ARCHITECTURE.md §6](./planning/TECHNICAL-ARCHITECTURE.md#6-environment-variables) — all keys below are summarized there. Do not duplicate values in this file.
+
 ```bash
 # ─── Slack ───────────────────────────────────────────────────────────────────
 SLACK_WEBHOOK_PARTNERSHIPS=
