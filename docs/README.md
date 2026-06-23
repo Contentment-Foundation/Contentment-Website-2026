@@ -45,7 +45,7 @@ See [`planning/README.md`](./planning/README.md) for the build hierarchy.
 
 ## Published briefs (web) — summaries only
 
-HTML briefs are **not** replacements for `planning/`. They are styled one-pagers for reading on Netlify (`/docs`). **Edit `.html` here**; Netlify copies them to `site/docs/` (see root [`README.md`](../README.md)).
+HTML briefs are **not** replacements for `planning/`. They are styled one-pagers for reading on Netlify (`/docs`). **Edit `.html` here**; run [`../scripts/copy-docs.sh`](../scripts/copy-docs.sh) locally (or let Netlify run it on deploy) to copy into `site/docs/`.
 
 | Page | Source file | Canonical detail lives in… |
 |------|-------------|---------------------------|

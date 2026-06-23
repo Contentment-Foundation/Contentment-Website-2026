@@ -72,16 +72,12 @@ PREVIEW LOCALLY
 
   Project docs — copy from docs/ first, then serve site/:
 
-    mkdir -p site/docs/tech-brief site/docs/team-brief site/docs/growth-brief site/docs/automation-brief && \
-    cp docs/index.html site/docs/index.html && \
-    cp docs/drive-links.js site/docs/drive-links.js && \
-    cp docs/TECH-BRIEF.html site/docs/tech-brief/index.html && \
-    cp docs/TEAM-BRIEF.html site/docs/team-brief/index.html && \
-    cp docs/GROWTH-BRIEF.html site/docs/growth-brief/index.html && \
-    cp docs/AUTOMATION-BRIEF.html site/docs/automation-brief/index.html && \
+    ./scripts/copy-docs.sh
     cd site && python3 -m http.server 8080
 
   Then open http://localhost:8080/docs
+
+  (site/docs/ is gitignored — re-run copy-docs.sh after editing docs/*.html.)
 
 
 DEPLOY
