@@ -14,8 +14,25 @@ HTML briefs are built from this folder and served under `/docs/` on the **Netlif
 | **Team brief** | [TEAM-BRIEF.html](./TEAM-BRIEF.html) | `/docs/team-brief` |
 | **Tech brief** | [TECH-BRIEF.html](./TECH-BRIEF.html) | `/docs/tech-brief` |
 | **Growth brief** | [GROWTH-BRIEF.html](./GROWTH-BRIEF.html) | `/docs/growth-brief` |
+| **Automation brief** | [AUTOMATION-BRIEF.html](./AUTOMATION-BRIEF.html) | `/docs/automation-brief` |
 
 Live preview (Netlify, interim): https://contentmentweb2.netlify.app/docs
+
+## Google Drive links
+
+Upload shareable copies (PDF, Word, or Google Docs) to Google Drive, then paste **Anyone with the link** URLs in **[`drive-links.js`](./drive-links.js)**. One edit updates the docs hub and every brief banner.
+
+```javascript
+// docs/drive-links.js — example after upload
+window.TCF_DRIVE_LINKS = {
+  folder: 'https://drive.google.com/drive/folders/…',
+  teamBrief: 'https://drive.google.com/file/d/…/view?usp=sharing',
+  techBrief: 'https://drive.google.com/file/d/…/view?usp=sharing',
+  // …
+};
+```
+
+Leave a key as `''` to hide that link until the file is uploaded.
 
 Production target: Vercel → `contentment.org` — see [WEBSITE-ARCHITECTURE.md](./WEBSITE-ARCHITECTURE.md) and [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md).
 

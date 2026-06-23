@@ -175,6 +175,9 @@
   </div>
 </header>
 
+<script>window.TCF_DRIVE_INDEX = true;</script>
+<script src="drive-links.js"></script>
+
 <main class="main">
   <div class="wrap">
     <div class="section-label">Briefs</div>
@@ -200,9 +203,20 @@
         <p>GA4 events, conversion funnel, meta descriptions, schema, email sequences, and launch checklist.</p>
         <span class="card-link">Read growth brief →</span>
       </a>
+
+      <a class="card" href="automation-brief/">
+        <span class="card-tag tag-tech">Engineering · Ops</span>
+        <h2>Automation &amp; Integrations Brief</h2>
+        <p>Slack, Zoom, Keela webhooks, Flodesk sequences, Google Sheets — triggers and env vars.</p>
+        <span class="card-link">Read automation brief →</span>
+      </a>
     </div>
 
-    <p class="note"><strong>Internal use.</strong> These pages support planning and alignment for the contentment.org rebuild. Markdown source files live in the repo under <code>docs/</code>; HTML versions here are copied to Netlify on deploy.<br><br><strong>Deployment:</strong> <strong>Netlify</strong> (interim) serves this docs hub and the <code>site/</code> prototype at <a href="https://contentmentweb2.netlify.app/docs" style="color:var(--ocean);">contentmentweb2.netlify.app</a>. <strong>Vercel</strong> is production for <code>contentment.org</code> after the Astro migration.</p>
+    <div class="section-label" style="margin-top:28px;">Google Drive</div>
+    <p class="note" style="margin-bottom:12px;"><strong>Shareable copies.</strong> Upload briefs and planning docs to Google Drive, then paste share URLs in <code>docs/drive-links.js</code> (one file updates every page).</p>
+    <div id="drive-links-list" class="note" style="background:#fff;border:1px solid var(--line);"></div>
+
+    <p class="note" style="margin-top:16px;"><strong>Internal use.</strong> These pages support planning and alignment for the contentment.org rebuild. Markdown source files live in the repo under <code>docs/</code>; HTML versions here are copied to Netlify on deploy.<br><br><strong>Deployment:</strong> <strong>Netlify</strong> (interim) serves this docs hub and the <code>site/</code> prototype at <a href="https://contentmentweb2.netlify.app/docs" style="color:var(--ocean);">contentmentweb2.netlify.app</a>. <strong>Vercel</strong> is production for <code>contentment.org</code> after the Astro migration.</p>
   </div>
 </main>
 

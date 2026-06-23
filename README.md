@@ -21,6 +21,9 @@ Phase 1 homepage prototype: static HTML, CSS, and vanilla JavaScript in `site/`.
 | `/docs/team-brief` | Team brief |
 | `/docs/tech-brief` | Technical development brief |
 | `/docs/growth-brief` | Growth, SEO & analytics brief |
+| `/docs/automation-brief` | Automation & integrations brief |
+
+**Google Drive:** paste share URLs in `docs/drive-links.js` — banners appear on each brief automatically.
 
 ## Repository layout
 
@@ -64,11 +67,13 @@ Then open http://localhost:8080
 **Project docs** — copy HTML from `docs/` into `site/docs/`, then serve `site/`:
 
 ```bash
-mkdir -p site/docs/tech-brief site/docs/team-brief site/docs/growth-brief && \
+mkdir -p site/docs/tech-brief site/docs/team-brief site/docs/growth-brief site/docs/automation-brief && \
 cp docs/index.html site/docs/index.html && \
+cp docs/drive-links.js site/docs/drive-links.js && \
 cp docs/TECH-BRIEF.html site/docs/tech-brief/index.html && \
 cp docs/TEAM-BRIEF.html site/docs/team-brief/index.html && \
 cp docs/GROWTH-BRIEF.html site/docs/growth-brief/index.html && \
+cp docs/AUTOMATION-BRIEF.html site/docs/automation-brief/index.html && \
 cd site && python3 -m http.server 8080
 ```
 

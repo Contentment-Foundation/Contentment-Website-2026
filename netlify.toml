@@ -4,11 +4,13 @@
 [build]
   publish = "site"
   command = """
-    mkdir -p site/docs/tech-brief site/docs/team-brief site/docs/growth-brief &&
+    mkdir -p site/docs/tech-brief site/docs/team-brief site/docs/growth-brief site/docs/automation-brief &&
     cp docs/index.html site/docs/index.html &&
+    cp docs/drive-links.js site/docs/drive-links.js &&
     cp docs/TECH-BRIEF.html site/docs/tech-brief/index.html &&
     cp docs/TEAM-BRIEF.html site/docs/team-brief/index.html &&
-    cp docs/GROWTH-BRIEF.html site/docs/growth-brief/index.html
+    cp docs/GROWTH-BRIEF.html site/docs/growth-brief/index.html &&
+    cp docs/AUTOMATION-BRIEF.html site/docs/automation-brief/index.html
   """
 
 # Docs hub + briefs (source: docs/*.html, copied at build)
@@ -30,6 +32,11 @@
 [[redirects]]
   from = "/docs/growth-brief"
   to = "/docs/growth-brief/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/docs/automation-brief"
+  to = "/docs/automation-brief/index.html"
   status = 200
 
 # Old flat URLs → nested under /docs/
