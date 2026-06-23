@@ -10,11 +10,11 @@
 window.TCF_DRIVE_LINKS = {
   folder: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
 
-  teamBrief:       'https://docs.google.com/document/d/1HcruJGaNEBU9waZjw4O_zHlDNPfMXN2N/edit?usp=sharing',
-  techBrief:       'https://docs.google.com/document/d/1i12exlu7w4-O1ZK-8DKiEXXgqRg-DQV9/edit?usp=sharing',
-  growthBrief:     'https://docs.google.com/document/d/1arSvTRUjaZD-NsKwr7IYQ9rs4H5PoU6H/edit?usp=sharing',
-  automationBrief: 'https://docs.google.com/document/d/1Fz-kU_cL1BwtP1VTmak42TCha3iiPpkC/edit?usp=sharing',
-  decisions:       'https://docs.google.com/document/d/16bxr4Wx-3WFzcK8tVOR8dmo4gXgNFfHf/edit?usp=sharing',
+  teamBrief:       'https://docs.google.com/document/d/1zSyJJ8QzLkhxbk9QEWOXvCY2J0i3NWsXOHrriHFu7cg/edit?usp=drive_link',
+  techBrief:       'https://docs.google.com/document/d/1L8IscQLn7TbSmjIlX9Sm8ADMbfZs6HCy6Mcz0vQiE4U/edit?usp=drive_link',
+  growthBrief:     'https://docs.google.com/document/d/13SflYbS0NMYx6jVOmYLDLViPiKm8U8g12dGJWTMqNxY/edit?usp=drive_link',
+  automationBrief: 'https://docs.google.com/document/d/155fUgR5NkMe2q-J8Z_lCPT3XhCpQw-2yKW85yUuGVW0/edit?usp=drive_link',
+  decisions:       'https://docs.google.com/document/d/155fUgR5NkMe2q-J8Z_lCPT3XhCpQw-2yKW85yUuGVW0/edit?usp=drive_link',
 };
 
 /* ─── Google Drive SVG icon (official coloured triangle logo) ─────────────── */
