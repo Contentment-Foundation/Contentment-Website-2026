@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contentment.org Redesign — Team Brief · Q2 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=Varela+Round&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal:   #1FAFC0;
+      --ocean:  #0080B0;
+      --deep:   #024E70;
+      --deep2:  #02374f;
+      --green:  #4FA98C;
+      --slate:  #3C3B43;
+      --ink:    #23252b;
+      --paper:  #FBFAF7;
+      --paper2: #F2F0EA;
+      --mist:   #E8F1F2;
+      --line:   rgba(2,78,112,.12);
+      --shadow: 0 18px 50px -20px rgba(2,55,79,.22);
+      --display: 'Newsreader', Georgia, serif;
+      --body:    'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--body);
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { font-size: 11.5px; background: #fff; }
+      .no-print { display: none; }
+      section, .card-grid, table { break-inside: avoid; }
+      @page { margin: 16mm 14mm; size: A4; }
+    }
+
+    /* ── LAYOUT ── */
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 32px; }
+
+    .doc-nav { background: var(--deep2); padding: 10px 0; font-size: 12px; }
+    .doc-nav .wrap { display: flex; gap: 20px; }
+    .doc-nav a { color: rgba(255,255,255,.65); text-decoration: none; }
+    .doc-nav a:hover { color: var(--teal); }
+
+    /* ── HEADER ── */
+    .page-header {
+      background: linear-gradient(165deg, var(--deep) 0%, var(--deep2) 100%);
+      color: #fff;
+      padding: 40px 0 36px;
+    }
+    .page-header .wrap { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+    .wordmark {
+      font-family: 'Varela Round', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,.55);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .page-header h1 {
+      font-family: var(--display);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 500;
+      line-height: 1.2;
+      color: #fff;
+    }
+    .page-header h1 span { color: var(--teal); }
+    .meta {
+      font-size: 11.5px;
+      color: rgba(255,255,255,.5);
+      text-align: right;
+      line-height: 1.7;
+      flex-shrink: 0;
+    }
+    .meta strong { color: rgba(255,255,255,.8); font-weight: 600; }
+
+    /* ── TAGLINE BAND ── */
+    .tagline-band {
+      background: var(--teal);
+      padding: 18px 0;
+      text-align: center;
+    }
+    .tagline-band p {
+      font-family: var(--display);
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-style: italic;
+      color: #fff;
+      font-weight: 400;
+    }
+    .tagline-band .orient {
+      font-family: var(--body);
+      font-size: 12px;
+      color: rgba(255,255,255,.8);
+      margin-top: 6px;
+      font-style: normal;
+    }
+
+    /* ── STATS BAND ── */
+    .stats-band {
+      background: var(--paper2);
+      border-bottom: 1px solid var(--line);
+      padding: 22px 0;
+    }
+    .stats-row {
+      display: flex;
+      gap: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat {
+      text-align: center;
+      padding: 10px 24px;
+      border-right: 1px solid var(--line);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-val {
+      font-family: var(--display);
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--deep);
+      line-height: 1;
+    }
+    .stat-val sup { font-size: .7em; color: var(--teal); }
+    .stat-label {
+      font-size: 10.5px;
+      color: var(--slate);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-top: 3px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main { padding: 36px 0 48px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* ── SECTIONS ── */
+    section { margin-bottom: 28px; }
+    .section-title {
+      font-family: var(--body);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--ocean);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+    .card h3 {
+      font-family: var(--display);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--deep);
+      margin-bottom: 8px;
+    }
+    .card p { font-size: 12.5px; color: var(--slate); line-height: 1.55; }
+
+    /* ── BIG IDEA ── */
+    .big-idea {
+      background: #fff;
+      border-left: 4px solid var(--teal);
+      border-radius: 0 14px 14px 0;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .big-idea p { font-family: var(--display); font-size: 1.05rem; color: var(--deep); line-height: 1.5; }
+    .big-idea .sub { font-family: var(--body); font-size: 12px; color: var(--slate); margin-top: 8px; font-style: normal; }
+
+    /* ── TABLES ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    thead tr { background: var(--deep); color: #fff; }
+    thead th {
+      padding: 9px 13px;
+      text-align: left;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    tbody tr { border-bottom: 1px solid var(--line); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background: var(--paper2); }
+    td { padding: 8px 13px; color: var(--slate); vertical-align: top; }
+    td strong, td b { color: var(--ink); }
+    td .tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .tag-high { background: #fde8e8; color: #b91c1c; }
+    .tag-med  { background: #fef3c7; color: #92400e; }
+    .tag-ok   { background: #d1fae5; color: #065f46; }
+
+    /* ── BELIEF JOURNEY ── */
+    .journey { display: flex; flex-direction: column; gap: 8px; }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px rgba(2,55,79,.06);
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--ocean), var(--teal));
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-body { flex: 1; }
+    .step-quote {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--deep);
+      line-height: 1.45;
+    }
+    .step-note {
+      font-size: 11.5px;
+      color: var(--slate);
+      margin-top: 3px;
+    }
+
+    /* ── PILLARS ── */
+    .pillars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .pillar {
+      background: linear-gradient(155deg, var(--green) 0%, #3C8E74 100%);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #fff;
+    }
+    .pillar h4 {
+      font-family: var(--display);
+      font-size: .95rem;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    .pillar p { font-size: 11.5px; color: rgba(255,255,255,.88); line-height: 1.5; }
+
+    /* ── VOICE BLOCK ── */
+    .voice-block {
+      background: linear-gradient(165deg, var(--deep) 0%, var(--deep2) 100%);
+      border-radius: 14px;
+      padding: 20px 22px;
+      color: #fff;
+    }
+    .voice-block .persona {
+      font-family: var(--display);
+      font-size: 1.15rem;
+      font-style: italic;
+      color: #bfeef5;
+      margin-bottom: 8px;
+    }
+    .voice-block p { font-size: 12.5px; color: rgba(255,255,255,.8); line-height: 1.6; }
+    .never-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .never-pill {
+      font-size: 11px;
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.75);
+      border: 1px solid rgba(255,255,255,.18);
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+    .never-pill::before { content: '✗  '; color: #f87171; font-size: 10px; }
+
+    /* ── SPRINT ── */
+    .sprint-chain {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      font-family: 'Courier New', monospace;
+      font-size: 11.5px;
+      color: var(--slate);
+      line-height: 1.9;
+    }
+    .sprint-chain .ticket { color: var(--ocean); font-weight: 700; }
+    .sprint-chain .label  { color: var(--slate); }
+    .sprint-chain .ext    { color: #b45309; }
+
+    /* ── METRICS ── */
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .metric {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .metric-val {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--deep);
+      line-height: 1.1;
+    }
+    .metric-label { font-size: 11px; color: var(--slate); margin-top: 4px; line-height: 1.4; }
+
+    /* ── WHERE TO LOOK ── */
+    .docs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .doc-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+    .doc-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: var(--mist);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .doc-row h4 { font-size: 12px; font-weight: 600; color: var(--deep); }
+    .doc-row p  { font-size: 11px; color: var(--slate); margin-top: 1px; }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      background: var(--deep2);
+      color: rgba(255,255,255,.45);
+      font-size: 11px;
+      text-align: center;
+      padding: 16px 32px;
+      line-height: 1.7;
+    }
+    .page-footer strong { color: rgba(255,255,255,.7); }
+
+    /* ── PRINT BUTTON ── */
+    .print-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--ocean);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,128,176,.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .print-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,128,176,.45); }
+  </style>
+</head>
+<body>
+
+<nav class="doc-nav no-print">
+  <div class="wrap">
+    <a href="/docs">← Project docs</a>
+    <a href="/">Homepage</a>
+  </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<header class="page-header">
+  <div class="wrap">
+    <div>
+      <div class="wordmark">The Contentment Foundation</div>
+      <h1>contentment.org Redesign<br><span>Team Brief</span></h1>
+    </div>
+    <div class="meta">
+      <strong>Prepared by</strong><br>
+      Somesh Bhardwaj<br>
+      Sr. System Admin · Full Stack AI Engineer<br>
+      The Contentment Foundation<br><br>
+      <strong>Q2 2026</strong>
+    </div>
+  </div>
+</header>
+
+<!-- ── TAGLINE ── -->
+<div class="tagline-band">
+  <p>"When one teacher thrives, generations flourish."</p>
+  <p class="orient">The Contentment Foundation equips teachers with the wellbeing tools to thrive, because every future we care about runs through a teacher.</p>
+</div>
+
+<!-- ── STATS ── -->
+<div class="stats-band">
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-val">325</div>
+      <div class="stat-label">Partner Schools</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">12</div>
+      <div class="stat-label">Countries · 4 Continents</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">11,925</div>
+      <div class="stat-label">Educators Reached</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">409,625<sup>+</sup></div>
+      <div class="stat-label">Students Reached</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">86%</div>
+      <div class="stat-label">Reported Improvement · Every Region</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">~20</div>
+      <div class="stat-label">$5 seats fund 1 teacher's full year</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<main class="main">
+<div class="wrap">
+
+  <!-- Big Idea -->
+  <section>
+    <div class="section-title">The Big Idea</div>
+    <div class="big-idea">
+      <p>Teacher wellbeing is the antidote to the problems we are seeing in the world. Teacher wellbeing is not an extra benefit. It is the foundation on which future generations are built.</p>
+      <p class="sub">We are building a marketing and conversion website — not a portal, LMS, or app. One primary action sitewide: <strong>Join Homeroom from $5/month.</strong> No visual redesign; the design system is locked to the existing prototype (<code>site/index.html</code>).</p>
+    </div>
+  </section>
+
+  <div class="grid-2" style="margin-bottom:28px;">
+
+    <!-- Three Audiences -->
+    <section style="margin-bottom:0;">
+      <div class="section-title">Three Audiences</div>
+      <table>
+        <thead>
+          <tr><th>Audience</th><th>Inner voice</th><th>Destination</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Future members</strong><br><span style="font-size:10.5px;color:var(--teal)">Primary</span></td>
+            <td>"I remember a great teacher. Teachers are running on empty."</td>
+            <td>Join Homeroom · $5/mo</td>
+          </tr>
+          <tr>
+            <td><strong>School leaders</strong></td>
+            <td>"My teachers are struggling. I need outcomes, not fluff."</td>
+            <td>Discovery form</td>
+          </tr>
+          <tr>
+            <td><strong>Educators</strong></td>
+            <td>"I'm exhausted. Is this another thing on my plate?"</td>
+            <td>Circles & pathway</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Phase 1 Pages -->
+    <section style="margin-bottom:0;">
+      <div class="section-title">Phase 1 Pages — Must Ship</div>
+      <table>
+        <thead>
+          <tr><th>Page</th><th>URL</th><th>Primary CTA</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Home</strong></td><td><code>/</code></td><td>Join Homeroom</td></tr>
+          <tr><td><strong>Why Teacher Wellbeing</strong></td><td><code>/why</code></td><td>Join Homeroom</td></tr>
+          <tr><td><strong>Educator Stories</strong></td><td><code>/stories</code></td><td>Join Homeroom</td></tr>
+          <tr><td><strong>For Schools</strong></td><td><code>/schools</code></td><td>Start the conversation</td></tr>
+          <tr><td><strong>Get Involved</strong></td><td><code>/give</code></td><td>Join Homeroom</td></tr>
+          <tr><td><strong>Homeroom</strong></td><td><code>/give/monthly</code></td><td>Become a Founding Member</td></tr>
+          <tr><td><strong>Legal</strong></td><td><code>/privacy · /terms</code></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+
+  <!-- Belief Journey -->
+  <section>
+    <div class="section-title">The Belief Journey — Every Page Moves One Step · No Page Does All Five</div>
+    <div class="journey">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-quote">"One caring teacher changes everything. I remember mine."</div>
+          <div class="step-note">Begin in their memory, not our mission. Hope, not crisis.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-quote">"The people I'm counting on to shape the future are barely holding on. Everything I care about is at risk."</div>
+          <div class="step-note">Burnout is a children problem, a community problem, a future problem.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-quote">"This is not a nice idea. It is proven, and TCF actually delivers it."</div>
+          <div class="step-note">Trust step: Harvard research · 86% in every region · Hawaiʻi 90% renewal · Bhutan national strategy · named teachers</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-quote">"I have a seat in this movement, and $5/month is how I show up."</div>
+          <div class="step-note">Homeroom for those who can give. A door for everyone who cannot — share, attend, open a school.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-quote">"I'm part of this now. I stay, I show up, I bring others."</div>
+          <div class="step-note">Owned by Events, stewardship, and every email we send.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid-2" style="margin-bottom:28px;">
+
+    <!-- Four Pillars -->
+    <section style="margin-bottom:0;">
+      <div class="section-title">The Four Pillars — Use Verbatim · Never Paraphrase</div>
+      <div class="pillars-grid">
+        <div class="pillar">
+          <h4>Mindfulness</h4>
+          <p>The practice of cultivating focused, nonjudgmental attention to the present moment helps us stay grounded and make thoughtful decisions.</p>
+        </div>
+        <div class="pillar">
+          <h4>Community</h4>
+          <p>Fostering trust, empathy, compassion, and selfless service brings out the best in ourselves so that we can bring out the best in others.</p>
+        </div>
+        <div class="pillar">
+          <h4>Self-Curiosity</h4>
+          <p>Encouraging curiosity about our inner world opens the door to self-discovery and a deeper understanding of ourselves and others.</p>
+        </div>
+        <div class="pillar">
+          <h4>Contentment</h4>
+          <p>Embracing all of life's experiences with unconditional acceptance allows us to recognize each emotion as a valuable guide.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Voice -->
+    <section style="margin-bottom:0;">
+      <div class="section-title">Voice &amp; Tone</div>
+      <div class="voice-block">
+        <div class="persona">The Tender Bullshit-Cutter</div>
+        <p>Warm, grounded, direct — never corporate. Names what is hard without shaming or pretending. Bridges emotion and evidence. Hope leads; crisis supports. Teachers are heroes running on empty, never victims.</p>
+        <div class="never-list">
+          <span class="never-pill">"donor"</span>
+          <span class="never-pill">em dashes</span>
+          <span class="never-pill">"quiet"</span>
+          <span class="never-pill">"steady"</span>
+          <span class="never-pill">"upstream"</span>
+          <span class="never-pill">guilt framing</span>
+          <span class="never-pill">scarcity alarms</span>
+          <span class="never-pill">"intervention"</span>
+          <span class="never-pill">"curriculum"</span>
+          <span class="never-pill">"program rollout"</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Tech Stack -->
+  <section>
+    <div class="section-title">Confirmed Tech Stack</div>
+    <table>
+      <thead>
+        <tr><th>Layer</th><th>Tool</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Build</strong></td><td>Astro 4.x</td><td>Static output; shared layouts; can embed existing HTML/CSS as-is</td></tr>
+        <tr><td><strong>Hosting</strong></td><td>Vercel</td><td>Preview deploys per PR; edge middleware for Homeroom gate</td></tr>
+        <tr><td><strong>Donations</strong></td><td>Keela</td><td>Redirect to hosted checkout only — site never handles card data</td></tr>
+        <tr><td><strong>Newsletter</strong></td><td>Flodesk</td><td>Embed or custom form POST → Vercel API → Flodesk API</td></tr>
+        <tr><td><strong>Forms</strong></td><td>Flodesk / Keela / Raisely / custom Vercel API</td><td>Flexible per form; pick simplest option that stores data where team works</td></tr>
+        <tr><td><strong>Database</strong></td><td>GCP Cloud SQL</td><td>Phase 2+ only — skip entirely at launch if Flodesk/Keela/Raisely cover the need</td></tr>
+        <tr><td><strong>CMS</strong></td><td>Markdown in repo → Sanity</td><td>Phase 1: JSON/markdown + deploy per update. Phase 1.5: Sanity when editors need self-service</td></tr>
+        <tr><td><strong>Analytics</strong></td><td>Plausible or GA4</td><td>UTM parameters required on all Festival/campaign traffic</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="grid-2" style="margin-bottom:28px;">
+
+    <!-- Open Decisions -->
+    <section style="margin-bottom:0;">
+      <div class="section-title">Open Decisions — Needs Sign-off</div>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Decision</th><th>Owner</th><th>Risk</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>Homeroom tier amounts</strong><br>$5/$25/$100 vs $25/$50/$100</td>
+            <td>Leadership · Finance</td>
+            <td><span class="tag tag-high">High</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>Keela donation URLs</strong></td>
+            <td>Finance · Ops</td>
+            <td><span class="tag tag-high">High</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>EIN</strong> for Homeroom FAQ</td>
+            <td>Finance</td>
+            <td><span class="tag tag-high">High</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>Story content + photos</strong><br>Min 3 published stories</td>
+            <td>Programs · Comms</td>
+            <td><span class="tag tag-high">High</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>Event calendar 2026</strong> dates confirmed</td>
+            <td>Events</td>
+            <td><span class="tag tag-med">Medium</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><strong>Final URL slugs</strong> team sign-off</td>
+            <td>Team</td>
+            <td><span class="tag tag-med">Medium</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><strong>Annual report format</strong><br>Embedded vs PDF</td>
+            <td>Leadership</td>
+            <td><span class="tag tag-med">Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Success Metrics -->
+    <section style="margin-bottom:0;">
+      <div class="section-title">Success Metrics — 90 Days Post-Launch</div>
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-val">+20%</div>
+          <div class="metric-label">Homeroom conversion vs old site</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">≥5%</div>
+          <div class="metric-label">/why sessions use Share CTA</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">≥10</div>
+          <div class="metric-label">Qualified school leads / month</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">≥200</div>
+          <div class="metric-label">Newsletter signups / month</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">&lt;55%</div>
+          <div class="metric-label">Homepage bounce rate</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">&lt;2.5s</div>
+          <div class="metric-label">LCP on 4G mobile</div>
+        </div>
+      </div>
+
+      <!-- Sprint Order -->
+      <div class="section-title" style="margin-top:20px;">Sprint Order (14 Must-Have Tickets)</div>
+      <div class="sprint-chain">
+        <span class="ticket">001</span> Layout → <span class="ticket">002</span> Routing → <span class="ticket">003</span> Mobile nav<br>
+        → <span class="ticket">010</span> Homepage → <span class="ticket">004</span> Wire links<br>
+        → <span class="ticket">020</span> /why · <span class="ticket">030</span> Stories data <span class="ext">← comms content needed</span><br>
+        → <span class="ticket">031</span> /stories · <span class="ticket">040</span> /schools · <span class="ticket">050</span> /give<br>
+        → <span class="ticket">060</span> Keela wiring <span class="ext">← URLs from finance needed</span><br>
+        → <span class="ticket">051</span> /give/monthly · <span class="ticket">070</span> Newsletter · <span class="ticket">071</span> Legal<br>
+        → <span class="ticket">080</span> Analytics → <span class="ticket">100</span> QA → <span class="ticket">101</span> Deploy
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Where to Look -->
+  <section>
+    <div class="section-title">Where to Find Full Detail</div>
+    <div class="docs-grid">
+      <div class="doc-row">
+        <div class="doc-icon">✍️</div>
+        <div>
+          <h4>Messaging &amp; Copy</h4>
+          <p>Taglines, CTAs, belief journey, proof stats, banned words — canonical, wins on any conflict</p>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon">🎙️</div>
+        <div>
+          <h4>Voice &amp; Tone</h4>
+          <p>Full persona, style principles, pre-publish checklist, what not to do</p>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon">🔬</div>
+        <div>
+          <h4>Evidence &amp; Research</h4>
+          <p>Jennings, Durlak, full DOIs, ready-to-use copy lines with citation pairing guidance</p>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon">🗺️</div>
+        <div>
+          <h4>Website Architecture</h4>
+          <p>Full sitemap (~30 URLs), phases, campaign pages, open URL decisions</p>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon">📋</div>
+        <div>
+          <h4>PRD</h4>
+          <p>All features (must/should/nice), user flows, MVP definition, success metrics, dependencies</p>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon">⚙️</div>
+        <div>
+          <h4>Technical Architecture</h4>
+          <p>Full stack, data model, env vars, routing, CMS decision, /impact boundary</p>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon">🎨</div>
+        <div>
+          <h4>Frontend Specification</h4>
+          <p>Design tokens, components, breakpoints, all integration specs (Keela, Flodesk, analytics)</p>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon">🔒</div>
+        <div>
+          <h4>Security &amp; Access</h4>
+          <p>Auth approach, data privacy, error handling, 15-item edge case table, pre-launch checklist</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="page-footer">
+  <strong>The Contentment Foundation</strong> · contentment.org Redesign · Q2 2026<br>
+  Prepared by Somesh Bhardwaj · Sr. System Admin, Full Stack AI Engineer<br>
+  Messaging &amp; Copy brief is canonical for any copy conflict · All docs in <code>docs/</code>
+</footer>
+
+<button class="print-btn no-print" onclick="window.print()">Save as PDF</button>
+
+</body>
+</html>

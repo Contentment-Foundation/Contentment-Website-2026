@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contentment.org — Technical Development Brief · Q2 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=Varela+Round&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal:   #1FAFC0;
+      --ocean:  #0080B0;
+      --deep:   #024E70;
+      --deep2:  #02374f;
+      --green:  #4FA98C;
+      --slate:  #3C3B43;
+      --ink:    #23252b;
+      --paper:  #FBFAF7;
+      --paper2: #F2F0EA;
+      --mist:   #E8F1F2;
+      --line:   rgba(2,78,112,.12);
+      --shadow: 0 14px 40px -16px rgba(2,55,79,.2);
+      --display: 'Newsreader', Georgia, serif;
+      --body:    'Inter', system-ui, sans-serif;
+      --mono:    'JetBrains Mono', 'Courier New', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--body); font-size: 13px; line-height: 1.6; color: var(--ink); background: var(--paper); }
+
+    @media print {
+      body { font-size: 11px; background: #fff; }
+      .no-print { display: none; }
+      .page-header, .arch-band, section, table { break-inside: avoid; }
+      @page { margin: 14mm 13mm; size: A4; }
+    }
+
+    /* ── LAYOUT ── */
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 30px; }
+
+    .doc-nav { background: var(--deep2); padding: 10px 0; font-size: 12px; }
+    .doc-nav .wrap { display: flex; gap: 20px; }
+    .doc-nav a { color: rgba(255,255,255,.65); text-decoration: none; }
+    .doc-nav a:hover { color: var(--teal); }
+
+    /* ── HEADER ── */
+    .page-header {
+      background: linear-gradient(165deg, var(--deep) 0%, var(--deep2) 100%);
+      padding: 36px 0 32px;
+    }
+    .page-header .wrap { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+    .wordmark { font-family: 'Varela Round', sans-serif; font-size: 11.5px; color: rgba(255,255,255,.5); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+    .page-header h1 { font-family: var(--display); font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 500; color: #fff; line-height: 1.2; }
+    .page-header h1 span { color: var(--teal); }
+    .meta { font-size: 11px; color: rgba(255,255,255,.5); text-align: right; line-height: 1.8; flex-shrink: 0; }
+    .meta strong { color: rgba(255,255,255,.8); font-weight: 600; }
+
+    /* ── PRINCIPLE BAND ── */
+    .arch-band {
+      background: var(--ocean);
+      padding: 14px 0;
+    }
+    .arch-band .wrap { display: flex; align-items: center; gap: 14px; }
+    .arch-band .badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 99px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .arch-band p { font-size: 12.5px; color: rgba(255,255,255,.9); }
+    .arch-band strong { color: #fff; }
+
+    /* ── ARCH DIAGRAM ── */
+    .arch-diagram {
+      background: var(--deep2);
+      padding: 20px 24px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.75);
+      line-height: 1.9;
+      overflow-x: auto;
+    }
+    .arch-diagram .c-white  { color: #fff; font-weight: 500; }
+    .arch-diagram .c-teal   { color: var(--teal); }
+    .arch-diagram .c-green  { color: #6ee7b7; }
+    .arch-diagram .c-yellow { color: #fcd34d; }
+    .arch-diagram .c-gray   { color: rgba(255,255,255,.4); }
+
+    /* ── MAIN ── */
+    .main { padding: 30px 0 44px; }
+    section { margin-bottom: 26px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+      color: var(--ocean);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+    /* ── TABLES ── */
+    table { width: 100%; border-collapse: collapse; font-size: 12px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+    thead tr { background: var(--deep); color: #fff; }
+    thead th { padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+    tbody tr { border-bottom: 1px solid var(--line); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background: var(--paper2); }
+    td { padding: 8px 12px; color: var(--slate); vertical-align: top; }
+    td strong, td b { color: var(--ink); }
+    td code { font-family: var(--mono); font-size: 11px; background: var(--mist); padding: 1px 5px; border-radius: 4px; color: var(--deep); }
+
+    /* ── CODE BLOCKS ── */
+    .code-block {
+      background: #1a2332;
+      border-radius: 12px;
+      padding: 16px 18px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      line-height: 1.85;
+      overflow-x: auto;
+      box-shadow: var(--shadow);
+    }
+    .code-block .c-comment { color: #5a7a9a; }
+    .code-block .c-key     { color: #7dd3fc; }
+    .code-block .c-val     { color: #86efac; }
+    .code-block .c-str     { color: #fca5a5; }
+    .code-block .c-type    { color: #c4b5fd; }
+    .code-block .c-op      { color: #94a3b8; }
+    .code-block .c-fn      { color: #fcd34d; }
+    .code-block .c-white   { color: #e2e8f0; }
+    .code-block .c-teal    { color: #5eead4; }
+
+    /* ── CARDS ── */
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow); }
+    .card h3 { font-family: var(--display); font-size: .95rem; font-weight: 500; color: var(--deep); margin-bottom: 6px; }
+    .card p  { font-size: 12px; color: var(--slate); line-height: 1.55; }
+
+    /* ── PHASE GATES ── */
+    .phases { display: flex; gap: 10px; }
+    .phase {
+      flex: 1;
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .phase-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 8px;
+    }
+    .phase-1 .phase-label  { color: var(--teal); }
+    .phase-15 .phase-label { color: var(--ocean); }
+    .phase-2 .phase-label  { color: var(--deep); }
+    .phase ul { list-style: none; }
+    .phase li { font-size: 11.5px; color: var(--slate); padding: 3px 0; border-bottom: 1px solid var(--line); display: flex; gap: 6px; }
+    .phase li:last-child { border-bottom: none; }
+    .phase li::before { content: '→'; color: var(--teal); flex-shrink: 0; }
+    .phase .trigger { font-size: 10.5px; color: var(--slate); background: var(--paper2); border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; }
+    .phase .trigger strong { color: var(--ink); }
+
+    /* ── SPRINT ── */
+    .sprint-block {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+    }
+    .sprint-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+    }
+    .sprint-row:last-child { border-bottom: none; }
+    .ticket-id {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--ocean);
+      background: var(--mist);
+      padding: 2px 7px;
+      border-radius: 5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ticket-label { color: var(--slate); flex: 1; }
+    .ticket-block { font-size: 10.5px; color: #b45309; background: #fef3c7; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+
+    /* ── ENV VARS ── */
+    .env-block {
+      background: #0f1923;
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      line-height: 2;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+    .env-section { color: #5a7a9a; font-size: 10.5px; margin-top: 10px; margin-bottom: 2px; }
+    .env-section:first-child { margin-top: 0; }
+    .env-key   { color: #7dd3fc; }
+    .env-eq    { color: #94a3b8; }
+    .env-val   { color: #86efac; }
+    .env-empty { color: #374151; }
+    .env-comment { color: #5a7a9a; font-size: 10.5px; }
+
+    /* ── CHECKLIST ── */
+    .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--slate);
+    }
+    .check-box {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--line);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── PERF TARGETS ── */
+    .perf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .perf-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .perf-val   { font-family: var(--display); font-size: 1.5rem; font-weight: 600; color: var(--deep); line-height: 1; }
+    .perf-label { font-size: 10.5px; color: var(--slate); margin-top: 4px; line-height: 1.4; }
+
+    /* ── DOCS REF ── */
+    .docs-ref { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .doc-card {
+      background: linear-gradient(155deg, var(--deep) 0%, var(--deep2) 100%);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .doc-card h4 { font-size: 11.5px; font-weight: 600; color: #bfeef5; margin-bottom: 3px; }
+    .doc-card p  { font-size: 10.5px; color: rgba(255,255,255,.6); line-height: 1.45; }
+    .doc-card code { font-family: var(--mono); font-size: 10px; color: var(--teal); }
+
+    /* ── FOOTER ── */
+    .page-footer { background: var(--deep2); color: rgba(255,255,255,.45); font-size: 11px; text-align: center; padding: 14px 32px; line-height: 1.7; }
+    .page-footer strong { color: rgba(255,255,255,.7); }
+
+    /* ── PRINT BTN ── */
+    .print-btn {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--ocean); color: #fff; border: none;
+      border-radius: 999px; padding: 11px 20px;
+      font-family: var(--body); font-size: 12.5px; font-weight: 600;
+      cursor: pointer; box-shadow: 0 8px 24px rgba(0,128,176,.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .print-btn:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<nav class="doc-nav no-print">
+  <div class="wrap">
+    <a href="/docs">← Project docs</a>
+    <a href="/">Homepage</a>
+  </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<header class="page-header">
+  <div class="wrap">
+    <div>
+      <div class="wordmark">The Contentment Foundation</div>
+      <h1>contentment.org<br><span>Technical Development Brief</span></h1>
+    </div>
+    <div class="meta">
+      <strong>Prepared by</strong><br>
+      Somesh Bhardwaj<br>
+      Sr. System Admin · Full Stack AI Engineer<br>
+      The Contentment Foundation<br><br>
+      <strong>Q2 2026 · Backend &amp; Engineering Team</strong>
+    </div>
+  </div>
+</header>
+
+<!-- ── PRINCIPLE BAND ── -->
+<div class="arch-band">
+  <div class="wrap">
+    <span class="badge">Core Principle</span>
+    <p><strong>Static-first. No custom server in Phase 1.</strong> Third-party services (Keela, Flodesk, Raisely) own the data. A Vercel backend + GCP Cloud SQL is added only when a provider cannot meet the workflow need.</p>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<main class="main">
+<div class="wrap">
+
+  <!-- Architecture Diagram -->
+  <section>
+    <div class="section-title">Architecture Overview</div>
+    <div class="arch-diagram">
+      <span class="c-gray">┌─────────────────────────────────────────────────────────────────────┐</span><br>
+      <span class="c-gray">│</span>  <span class="c-white">Browser</span><span class="c-gray">                                                            │</span><br>
+      <span class="c-gray">│</span>    <span class="c-gray">└──</span> <span class="c-white">Vercel CDN</span>  <span class="c-gray">(Astro static output — HTML / CSS / JS)</span><span class="c-gray">          │</span><br>
+      <span class="c-gray">│</span>          <span class="c-gray">├──</span> <span class="c-teal">Keela</span>       <span class="c-gray">redirect to hosted checkout (no API from browser)</span><span class="c-gray">  │</span><br>
+      <span class="c-gray">│</span>          <span class="c-gray">├──</span> <span class="c-teal">Flodesk</span>     <span class="c-gray">embed  OR  Vercel Fn → Flodesk API</span><span class="c-gray">              │</span><br>
+      <span class="c-gray">│</span>          <span class="c-gray">├──</span> <span class="c-teal">Raisely</span>     <span class="c-gray">embed / campaign link</span><span class="c-gray">                           │</span><br>
+      <span class="c-gray">│</span>          <span class="c-gray">├──</span> <span class="c-teal">Analytics</span>   <span class="c-gray">Plausible or GA4 (script tag + data attrs)</span><span class="c-gray">       │</span><br>
+      <span class="c-gray">│</span>          <span class="c-gray">└──</span> <span class="c-yellow">Vercel Fn</span>   <span class="c-gray">/api/* — custom form POST (rate-limited)</span><span class="c-gray">         │</span><br>
+      <span class="c-gray">│</span>                <span class="c-gray">└──</span> <span class="c-green">GCP Cloud SQL</span>  <span class="c-gray">Phase 2+ only — school leads, member auth</span><span class="c-gray">  │</span><br>
+      <span class="c-gray">└─────────────────────────────────────────────────────────────────────┘</span>
+    </div>
+  </section>
+
+  <!-- Stack + Project Structure side by side -->
+  <div class="grid-2" style="margin-bottom:26px;">
+
+    <section style="margin-bottom:0;">
+      <div class="section-title">Confirmed Stack</div>
+      <table>
+        <thead><tr><th>Layer</th><th>Tool</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Framework</strong></td><td>Astro 4.x</td><td>Static output; SSR only for <code>/api</code> routes</td></tr>
+          <tr><td><strong>Hosting</strong></td><td>Vercel</td><td>Auto preview per PR; edge middleware for gate</td></tr>
+          <tr><td><strong>Serverless</strong></td><td>Vercel Functions</td><td><code>/api/newsletter</code> · <code>/api/school-inquiry</code></td></tr>
+          <tr><td><strong>Donations</strong></td><td>Keela</td><td>Redirect links only — no card data on our servers</td></tr>
+          <tr><td><strong>Newsletter</strong></td><td>Flodesk</td><td>Embed or POST → <code>/api/newsletter</code> → Flodesk API</td></tr>
+          <tr><td><strong>Fundraise</strong></td><td>Raisely</td><td>Embed or <code>PUBLIC_RAISELY_CAMPAIGN_URL</code></td></tr>
+          <tr><td><strong>Database</strong></td><td>GCP Cloud SQL</td><td>Phase 2+ — skip if Flodesk/Keela/Raisely suffice</td></tr>
+          <tr><td><strong>CMS</strong></td><td>JSON → Sanity</td><td>Phase 1: JSON/markdown. Phase 1.5: Sanity</td></tr>
+          <tr><td><strong>Analytics</strong></td><td>Plausible / GA4</td><td>Script tag; UTM required on campaign links</td></tr>
+          <tr><td><strong>Homeroom gate</strong></td><td>Vercel Edge</td><td>Phase 2 — shared password; magic link at >500 members</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section style="margin-bottom:0;">
+      <div class="section-title">Project Structure (Astro — target)</div>
+      <div class="code-block">
+<span class="c-white">src/</span><br>
+<span class="c-op">├─</span> <span class="c-key">layouts/</span>    BaseLayout.astro  <span class="c-comment"># nav, footer, CSS</span><br>
+<span class="c-op">├─</span> <span class="c-key">components/</span>  Nav · Footer · Hero · StatBand<br>
+<span class="c-op">│              </span>  OrbitSection · Pillars · HomeroomBlock<br>
+<span class="c-op">│              </span>  DoorCards · NewsletterForm<br>
+<span class="c-op">├─</span> <span class="c-key">pages/</span><br>
+<span class="c-op">│   ├─</span> <span class="c-teal">index.astro</span>          <span class="c-comment"># /</span><br>
+<span class="c-op">│   ├─</span> <span class="c-teal">why.astro</span>            <span class="c-comment"># /why</span><br>
+<span class="c-op">│   ├─</span> <span class="c-teal">stories/</span>  index · [slug].astro<br>
+<span class="c-op">│   ├─</span> <span class="c-teal">schools.astro</span>        <span class="c-comment"># /schools</span><br>
+<span class="c-op">│   ├─</span> <span class="c-teal">give/</span>  index · monthly.astro<br>
+<span class="c-op">│   ├─</span> <span class="c-teal">privacy.astro · terms.astro</span><br>
+<span class="c-op">│   └─</span> <span class="c-fn">api/</span>  <span class="c-comment"># Vercel Serverless Fns</span><br>
+<span class="c-op">│       ├─</span> <span class="c-fn">newsletter.ts</span><br>
+<span class="c-op">│       └─</span> <span class="c-fn">school-inquiry.ts</span><br>
+<span class="c-op">├─</span> <span class="c-key">data/</span>  stories.json · stats.json<br>
+<span class="c-op">├─</span> <span class="c-key">styles/</span>  tokens.css · global.css<br>
+<span class="c-op">└─</span> <span class="c-key">scripts/</span>  nav.js · animations.js · orbit.js<br>
+<br>
+<span class="c-white">public/assets/</span>    <span class="c-comment"># images (moved from site/assets/)</span><br>
+<span class="c-white">.env.example</span>      <span class="c-comment"># all keys, no values</span>
+      </div>
+    </section>
+  </div>
+
+  <!-- Integration Specs -->
+  <section>
+    <div class="section-title">Integration Specs</div>
+    <div class="grid-2">
+
+      <div>
+        <p style="font-size:11px;font-weight:700;color:var(--deep);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Flodesk — Newsletter</p>
+        <div class="code-block" style="font-size:11px;">
+<span class="c-comment">// Option B — custom form (full UI control)</span><br>
+<span class="c-white">POST</span> <span class="c-str">/api/newsletter</span><br>
+<span class="c-key">Body:</span> <span class="c-op">{</span> <span class="c-str">"email"</span><span class="c-op">,</span> <span class="c-str">"first_name"</span><span class="c-op">,</span> <span class="c-str">"source"</span> <span class="c-op">}</span><br><br>
+<span class="c-comment">// Server (Vercel fn):</span><br>
+<span class="c-fn">POST</span> https://api.flodesk.com/v1/subscribers<br>
+<span class="c-key">Auth:</span> Basic <span class="c-val">FLODESK_API_KEY</span>  <span class="c-comment">← server only</span><br>
+<span class="c-key">200</span> → inline success message<br>
+<span class="c-key">dup</span> → <span class="c-str">"You're already subscribed"</span><br>
+<span class="c-key">5xx</span> → friendly error + mailto
+        </div>
+      </div>
+
+      <div>
+        <p style="font-size:11px;font-weight:700;color:var(--deep);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">School Discovery Form</p>
+        <div class="code-block" style="font-size:11px;">
+<span class="c-white">POST</span> <span class="c-str">/api/school-inquiry</span><br>
+<span class="c-key">Body:</span> <span class="c-op">{</span><br>
+  <span class="c-str">"school_name"</span>   <span class="c-type">required</span><br>
+  <span class="c-str">"contact_name"</span>  <span class="c-type">required</span><br>
+  <span class="c-str">"contact_email"</span> <span class="c-type">required</span><br>
+  <span class="c-str">"role"</span><span class="c-op">,</span> <span class="c-str">"country"</span><span class="c-op">,</span> <span class="c-str">"message"</span> <span class="c-type">optional</span><br>
+  <span class="c-str">"_honey"</span>        <span class="c-comment">← honeypot, must be empty</span><br>
+<span class="c-op">}</span><br><br>
+<span class="c-comment">// Server: Flodesk/Keela OR GCP INSERT</span><br>
+<span class="c-comment">// Rate limit: 5 req / 15 min / IP</span><br>
+<span class="c-key">200</span> → thank-you (voice &amp; tone)<br>
+<span class="c-key">5xx</span> → friendly error + mailto
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Analytics Events + Homeroom Gate -->
+  <div class="grid-2" style="margin-bottom:26px;">
+
+    <section style="margin-bottom:0;">
+      <div class="section-title">Analytics Events to Instrument</div>
+      <table>
+        <thead><tr><th>Event</th><th>Trigger</th><th>Method</th></tr></thead>
+        <tbody>
+          <tr><td><code>cta_homeroom_click</code></td><td>Any Homeroom CTA click</td><td><code>data-analytics</code> attr</td></tr>
+          <tr><td><code>cta_school_click</code></td><td>"Start the conversation"</td><td><code>data-analytics</code> attr</td></tr>
+          <tr><td><code>newsletter_submit</code></td><td>Successful form POST</td><td>JS after 200 response</td></tr>
+          <tr><td><code>story_view</code></td><td>Story page load</td><td>Page-level script</td></tr>
+          <tr><td><code>share_why</code></td><td>Share button on <code>/why</code></td><td>JS click handler</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section style="margin-bottom:0;">
+      <div class="section-title">Homeroom Gate — Phase 2</div>
+      <div class="code-block" style="font-size:11px;">
+<span class="c-comment">// Vercel Edge Middleware (middleware.ts)</span><br>
+<span class="c-key">1.</span> Request hits <span class="c-str">/homeroom/*</span><br>
+<span class="c-key">2.</span> Check cookie: <span class="c-teal">homeroom_session</span><br>
+<span class="c-key">3.</span> Missing → redirect to <span class="c-str">/homeroom/login</span><br>
+<span class="c-key">4.</span> <span class="c-fn">POST /api/homeroom-auth</span><br>
+   compare to <span class="c-val">HOMEROOM_GATE_PASSWORD</span> <span class="c-comment">(env)</span><br>
+   rate limit: 5 attempts / 15 min / IP<br>
+   success → HTTP-only cookie, 7-day TTL<br><br>
+<span class="c-comment">// Phase 2.1: magic link (>500 members)</span><br>
+Vercel fn sends signed link → JWT cookie<br>
+Requires GCP <span class="c-teal">homeroom_members</span> table
+      </div>
+    </section>
+
+  </div>
+
+  <!-- GCP Schema -->
+  <section>
+    <div class="section-title">GCP Cloud SQL Schema — Phase 2+ (skip at launch if Flodesk/Keela/Raisely suffice)</div>
+    <div class="code-block">
+<span class="c-comment">-- School leads (add only if you need queryable lead workflow)</span><br>
+<span class="c-fn">CREATE TABLE</span> <span class="c-teal">school_inquiries</span> <span class="c-op">(</span><br>
+&nbsp;&nbsp;<span class="c-key">id</span>            <span class="c-type">UUID</span>        <span class="c-white">PRIMARY KEY DEFAULT gen_random_uuid()</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">created_at</span>    <span class="c-type">TIMESTAMPTZ</span> <span class="c-white">DEFAULT now()</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">school_name</span>   <span class="c-type">TEXT</span>        <span class="c-white">NOT NULL</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">contact_name</span>  <span class="c-type">TEXT</span>        <span class="c-white">NOT NULL</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">contact_email</span> <span class="c-type">TEXT</span>        <span class="c-white">NOT NULL</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">role</span><span class="c-op">,</span> <span class="c-key">country</span><span class="c-op">,</span> <span class="c-key">message</span><span class="c-op">,</span> <span class="c-key">source_page</span>  <span class="c-type">TEXT</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">status</span>         <span class="c-type">TEXT</span>        <span class="c-white">DEFAULT 'new'</span>  <span class="c-comment">-- new | contacted | qualified | closed</span><br>
+<span class="c-op">);</span><br><br>
+<span class="c-comment">-- Homeroom members (magic-link auth only)</span><br>
+<span class="c-fn">CREATE TABLE</span> <span class="c-teal">homeroom_members</span> <span class="c-op">(</span><br>
+&nbsp;&nbsp;<span class="c-key">id</span>               <span class="c-type">UUID</span>    <span class="c-white">PRIMARY KEY DEFAULT gen_random_uuid()</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">email</span>            <span class="c-type">TEXT</span>    <span class="c-white">UNIQUE NOT NULL</span><span class="c-op">,</span>  <span class="c-comment">-- matches Keela donor email</span><br>
+&nbsp;&nbsp;<span class="c-key">keela_contact_id</span> <span class="c-type">TEXT</span><span class="c-op">,</span>  <span class="c-key">tier</span> <span class="c-type">TEXT</span><span class="c-op">,</span>  <span class="c-key">active</span> <span class="c-type">BOOLEAN</span> <span class="c-white">DEFAULT true</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;<span class="c-key">last_verified_at</span> <span class="c-type">TIMESTAMPTZ</span><br>
+<span class="c-op">);</span>  <span class="c-comment">-- All DB access via Vercel Functions only — never from browser</span>
+    </div>
+  </section>
+
+  <!-- Env Vars + Redirects -->
+  <div class="grid-2" style="margin-bottom:26px;">
+
+    <section style="margin-bottom:0;">
+      <div class="section-title">Environment Variables</div>
+      <div class="env-block">
+        <div class="env-section"># Public — safe in browser (PUBLIC_ prefix)</div>
+        <span class="env-key">PUBLIC_SITE_URL</span><span class="env-eq">=</span><span class="env-val">https://contentment.org</span><br>
+        <span class="env-key">PUBLIC_KEELA_TIER_5_URL</span><span class="env-eq">=</span><span class="env-empty">          </span><span class="env-comment"> ← from finance</span><br>
+        <span class="env-key">PUBLIC_KEELA_TIER_25_URL</span><span class="env-eq">=</span><span class="env-empty">         </span><span class="env-comment"> ← from finance</span><br>
+        <span class="env-key">PUBLIC_KEELA_TIER_100_URL</span><span class="env-eq">=</span><span class="env-empty">        </span><span class="env-comment"> ← from finance</span><br>
+        <span class="env-key">PUBLIC_PLAUSIBLE_DOMAIN</span><span class="env-eq">=</span><span class="env-empty">          </span><span class="env-comment"> or PUBLIC_GA_ID</span><br>
+        <span class="env-key">PUBLIC_RAISELY_CAMPAIGN_URL</span><span class="env-eq">=</span><span class="env-empty">      </span>
+        <div class="env-section"># Server-only — Vercel env, never in repo</div>
+        <span class="env-key">FLODESK_API_KEY</span><span class="env-eq">=</span><span class="env-empty">                  </span><br>
+        <span class="env-key">HOMEROOM_GATE_PASSWORD</span><span class="env-eq">=</span><span class="env-empty">           </span><span class="env-comment"> Phase 2</span><br>
+        <span class="env-key">GCP_CLOUD_SQL_CONNECTION</span><span class="env-eq">=</span><span class="env-empty">         </span><span class="env-comment"> Phase 2</span><br>
+        <span class="env-key">GCP_SERVICE_ACCOUNT_JSON</span><span class="env-eq">=</span><span class="env-empty">         </span><span class="env-comment"> Phase 2</span>
+      </div>
+    </section>
+
+    <section style="margin-bottom:0;">
+      <div class="section-title">Routing &amp; Redirects</div>
+      <table style="margin-bottom:12px;">
+        <thead><tr><th>Environment</th><th>URL</th><th>Branch</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Production</strong></td><td><code>contentment.org</code></td><td><code>main</code></td></tr>
+          <tr><td><strong>Preview</strong></td><td><code>*.vercel.app</code></td><td>Every PR (auto)</td></tr>
+          <tr><td><strong>Local</strong></td><td><code>localhost:4321</code></td><td><code>astro dev</code> or <code>vercel dev</code></td></tr>
+        </tbody>
+      </table>
+      <div class="code-block" style="font-size:11px;">
+<span class="c-comment">// vercel.json</span><br>
+<span class="c-op">{</span> <span class="c-str">"redirects"</span><span class="c-op">:</span> <span class="c-op">[</span><br>
+&nbsp;&nbsp;<span class="c-op">{</span> <span class="c-str">"source"</span><span class="c-op">:</span> <span class="c-str">"/donate"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"destination"</span><span class="c-op">:</span> <span class="c-str">"/give/monthly"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"permanent"</span><span class="c-op">:</span> <span class="c-val">true</span> <span class="c-op">},</span><br>
+&nbsp;&nbsp;<span class="c-op">{</span> <span class="c-str">"source"</span><span class="c-op">:</span> <span class="c-str">"/old-wp-path"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"destination"</span><span class="c-op">:</span> <span class="c-str">"/new-slug"</span><span class="c-op">,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"permanent"</span><span class="c-op">:</span> <span class="c-val">true</span> <span class="c-op">}</span><br>
+<span class="c-op">]}</span><br>
+<span class="c-comment">// Run full backlink audit before DNS cutover</span>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Phase Gates -->
+  <section>
+    <div class="section-title">Phase Gates</div>
+    <div class="phases">
+      <div class="phase phase-1">
+        <div class="phase-label">Phase 1 — MVP Launch</div>
+        <div class="trigger"><strong>Ship when:</strong> all 14 must-have tickets closed, Keela live, analytics recording</div>
+        <ul>
+          <li>Static Astro site on Vercel</li>
+          <li>Keela redirect CTAs live</li>
+          <li>Flodesk newsletter wired</li>
+          <li>School form → Flodesk or Keela</li>
+          <li>Analytics + UTM tracking</li>
+          <li>3+ published stories</li>
+          <li>WCAG 2.1 AA baseline</li>
+        </ul>
+      </div>
+      <div class="phase phase-15">
+        <div class="phase-label">Phase 1.5 — Soon After</div>
+        <div class="trigger"><strong>Trigger:</strong> Phase 1 stable; editorial team needs self-service content updates</div>
+        <ul>
+          <li>Sanity CMS for stories + team</li>
+          <li>Individual story pages</li>
+          <li>Events &amp; Experiences page</li>
+          <li>School form → Vercel fn + GCP (if workflow needs it)</li>
+          <li>Get Involved sub-pages</li>
+          <li>SEO meta + sitemap.xml</li>
+        </ul>
+      </div>
+      <div class="phase phase-2">
+        <div class="phase-label">Phase 2 — Member Experience</div>
+        <div class="trigger"><strong>Trigger:</strong> Homeroom member base growing; need gated hub + member auth</div>
+        <ul>
+          <li>Vercel edge middleware gate</li>
+          <li>/homeroom gated hub</li>
+          <li>GCP Cloud SQL for member table</li>
+          <li>Magic-link auth at >500 members</li>
+          <li>About section (5 pages)</li>
+          <li>Interactive stories map</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sprint Order -->
+  <section>
+    <div class="section-title">Sprint Order — 14 Must-Have Tickets</div>
+    <div class="sprint-block">
+      <div class="sprint-row"><span class="ticket-id">001</span><span class="ticket-label">Extract shared layout — CSS tokens, nav, footer from prototype (verbatim, no changes)</span></div>
+      <div class="sprint-row"><span class="ticket-id">002</span><span class="ticket-label">Astro scaffold — all Phase 1 route stubs; 404.html; static build output to Vercel</span></div>
+      <div class="sprint-row"><span class="ticket-id">003</span><span class="ticket-label">Mobile nav drawer — focus trap, aria-expanded, body scroll lock, Escape to close</span></div>
+      <div class="sprint-row"><span class="ticket-id">010</span><span class="ticket-label">Port full homepage from site/index.html → / (all JS behaviors preserved: orbit, count-up, accordion)</span></div>
+      <div class="sprint-row"><span class="ticket-id">004</span><span class="ticket-label">Wire all nav + footer links — no href="#" remaining on primary paths</span></div>
+      <div class="sprint-row"><span class="ticket-id">020</span><span class="ticket-label">Build /why — longform, share CTA (Web Share API + copy-link fallback), evidence citations</span></div>
+      <div class="sprint-row"><span class="ticket-id">030</span><span class="ticket-label">stories.json schema + seed data (slug, name, country, quote, themes, published, lat/lng optional)</span><span class="ticket-block">⚠ wait: comms content</span></div>
+      <div class="sprint-row"><span class="ticket-id">031</span><span class="ticket-label">Build /stories index — door-card grid, responsive breakpoints from Frontend Spec</span></div>
+      <div class="sprint-row"><span class="ticket-id">040</span><span class="ticket-label">Build /schools — split layout, partnership tiers, discovery form UI, Durlak/Jennings proof</span></div>
+      <div class="sprint-row"><span class="ticket-id">050</span><span class="ticket-label">Build /give gateway — five-seat door cards in correct order, each with mechanism line</span></div>
+      <div class="sprint-row"><span class="ticket-id">060</span><span class="ticket-label">Keela env vars — wire all Homeroom CTAs; data-analytics on every button; test in Keela sandbox</span><span class="ticket-block">⚠ wait: finance URLs</span></div>
+      <div class="sprint-row"><span class="ticket-id">051</span><span class="ticket-label">Build /give/monthly full copy — homeroom metaphor, tiers, 100 Hearts founding CTA, FAQ with EIN</span><span class="ticket-block">⚠ wait: tier decision + EIN</span></div>
+      <div class="sprint-row"><span class="ticket-id">070</span><span class="ticket-label">Newsletter — Flodesk embed or /api/newsletter Vercel fn; inline validation; /updates page</span></div>
+      <div class="sprint-row"><span class="ticket-id">071</span><span class="ticket-label">/privacy + /terms — simple text pages; linked from footer; legal sign-off required</span></div>
+      <div class="sprint-row"><span class="ticket-id">080</span><span class="ticket-label">Analytics — script in BaseLayout; 5 conversion events; cookie consent if required by jurisdiction</span></div>
+      <div class="sprint-row"><span class="ticket-id">100</span><span class="ticket-label">Pre-launch QA — a11y axe scan, Lighthouse ≥85 mobile, Keela live transaction, all CTAs live</span></div>
+      <div class="sprint-row"><span class="ticket-id">101</span><span class="ticket-label">Production deploy — DNS cutover, SSL verify, env vars in Vercel, old URL redirects active</span></div>
+    </div>
+  </section>
+
+  <!-- Security Checklist + Performance -->
+  <div class="grid-2" style="margin-bottom:26px;">
+
+    <section style="margin-bottom:0;">
+      <div class="section-title">Security Checklist — Pre-launch</div>
+      <div class="checklist">
+        <div class="check-item"><div class="check-box"></div>HTTPS enforced (Vercel auto)</div>
+        <div class="check-item"><div class="check-box"></div>Zero API keys in client JS or assets</div>
+        <div class="check-item"><div class="check-box"></div>Keela uses hosted checkout URLs only</div>
+        <div class="check-item"><div class="check-box"></div>All form POSTs over HTTPS</div>
+        <div class="check-item"><div class="check-box"></div>Honeypot on every custom form</div>
+        <div class="check-item"><div class="check-box"></div>Rate limiting on /api/* routes</div>
+        <div class="check-item"><div class="check-box"></div>.env in .gitignore; secret scan CI</div>
+        <div class="check-item"><div class="check-box"></div>GCP creds in Vercel env only</div>
+        <div class="check-item"><div class="check-box"></div>Security headers in vercel.json</div>
+        <div class="check-item"><div class="check-box"></div>npm audit clean before deploy</div>
+        <div class="check-item"><div class="check-box"></div>No stack traces exposed to users</div>
+        <div class="check-item"><div class="check-box"></div>Homeroom password in Vercel env only</div>
+      </div>
+    </section>
+
+    <section style="margin-bottom:0;">
+      <div class="section-title">Performance Targets</div>
+      <div class="perf-grid">
+        <div class="perf-card">
+          <div class="perf-val">≥85</div>
+          <div class="perf-label">Lighthouse Performance mobile</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-val">&lt;2.5s</div>
+          <div class="perf-label">LCP on 4G mobile</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-val">0</div>
+          <div class="perf-label">Critical a11y issues at launch</div>
+        </div>
+      </div>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Asset</th><th>Strategy</th></tr></thead>
+        <tbody>
+          <tr><td>Images</td><td>WebP format; <code>loading="lazy"</code> below fold</td></tr>
+          <tr><td>Fonts</td><td><code>preconnect</code> to fonts.googleapis.com (already in prototype)</td></tr>
+          <tr><td>JS</td><td>Defer non-critical; no framework bundle (Astro default)</td></tr>
+          <tr><td>Reduced motion</td><td><code>@media (prefers-reduced-motion)</code> — already implemented, preserve on all pages</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+
+  <!-- Related Docs -->
+  <section>
+    <div class="section-title">Full Detail — Where to Look</div>
+    <div class="docs-ref">
+      <div class="doc-card">
+        <h4>Technical Architecture</h4>
+        <p>Full stack decisions, data model, CMS rationale, /impact boundary, Phase 2 schema</p>
+        <code>planning/TECHNICAL-ARCHITECTURE.md</code>
+      </div>
+      <div class="doc-card">
+        <h4>Frontend Specification</h4>
+        <p>All design tokens, component classes, breakpoints, integration specs (Keela, Flodesk, analytics)</p>
+        <code>planning/FRONTEND-SPECIFICATION.md</code>
+      </div>
+      <div class="doc-card">
+        <h4>Security &amp; Access</h4>
+        <p>Auth approach, RLS rules, error handling, 15-item edge case table, pre-launch checklist</p>
+        <code>planning/SECURITY-AND-ACCESS.md</code>
+      </div>
+      <div class="doc-card">
+        <h4>Feature Tickets</h4>
+        <p>All 28 tickets with acceptance criteria, dependencies, and AI prompt seeds</p>
+        <code>planning/FEATURE-TICKETS.md</code>
+      </div>
+      <div class="doc-card">
+        <h4>PRD</h4>
+        <p>Full feature list, user flows (Mermaid), MVP definition, success metrics, open decisions</p>
+        <code>planning/PRD.md</code>
+      </div>
+      <div class="doc-card">
+        <h4>Messaging &amp; Copy</h4>
+        <p>No em dashes, no "donor" — copy rules every page template must follow</p>
+        <code>MESSAGING-AND-COPY.md</code>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="page-footer">
+  <strong>The Contentment Foundation</strong> · contentment.org Redesign · Technical Development Brief · Q2 2026<br>
+  Prepared by Somesh Bhardwaj · Sr. System Admin, Full Stack AI Engineer<br>
+  Full planning docs in <code>docs/planning/</code>
+</footer>
+
+<button class="print-btn no-print" onclick="window.print()">Save as PDF</button>
+
+</body>
+</html>
