@@ -10,7 +10,7 @@ Phase 1 homepage prototype: static HTML, CSS, and vanilla JavaScript in `site/`.
 | **Production** | Vercel | [contentment.org](https://contentment.org) | After Astro migration (`TICKET-002`) |
 | **PR previews** | Vercel | `*.vercel.app` | Per pull request on `main` |
 
-**Now:** `netlify.toml` publishes `site/` and copies `docs/*.html` into `site/docs/` on build. Push to the connected branch to deploy the prototype.
+**Now:** `netlify.toml` publishes `site/` and **generates** `site/docs/` on each build by copying `docs/*.html`. That folder is **not in git** — edit sources in `docs/` only.
 
 **Target:** Astro 4.x static build on Vercel — see [`docs/planning/TECHNICAL-ARCHITECTURE.md`](./docs/planning/TECHNICAL-ARCHITECTURE.md) and [`docs/WEBSITE-ARCHITECTURE.md`](./docs/WEBSITE-ARCHITECTURE.md).
 

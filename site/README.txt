@@ -15,8 +15,8 @@ DEPLOYMENT
   Production (target)  Vercel            https://contentment.org
   PR previews          Vercel            *.vercel.app
 
-  Netlify (netlify.toml): publishes site/ and copies docs/*.html into
-  site/docs/ on build. Push to deploy.
+  Netlify (netlify.toml): publishes site/ and generates site/docs/ on
+  each build from docs/*.html. site/docs/ is gitignored — not in repo.
 
     /              Homepage
     /docs          Project docs hub

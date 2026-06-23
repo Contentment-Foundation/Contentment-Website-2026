@@ -1,5 +1,6 @@
 # contentment.org — Technical Development Brief
-> Q2 2026 · Backend & Engineering Team · Full detail in `docs/planning/`  
+> Q2 2026 · Backend & Engineering Team · **Canonical spec:** [`docs/planning/TECHNICAL-ARCHITECTURE.md`](./planning/TECHNICAL-ARCHITECTURE.md)  
+> This file is a summary. If anything here disagrees with `planning/`, the planning doc wins.
 > Prepared by **Somesh Bhardwaj** · somesh@contentment.org · Sr. System Admin, Full Stack AI Engineer · The Contentment Foundation
 
 ---

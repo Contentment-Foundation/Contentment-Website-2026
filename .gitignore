@@ -1,0 +1,4 @@
+.DS_Store
+
+# Netlify build copies docs/*.html here — source of truth is docs/
+site/docs/
