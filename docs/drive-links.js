@@ -8,14 +8,13 @@
  * Paste the URL below. Leave '' to hide that link until ready.
  */
 window.TCF_DRIVE_LINKS = {
-  /** All brief .docx exports — June 2026 */
   folder: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
 
-  /** Per-brief: same folder until individual file links are added */
-  teamBrief: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
-  techBrief: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
-  growthBrief: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
-  automationBrief: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
+  teamBrief: 'https://docs.google.com/document/d/1HcruJGaNEBU9waZjw4O_zHlDNPfMXN2N/edit?usp=sharing',
+  techBrief: 'https://docs.google.com/document/d/1i12exlu7w4-O1ZK-8DKiEXXgqRg-DQV9/edit?usp=sharing',
+  growthBrief: 'https://docs.google.com/document/d/1arSvTRUjaZD-NsKwr7IYQ9rs4H5PoU6H/edit?usp=sharing',
+  automationBrief: 'https://docs.google.com/document/d/1Fz-kU_cL1BwtP1VTmak42TCha3iiPpkC/edit?usp=sharing',
+  decisions: 'https://docs.google.com/document/d/16bxr4Wx-3WFzcK8tVOR8dmo4gXgNFfHf/edit?usp=sharing',
 };
 
 (function () {
@@ -39,14 +38,15 @@ window.TCF_DRIVE_LINKS = {
   }
 
   var labels = {
-    folder: 'Brief exports (folder)',
-    teamBrief: 'Team Brief (PDF / Doc)',
-    techBrief: 'Technical Brief (PDF / Doc)',
-    growthBrief: 'Growth Brief (PDF / Doc)',
-    automationBrief: 'Automation Brief (PDF / Doc)',
+    folder: 'All briefs (folder)',
+    teamBrief: 'Team Brief',
+    techBrief: 'Technical Brief',
+    growthBrief: 'Growth Brief',
+    automationBrief: 'Automation Brief',
+    decisions: 'Open Technical Decisions',
   };
 
-  var keys = ['folder', 'teamBrief', 'techBrief', 'growthBrief', 'automationBrief'];
+  var keys = ['folder', 'teamBrief', 'techBrief', 'growthBrief', 'automationBrief', 'decisions'];
 
   function esc(s) {
     return String(s)
@@ -71,7 +71,7 @@ window.TCF_DRIVE_LINKS = {
       (links.folder
         ? ' <span class="drive-muted">·</span> <a href="' +
           esc(links.folder) +
-          '" target="_blank" rel="noopener noreferrer">All brief exports ↗</a>'
+          '" target="_blank" rel="noopener noreferrer">All briefs folder ↗</a>'
         : '') +
       '</div>';
 
