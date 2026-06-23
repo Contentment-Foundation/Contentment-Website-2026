@@ -1,7 +1,7 @@
 # Planning & Execution
 
 > **Contact:** somesh@contentment.org  
-> **Canonical:** This folder is the **source of truth for build and execution.** The HTML briefs at `../TEAM-BRIEF.html`, `../TECH-BRIEF.html`, etc. are readable summaries only — if they conflict with files here, **this folder wins.**
+> **Canonical:** This folder is the **source of truth for build and execution.** The HTML briefs at `../briefs/TEAM-BRIEF.html`, `../briefs/TECH-BRIEF.html`, etc. are readable summaries only — if they conflict with files here, **this folder wins.**
 
 Build-ready documents for the contentment.org redesign. All execution docs assume **no UI/UX changes** beyond the approved prototype (`site/index.html`).
 
@@ -26,6 +26,6 @@ Technical Architecture + Security (how we build)
 Feature Tickets (execution order)
 ```
 
-Content & copy: [`../MESSAGING-AND-COPY.md`](../MESSAGING-AND-COPY.md) · IA: [`../WEBSITE-ARCHITECTURE.md`](../WEBSITE-ARCHITECTURE.md)
+Content & copy: [`../research/MESSAGING-AND-COPY.md`](../research/MESSAGING-AND-COPY.md) · IA: [`../research/WEBSITE-ARCHITECTURE.md`](../research/WEBSITE-ARCHITECTURE.md)
 
-**Not in this folder (by design):** role briefs (`../TEAM-BRIEF.md`, `../TECH-BRIEF.md`, …) and their `.html` twins — summaries for stakeholders, not duplicate specs.
+**Not in this folder (by design):** role briefs (`../briefs/TEAM-BRIEF.md`, `../briefs/TECH-BRIEF.md`, …) and their `.html` twins — summaries for stakeholders, not duplicate specs.

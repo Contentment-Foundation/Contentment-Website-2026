@@ -81,7 +81,7 @@ Prototype menu button only exists at `≤940px` with no drawer. Implement full-s
 | **Dependencies** | TICKET-002 |
 
 **Description:**  
-Replace `href="#"` and hash-only links with real routes per [Website Architecture](../WEBSITE-ARCHITECTURE.md). Footer Explore/Get Involved columns map to Phase 1 pages. Social links: LinkedIn, Instagram, YouTube URLs from comms team (use placeholders only if URLs not yet provided — document in README).
+Replace `href="#"` and hash-only links with real routes per [Website Architecture](../research/WEBSITE-ARCHITECTURE.md). Footer Explore/Get Involved columns map to Phase 1 pages. Social links: LinkedIn, Instagram, YouTube URLs from comms team (use placeholders only if URLs not yet provided — document in README).
 
 **Acceptance criteria:**
 - [ ] No `href="#"` on nav items
@@ -119,7 +119,7 @@ Port entire homepage from `site/index.html` to index route. All sections: hero, 
 | **Dependencies** | TICKET-010 |
 
 **Description:**  
-Compare homepage copy to [Messaging brief §6 Home](../MESSAGING-AND-COPY.md). Update headlines/subheads only where brief specifies different copy. Do not change layout. Ensure orientation line, three beats, and proof stats match Section 8 exactly.
+Compare homepage copy to [Messaging brief §6 Home](../research/MESSAGING-AND-COPY.md). Update headlines/subheads only where brief specifies different copy. Do not change layout. Ensure orientation line, three beats, and proof stats match Section 8 exactly.
 
 **Acceptance criteria:**
 - [ ] Stats: 325 schools, 12 countries, 11,925 educators, 409,625+ students, 86%
@@ -143,7 +143,7 @@ Long-form page using existing section patterns (`.split`, `.impact`, `.quote-car
 
 **Acceptance criteria:**
 - [ ] Passes first-time visitor test (messaging brief §5)
-- [ ] Citations: Harvard, 86%, Bhutan, Hawaiʻi renewal — link to [Evidence doc](../EVIDENCE-AND-RESEARCH.md) where cited
+- [ ] Citations: Harvard, 86%, Bhutan, Hawaiʻi renewal — link to [Evidence doc](../research/EVIDENCE-AND-RESEARCH.md) where cited
 - [ ] Uses only approved design system components
 - [ ] Share button triggers Web Share API or copy-link fallback
 

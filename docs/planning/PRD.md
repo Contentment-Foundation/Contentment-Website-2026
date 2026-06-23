@@ -6,7 +6,7 @@
 > **Product:** The Contentment Foundation public website  
 > **UI/UX constraint:** Locked to current prototype (`site/index.html`) and approved planning docs. No visual redesign in v1.
 
-Related: [Website Architecture](../WEBSITE-ARCHITECTURE.md) · [Messaging & Copy](../MESSAGING-AND-COPY.md) · [Feature Tickets](./FEATURE-TICKETS.md)
+Related: [Website Architecture](../research/WEBSITE-ARCHITECTURE.md) · [Messaging & Copy](../research/MESSAGING-AND-COPY.md) · [Feature Tickets](./FEATURE-TICKETS.md)
 
 ---
 
@@ -157,7 +157,7 @@ flowchart LR
 |-----------|--------|
 | **Pages live** | `/`, `/why`, `/stories` (index + minimum 1 story), `/schools`, `/give`, `/give/monthly`, `/privacy`, `/terms` |
 | **UI** | Matches `site/index.html` design system — no new visual direction |
-| **Copy** | Follows [Messaging & Copy](../MESSAGING-AND-COPY.md); orientation line on every page |
+| **Copy** | Follows [Messaging & Copy](../research/MESSAGING-AND-COPY.md); orientation line on every page |
 | **Donations** | Keela live for $5/$25/$100 tiers (pending tier decision) |
 | **Newsletter** | Form submits to email provider |
 | **CTAs** | No placeholder `href="#"` on primary conversion paths |
@@ -222,7 +222,7 @@ flowchart LR
 
 > **Editorial launch risk:** Story content from comms is an external dependency with no engineering workaround. If content is not ready at Phase 1 launch, `/stories` ships as a stub. Assign a content deadline 3 weeks before planned launch.
 
-See [Messaging & Copy §11](../MESSAGING-AND-COPY.md) for full open decisions list.
+See [Messaging & Copy §11](../research/MESSAGING-AND-COPY.md) for full open decisions list.
 
 ---
 
@@ -233,8 +233,8 @@ See [Messaging & Copy §11](../MESSAGING-AND-COPY.md) for full open decisions li
 | Feature tickets | [FEATURE-TICKETS.md](./FEATURE-TICKETS.md) |
 | Technical architecture | [TECHNICAL-ARCHITECTURE.md](./TECHNICAL-ARCHITECTURE.md) |
 | Frontend spec (locked UI) | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) |
-| Site map | [WEBSITE-ARCHITECTURE.md](../WEBSITE-ARCHITECTURE.md) |
-| Messaging brief | [MESSAGING-AND-COPY.md](../MESSAGING-AND-COPY.md) |
+| Site map | [WEBSITE-ARCHITECTURE.md](../research/WEBSITE-ARCHITECTURE.md) |
+| Messaging brief | [MESSAGING-AND-COPY.md](../research/MESSAGING-AND-COPY.md) |
 
 ---
 

@@ -315,7 +315,7 @@ Content briefs for both pages must be written and approved before either is buil
 
 **Canonical reference** for all env vars. Store values in **Vercel project → Settings → Environment Variables** (production and preview). Commit `.env.example` with key names only — no values. During Netlify interim dev, only `PUBLIC_*` vars are relevant; server-side vars apply once Astro + Vercel Functions deploy.
 
-Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../AUTOMATION-BRIEF.md). Recommended tool choices: [DECISIONS.md](./DECISIONS.md).
+Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../briefs/AUTOMATION-BRIEF.md). Recommended tool choices: [DECISIONS.md](./DECISIONS.md).
 
 ### 6.1 Public (browser-safe — `PUBLIC_` prefix)
 

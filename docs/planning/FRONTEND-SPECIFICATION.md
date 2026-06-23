@@ -5,7 +5,7 @@
 > **Contact:** somesh@contentment.org  
 > **UI/UX policy:** **LOCKED.** This spec documents the approved prototype in `site/index.html`. New pages must reuse these patterns. No redesign, no new color palette, no new typography in v1.
 
-**Source of truth:** `site/index.html` · [Messaging & Copy](../MESSAGING-AND-COPY.md) · [Voice & Tone](../VOICE-AND-TONE.md)
+**Source of truth:** `site/index.html` · [Messaging & Copy](../research/MESSAGING-AND-COPY.md) · [Voice & Tone](../research/VOICE-AND-TONE.md)
 
 Related: [Technical Architecture](./TECHNICAL-ARCHITECTURE.md) · [PRD](./PRD.md)
 
@@ -148,7 +148,7 @@ Related: [Technical Architecture](./TECHNICAL-ARCHITECTURE.md) · [PRD](./PRD.md
 
 Every page includes:
 
-1. **Orientation line** (or variation) in first screen — per [Messaging brief](../MESSAGING-AND-COPY.md)
+1. **Orientation line** (or variation) in first screen — per [Messaging brief](../research/MESSAGING-AND-COPY.md)
 2. **One primary CTA** — per CTA taxonomy
 3. Shared `header` + `footer` from prototype
 4. At least one `.band` section using approved patterns
@@ -347,8 +347,8 @@ Forms are **not one-size-fits-all**. Use the provider that already owns the work
 
 All UI text must follow:
 
-- [Messaging & Copy](../MESSAGING-AND-COPY.md) — wins on copy
-- [Voice & Tone](../VOICE-AND-TONE.md) — persona
+- [Messaging & Copy](../research/MESSAGING-AND-COPY.md) — wins on copy
+- [Voice & Tone](../research/VOICE-AND-TONE.md) — persona
 - No em dashes; no "donor"; no banned words
 
 ---

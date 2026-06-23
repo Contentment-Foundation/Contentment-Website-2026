@@ -11,9 +11,9 @@ Planning and content docs for the contentment.org redesign (Q2 2026). All files 
 | Layer | Location | Role |
 |-------|----------|------|
 | **Execution (canonical)** | [`planning/`](./planning/) | PRD, technical architecture, tickets, security, frontend spec, decisions |
-| **Content & IA** | `docs/*.md` (root) | Messaging, voice, evidence, sitemap — not duplicated in `planning/` |
-| **Team orientation (optional)** | `*-BRIEF.html` + `*-BRIEF.md` | Short readable summaries for stakeholders; must align with `planning/` |
-| **Deploy copy** | `site/docs/` (gitignored) | Generated on Netlify build from `docs/*.html` — not stored in repo |
+| **Content & IA** | [`docs/research/`](./research/) | Messaging, voice, evidence, sitemap — not duplicated in `planning/` |
+| **Team orientation (optional)** | [`docs/briefs/`](./briefs/) | Short readable summaries for stakeholders; must align with `planning/` |
+| **Deploy copy** | `site/docs/` (gitignored) | Generated on Netlify build from `docs/briefs/*.html` — not stored in repo |
 
 See [`planning/README.md`](./planning/README.md) for the build hierarchy.
 
@@ -36,26 +36,26 @@ See [`planning/README.md`](./planning/README.md) for the build hierarchy.
 
 | Doc | File | Use when you need… |
 |-----|------|-------------------|
-| **Messaging & copy** | [MESSAGING-AND-COPY.md](./MESSAGING-AND-COPY.md) | Taglines, belief journey, page copy briefs, stats, CTAs (wins on copy conflicts) |
-| **Voice & tone** | [VOICE-AND-TONE.md](./VOICE-AND-TONE.md) | Persona, tone principles, pre-publish voice check |
-| **Evidence & research** | [EVIDENCE-AND-RESEARCH.md](./EVIDENCE-AND-RESEARCH.md) | Citable sources, DOIs, ready-to-use copy lines |
-| **Site architecture** | [WEBSITE-ARCHITECTURE.md](./WEBSITE-ARCHITECTURE.md) | Sitemap, URLs, phases, deployment model |
+| **Messaging & copy** | [research/MESSAGING-AND-COPY.md](./research/MESSAGING-AND-COPY.md) | Taglines, belief journey, page copy briefs, stats, CTAs (wins on copy conflicts) |
+| **Voice & tone** | [research/VOICE-AND-TONE.md](./research/VOICE-AND-TONE.md) | Persona, tone principles, pre-publish voice check |
+| **Evidence & research** | [research/EVIDENCE-AND-RESEARCH.md](./research/EVIDENCE-AND-RESEARCH.md) | Citable sources, DOIs, ready-to-use copy lines |
+| **Site architecture** | [research/WEBSITE-ARCHITECTURE.md](./research/WEBSITE-ARCHITECTURE.md) | Sitemap, URLs, phases, deployment model |
 
 ---
 
 ## Published briefs (web) — summaries only
 
-HTML briefs are **not** replacements for `planning/`. They are styled one-pagers for reading on Netlify (`/docs`). **Edit `.html` here**; run [`../scripts/copy-docs.sh`](../scripts/copy-docs.sh) locally (or let Netlify run it on deploy) to copy into `site/docs/`.
+HTML briefs are **not** replacements for `planning/`. They are styled one-pagers for reading on Netlify (`/docs`). **Edit `.html` in `docs/briefs/`**; run [`../scripts/copy-docs.sh`](../scripts/copy-docs.sh) locally (or let Netlify run it on deploy) to copy into `site/docs/`.
 
 | Page | Source file | Canonical detail lives in… |
 |------|-------------|---------------------------|
 | **Docs hub** | [index.html](./index.html) | — |
-| **Team brief** | [TEAM-BRIEF.html](./TEAM-BRIEF.html) | [planning/PRD.md](./planning/PRD.md), [MESSAGING-AND-COPY.md](./MESSAGING-AND-COPY.md) |
-| **Tech brief** | [TECH-BRIEF.html](./TECH-BRIEF.html) | [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md) |
-| **Growth brief** | [GROWTH-BRIEF.html](./GROWTH-BRIEF.html) | [MESSAGING-AND-COPY.md](./MESSAGING-AND-COPY.md), [planning/FEATURE-TICKETS.md](./planning/FEATURE-TICKETS.md) (TICKET-080/081) |
-| **Automation brief** | [AUTOMATION-BRIEF.html](./AUTOMATION-BRIEF.html) | [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md) §6, [AUTOMATION-BRIEF.md](./AUTOMATION-BRIEF.md) |
+| **Team brief** | [briefs/TEAM-BRIEF.html](./briefs/TEAM-BRIEF.html) | [planning/PRD.md](./planning/PRD.md), [research/MESSAGING-AND-COPY.md](./research/MESSAGING-AND-COPY.md) |
+| **Tech brief** | [briefs/TECH-BRIEF.html](./briefs/TECH-BRIEF.html) | [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md) |
+| **Growth brief** | [briefs/GROWTH-BRIEF.html](./briefs/GROWTH-BRIEF.html) | [research/MESSAGING-AND-COPY.md](./research/MESSAGING-AND-COPY.md), [planning/FEATURE-TICKETS.md](./planning/FEATURE-TICKETS.md) (TICKET-080/081) |
+| **Automation brief** | [briefs/AUTOMATION-BRIEF.html](./briefs/AUTOMATION-BRIEF.html) | [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md) §6, [briefs/AUTOMATION-BRIEF.md](./briefs/AUTOMATION-BRIEF.md) |
 
-Matching `*-BRIEF.md` files at `docs/` root are optional repo copies of the same summaries. **Do not treat them as a second spec** — update `planning/` first, then refresh briefs if needed.
+Matching `*-BRIEF.md` files in `docs/briefs/` are the markdown source of each brief. **Do not treat them as a second spec** — update `planning/` first, then refresh briefs if needed.
 
 Live preview (Netlify, interim): https://contentmentweb2.netlify.app/docs
 
@@ -77,16 +77,16 @@ window.TCF_DRIVE_LINKS = {
 
 Leave a key as `''` to hide that link. The web briefs on Netlify remain the primary reading experience.
 
-Production target: Vercel → `contentment.org` — see [WEBSITE-ARCHITECTURE.md](./WEBSITE-ARCHITECTURE.md) and [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md).
+Production target: Vercel → `contentment.org` — see [research/WEBSITE-ARCHITECTURE.md](./research/WEBSITE-ARCHITECTURE.md) and [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md).
 
 All `.md` files remain in the private GitHub repo — not published to public Drive.
 
 ## Authority order (conflicts)
 
 1. **Build & execution** → `docs/planning/` (PRD, architecture, tickets, security, frontend spec, decisions)  
-2. **Copy & messaging** → [MESSAGING-AND-COPY.md](./MESSAGING-AND-COPY.md)  
-3. **Persona & style** → [VOICE-AND-TONE.md](./VOICE-AND-TONE.md)  
-4. **URLs & structure** → [WEBSITE-ARCHITECTURE.md](./WEBSITE-ARCHITECTURE.md)  
+2. **Copy & messaging** → [research/MESSAGING-AND-COPY.md](./research/MESSAGING-AND-COPY.md)  
+3. **Persona & style** → [research/VOICE-AND-TONE.md](./research/VOICE-AND-TONE.md)  
+4. **URLs & structure** → [research/WEBSITE-ARCHITECTURE.md](./research/WEBSITE-ARCHITECTURE.md)  
 5. **HTML / `*-BRIEF.md` summaries** → orientation only; must match 1–4 above  
 
 ```
