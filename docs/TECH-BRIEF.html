@@ -320,7 +320,7 @@
 <div class="arch-band">
   <div class="wrap">
     <span class="badge">Core Principle</span>
-    <p><strong>Static-first. No custom server in Phase 1.</strong> Third-party services (Keela, Flodesk, Raisely) own the data. A Vercel backend + GCP Cloud SQL is added only when a provider cannot meet the workflow need.</p>
+    <p><strong>Static-first. No custom server in Phase 1.</strong> Third-party services (Keela, Flodesk, Raisely) own the data. <strong>Production:</strong> Vercel. <strong>Dev (interim):</strong> Netlify publishes <code>site/</code> until Astro migration. Vercel backend + GCP Cloud SQL only when a provider cannot meet the workflow need.</p>
   </div>
 </div>
 
@@ -354,14 +354,17 @@
         <thead><tr><th>Layer</th><th>Tool</th><th>Notes</th></tr></thead>
         <tbody>
           <tr><td><strong>Framework</strong></td><td>Astro 4.x</td><td>Static output; SSR only for <code>/api</code> routes</td></tr>
-          <tr><td><strong>Hosting</strong></td><td>Vercel</td><td>Auto preview per PR; edge middleware for gate</td></tr>
+          <tr><td><strong>Hosting</strong></td><td>Vercel</td><td>Production — auto preview per PR; edge middleware for gate</td></tr>
+          <tr><td><strong>Dev preview</strong></td><td>Netlify</td><td>Interim — <code>site/</code> prototype + docs briefs until Astro</td></tr>
           <tr><td><strong>Serverless</strong></td><td>Vercel Functions</td><td><code>/api/newsletter</code> · <code>/api/school-inquiry</code></td></tr>
           <tr><td><strong>Donations</strong></td><td>Keela</td><td>Redirect links only — no card data on our servers</td></tr>
           <tr><td><strong>Newsletter</strong></td><td>Flodesk</td><td>Embed or POST → <code>/api/newsletter</code> → Flodesk API</td></tr>
           <tr><td><strong>Fundraise</strong></td><td>Raisely</td><td>Embed or <code>PUBLIC_RAISELY_CAMPAIGN_URL</code></td></tr>
           <tr><td><strong>Database</strong></td><td>GCP Cloud SQL</td><td>Phase 2+ — skip if Flodesk/Keela/Raisely suffice</td></tr>
           <tr><td><strong>CMS</strong></td><td>JSON → Sanity</td><td>Phase 1: JSON/markdown. Phase 1.5: Sanity</td></tr>
-          <tr><td><strong>Analytics</strong></td><td>Plausible / GA4</td><td>Script tag; UTM required on campaign links</td></tr>
+          <tr><td><strong>Analytics</strong></td><td>Plausible</td><td>Recommended (DECISION-001); GA4 only if paid ads</td></tr>
+          <tr><td><strong>Rate limit</strong></td><td>Upstash Redis</td><td><code>@upstash/ratelimit</code> — 5 req / 15 min / IP (DECISION-004)</td></tr>
+          <tr><td><strong>Transactional email</strong></td><td>Resend</td><td>School notifications, magic links (DECISION-003)</td></tr>
           <tr><td><strong>Homeroom gate</strong></td><td>Vercel Edge</td><td>Phase 2 — shared password; magic link at >500 members</td></tr>
         </tbody>
       </table>
@@ -496,24 +499,53 @@ Requires GCP <span class="c-teal">homeroom_members</span> table
     </div>
   </section>
 
+  <!-- Open Technical Decisions -->
+  <section>
+    <div class="section-title">Open Technical Decisions — Recommended (sign-off pending)</div>
+    <p style="font-size:12px;color:var(--slate);margin-bottom:12px;">Full detail: <code>planning/DECISIONS.md</code></p>
+    <table>
+      <thead><tr><th>#</th><th>Decision</th><th>Suggested choice</th></tr></thead>
+      <tbody>
+        <tr><td>001</td><td>Primary analytics</td><td><strong>Plausible only</strong> — add GA4 if paid ads confirmed</td></tr>
+        <tr><td>002</td><td>Cookie consent</td><td><strong>No banner</strong> — disclose in <code>/privacy</code></td></tr>
+        <tr><td>003</td><td>Transactional email</td><td><strong>Resend</strong> (<code>RESEND_API_KEY</code>)</td></tr>
+        <tr><td>004</td><td>Rate limiting</td><td><strong>@upstash/ratelimit</strong> + Upstash Redis</td></tr>
+      </tbody>
+    </table>
+  </section>
+
   <!-- Env Vars + Redirects -->
   <div class="grid-2" style="margin-bottom:26px;">
 
     <section style="margin-bottom:0;">
       <div class="section-title">Environment Variables</div>
+      <p style="font-size:11px;color:var(--slate);margin-bottom:10px;"><strong>Canonical table:</strong> <code>planning/TECHNICAL-ARCHITECTURE.md</code> §6 · <code>AUTOMATION-BRIEF.md</code> for webhook detail</p>
       <div class="env-block">
         <div class="env-section"># Public — safe in browser (PUBLIC_ prefix)</div>
         <span class="env-key">PUBLIC_SITE_URL</span><span class="env-eq">=</span><span class="env-val">https://contentment.org</span><br>
         <span class="env-key">PUBLIC_KEELA_TIER_5_URL</span><span class="env-eq">=</span><span class="env-empty">          </span><span class="env-comment"> ← from finance</span><br>
         <span class="env-key">PUBLIC_KEELA_TIER_25_URL</span><span class="env-eq">=</span><span class="env-empty">         </span><span class="env-comment"> ← from finance</span><br>
         <span class="env-key">PUBLIC_KEELA_TIER_100_URL</span><span class="env-eq">=</span><span class="env-empty">        </span><span class="env-comment"> ← from finance</span><br>
-        <span class="env-key">PUBLIC_PLAUSIBLE_DOMAIN</span><span class="env-eq">=</span><span class="env-empty">          </span><span class="env-comment"> or PUBLIC_GA_ID</span><br>
+        <span class="env-key">PUBLIC_PLAUSIBLE_DOMAIN</span><span class="env-eq">=</span><span class="env-empty">          </span><span class="env-comment"> recommended (DECISION-001)</span><br>
         <span class="env-key">PUBLIC_RAISELY_CAMPAIGN_URL</span><span class="env-eq">=</span><span class="env-empty">      </span>
-        <div class="env-section"># Server-only — Vercel env, never in repo</div>
+        <div class="env-section"># Server — core (Vercel env, never in repo)</div>
         <span class="env-key">FLODESK_API_KEY</span><span class="env-eq">=</span><span class="env-empty">                  </span><br>
-        <span class="env-key">HOMEROOM_GATE_PASSWORD</span><span class="env-eq">=</span><span class="env-empty">           </span><span class="env-comment"> Phase 2</span><br>
-        <span class="env-key">GCP_CLOUD_SQL_CONNECTION</span><span class="env-eq">=</span><span class="env-empty">         </span><span class="env-comment"> Phase 2</span><br>
-        <span class="env-key">GCP_SERVICE_ACCOUNT_JSON</span><span class="env-eq">=</span><span class="env-empty">         </span><span class="env-comment"> Phase 2</span>
+        <span class="env-key">UPSTASH_REDIS_REST_URL</span><span class="env-eq">=</span><span class="env-empty">         </span><span class="env-comment"> DECISION-004</span><br>
+        <span class="env-key">UPSTASH_REDIS_REST_TOKEN</span><span class="env-eq">=</span><span class="env-empty">       </span><br>
+        <span class="env-key">RESEND_API_KEY</span><span class="env-eq">=</span><span class="env-empty">                 </span><span class="env-comment"> DECISION-003</span><br>
+        <div class="env-section"># Server — Slack webhooks</div>
+        <span class="env-key">SLACK_WEBHOOK_PARTNERSHIPS</span><span class="env-eq">=</span><span class="env-empty">   </span><br>
+        <span class="env-key">SLACK_WEBHOOK_HOMEROOM</span><span class="env-eq">=</span><span class="env-empty">       </span><br>
+        <span class="env-key">SLACK_WEBHOOK_GROWTH</span><span class="env-eq">=</span><span class="env-empty">         </span><br>
+        <span class="env-key">SLACK_WEBHOOK_EVENTS</span><span class="env-eq">=</span><span class="env-empty">         </span><br>
+        <span class="env-key">SLACK_WEBHOOK_ERRORS</span><span class="env-eq">=</span><span class="env-empty">         </span><br>
+        <div class="env-section"># Server — Keela · Zoom · Phase 2</div>
+        <span class="env-key">KEELA_WEBHOOK_SECRET</span><span class="env-eq">=</span><span class="env-empty">         </span><br>
+        <span class="env-key">ZOOM_ACCOUNT_ID</span><span class="env-eq">=</span><span class="env-empty">              </span><span class="env-comment"> Phase 1.5</span><br>
+        <span class="env-key">ZOOM_CLIENT_ID</span><span class="env-eq">=</span><span class="env-empty">               </span><br>
+        <span class="env-key">ZOOM_CLIENT_SECRET</span><span class="env-eq">=</span><span class="env-empty">           </span><br>
+        <span class="env-key">HOMEROOM_GATE_PASSWORD</span><span class="env-eq">=</span><span class="env-empty">       </span><span class="env-comment"> Phase 2</span><br>
+        <span class="env-key">GCP_CLOUD_SQL_CONNECTION</span><span class="env-eq">=</span><span class="env-empty">     </span><span class="env-comment"> Phase 2</span>
       </div>
     </section>
 
@@ -522,8 +554,9 @@ Requires GCP <span class="c-teal">homeroom_members</span> table
       <table style="margin-bottom:12px;">
         <thead><tr><th>Environment</th><th>URL</th><th>Branch</th></tr></thead>
         <tbody>
-          <tr><td><strong>Production</strong></td><td><code>contentment.org</code></td><td><code>main</code></td></tr>
-          <tr><td><strong>Preview</strong></td><td><code>*.vercel.app</code></td><td>Every PR (auto)</td></tr>
+          <tr><td><strong>Production</strong></td><td><code>contentment.org</code></td><td><code>main</code> · Vercel</td></tr>
+          <tr><td><strong>Dev preview</strong></td><td><code>contentmentweb2.netlify.app</code></td><td>Netlify (interim)</td></tr>
+          <tr><td><strong>PR preview</strong></td><td><code>*.vercel.app</code></td><td>Every PR (auto)</td></tr>
           <tr><td><strong>Local</strong></td><td><code>localhost:4321</code></td><td><code>astro dev</code> or <code>vercel dev</code></td></tr>
         </tbody>
       </table>
@@ -666,8 +699,18 @@ Requires GCP <span class="c-teal">homeroom_members</span> table
     <div class="section-title">Full Detail — Where to Look</div>
     <div class="docs-ref">
       <div class="doc-card">
+        <h4>Open Technical Decisions</h4>
+        <p>Analytics (Plausible), cookie consent, Resend, Upstash rate limiting — recommended choices</p>
+        <code>planning/DECISIONS.md</code>
+      </div>
+      <div class="doc-card">
+        <h4>Website Architecture</h4>
+        <p>Sitemap, /events (Phase 1.5), Netlify interim + Vercel production deployment model</p>
+        <code>WEBSITE-ARCHITECTURE.md</code>
+      </div>
+      <div class="doc-card">
         <h4>Technical Architecture</h4>
-        <p>Full stack decisions, data model, CMS rationale, /impact boundary, Phase 2 schema</p>
+        <p>Full stack decisions, consolidated env vars §6, CI/CD, DNS cutover, Phase 2 schema</p>
         <code>planning/TECHNICAL-ARCHITECTURE.md</code>
       </div>
       <div class="doc-card">

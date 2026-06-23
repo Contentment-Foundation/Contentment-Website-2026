@@ -6,7 +6,16 @@
 
 ## Architecture Principle
 
-**Static-first. No custom server in Phase 1.** contentment.org is a static marketing site deployed on Vercel. Third-party managed services (Keela, Flodesk, Raisely) own the data. A custom backend (Vercel Serverless Functions + GCP Cloud SQL) is introduced only when a provider cannot meet the workflow need.
+**Static-first. No custom server in Phase 1.** contentment.org is a static marketing site. **Production:** Vercel (`contentment.org`). **Development (interim):** Netlify publishes the `site/` prototype until Astro migration (`TICKET-002`). Third-party managed services (Keela, Flodesk, Raisely) own the data. A custom backend (Vercel Serverless Functions + GCP Cloud SQL) is introduced only when a provider cannot meet the workflow need.
+
+## Deployment
+
+| Environment | Host | URL |
+|-------------|------|-----|
+| Prototype preview (now) | Netlify (interim) | `contentmentweb2.netlify.app` |
+| Production | Vercel | `contentment.org` |
+| PR previews | Vercel | `*.vercel.app` |
+| Local (Astro) | `astro dev` | `localhost:4321` |
 
 ```
 Browser
@@ -25,14 +34,17 @@ Browser
 | Layer | Tool | Version / Notes |
 |-------|------|-----------------|
 | **Framework** | Astro | 4.x — static output (`output: 'static'`); SSR only for API routes |
-| **Hosting** | Vercel | Git-connected; auto preview on every PR branch |
+| **Hosting** | Vercel (production) | Git-connected; auto preview on every PR branch |
+| **Dev preview** | Netlify (interim) | `site/` prototype + docs briefs until Astro on Vercel |
 | **Serverless** | Vercel Functions | `/api/*` routes for custom form POSTs (Phase 1+) |
 | **Donations** | Keela | Redirect to hosted checkout URLs — no API from browser |
 | **Newsletter** | Flodesk | Embed iframe **or** POST to `/api/newsletter` → Flodesk REST API |
 | **Fundraise** | Raisely | Embed or `PUBLIC_RAISELY_CAMPAIGN_URL` link |
 | **Database** | GCP Cloud SQL (PostgreSQL) | Phase 2+ — only if custom forms or member auth need it |
 | **CMS** | Markdown + JSON in repo | Phase 1 · migrate to Sanity at Phase 1.5 when editors need self-service |
-| **Analytics** | Plausible or GA4 | Script in `<head>`; custom events via data attributes |
+| **Analytics** | Plausible (recommended) | See DECISION-001; GA4 only if paid ads confirmed |
+| **Rate limiting** | @upstash/ratelimit + Upstash Redis | 5 req / 15 min / IP on all `/api/*` — DECISION-004 |
+| **Transactional email** | Resend | School inquiry notifications, magic links — DECISION-003 |
 | **Homeroom gate** | Vercel Edge Middleware | Phase 2 — shared password → rotating cookie; magic link if >500 members |
 | **Version control** | Git + GitHub | Vercel auto-deploys `main` to production; PR branches → preview URLs |
 
@@ -258,20 +270,39 @@ Access rule: All DB access through Vercel Serverless Functions only. `GCP_SERVIC
 
 ## Environment Variables
 
+**Canonical full table:** `docs/planning/TECHNICAL-ARCHITECTURE.md` §6. Summary below.
+
 ```bash
 # Public (safe in browser — prefix PUBLIC_)
 PUBLIC_SITE_URL=https://contentment.org
 PUBLIC_KEELA_TIER_5_URL=           # Keela $5/mo checkout — from finance
 PUBLIC_KEELA_TIER_25_URL=          # Keela $25/mo checkout
 PUBLIC_KEELA_TIER_100_URL=         # Keela $100/mo checkout
-PUBLIC_PLAUSIBLE_DOMAIN=           # or PUBLIC_GA_ID
+PUBLIC_PLAUSIBLE_DOMAIN=           # recommended (DECISION-001)
 PUBLIC_RAISELY_CAMPAIGN_URL=       # Fundraise page link
 
 # Server-only (Vercel env — never in repo or browser)
-FLODESK_API_KEY=                   # Flodesk REST API key
+FLODESK_API_KEY=
+UPSTASH_REDIS_REST_URL=            # rate limit + webhook dedup (DECISION-004)
+UPSTASH_REDIS_REST_TOKEN=
+RESEND_API_KEY=                    # transactional email (DECISION-003)
+SLACK_WEBHOOK_PARTNERSHIPS=         # see AUTOMATION-BRIEF.md
+SLACK_WEBHOOK_HOMEROOM=
+SLACK_WEBHOOK_GROWTH=
+SLACK_WEBHOOK_EVENTS=
+SLACK_WEBHOOK_CONTENT=
+SLACK_WEBHOOK_ERRORS=
+SLACK_WEBHOOK_METRICS=
+KEELA_WEBHOOK_SECRET=
+ZOOM_ACCOUNT_ID=                   # Phase 1.5 — event RSVP
+ZOOM_CLIENT_ID=
+ZOOM_CLIENT_SECRET=
+ZOOM_FESTIVAL_WEBINAR_ID=
+GCP_SERVICE_ACCOUNT_JSON=          # Google Sheets / Calendar
+GOOGLE_SCHOOL_SHEET_ID=
 HOMEROOM_GATE_PASSWORD=            # Phase 2 shared password
-GCP_CLOUD_SQL_CONNECTION=          # Phase 2 Cloud SQL connection string
-GCP_SERVICE_ACCOUNT_JSON=          # Phase 2 GCP credentials (JSON)
+GCP_CLOUD_SQL_CONNECTION=          # Phase 2 Cloud SQL
+SENTRY_DSN=                        # Phase 1.5 optional (DECISION-006)
 ```
 
 Store in **Vercel project → Settings → Environment Variables**. Commit `.env.example` with all keys, no values.
@@ -283,6 +314,7 @@ Store in **Vercel project → Settings → Environment Variables**. Commit `.env
 | Environment | URL | Branch |
 |-------------|-----|--------|
 | Production | https://contentment.org | `main` |
+| Dev preview (interim) | https://contentmentweb2.netlify.app | Netlify connected branch |
 | Preview | `*.vercel.app` | Every PR branch (automatic) |
 | Local | `localhost:4321` (Astro) or `vercel dev` | — |
 
@@ -308,7 +340,7 @@ Run a full backlink audit before DNS cutover to capture all old WordPress URLs.
 - [ ] Keela links use official hosted checkout URLs only
 - [ ] All form POSTs go to HTTPS endpoints
 - [ ] Honeypot field on every custom form (hidden from users, checked server-side)
-- [ ] Rate limiting on `/api/*` routes (Vercel built-in or custom middleware)
+- [ ] Rate limiting on `/api/*` routes via `@upstash/ratelimit` + Upstash Redis (DECISION-004)
 - [ ] `.env` in `.gitignore`; run `git secret` or GitHub secret scan on CI
 - [ ] `GCP_SERVICE_ACCOUNT_JSON` and DB connection string in Vercel env only
 - [ ] Security headers via `vercel.json`: `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`
@@ -374,7 +406,10 @@ TICKET-101  DNS cutover + production deploy
 
 | Need | Document |
 |------|----------|
+| Open technical decisions (analytics, email, rate limit) | `docs/planning/DECISIONS.md` |
 | Full tech stack + data model + CMS rationale | `docs/planning/TECHNICAL-ARCHITECTURE.md` |
+| Site architecture, `/events`, deployment model | `docs/WEBSITE-ARCHITECTURE.md` |
+| Automation, Slack, Zoom, Keela webhooks | `docs/AUTOMATION-BRIEF.md` |
 | Design tokens, component classes, integration specs | `docs/planning/FRONTEND-SPECIFICATION.md` |
 | Auth, RLS, error handling, edge cases (15 items) | `docs/planning/SECURITY-AND-ACCESS.md` |
 | All feature tickets with acceptance criteria | `docs/planning/FEATURE-TICKETS.md` |

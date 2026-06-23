@@ -632,13 +632,22 @@
       </thead>
       <tbody>
         <tr><td><strong>Build</strong></td><td>Astro 4.x</td><td>Static output; shared layouts; can embed existing HTML/CSS as-is</td></tr>
-        <tr><td><strong>Hosting</strong></td><td>Vercel</td><td>Preview deploys per PR; edge middleware for Homeroom gate</td></tr>
+        <tr><td><strong>Hosting</strong></td><td>Vercel</td><td>Production — preview deploys per PR; edge middleware for Homeroom gate</td></tr>
+        <tr><td><strong>Dev preview</strong></td><td>Netlify</td><td>Interim — <code>site/</code> prototype + docs briefs until Astro on Vercel</td></tr>
         <tr><td><strong>Donations</strong></td><td>Keela</td><td>Redirect to hosted checkout only — site never handles card data</td></tr>
         <tr><td><strong>Newsletter</strong></td><td>Flodesk</td><td>Embed or custom form POST → Vercel API → Flodesk API</td></tr>
         <tr><td><strong>Forms</strong></td><td>Flodesk / Keela / Raisely / custom Vercel API</td><td>Flexible per form; pick simplest option that stores data where team works</td></tr>
         <tr><td><strong>Database</strong></td><td>GCP Cloud SQL</td><td>Phase 2+ only — skip entirely at launch if Flodesk/Keela/Raisely cover the need</td></tr>
         <tr><td><strong>CMS</strong></td><td>Markdown in repo → Sanity</td><td>Phase 1: JSON/markdown + deploy per update. Phase 1.5: Sanity when editors need self-service</td></tr>
-        <tr><td><strong>Analytics</strong></td><td>Plausible or GA4</td><td>UTM parameters required on all Festival/campaign traffic</td></tr>
+        <tr><td><strong>Analytics</strong></td><td>Plausible</td><td>Recommended (DECISION-001); UTM required on Festival/campaign traffic</td></tr>
+      </tbody>
+    </table>
+    <table style="margin-top:16px;">
+      <thead><tr><th>Environment</th><th>Host</th><th>URL</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Prototype (now)</strong></td><td>Netlify</td><td><code>contentmentweb2.netlify.app</code></td></tr>
+        <tr><td><strong>Production</strong></td><td>Vercel</td><td><code>contentment.org</code></td></tr>
+        <tr><td><strong>PR previews</strong></td><td>Vercel</td><td><code>*.vercel.app</code></td></tr>
       </tbody>
     </table>
   </section>
@@ -773,7 +782,7 @@
         <div class="doc-icon">🗺️</div>
         <div>
           <h4>Website Architecture</h4>
-          <p>Full sitemap (~30 URLs), phases, campaign pages, open URL decisions</p>
+          <p>Full sitemap (~31 URLs), /events Phase 1.5, Netlify interim + Vercel production</p>
         </div>
       </div>
       <div class="doc-row">
@@ -787,7 +796,14 @@
         <div class="doc-icon">⚙️</div>
         <div>
           <h4>Technical Architecture</h4>
-          <p>Full stack, data model, env vars, routing, CMS decision, /impact boundary</p>
+          <p>Full stack, consolidated env vars §6, CI/CD, routing, CMS decision</p>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-icon">✅</div>
+        <div>
+          <h4>Open Technical Decisions</h4>
+          <p>Plausible, Resend, Upstash — recommended choices (DECISIONS 001–004)</p>
         </div>
       </div>
       <div class="doc-row">

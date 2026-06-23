@@ -28,7 +28,7 @@ Markdown sources (`.md`) below are for planning in-repo; they are not published 
 | **Evidence & research** | [EVIDENCE-AND-RESEARCH.md](./EVIDENCE-AND-RESEARCH.md) | Citable external sources (Jennings, Durlak), ready-to-use copy lines, DOIs |
 | **Messaging & copy** | [MESSAGING-AND-COPY.md](./MESSAGING-AND-COPY.md) | Taglines, belief journey, page copy briefs, stats, CTAs, guardrails, handoff checklist |
 | **Voice & tone** | [VOICE-AND-TONE.md](./VOICE-AND-TONE.md) | Persona, tone principles, style craft, pre-publish voice check |
-| **Site architecture** | [WEBSITE-ARCHITECTURE.md](./WEBSITE-ARCHITECTURE.md) | Sitemap, URLs, phases, Homeroom, campaign pages, build notes |
+| **Site architecture** | [WEBSITE-ARCHITECTURE.md](./WEBSITE-ARCHITECTURE.md) | Sitemap, `/events`, URLs, Netlify interim + Vercel production |
 
 ## Planning & execution
 
@@ -38,6 +38,7 @@ Build-ready docs in [`planning/`](./planning/):
 |-----|------|
 | PRD | [planning/PRD.md](./planning/PRD.md) |
 | Technical architecture | [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md) |
+| Open technical decisions | [planning/DECISIONS.md](./planning/DECISIONS.md) |
 | Security & access | [planning/SECURITY-AND-ACCESS.md](./planning/SECURITY-AND-ACCESS.md) |
 | Frontend specification | [planning/FRONTEND-SPECIFICATION.md](./planning/FRONTEND-SPECIFICATION.md) |
 | Feature tickets | [planning/FEATURE-TICKETS.md](./planning/FEATURE-TICKETS.md) |

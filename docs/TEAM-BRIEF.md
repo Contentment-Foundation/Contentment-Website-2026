@@ -92,13 +92,22 @@ Every page moves a visitor one step. No page does all five.
 | Layer | Tool | Status |
 |-------|------|--------|
 | Build | Astro 4.x (static output) | Recommended |
-| Hosting | Vercel | Confirmed |
+| Hosting | Vercel (production) | Confirmed |
+| Dev preview | Netlify (interim) | `site/` prototype until Astro on Vercel |
 | Donations | Keela — redirect to hosted checkout | Confirmed (existing) |
 | Newsletter | Flodesk — embed or Vercel API | Confirmed |
 | Forms | Flodesk / Keela / Raisely / custom Vercel API | Flexible per form |
 | Database | GCP Cloud SQL | Phase 2+ only if needed |
 | CMS | Markdown in repo → Sanity at Phase 1.5 | Migrate when editors need self-service |
-| Analytics | Plausible or GA4 | UTM required for Festival |
+| Analytics | Plausible (recommended) | GA4 only if paid ads; see `planning/DECISIONS.md` |
+
+### Deployment
+
+| Environment | Host | URL |
+|-------------|------|-----|
+| Prototype preview (now) | Netlify | contentmentweb2.netlify.app |
+| Production | Vercel | contentment.org |
+| PR previews | Vercel | `*.vercel.app` |
 
 ---
 
@@ -161,7 +170,8 @@ Every page moves a visitor one step. No page does all five.
 | What to say, taglines, CTAs, banned words | `docs/MESSAGING-AND-COPY.md` — wins on any copy conflict |
 | Who we sound like, writing craft | `docs/VOICE-AND-TONE.md` |
 | Citations, DOIs, ready-to-use copy lines | `docs/EVIDENCE-AND-RESEARCH.md` |
-| Sitemap, URLs, campaign pages | `docs/WEBSITE-ARCHITECTURE.md` |
+| Sitemap, URLs, campaign pages, `/events` | `docs/WEBSITE-ARCHITECTURE.md` |
+| Open technical decisions | `docs/planning/DECISIONS.md` |
 | Full product requirements | `docs/planning/PRD.md` |
 | Tech stack, data model, env vars | `docs/planning/TECHNICAL-ARCHITECTURE.md` |
 | Design system, components, integrations | `docs/planning/FRONTEND-SPECIFICATION.md` |
