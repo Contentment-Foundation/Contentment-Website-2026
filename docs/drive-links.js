@@ -14,7 +14,7 @@ window.TCF_DRIVE_LINKS = {
   techBrief:       'https://docs.google.com/document/d/1L8IscQLn7TbSmjIlX9Sm8ADMbfZs6HCy6Mcz0vQiE4U/edit?usp=drive_link',
   growthBrief:     'https://docs.google.com/document/d/13SflYbS0NMYx6jVOmYLDLViPiKm8U8g12dGJWTMqNxY/edit?usp=drive_link',
   automationBrief: 'https://docs.google.com/document/d/155fUgR5NkMe2q-J8Z_lCPT3XhCpQw-2yKW85yUuGVW0/edit?usp=drive_link',
-  decisions:       'https://docs.google.com/document/d/155fUgR5NkMe2q-J8Z_lCPT3XhCpQw-2yKW85yUuGVW0/edit?usp=drive_link',
+  decisions:       'https://docs.google.com/document/d/1osaGMx87Kr_rNggoBeztq2LT0JnRgPpPye-60fKZv0w/edit?usp=drive_link',
 };
 
 /* ─── Google Drive SVG icon (official coloured triangle logo) ─────────────── */
