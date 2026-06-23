@@ -2,6 +2,7 @@
 
 > **Status:** Draft  
 > **Last updated:** June 2026  
+> **Contact:** somesh@contentment.org  
 > **UI/UX policy:** **LOCKED.** This spec documents the approved prototype in `site/index.html`. New pages must reuse these patterns. No redesign, no new color palette, no new typography in v1.
 
 **Source of truth:** `site/index.html` · [Messaging & Copy](../MESSAGING-AND-COPY.md) · [Voice & Tone](../VOICE-AND-TONE.md)
@@ -271,7 +272,7 @@ Forms are **not one-size-fits-all**. Use the provider that already owns the work
 2. Insert into **GCP Cloud SQL** `school_inquiries` + notify partnerships email (Phase 2)
 
 **Success:** `200` — inline thank-you matching voice & tone.  
-**Error:** Friendly message + `mailto:hello@contentment.org`.
+**Error:** Friendly message + `mailto:somesh@contentment.org`.
 
 ---
 

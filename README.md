@@ -38,7 +38,7 @@ python3 -m http.server 8080
 
 Then open http://localhost:8080
 
-(Or open `index.html` directly in a browser — external images still load.)
+(Or open `site/index.html` directly in a browser — use the footer **Project docs** link or open `site/docs/index.html`. Links use relative paths so they work over `file://` as well as a local server. Run the docs copy command below first so `site/docs/` exists.)
 
 **Project docs** — copy HTML from `docs/` into `site/docs/`, then serve `site/`:
 
@@ -150,5 +150,6 @@ Defined in the `<script>` block at the bottom of `site/index.html`:
 
 ## Contact
 
-- **Email:** hello@contentment.org
+- **Project / technical:** somesh@contentment.org
+- **General:** hello@contentment.org
 - The Contentment Foundation · 501(c)(3) nonprofit

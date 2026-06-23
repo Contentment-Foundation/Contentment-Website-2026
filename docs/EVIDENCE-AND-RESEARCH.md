@@ -2,6 +2,7 @@
 
 > **Status:** Draft — citable sources for website copy  
 > **Last updated:** June 2026  
+> **Contact:** somesh@contentment.org  
 > **Use for:** Why Teacher Wellbeing, For Schools, impact pages, footnotes, and any claim about research-backed outcomes
 
 Full bibliographic detail for external research cited on the site. TCF's own outcome stats (86%, 325 schools, etc.) live in [Messaging & Copy](./MESSAGING-AND-COPY.md) Section 8.

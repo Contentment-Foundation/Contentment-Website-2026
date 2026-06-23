@@ -2,6 +2,7 @@
 
 > **Status:** Draft  
 > **Last updated:** June 2026  
+> **Contact:** somesh@contentment.org  
 > **Product:** The Contentment Foundation public website  
 > **UI/UX constraint:** Locked to current prototype (`site/index.html`) and approved planning docs. No visual redesign in v1.
 

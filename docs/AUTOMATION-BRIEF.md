@@ -1,6 +1,6 @@
 # contentment.org — Custom Automation & Integrations Brief
 > Q2 2026 · Engineering, Operations & Growth Team · Full detail in `docs/planning/`  
-> Prepared by **Somesh Bhardwaj** · Sr. System Admin, Full Stack AI Engineer · The Contentment Foundation
+> Prepared by **Somesh Bhardwaj** · somesh@contentment.org · Sr. System Admin, Full Stack AI Engineer · The Contentment Foundation
 
 ---
 

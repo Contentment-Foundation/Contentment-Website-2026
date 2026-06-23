@@ -1,6 +1,6 @@
 # contentment.org — Technical Development Brief
 > Q2 2026 · Backend & Engineering Team · Full detail in `docs/planning/`  
-> Prepared by **Somesh Bhardwaj** · Sr. System Admin, Full Stack AI Engineer · The Contentment Foundation
+> Prepared by **Somesh Bhardwaj** · somesh@contentment.org · Sr. System Admin, Full Stack AI Engineer · The Contentment Foundation
 
 ---
 
@@ -126,7 +126,7 @@ Server (Vercel fn):
   → Body: { "email", "first_name", "segments": ["newsletter"] }
   → 200 → inline success message
   → 4xx duplicate → "You're already subscribed"
-  → 5xx → friendly error + mailto:hello@contentment.org
+  → 5xx → friendly error + mailto:somesh@contentment.org
 
 Env var: FLODESK_API_KEY (server-side only — never expose to browser)
 ```

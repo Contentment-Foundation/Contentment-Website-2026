@@ -153,5 +153,6 @@ STILL TO DO (non-blocking)
 CONTACT
 -------
 
-  hello@contentment.org
+  Project / technical: somesh@contentment.org
+  General: hello@contentment.org
   The Contentment Foundation · 501(c)(3) nonprofit

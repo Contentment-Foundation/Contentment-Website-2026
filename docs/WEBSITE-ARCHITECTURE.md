@@ -3,6 +3,7 @@
 > **Status:** Draft — under review and finalization  
 > **Domain:** [contentment.org](https://contentment.org)  
 > **Last updated:** June 2026  
+> **Contact:** somesh@contentment.org  
 > **Current build:** Phase 1 homepage prototype in `site/index.html` (static HTML/CSS/JS)
 
 This document is the canonical reference for site structure, URL planning, content scope, and build priorities. Slugs and page groupings are suggestions until the team signs off on final URLs.

@@ -1,5 +1,7 @@
 # Contentment Foundation — Project Documentation
 
+> **Contact:** somesh@contentment.org
+
 Planning and content docs for the contentment.org redesign (Q2 2026). All files are draft unless marked approved.
 
 ## Published briefs (web)

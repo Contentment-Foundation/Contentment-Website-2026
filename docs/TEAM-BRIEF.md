@@ -1,6 +1,6 @@
 # contentment.org Redesign — Team Brief
 > Q2 2026 · One-pager for all team members · Full detail in individual docs under `docs/`  
-> Prepared by **Somesh Bhardwaj** · Sr. System Admin, Full Stack AI Engineer · The Contentment Foundation
+> Prepared by **Somesh Bhardwaj** · somesh@contentment.org · Sr. System Admin, Full Stack AI Engineer · The Contentment Foundation
 
 ---
 

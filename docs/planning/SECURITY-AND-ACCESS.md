@@ -2,6 +2,7 @@
 
 > **Status:** Draft  
 > **Last updated:** June 2026  
+> **Contact:** somesh@contentment.org  
 > **Audience:** Founders, PMs, and engineers — plain English
 
 Related: [Technical Architecture](./TECHNICAL-ARCHITECTURE.md) · [PRD](./PRD.md)
@@ -61,7 +62,7 @@ contentment.org is a **public marketing website**. It does not store credit card
 | **Anonymous visitor** | Anyone on the internet | Read all public pages; submit newsletter; submit school form; click through to Keela | Access `/homeroom`; see draft preview URLs without token |
 | **Homeroom member** | Monthly giver | Access `/homeroom/*` after gate | Edit site content; see other members' data |
 | **Content editor** | TCF staff / agency | Edit CMS or repo; trigger preview deploys | Access Keela financials unless granted |
-| **Site admin** | Somesh / tech lead | Deploy production; manage env vars; rotate Homeroom password | None beyond job function |
+| **Site admin** | Somesh Bhardwaj · somesh@contentment.org | Deploy production; manage env vars; rotate Homeroom password | None beyond job function |
 
 ### Keela (external)
 
@@ -106,7 +107,7 @@ What visitors and staff should see when things break.
 | Failure | User sees | System action |
 |---------|-----------|---------------|
 | Keela URL missing / wrong | Button goes nowhere or 404 | **Pre-launch check:** validate all Keela URLs in staging |
-| Keela checkout down | Keela's error page | Show `hello@contentment.org` on `/give/monthly` as fallback |
+| Keela checkout down | Keela's error page | Show `somesh@contentment.org` on `/give/monthly` as fallback |
 | User abandons cart | No error | Keela handles; optional retargeting via email (out of scope) |
 
 ### Newsletter signup
@@ -114,7 +115,7 @@ What visitors and staff should see when things break.
 | Failure | User sees | System action |
 |---------|-----------|---------------|
 | Invalid email | Inline: "Please enter a valid email" | Client-side validation |
-| Provider API error | "Something went wrong. Try again or email hello@contentment.org" | Log error server-side; alert if >5% failure rate |
+| Provider API error | "Something went wrong. Try again or email somesh@contentment.org" | Log error server-side; alert if >5% failure rate |
 | Duplicate email | "You're already subscribed" (friendly) | Provider returns duplicate; map to friendly copy |
 
 ### School discovery form
@@ -166,6 +167,28 @@ What visitors and staff should see when things break.
 
 ---
 
+## 7b. Webhook idempotency
+
+Keela retries webhook delivery on non-200 responses. If a Vercel fn completes its work (Slack + Sheets written) but the 200 response is slow, Keela re-delivers and you get duplicate Slack messages and duplicate Sheets rows.
+
+**Pattern:** Store a processed flag in Upstash Redis using NX (only-if-not-exists). Uses the same Redis instance as rate limiting — no additional infra required.
+
+```typescript
+// In /api/keela-webhook handler — before any downstream calls
+const redis = Redis.fromEnv();
+const webhookId = request.headers.get('x-keela-delivery-id') ?? body.id;
+
+const isNew = await redis.set(
+  `webhook:${webhookId}`,
+  '1',
+  { nx: true, ex: 86400 }   // ex = expire after 24h; nx = only set if key doesn't exist
+);
+if (!isNew) return new Response('Already processed', { status: 200 });
+// proceed: Slack → Sheets → Flodesk
+```
+
+---
+
 ## 8. Security checklist (pre-launch)
 
 - [ ] HTTPS enforced on production domain
@@ -173,11 +196,16 @@ What visitors and staff should see when things break.
 - [ ] Keela uses official hosted checkout URLs only
 - [ ] Forms use HTTPS POST
 - [ ] Privacy policy and terms published
-- [ ] Cookie/analytics consent if required by jurisdiction
-- [ ] GitHub org 2FA enabled for contributors
-- [ ] Homeroom password stored in host env only (Phase 2)
-- [ ] Dependency audit: `npm audit` if using Astro build
-- [ ] Security headers: `X-Frame-Options`, `X-Content-Type-Options` via host config
+- [ ] Cookie/analytics consent resolved — see DECISIONS.md #002
+- [ ] **Content Security Policy** deployed via `vercel.json` headers (see TECHNICAL-ARCHITECTURE.md §9); tested in report-only mode before enforcing
+- [ ] GitHub org 2FA enabled for all contributors
+- [ ] Homeroom password stored in Vercel env only — never in code, Slack, or email (Phase 2)
+- [ ] Dependency audit: `npm audit --audit-level=high` passing in CI
+- [ ] Full security headers set in `vercel.json`: CSP · `X-Frame-Options` · `X-Content-Type-Options` · `Referrer-Policy` · `Permissions-Policy`
+- [ ] `font-display: swap` on Google Fonts URL (prevents render-blocking flash)
+- [ ] Transactional email provider configured for team notifications — see DECISIONS.md #003
+- [ ] Webhook idempotency check implemented in `/api/keela-webhook` (§7b above)
+- [ ] Rate limiting on all `/api/*` routes via @upstash/ratelimit (see TECHNICAL-ARCHITECTURE.md §10)
 
 ---
 
@@ -188,6 +216,7 @@ What visitors and staff should see when things break.
 | Technical architecture | [TECHNICAL-ARCHITECTURE.md](./TECHNICAL-ARCHITECTURE.md) |
 | Frontend integrations | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) |
 | PRD | [PRD.md](./PRD.md) |
+| Open decisions | [DECISIONS.md](./DECISIONS.md) |
 
 ---
 
@@ -197,3 +226,4 @@ What visitors and staff should see when things break.
 |------|--------|
 | 2026-06 | Initial security & access document. |
 | 2026-06 | Updated to confirmed stack: Flodesk replaces Mailchimp throughout; GCP Cloud SQL replaces Supabase (§4 renamed, access rules updated); Vercel edge middleware replaces Netlify for Homeroom gate (§2); Raisely added to admin roles and data table; form error handling updated to reference GCP/provider fallback instead of Formspree. |
+| 2026-06 | Added: webhook idempotency pattern (§7b), CSP to pre-launch checklist, transactional email and rate-limiting checklist items, link to DECISIONS.md. |

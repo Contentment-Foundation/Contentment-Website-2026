@@ -1,6 +1,6 @@
 # contentment.org — Growth, SEO & Analytics Brief
 > Q2 2026 · Post-Development · Marketing, Content & Growth Team  
-> Prepared by **Somesh Bhardwaj** · Sr. System Admin, Full Stack AI Engineer · The Contentment Foundation
+> Prepared by **Somesh Bhardwaj** · somesh@contentment.org · Sr. System Admin, Full Stack AI Engineer · The Contentment Foundation
 
 ---
 

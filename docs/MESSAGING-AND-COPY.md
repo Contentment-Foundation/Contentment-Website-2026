@@ -2,6 +2,7 @@
 
 > **Status:** Draft — updated after Jun 11, 2026 team meeting  
 > **Last updated:** June 2026  
+> **Contact:** somesh@contentment.org  
 > **Use for:** Taglines, belief journey, page copy briefs, stats, CTAs, guardrails, and handoff checklists  
 > **Authority:** Canonical source for messaging and copy. If anything here disagrees with another doc, **this brief wins** for copy decisions.
 

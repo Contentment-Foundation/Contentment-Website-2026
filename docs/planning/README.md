@@ -1,5 +1,7 @@
 # Planning & Execution
 
+> **Contact:** somesh@contentment.org
+
 Build-ready documents for the contentment.org redesign. All execution docs assume **no UI/UX changes** beyond the approved prototype (`site/index.html`) and planning briefs in `../`.
 
 | Document | File | Owner lens |

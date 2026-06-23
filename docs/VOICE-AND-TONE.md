@@ -2,6 +2,7 @@
 
 > **Status:** Draft — under review and finalization  
 > **Last updated:** June 2026  
+> **Contact:** somesh@contentment.org  
 > **Use for:** Website copy, campaigns, newsletters, social, press, Homeroom content, and any AI-assisted writing for TCF
 
 This document defines **who** TCF sounds like — persona, tone, and writing craft. For **what to say** (taglines, belief journey, page copy, stats, CTAs, banned words), use [Messaging & Copy](./MESSAGING-AND-COPY.md), which wins on any conflict. [Site architecture](./WEBSITE-ARCHITECTURE.md) defines *where* pages live.

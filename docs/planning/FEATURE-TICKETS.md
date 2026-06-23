@@ -2,6 +2,7 @@
 
 > **Status:** Draft  
 > **Last updated:** June 2026  
+> **Contact:** somesh@contentment.org  
 > **Use:** Copy each ticket into an AI coding session or issue tracker.  
 > **UI rule:** Strictly match `site/index.html` and [Frontend Spec](./FRONTEND-SPECIFICATION.md). No visual redesign.
 
@@ -249,7 +250,7 @@ Form on `/schools`: school name, contact name, email, role, country, message. St
 **Acceptance criteria:**
 - [ ] Client validation on required fields
 - [ ] Successful submit shows thank-you message in voice & tone
-- [ ] Failure shows fallback email hello@contentment.org
+- [ ] Failure shows fallback email somesh@contentment.org
 - [ ] Notification email to partnerships team
 
 ---
@@ -468,7 +469,7 @@ Run full QA: all routes, all CTAs, forms, mobile, a11y axe scan, cross-browser (
 - [ ] No critical a11y issues
 - [ ] Keela live transaction verified
 - [ ] Redirect plan for old URLs executed
-- [ ] `hello@contentment.org` monitored for form notifications
+- [ ] `somesh@contentment.org` monitored for form notifications
 
 ---
 
@@ -497,7 +498,9 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | should-have | 8 |
 | nice-to-have | 6 |
 
-**Suggested sprint order:** 001 → 002 → 003 → 010 → 004 → 020 → 030 → 031 → 040 → 050 → 060 → 051 → 070 → 071 → 080 → 100 → 101
+**Suggested sprint order:** 001 → 002 → 003 → 010 → 011 → 004 → 020 → 030 → 031 → 040 → 050 → 060 → 051 → 070 → 071 → 080 → 081 → 100 → 101
+
+> TICKET-011 (homepage copy audit) added after 010; TICKET-081 (SEO baseline) added before 100 — both were missing from the previous order.
 
 ---
 
@@ -508,6 +511,7 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | PRD | [PRD.md](./PRD.md) |
 | Technical architecture | [TECHNICAL-ARCHITECTURE.md](./TECHNICAL-ARCHITECTURE.md) |
 | Frontend spec | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) |
+| Open decisions | [DECISIONS.md](./DECISIONS.md) |
 
 ---
 
@@ -517,3 +521,4 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 |------|--------|
 | 2026-06 | Initial feature ticket list for Phase 1 MVP. |
 | 2026-06 | Fixed sprint order (TICKET-060 moved after 050; TICKET-020 does not depend on Keela). Added Homeroom naming convention note. Added external content dependency note to TICKET-030. Added Keela blocking chain note to TICKET-051. Added messaging brief alignment note to TICKET-090. |
+| 2026-06 | Sprint order corrected: TICKET-011 (homepage copy audit) and TICKET-081 (SEO baseline) were missing — both added in correct dependency position. |

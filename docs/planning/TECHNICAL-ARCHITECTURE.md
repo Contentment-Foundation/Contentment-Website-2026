@@ -2,6 +2,7 @@
 
 > **Status:** Draft  
 > **Last updated:** June 2026  
+> **Contact:** somesh@contentment.org  
 > **Constraint:** Preserve existing UI from `site/index.html`; evolve structure, routing, and integrations only.
 
 Related: [PRD](./PRD.md) · [Frontend Spec](./FRONTEND-SPECIFICATION.md) · [Security & Access](./SECURITY-AND-ACCESS.md)
@@ -348,29 +349,195 @@ Detail: [Frontend Specification — Integrations](./FRONTEND-SPECIFICATION.md#in
 
 ---
 
-## 8. Performance & caching
+## 8. Astro configuration (`astro.config.mjs`)
+
+Install and configure before any page ticket begins:
+
+```javascript
+import { defineConfig } from 'astro/config';
+import vercel from '@astrojs/vercel/static';
+import sitemap from '@astrojs/sitemap';
+
+export default defineConfig({
+  site: 'https://contentment.org',
+  output: 'static',
+  adapter: vercel(),              // required for edge middleware (Homeroom gate Phase 2)
+  integrations: [sitemap()],      // auto-generates /sitemap.xml on every build
+  image: {
+    service: { entrypoint: 'astro/assets/services/sharp' }   // WebP + srcset at build time
+  }
+});
+```
+
+**Required packages:** `@astrojs/vercel`, `@astrojs/sitemap`, `sharp`
+
+Use `<Image />` from `astro:assets` for all photos and OG images. It generates WebP, responsive srcset, and correct `width`/`height` attributes at build time — directly addresses the LCP < 2.5s target.
+
+---
+
+## 9. `vercel.json` — full specification
+
+```json
+{
+  "redirects": [
+    { "source": "/donate", "destination": "/give/monthly", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options",         "value": "DENY" },
+        { "key": "X-Content-Type-Options",  "value": "nosniff" },
+        { "key": "Referrer-Policy",         "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy",      "value": "camera=(), microphone=(), geolocation=()" },
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://www.googletagmanager.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://plausible.io https://www.google-analytics.com https://api.flodesk.com; frame-src https://*.flodesk.com https://*.keela.co https://*.raisely.com; object-src 'none'; base-uri 'self';" }
+      ]
+    }
+  ],
+  "functions": {
+    "src/pages/api/*.ts": { "maxDuration": 10 }
+  }
+}
+```
+
+**CSP notes:**
+- Add any new third-party script domain to `script-src` before deploying or it will silently block.
+- Test in report-only mode first (`Content-Security-Policy-Report-Only`) — watch the browser console for violations before enforcing.
+- `'unsafe-inline'` on `script-src` is required for Astro's inline hydration. Remove when migrating to fully external scripts.
+
+---
+
+## 10. Rate limiting
+
+All `/api/*` routes must rate-limit by IP before any downstream call (Flodesk, Slack, Sheets, Zoom). Use `@upstash/ratelimit` backed by Upstash Redis — survives Vercel cold starts, works across all edge regions.
+
+```typescript
+// src/lib/ratelimit.ts — shared across all API routes
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
+
+export const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),                       // reads UPSTASH_REDIS_REST_URL + TOKEN
+  limiter: Ratelimit.slidingWindow(5, '15 m'),  // 5 requests / 15 min / IP
+  analytics: true,
+});
+
+// In any Vercel fn:
+const ip = request.headers.get('x-forwarded-for') ?? '127.0.0.1';
+const { success } = await ratelimit.limit(`api:school-inquiry:${ip}`);
+if (!success) return new Response('Too many requests', { status: 429 });
+```
+
+**New env vars (server-only):**
+```bash
+UPSTASH_REDIS_REST_URL=     # from Upstash console
+UPSTASH_REDIS_REST_TOKEN=   # from Upstash console — never expose to browser
+```
+
+Upstash free tier: 10,000 commands/day — sufficient for TCF form volume.
+
+---
+
+## 11. CI/CD pipeline (GitHub Actions)
+
+No PR merges to `main` without passing this pipeline.
+
+```yaml
+# .github/workflows/ci.yml
+name: CI
+on:
+  push:    { branches: [main] }
+  pull_request: { branches: [main] }
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: npm ci
+      - run: npm run type-check    # tsc --noEmit
+      - run: npm run lint          # eslint src/
+      - run: npm audit --audit-level=high
+      - run: npm run build         # astro build — catches broken imports at PR time
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+      - uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: ${{ vars.PREVIEW_URL }}
+          uploadArtifacts: true
+```
+
+**`package.json` scripts:**
+```json
+{
+  "scripts": {
+    "dev":        "astro dev",
+    "build":      "astro build",
+    "preview":    "astro preview",
+    "type-check": "tsc --noEmit",
+    "lint":       "eslint src/ --ext .ts,.astro"
+  }
+}
+```
+
+**Branch strategy:** `feature/TICKET-XXX-short-description` → PR → Vercel preview URL → merge to `main` → production deploy. No long-lived branches; PRs close within one sprint.
+
+**Secret scanning:** Enable GitHub's native secret scanning on the organisation. Catches API keys accidentally committed.
+
+---
+
+## 12. DNS cutover runbook
+
+Run in sequence. `hello@contentment.org` email must not be interrupted during cutover.
+
+| Step | When | Action |
+|------|------|--------|
+| 1 | 72h before | Reduce all DNS TTLs to 60 seconds at current registrar |
+| 2 | 48h before | Add domain to Vercel project → Settings → Domains; verify SSL auto-provisions |
+| 3 | 24h before | Full smoke test on Vercel preview URL — all routes, forms, Keela links |
+| 4 | Cutover | Set A record to `76.76.21.21` (Vercel) or CNAME to `cname.vercel-dns.com` for apex domain |
+| 5 | Cutover | **Verify MX records unchanged** — Google Workspace email must continue routing |
+| 6 | Cutover | Confirm HTTPS loads within 5 minutes (Vercel auto-provisions Let's Encrypt) |
+| 7 | +15 min | Smoke test https://contentment.org — homepage, /why, /give/monthly, Keela CTA |
+| 8 | +1 hour | Submit sitemap.xml in Google Search Console; check for crawl errors |
+| 9 | +24h | Restore DNS TTLs to 3600 seconds |
+| 10 | +30 days | Decommission old site once backlink traffic has migrated |
+
+**Emergency rollback:** Revert A/CNAME to old host. 60-second TTL means recovery within ~2 minutes.
+
+---
+
+## 13. Performance & caching
 
 | Asset | Strategy |
 |-------|----------|
-| HTML | CDN cache, short TTL or immutable per deploy |
-| Images | WebP where possible; `loading="lazy"` below fold |
-| Fonts | Google Fonts with `preconnect` (already in prototype) |
-| JS | Defer non-critical; respect `prefers-reduced-motion` |
+| HTML | CDN cache, immutable per deploy (Vercel default) |
+| Images | `<Image />` from `astro:assets` — auto WebP + srcset + `loading="lazy"` |
+| Fonts | Google Fonts `preconnect` + `?display=swap` on the URL (prevents render-blocking) |
+| JS | Defer non-critical; `type="module"`; `prefers-reduced-motion` disables orbit and parallax |
+| API routes | No cache — always fresh |
 
 ---
 
-## 9. Observability
+## 14. Observability
 
-| Signal | Tool |
-|--------|------|
-| Uptime | Vercel status / UptimeRobot |
-| API errors (custom forms) | Vercel function logs; Sentry optional |
-| Analytics | GA4 / Plausible |
-| Form failures | Flodesk / Keela / Raisely dashboards + alert email |
+| Signal | Tool | Action |
+|--------|------|--------|
+| Uptime | UptimeRobot | Monitor https://contentment.org every 5 min; alert to `#errors` |
+| API errors | Slack `#errors` (AUTOMATION-BRIEF A6) | Every Vercel fn catch block must POST to this webhook |
+| Error tracking | Sentry (Phase 1.5) | `SENTRY_DSN` env var; `@sentry/astro` — skip Phase 1 |
+| Analytics | Plausible (primary) | See DECISIONS.md #001 |
+| Form failures | Vercel function logs + Slack `#errors` | Alert if >5% error rate in 15 min window |
 
 ---
 
-## 10. Related documents
+## 15. Related documents
 
 | Document | Location |
 |----------|----------|
@@ -378,6 +545,7 @@ Detail: [Frontend Specification — Integrations](./FRONTEND-SPECIFICATION.md#in
 | Security & access | [SECURITY-AND-ACCESS.md](./SECURITY-AND-ACCESS.md) |
 | Frontend spec | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) |
 | Feature tickets | [FEATURE-TICKETS.md](./FEATURE-TICKETS.md) |
+| Open decisions | [DECISIONS.md](./DECISIONS.md) |
 
 ---
 
@@ -388,3 +556,4 @@ Detail: [Frontend Specification — Integrations](./FRONTEND-SPECIFICATION.md#in
 | 2026-06 | Initial technical architecture. Astro recommended; Supabase optional Phase 2. |
 | 2026-06 | Stack confirmed: Vercel deploy, Flodesk newsletter, flexible forms (Flodesk/Keela/Raisely/custom), GCP Cloud SQL optional Phase 2. |
 | 2026-06 | Committed to CMS path: markdown-in-repo (Phase 1) → Sanity (Phase 1.5); added rationale. Added /impact vs /about/impact content boundary definition to routing section. |
+| 2026-06 | Added: Astro config spec (§8), vercel.json with CSP (§9), rate limiting with @upstash/ratelimit (§10), GitHub Actions CI/CD pipeline (§11), DNS cutover runbook (§12), updated performance and observability sections. DECISIONS.md created for 6 open choices. |
