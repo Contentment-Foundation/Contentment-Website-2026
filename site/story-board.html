@@ -227,6 +227,13 @@
     background:rgba(255,255,255,.88); padding:7px 12px; border-radius:4px; pointer-events:none;
     border:1.5px dashed rgba(2,78,112,.18); transform:rotate(-1deg); box-shadow:2px 3px 0 rgba(2,78,112,.06); }
   #viewport.grid-mode .zoom-hint { display:none; }
+
+  #emptyState { position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+    text-align:center; padding:40px; pointer-events:none; }
+  #emptyState.show { display:flex; }
+  #emptyState p { font-family:Caveat,cursive; font-size:20px; font-weight:600; color:var(--deep);
+    background:rgba(255,255,255,.88); padding:14px 22px; border-radius:10px; margin:0;
+    border:1.5px dashed rgba(2,78,112,.18); box-shadow:2px 3px 0 rgba(2,78,112,.06); }
 </style>
 </head>
 <body>
@@ -264,6 +271,7 @@
       <div id="boardSurface"></div>
     </div>
     <div class="zoom-hint">drag to explore · scroll to zoom · tap a story ♥</div>
+    <div id="emptyState"><p>No stories match these filters yet — try a different region or role.</p></div>
   </div>
 </div>
 <div id="modalBg"></div>
@@ -299,7 +307,8 @@ const REGIONS=["All","Americas","Africa","Asia","Europe","Oceania"];
 const VIDEO_EVERY=7; // every 7th story gets a placeholder video badge
 
 let stories=[], filtered=[], activeRegion="All", activeRole="all";
-let gridMode=window.matchMedia("(max-width:820px)").matches;
+const mobileQuery=window.matchMedia("(max-width:820px)");
+let gridMode=mobileQuery.matches;
 let scale=1, panX=0, panY=0, dragging=false, dragX=0, dragY=0;
 
 const viewport=document.getElementById("viewport");
@@ -362,6 +371,8 @@ function renderCards(){
   filtered=stories.filter(inFilter);
   document.getElementById("countLabel").textContent=
     filtered.length+" "+(filtered.length===1?"story":"stories");
+  document.getElementById("emptyState").classList.toggle("show",filtered.length===0);
+  if(!filtered.length){ boardSurface.innerHTML=""; return; }
   if(!gridMode) layoutBoard();
   boardSurface.innerHTML=(gridMode?"":`<div class="board-doodles" aria-hidden="true">
       <span class="d1">our stories</span>
@@ -381,7 +392,7 @@ function renderCards(){
         ${s.shape==="shape-ticket"?'<span class="ticket-stamp" aria-hidden="true">voice</span>':""}
         ${s.shape==="shape-tag"?'<span class="tag-hole" aria-hidden="true"></span>':""}
         <div class="media">
-          <img src="${s.img}" alt="" loading="lazy" />
+          <img src="${s.img}" alt="${s.cap||""}" loading="lazy" />
           ${s.hasVideo?'<div class="play" aria-hidden="true">▶</div>':""}
         </div>
         <div class="body">
@@ -429,18 +440,49 @@ function fitBoard(){
 }
 
 // Pan & zoom (board mode only)
+const activePointers=new Map();
+let pinchStartDist=null, pinchStartScale=1;
 viewport.addEventListener("pointerdown",e=>{
-  if(gridMode||e.target.closest(".frame")) return;
+  if(gridMode) return;
+  activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(activePointers.size===2){
+    dragging=false; viewport.classList.remove("dragging");
+    const pts=[...activePointers.values()];
+    pinchStartDist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+    pinchStartScale=scale;
+    return;
+  }
+  if(e.target.closest(".frame")) return;
   dragging=true; dragX=e.clientX-panX; dragY=e.clientY-panY;
   viewport.classList.add("dragging");
   viewport.setPointerCapture(e.pointerId);
 });
 viewport.addEventListener("pointermove",e=>{
+  if(activePointers.has(e.pointerId)) activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(activePointers.size===2&&pinchStartDist){
+    const pts=[...activePointers.values()];
+    const dist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+    const midX=(pts[0].x+pts[1].x)/2, midY=(pts[0].y+pts[1].y)/2;
+    const ns=Math.min(2.2,Math.max(0.35,pinchStartScale*(dist/pinchStartDist)));
+    const rect=viewport.getBoundingClientRect();
+    const mx=midX-rect.left, my=midY-rect.top;
+    panX=mx-(mx-panX)*(ns/scale);
+    panY=my-(my-panY)*(ns/scale);
+    scale=ns;
+    applyTransform();
+    return;
+  }
   if(!dragging) return;
   panX=e.clientX-dragX; panY=e.clientY-dragY;
   applyTransform();
 });
-viewport.addEventListener("pointerup",()=>{ dragging=false; viewport.classList.remove("dragging"); });
+function endPointer(e){
+  activePointers.delete(e.pointerId);
+  if(activePointers.size<2) pinchStartDist=null;
+  if(activePointers.size===0){ dragging=false; viewport.classList.remove("dragging"); }
+}
+viewport.addEventListener("pointerup",endPointer);
+viewport.addEventListener("pointercancel",endPointer);
 viewport.addEventListener("wheel",e=>{
   if(gridMode) return;
   e.preventDefault();
@@ -456,6 +498,7 @@ viewport.addEventListener("wheel",e=>{
 
 document.getElementById("btnBoard").onclick=()=>setGridMode(false);
 document.getElementById("btnGrid").onclick=()=>setGridMode(true);
+mobileQuery.addEventListener("change",e=>setGridMode(e.matches));
 document.getElementById("btnFit").onclick=fitBoard;
 document.getElementById("btnReset").onclick=fitBoard;
 document.getElementById("btnZoomIn").onclick=()=>{ scale=Math.min(2.2,scale+.15); applyTransform(); };

@@ -234,8 +234,11 @@ const inRegion=k=> activeRegion==="All"||PROGRAM[k].region===activeRegion;
 
 if(typeof d3==="undefined"||typeof topojson==="undefined"){
   showBanner("Libraries didn't load — this page needs an internet connection (it pulls D3 and the map from a CDN). Open the file in a normal browser tab while online.");
+} else if(typeof PROGRAM==="undefined"){
+  showBanner("Program data didn't load — program-data.js is missing or failed to load next to this file.");
 }
 function showBanner(msg){ const b=document.getElementById("banner"); b.textContent=msg; b.style.display="block"; }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
 // filter chips
 const fWrap=document.getElementById("filters");
@@ -248,14 +251,16 @@ function animate(el,to){ const start=+el.dataset.count||0,t0=performance.now(),d
     el.textContent=fmt(v); if(p<1) requestAnimationFrame(step); else el.dataset.count=to; })(t0); }
 function updateTotals(){
   const keys=Object.keys(PROGRAM).filter(inRegion), geo=keys.filter(k=>!k.startsWith("__"));
-  const sum=f=>keys.reduce((a,k)=>a+PROGRAM[k][f],0);
+  // City pins (e.g. __Nairobi) are a drill-down into their country's own numbers,
+  // not additional population — sum over `geo` only or totals double-count them.
+  const sum=f=>geo.reduce((a,k)=>a+PROGRAM[k][f],0);
   animate(document.getElementById("tCountries"),geo.length);
   animate(document.getElementById("tSchools"),sum("schools"));
   animate(document.getElementById("tEducators"),sum("educators"));
   animate(document.getElementById("tStudents"),sum("students"));
 }
 
-if(typeof d3!=="undefined" && typeof topojson!=="undefined"){
+if(typeof d3!=="undefined" && typeof topojson!=="undefined" && typeof PROGRAM!=="undefined"){
 d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world=>{
   const feats=topojson.feature(world,world.objects.countries).features;
   // resolve program key by ISO id first, then name
@@ -267,9 +272,13 @@ d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(w
     .attr("d",path)
     .attr("class",f=>"country"+(f.__key?" served":""))
     .attr("data-key",f=>f.__key||"")
+    .attr("tabindex",f=>f.__key?0:null)
+    .attr("role",f=>f.__key?"button":null)
+    .attr("aria-label",f=>f.__key?nameOf(f.__key):null)
     .on("mousemove",(e,f)=>{ if(f.__key&&inRegion(f.__key)) quickTip(f.__key,e); })
     .on("mouseleave",hideTip)
-    .on("click",(e,f)=>{ if(f.__key&&inRegion(f.__key)){ openPopup(f.__key,e); e.stopPropagation(); } });
+    .on("click",(e,f)=>{ if(f.__key&&inRegion(f.__key)){ openPopup(f.__key,e); e.stopPropagation(); } })
+    .on("keydown",(e,f)=>{ if(f.__key&&inRegion(f.__key)&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(f.__key,null); } });
 
   const pins=svg.append("g").selectAll("g").data(CITIES).join("g")
     .attr("transform",d=>`translate(${projection(d.coords)})`);
@@ -277,8 +286,10 @@ d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(w
   pulse.append("animate").attr("attributeName","r").attr("values","4;12;4").attr("dur","2.4s").attr("repeatCount","indefinite");
   pulse.append("animate").attr("attributeName","opacity").attr("values",".5;0;.5").attr("dur","2.4s").attr("repeatCount","indefinite");
   pins.append("circle").attr("class","pin").attr("r",4)
+    .attr("tabindex",0).attr("role","button").attr("aria-label",d=>nameOf(d.key))
     .on("mousemove",(e,d)=>{ if(inRegion(d.key)) quickTip(d.key,e); }).on("mouseleave",hideTip)
-    .on("click",(e,d)=>{ if(inRegion(d.key)){ openPopup(d.key,e); e.stopPropagation(); } });
+    .on("click",(e,d)=>{ if(inRegion(d.key)){ openPopup(d.key,e); e.stopPropagation(); } })
+    .on("keydown",(e,d)=>{ if(inRegion(d.key)&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(d.key,null); } });
   pins.append("text").attr("class","pin-label").attr("x",8).attr("y",3).text(d=>d.name);
 
   applyFilter(); updateTotals(); renderList();
@@ -287,7 +298,7 @@ d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(w
 
 // hover tooltip
 function quickTip(k,e){ const d=PROGRAM[k];
-  tip.innerHTML=`<b>${nameOf(k)}</b> — ${d.schools} schools · ${fmt(d.students)} students · click for details`;
+  tip.innerHTML=`<b>${esc(nameOf(k))}</b> — ${d.schools} schools · ${fmt(d.students)} students · click for details`;
   tip.classList.add("show"); const r=mapWrap.getBoundingClientRect();
   let x=e.clientX-r.left+12,y=e.clientY-r.top+12;
   if(x+tip.offsetWidth>r.width) x=e.clientX-r.left-tip.offsetWidth-12;
@@ -313,8 +324,8 @@ function openPopup(k,evt){
     <div class="pop-main">
       <button class="pop-close" id="popClose">×</button>
       <div class="pop-body">
-        <h2>${nameOf(k)}</h2>
-        <div class="region">${d.region} · active since ${d.since}</div>
+        <h2>${esc(nameOf(k))}</h2>
+        <div class="region">${esc(d.region)} · active since ${d.since}</div>
         <div class="metrics">
           <div class="metric"><div class="n">${d.schools}</div><div class="l">Schools</div></div>
           <div class="metric"><div class="n">${fmt(d.educators)}</div><div class="l">Educators</div></div>
@@ -325,10 +336,10 @@ function openPopup(k,evt){
         ${bar("Attendance up",d.impact.attendance)}
         ${bar("Teacher retention",d.impact.teacherRetention)}
         <div class="subhead">Programs running</div>
-        <div class="tags">${d.programs.map(p=>`<span class="tag">${p}</span>`).join("")}</div>
+        <div class="tags">${d.programs.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}</div>
         <div class="subhead">Voices from the ground</div>
         <button type="button" class="stories-trigger" id="storiesTrigger">
-          <span>Read the ${d.stories.length} ${d.stories.length===1?"story":"stories"} from ${nameOf(k)}</span>
+          <span>Read the ${d.stories.length} ${d.stories.length===1?"story":"stories"} from ${esc(nameOf(k))}</span>
           <span class="st-arrow" aria-hidden="true">→</span>
         </button>
       </div>
@@ -389,7 +400,7 @@ function openStories(k){
   panel.innerHTML=`<div class="pop-full-inner">
     <div class="full-head">
       <button class="full-back" id="fullBack" aria-label="Back to summary">←</button>
-      <div class="full-head-title">Voices from ${nameOf(k)}</div>
+      <div class="full-head-title">Voices from ${esc(nameOf(k))}</div>
     </div>
     <div class="full-body">
       <div class="story-list">${s.map((st,i)=>{
@@ -398,12 +409,12 @@ function openStories(k){
         return `<details class="story-block"${i===0?" open":""}>
           <summary>
             <span class="role-badge ${rc}">${rl}</span>
-            <span class="story-sum-q">“${st.q}”</span>
-            <span class="story-sum-by">— ${st.by}</span>
+            <span class="story-sum-q">“${esc(st.q)}”</span>
+            <span class="story-sum-by">— ${esc(st.by)}</span>
           </summary>
           <div class="story-block-body">
-            <img class="story-thumb" src="${st.img}" alt="${st.cap||""}">
-            <p class="story-preview">${st.full}</p>
+            <img class="story-thumb" src="${esc(st.img)}" alt="${esc(st.cap||"")}">
+            <p class="story-preview">${esc(st.full)}</p>
           </div>
         </details>`;
       }).join("")}</div>
@@ -456,12 +467,13 @@ function renderList(){
   const q=(document.getElementById("search").value||"").toLowerCase();
   const keys=Object.keys(PROGRAM).filter(inRegion).filter(k=>nameOf(k).toLowerCase().includes(q))
     .sort((a,b)=>PROGRAM[b].students-PROGRAM[a].students);
-  list.innerHTML=keys.map(k=>`<li data-k="${k}" style="${k===selected?'background:var(--served);color:#12331e;font-weight:700':''}">
-    <span>${nameOf(k)}</span><span class="r" style="${k===selected?'color:#1c5230':''}">${PROGRAM[k].schools} schools</span></li>`).join("");
+  list.innerHTML=keys.map(k=>`<li data-k="${esc(k)}" tabindex="0" role="button" style="${k===selected?'background:var(--served);color:#12331e;font-weight:700':''}">
+    <span>${esc(nameOf(k))}</span><span class="r" style="${k===selected?'color:#1c5230':''}">${PROGRAM[k].schools} schools</span></li>`).join("");
   [...list.children].forEach(li=>{
     li.onmouseenter=()=>d3.selectAll("path.country").filter(function(){return this.dataset.key===li.dataset.k;}).classed("active",true);
     li.onmouseleave=()=>d3.selectAll("path.country").filter(function(){return this.dataset.key===li.dataset.k;}).classed("active",li.dataset.k===selected);
     li.onclick=()=>openPopup(li.dataset.k,null);
+    li.onkeydown=(e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openPopup(li.dataset.k,null); } };
   });
 }
 </script>
