@@ -23,7 +23,7 @@ Open http://localhost:8080/foundation-reach-map.html (needs internet for D3 + ma
 - **Map:** D3 `geoNaturalEarth1` flat projection rendering `world-atlas` TopoJSON. No globe, no zoom.
 - **Matching:** served countries are matched by **ISO numeric code** (with a name fallback), so the
   highlight/click join can't silently fail.
-- **Data lives at the top of the `<script>` block**, separate from the map:
+- **Data lives in `site/program-data.js`** (shared with the Story Board prototype):
   - `PROGRAM` — keyed by display name; each entry has `iso`, `region`, `since`, `schools`,
     `educators`, `students`, `impact{}`, `programs[]`, and `stories[]`.
   - `CITIES` — city pins with `[lng, lat]` coords.

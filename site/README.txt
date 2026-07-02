@@ -25,6 +25,8 @@ DEPLOYMENT
     /docs/growth-brief
     /docs/automation-brief
     /foundation-reach-map   Interactive map design prototype (team review)
+    /story-board            Story Board — voices canvas prototype (team review)
+    /story-board-feed-guide How to add stories & media (Google Drive, YouTube)
 
   Google Drive (optional): PDF/Doc brief exports only — not .md files.
   Edit docs/drive-links.js when share URLs are ready.
@@ -38,6 +40,9 @@ REPOSITORY LAYOUT
   site/
     index.html                  ← primary editable build (~48 KB)
     foundation-reach-map.html   ← map design prototype (team review, not on homepage)
+    story-board.html            ← Story Board prototype (team review, not on homepage)
+    story-board-feed-guide.html ← content feed guide for stories & media
+    program-data.js             ← shared story/country data for map + story board
     assets/                     ← images referenced by index.html (~2.8 MB)
     README.txt     ← this file (mirror of ../README.md for local reference)
 

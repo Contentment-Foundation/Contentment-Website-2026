@@ -37,6 +37,17 @@
   to = "/foundation-reach-map.html"
   status = 200
 
+# Story Board — team design prototype (not on homepage yet)
+[[redirects]]
+  from = "/story-board"
+  to = "/story-board.html"
+  status = 200
+
+[[redirects]]
+  from = "/story-board-feed-guide"
+  to = "/story-board-feed-guide.html"
+  status = 200
+
 # Old flat URLs → nested under /docs/
 [[redirects]]
   from = "/tech-brief"

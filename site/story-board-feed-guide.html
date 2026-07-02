@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Board — How to Add Stories &amp; Media</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=Varela+Round&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #1FAFC0; --ocean: #0080B0; --deep: #024E70; --green: #4FA98C;
+      --paper: #FBFAF7; --ink: #23252b; --muted: #5c6570; --line: rgba(2,78,112,.12);
+      --display: 'Newsreader', Georgia, serif;
+      --body: 'Inter', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--body); font-size: 15px; line-height: 1.65; color: var(--ink); background: var(--paper); }
+    a { color: var(--ocean); }
+    a:hover { color: var(--deep); }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 64px; }
+    .banner { padding: 10px 20px; background: #ffdd57; color: #4a3b00; font-size: 12px;
+      display: flex; gap: 14px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid rgba(0,0,0,.06); }
+    .banner a { color: var(--deep); font-weight: 700; text-decoration: none; }
+    .banner a:hover { text-decoration: underline; }
+    header { padding: 40px 0 28px; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
+    .eyebrow { font-family: 'Varela Round', sans-serif; font-size: 11px; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--ocean); margin-bottom: 10px; }
+    h1 { font-family: var(--display); font-size: clamp(1.75rem, 4vw, 2.25rem); font-weight: 500;
+      color: var(--deep); line-height: 1.2; margin-bottom: 12px; }
+    .lede { font-size: 16px; color: var(--muted); max-width: 58ch; }
+    h2 { font-family: var(--display); font-size: 1.35rem; font-weight: 500; color: var(--deep);
+      margin: 36px 0 14px; padding-top: 8px; }
+    h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      color: var(--ocean); margin: 24px 0 10px; }
+    p { margin-bottom: 14px; }
+    ul, ol { margin: 0 0 16px 1.25rem; }
+    li { margin-bottom: 6px; }
+    .phase { display: grid; gap: 16px; margin: 20px 0; }
+    .phase-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px;
+      box-shadow: 0 4px 20px -12px rgba(2,78,112,.15); }
+    .phase-card strong { display: block; font-size: 13px; color: var(--deep); margin-bottom: 6px; }
+    .phase-card span { font-size: 14px; color: var(--muted); }
+    .phase-card.now { border-left: 4px solid var(--teal); }
+    .phase-card.later { border-left: 4px solid var(--green); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0 20px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; }
+    code { font-size: 12px; background: #eef4f6; padding: 2px 6px; border-radius: 4px; word-break: break-all; }
+    pre { background: #1a2e38; color: #e8f4f8; padding: 16px 18px; border-radius: 10px; overflow-x: auto;
+      font-size: 12px; line-height: 1.55; margin: 14px 0 20px; }
+    pre code { background: none; padding: 0; color: inherit; }
+    .callout { background: rgba(31,175,192,.08); border: 1px solid rgba(31,175,192,.25);
+      border-radius: 10px; padding: 14px 18px; margin: 18px 0; font-size: 14px; }
+    .callout strong { color: var(--deep); }
+    .checklist { list-style: none; margin-left: 0; }
+    .checklist li { padding-left: 1.6em; position: relative; }
+    .checklist li::before { content: "☐"; position: absolute; left: 0; color: var(--ocean); }
+    .steps { counter-reset: step; list-style: none; margin-left: 0; }
+    .steps li { counter-increment: step; padding-left: 2.4em; position: relative; margin-bottom: 12px; }
+    .steps li::before { content: counter(step); position: absolute; left: 0; width: 1.6em; height: 1.6em;
+      background: var(--ocean); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; }
+    footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line);
+      font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="banner" role="status">
+    <span><strong>Content guide</strong> — for Story Board &amp; Foundation Reach map prototypes</span>
+    <a href="story-board.html">← Story Board</a>
+    <a href="foundation-reach-map.html">Foundation Reach map</a>
+    <a href="index.html">Homepage</a>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">The Contentment Foundation</div>
+      <h1>How to feed stories &amp; media to the Story Board</h1>
+      <p class="lede">A practical guide for adding educator and student voices — photos, quotes, and video — using Google Drive and YouTube today, with a staff-friendly admin portal planned next.</p>
+    </header>
+
+    <h2>Two phases</h2>
+    <div class="phase">
+      <div class="phase-card now">
+        <strong>Phase 1 — Now</strong>
+        <span>Collect media in <strong>Google Drive</strong> and <strong>YouTube</strong>. A technical teammate adds story entries to one shared data file. Changes appear on the Story Board and world map after deploy.</span>
+      </div>
+      <div class="phase-card later">
+        <strong>Phase 2 — Coming</strong>
+        <span>A <strong>web admin portal</strong> so program and comms staff can add, preview, and publish stories without editing code — with photo upload, link import, and a review step before go-live.</span>
+      </div>
+    </div>
+
+    <h2>What you need for each story</h2>
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Example</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Headline quote</strong></td><td>“I used to feel like a volcano…”</td><td>Short, human, stands alone on a card</td></tr>
+        <tr><td><strong>Full story</strong></td><td>2–4 paragraphs</td><td>Shown when someone clicks the card</td></tr>
+        <tr><td><strong>Attribution</strong></td><td>Jayden, age 11, Texas</td><td>Follow school privacy rules</td></tr>
+        <tr><td><strong>Role</strong></td><td>Educator or Student</td><td>Powers the filter buttons</td></tr>
+        <tr><td><strong>Country</strong></td><td>United States of America</td><td>Must match the map country name</td></tr>
+        <tr><td><strong>Photo</strong></td><td>Google Drive link</td><td>Direct image URL (see below)</td></tr>
+        <tr><td><strong>Video</strong> (optional)</td><td>YouTube link</td><td>Public or Unlisted; captions recommended</td></tr>
+        <tr><td><strong>Photo caption</strong> (optional)</td><td>Jayden after morning check-in, 2025</td><td>Helps accessibility</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>One file, two places.</strong> Stories added today live in <code>site/program-data.js</code>. That same data powers both the <a href="story-board.html">Story Board</a> and the <a href="foundation-reach-map.html">Foundation Reach map</a>.
+    </div>
+
+    <h2>Google Drive — photos</h2>
+
+    <h3>1. Organize your folder</h3>
+    <p>Create a shared Drive folder, e.g. <em>Contentment — Story Board Media</em>, with subfolders for Educators and Students. Use clear filenames: <code>kenya-aisha-teacher.jpg</code>.</p>
+
+    <h3>2. Share the image</h3>
+    <ol>
+      <li>Upload the photo.</li>
+      <li>Right-click → <strong>Share</strong> → General access: <strong>Anyone with the link</strong> → Viewer.</li>
+      <li>Copy the link. It looks like:<br>
+        <code>https://drive.google.com/file/d/1ABC…xyz/view?usp=sharing</code></li>
+    </ol>
+
+    <h3>3. Convert to a direct image link</h3>
+    <p>The website cannot use the Drive preview page. Copy the <strong>file ID</strong> (the long string between <code>/d/</code> and <code>/view</code>) and use this format:</p>
+    <pre><code>https://drive.google.com/uc?export=view&amp;id=FILE_ID_HERE</code></pre>
+    <p>Send that URL to whoever updates the data file, along with the quote, full story, and attribution.</p>
+
+    <h3>If the image doesn’t show</h3>
+    <ul>
+      <li>Confirm sharing is <em>Anyone with the link</em></li>
+      <li>Try re-copying the file ID into the direct URL format above</li>
+      <li>Use a JPG under ~500 KB if loading is slow</li>
+    </ul>
+
+    <h2>YouTube — video</h2>
+
+    <h3>Adding a clip</h3>
+    <ol>
+      <li>Upload to the foundation YouTube channel (or an approved school channel).</li>
+      <li>Set visibility to <strong>Public</strong> or <strong>Unlisted</strong> — not Private.</li>
+      <li>Turn on <strong>captions</strong> for accessibility.</li>
+      <li>Copy the watch URL, e.g. <code>https://www.youtube.com/watch?v=VIDEO_ID</code></li>
+    </ol>
+
+    <h3>Photo + video together</h3>
+    <p>For the best card appearance, provide <strong>both</strong> a Google Drive photo (<code>img</code>) and a YouTube URL (<code>video</code>). The photo appears on the hanging card; clicking opens the full story and plays the video in the modal.</p>
+    <p>If you only have video, you can use YouTube’s thumbnail as the photo:<br>
+      <code>https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg</code></p>
+
+    <h2>Step-by-step — add a story (Phase 1)</h2>
+    <ol class="steps">
+      <li>Gather quote, full story, name/attribution, role, and country.</li>
+      <li>Upload photo to Drive (and video to YouTube if applicable).</li>
+      <li>Get the direct Drive image URL and YouTube watch URL.</li>
+      <li>Send everything to the technical contact (see footer) or add to <code>program-data.js</code> under the correct country’s <code>stories</code> list.</li>
+      <li>Preview on <a href="story-board.html">Story Board</a> and <a href="foundation-reach-map.html">map</a> after deploy.</li>
+    </ol>
+
+    <h3>Example entry (for developers)</h3>
+    <pre><code>{
+  q: "The curriculum changed how our whole school handles conflict.",
+  by: "Maria S., Principal, Ohio",
+  role: "educator",
+  img: "https://drive.google.com/uc?export=view&amp;id=YOUR_FILE_ID",
+  cap: "Maria leading a restorative circle, 2025",
+  video: "https://www.youtube.com/watch?v=YOUR_VIDEO_ID",
+  text: "Short teaser for the map popup…",
+  full: "Full story text for the modal…"
+}</code></pre>
+
+    <h2>Consent &amp; quality checklist</h2>
+    <p>Before any real name, face, or voice goes live:</p>
+    <ul class="checklist">
+      <li>Media release on file (especially for students under 18)</li>
+      <li>Name format approved by the school (first name + last initial is common)</li>
+      <li>No identifying details the family would not want public</li>
+      <li>Photo is respectful, well lit, and representative</li>
+      <li>Quote is accurate and approved by the speaker or school lead</li>
+      <li>Video has captions; photo has a descriptive caption</li>
+    </ul>
+    <p>Keep consent forms in a private Drive folder — never linked on the public site.</p>
+
+    <h2>Phase 2 — admin portal (planned)</h2>
+    <p>Non-technical staff will sign in to a simple web form:</p>
+    <ul>
+      <li>Pick country, role, and write the quote + full story</li>
+      <li>Upload a photo or paste Google Drive / YouTube links</li>
+      <li>Preview exactly how the card and modal will look</li>
+      <li>Submit for review → approved stories publish automatically</li>
+    </ul>
+    <p>The portal will store stories in a database and serve them to the website — no more hand-editing JSON. Until then, <code>program-data.js</code> is the source of truth.</p>
+
+    <footer>
+      <p><strong>Questions?</strong> Program content → your program lead · Technical updates → <a href="mailto:somesh@contentment.org">somesh@contentment.org</a> · General → <a href="mailto:hello@contentment.org">hello@contentment.org</a></p>
+      <p style="margin-top:12px">Developer reference: <code>prototypes/story-board/FEED-GUIDE.md</code> in the repo · Last updated July 2026</p>
+    </footer>
+  </div>
+</body>
+</html>
