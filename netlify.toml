@@ -31,6 +31,12 @@
   to = "/docs/automation-brief/index.html"
   status = 200
 
+# Foundation Reach map — team design prototype (not on homepage yet)
+[[redirects]]
+  from = "/foundation-reach-map"
+  to = "/foundation-reach-map.html"
+  status = 200
+
 # Old flat URLs → nested under /docs/
 [[redirects]]
   from = "/tech-brief"

@@ -24,6 +24,7 @@ DEPLOYMENT
     /docs/tech-brief
     /docs/growth-brief
     /docs/automation-brief
+    /foundation-reach-map   Interactive map design prototype (team review)
 
   Google Drive (optional): PDF/Doc brief exports only — not .md files.
   Edit docs/drive-links.js when share URLs are ready.
@@ -35,8 +36,9 @@ REPOSITORY LAYOUT
 -----------------
 
   site/
-    index.html     ← primary editable build (~48 KB)
-    assets/        ← images referenced by index.html (~2.8 MB)
+    index.html                  ← primary editable build (~48 KB)
+    foundation-reach-map.html   ← map design prototype (team review, not on homepage)
+    assets/                     ← images referenced by index.html (~2.8 MB)
     README.txt     ← this file (mirror of ../README.md for local reference)
 
   contentment-home.html   ← single-file build at repo root (~3.8 MB)
