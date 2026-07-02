@@ -424,8 +424,8 @@ function focusBoard(){
   const COL_W=280;
   const colsVisible=2.5; // default: ~2–3 story columns readable on screen
   scale=Math.min(1.6, Math.max(0.88, (vw*0.92)/(COL_W*colsVisible)));
-  panX=Math.max(24, vw*0.05);
-  panY=bh*scale>vh ? 28 : Math.max(20, (vh-bh*scale)/2);
+  panX=(vw-bw*scale)/2;
+  panY=Math.max(12,(vh-bh*scale)/2-vh*0.07);
   applyTransform();
 }
 function fitBoard(){
