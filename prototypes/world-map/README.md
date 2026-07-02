@@ -30,8 +30,9 @@ Open http://localhost:8080/foundation-reach-map.html (needs internet for D3 + ma
   - Each story: `{ q, text, by, role, img, cap, full }`. Missing fields are auto-filled; images are
     placeholder SVGs until real photos are set via `img` (URL or local path).
 - **Interactions:** hover tooltip, click → floating popup (country summary), region filters,
-  searchable country list, animated totals, a "Read the stories" trigger that slides open a
-  right-side panel listing **all** that country's voices as collapsible blocks, and a
+  searchable country list, animated totals (country-level only — city pins do not double-count),
+  keyboard navigation on countries, pins, and list items, a "Read the stories" trigger that slides
+  open a right-side panel listing **all** that country's voices as collapsible blocks, and a
   collapsible country list sidebar.
 
 ## To integrate after approval

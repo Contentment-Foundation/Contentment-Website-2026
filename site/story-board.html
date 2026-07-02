@@ -66,6 +66,9 @@
     position:static; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
     gap:20px; padding:24px; max-width:1400px; margin:0 auto; min-height:auto;
   }
+  @media (max-width:600px){
+    #boardSurface.grid-layout { grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:12px; padding:14px; }
+  }
 
   .frame-wrap { position:absolute; width:240px; transform-origin:50% 0; margin-top:18px;
     animation:pendulum var(--sway-dur,4.2s) ease-in-out infinite; animation-delay:var(--sway-delay,0s); }
@@ -420,6 +423,9 @@ function setGridMode(on){
   boardSurface.classList.toggle("grid-layout",on);
   document.getElementById("btnBoard").classList.toggle("active",!on);
   document.getElementById("btnGrid").classList.toggle("active",on);
+  ["btnFit","btnReset","btnZoomIn","btnZoomOut"].forEach(id=>{
+    document.getElementById(id).style.display=on?"none":"";
+  });
   if(on){ boardLayer.style.transform=""; boardSurface.style.width=""; boardSurface.style.height=""; }
   renderCards();
 }
@@ -501,8 +507,8 @@ document.getElementById("btnGrid").onclick=()=>setGridMode(true);
 mobileQuery.addEventListener("change",e=>setGridMode(e.matches));
 document.getElementById("btnFit").onclick=fitBoard;
 document.getElementById("btnReset").onclick=fitBoard;
-document.getElementById("btnZoomIn").onclick=()=>{ scale=Math.min(2.2,scale+.15); applyTransform(); };
-document.getElementById("btnZoomOut").onclick=()=>{ scale=Math.max(0.35,scale-.15); applyTransform(); };
+document.getElementById("btnZoomIn").onclick=()=>{ if(gridMode) return; scale=Math.min(2.2,scale+.15); applyTransform(); };
+document.getElementById("btnZoomOut").onclick=()=>{ if(gridMode) return; scale=Math.max(0.35,scale-.15); applyTransform(); };
 
 // Region filters
 const rWrap=document.getElementById("regionFilters");

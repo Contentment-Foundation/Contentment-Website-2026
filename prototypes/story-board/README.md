@@ -22,14 +22,14 @@ Phase 2 (planned): staff admin portal — no code required to publish stories.
 
 ## Views
 
-- **Board** — infinite canvas, pan (drag), zoom (scroll or +/-), hanging frames with subtle sway
-- **Grid** — responsive card grid (default on mobile)
+- **Board** — infinite canvas; default zoom fits all cards on screen; pan (drag), zoom (scroll, +/-, or pinch on touch), hanging frames with subtle sway
+- **Grid** — responsive card grid (default on viewports ≤820px; tighter columns ≤600px)
 
 ## Controls
 
-- Region and role filters
-- Board / Grid toggle
-- Fit board · Reset zoom
+- Region and role filters (empty state when no stories match)
+- Board / Grid toggle (zoom/fit controls hidden in Grid mode)
+- Fit board · Reset — both return to fit-all-to-screen on Board view
 - Click a frame → full story modal (YouTube embed when `video` is set)
 
 ## Data
