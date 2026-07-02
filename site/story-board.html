@@ -400,7 +400,7 @@ function renderCards(){
     wrap.setAttribute("role","button");
     wrap.setAttribute("aria-label","Story from "+filtered.find(x=>x.id===+wrap.dataset.id)?.place);
   });
-  if(!gridMode) requestAnimationFrame(focusBoard);
+  if(!gridMode) requestAnimationFrame(fitBoard);
 }
 
 function setGridMode(on){
@@ -415,18 +415,6 @@ function setGridMode(on){
 
 function applyTransform(){
   boardLayer.style.transform=`translate(${panX}px,${panY}px) scale(${scale})`;
-}
-function focusBoard(){
-  if(gridMode||!filtered.length) return;
-  const vw=viewport.clientWidth, vh=viewport.clientHeight;
-  const bw=boardSurface.offsetWidth, bh=boardSurface.offsetHeight;
-  if(!vw||!vh||!bw||!bh){ requestAnimationFrame(focusBoard); return; }
-  const COL_W=280;
-  const colsVisible=2.5; // default: ~2–3 story columns readable on screen
-  scale=Math.min(1.6, Math.max(0.88, (vw*0.92)/(COL_W*colsVisible)));
-  panX=(vw-bw*scale)/2;
-  panY=Math.max(12,(vh-bh*scale)/2-vh*0.07);
-  applyTransform();
 }
 function fitBoard(){
   if(gridMode||!filtered.length) return;
@@ -469,7 +457,7 @@ viewport.addEventListener("wheel",e=>{
 document.getElementById("btnBoard").onclick=()=>setGridMode(false);
 document.getElementById("btnGrid").onclick=()=>setGridMode(true);
 document.getElementById("btnFit").onclick=fitBoard;
-document.getElementById("btnReset").onclick=focusBoard;
+document.getElementById("btnReset").onclick=fitBoard;
 document.getElementById("btnZoomIn").onclick=()=>{ scale=Math.min(2.2,scale+.15); applyTransform(); };
 document.getElementById("btnZoomOut").onclick=()=>{ scale=Math.max(0.35,scale-.15); applyTransform(); };
 
