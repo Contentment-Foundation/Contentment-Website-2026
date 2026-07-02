@@ -253,7 +253,7 @@
         <button type="button" class="btn" id="btnGrid">Grid</button>
       </div>
       <button type="button" class="btn" id="btnFit" title="Fit all frames">Fit board</button>
-      <button type="button" class="btn" id="btnReset" title="Reset zoom">Reset</button>
+      <button type="button" class="btn" id="btnReset" title="Default readable zoom">Reset</button>
       <button type="button" class="btn" id="btnZoomIn">+</button>
       <button type="button" class="btn" id="btnZoomOut">−</button>
     </div>
@@ -400,7 +400,7 @@ function renderCards(){
     wrap.setAttribute("role","button");
     wrap.setAttribute("aria-label","Story from "+filtered.find(x=>x.id===+wrap.dataset.id)?.place);
   });
-  if(!gridMode) requestAnimationFrame(fitBoard);
+  if(!gridMode) requestAnimationFrame(focusBoard);
 }
 
 function setGridMode(on){
@@ -416,19 +416,29 @@ function setGridMode(on){
 function applyTransform(){
   boardLayer.style.transform=`translate(${panX}px,${panY}px) scale(${scale})`;
 }
+function focusBoard(){
+  if(gridMode||!filtered.length) return;
+  const vw=viewport.clientWidth, vh=viewport.clientHeight;
+  const bw=boardSurface.offsetWidth, bh=boardSurface.offsetHeight;
+  if(!vw||!vh||!bw||!bh){ requestAnimationFrame(focusBoard); return; }
+  const COL_W=280;
+  const colsVisible=2.5; // default: ~2–3 story columns readable on screen
+  scale=Math.min(1.6, Math.max(0.88, (vw*0.92)/(COL_W*colsVisible)));
+  panX=Math.max(24, vw*0.05);
+  panY=bh*scale>vh ? 28 : Math.max(20, (vh-bh*scale)/2);
+  applyTransform();
+}
 function fitBoard(){
   if(gridMode||!filtered.length) return;
   const vw=viewport.clientWidth, vh=viewport.clientHeight;
   const bw=boardSurface.offsetWidth, bh=boardSurface.offsetHeight;
   if(!vw||!vh||!bw||!bh){ requestAnimationFrame(fitBoard); return; }
   const fit=Math.min(vw/bw,vh/bh);
-  // Default: a little closer than full fit — feels more zoomed in (~15%), capped at 120%
-  scale=Math.max(0.35,Math.min(1.2,fit*1.15));
+  scale=Math.max(0.35, Math.min(1.15, fit*0.96));
   panX=(vw-bw*scale)/2;
-  panY=Math.max(12,(vh-bh*scale)/2-vh*0.07);
+  panY=Math.max(12,(vh-bh*scale)/2);
   applyTransform();
 }
-function resetView(){ scale=1; panX=80; panY=40; applyTransform(); }
 
 // Pan & zoom (board mode only)
 viewport.addEventListener("pointerdown",e=>{
@@ -459,7 +469,7 @@ viewport.addEventListener("wheel",e=>{
 document.getElementById("btnBoard").onclick=()=>setGridMode(false);
 document.getElementById("btnGrid").onclick=()=>setGridMode(true);
 document.getElementById("btnFit").onclick=fitBoard;
-document.getElementById("btnReset").onclick=resetView;
+document.getElementById("btnReset").onclick=focusBoard;
 document.getElementById("btnZoomIn").onclick=()=>{ scale=Math.min(2.2,scale+.15); applyTransform(); };
 document.getElementById("btnZoomOut").onclick=()=>{ scale=Math.max(0.35,scale-.15); applyTransform(); };
 
