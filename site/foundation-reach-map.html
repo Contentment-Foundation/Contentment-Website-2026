@@ -19,7 +19,9 @@
   * { box-sizing:border-box; }
   html,body { margin:0; background:var(--bg); color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
-  #app { display:grid; grid-template-columns:1fr 320px; grid-template-rows:auto auto 1fr; min-height:100vh; height:100vh; }
+  #app { display:grid; grid-template-columns:1fr 320px; grid-template-rows:auto auto 1fr; min-height:100vh; height:100vh;
+    transition:grid-template-columns .35s cubic-bezier(.4,0,.2,1); }
+  #app.panel-collapsed { grid-template-columns:1fr 0px; }
   header { grid-column:1 / -1; padding:16px 24px; border-bottom:1px solid rgba(255,255,255,.08);
     display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
   header h1 { font-size:18px; margin:0; letter-spacing:.4px; white-space:nowrap; }
@@ -61,13 +63,34 @@
   #backdrop { position:fixed; inset:0; background:rgba(20,20,45,.45); z-index:40; opacity:0;
     pointer-events:none; transition:opacity .18s; }
   #backdrop.show { opacity:1; pointer-events:auto; }
-  #popup { position:fixed; z-index:50; width:400px; max-width:94vw; max-height:82vh; display:flex; flex-direction:column; overflow:hidden;
+  #popup { position:fixed; z-index:50; width:400px; max-width:94vw; max-height:82vh; overflow:hidden;
     background:var(--card); color:var(--ink); border-radius:14px; box-shadow:0 20px 50px rgba(0,0,0,.4);
-    opacity:0; transform:scale(.96); pointer-events:none; transition:opacity .16s, transform .16s; }
+    opacity:0; transform:scale(.96); pointer-events:none;
+    transition:opacity .16s, transform .16s, width .38s cubic-bezier(.4,0,.2,1); }
   #popup.show { opacity:1; transform:scale(1); pointer-events:auto; }
+  #popup.expanded { width:760px; }
+  .pop-shell { display:flex; height:100%; max-height:82vh; }
+  .pop-main { position:relative; flex:0 0 400px; width:400px; display:flex; flex-direction:column; min-width:0;
+    max-height:82vh; overflow:hidden; }
+  .pop-full { flex:0 0 0; width:0; overflow:hidden; background:#fafbfd;
+    border-left:1px solid transparent; transition:flex-basis .38s cubic-bezier(.4,0,.2,1),
+    width .38s cubic-bezier(.4,0,.2,1), border-color .38s; }
+  #popup.expanded .pop-full { flex:0 0 360px; width:360px; border-left-color:#e7e8ef; }
+  .pop-full-inner { width:360px; height:100%; max-height:82vh; display:flex; flex-direction:column;
+    transform:translateX(24px); opacity:0; transition:transform .38s cubic-bezier(.4,0,.2,1), opacity .28s ease; }
+  #popup.expanded .pop-full-inner { transform:translateX(0); opacity:1; }
   .pop-close { position:absolute; top:10px; right:10px; z-index:5; width:28px; height:28px; border-radius:50%;
     border:none; background:rgba(0,0,0,.35); color:#fff; font-size:16px; cursor:pointer; }
   .pop-close:hover { background:rgba(0,0,0,.6); }
+  .full-back { align-self:flex-start; margin:12px 12px 0; width:28px; height:28px; border-radius:50%;
+    border:none; background:#e7e8ef; color:#444; font-size:16px; cursor:pointer; flex:none; }
+  .full-back:hover { background:#d7d9e6; }
+  .full-body { flex:1; min-height:0; overflow-y:auto; padding:8px 18px 18px; }
+  .full-body .frole { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
+    color:#1c6fb8; margin-bottom:10px; }
+  .full-body .fq { font-style:italic; font-size:16px; color:var(--accent); margin-bottom:12px; line-height:1.4; }
+  .full-body .ftext { font-size:14px; line-height:1.75; color:#444; }
+  .full-body .fby { margin-top:14px; font-size:12px; color:#888; font-weight:600; }
   .slider { position:relative; flex:none; width:100%; height:180px; background:#222;
     border-radius:14px 14px 0 0; overflow:hidden; }
   .slider img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .35s; }
@@ -84,27 +107,17 @@
     cursor:pointer; text-decoration:none; }
   .full-link:hover { text-decoration:underline; }
 
-  /* larger "read full story" modal */
-  #fullModal { position:fixed; inset:0; z-index:70; display:none; align-items:center; justify-content:center;
-    background:rgba(20,20,45,.6); padding:24px; }
-  #fullModal.show { display:flex; }
-  #fullModal .fbox { position:relative; background:#fff; color:var(--ink); border-radius:16px; max-width:620px;
-    width:100%; max-height:88vh; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 30px 70px rgba(0,0,0,.5); }
-  #fullModal .fbox img { width:100%; height:260px; object-fit:cover; flex:none; }
-  #fullModal .fcap { padding:8px 26px 0; font-size:12px; color:#999; }
-  #fullModal .fbody { padding:16px 26px 26px; overflow-y:auto; }
-  #fullModal h3 { margin:0 0 4px; font-size:24px; }
-  #fullModal .frole { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#1c6fb8; margin-bottom:12px; }
-  #fullModal .fq { font-style:italic; font-size:17px; color:var(--accent); margin-bottom:14px; line-height:1.4; }
-  #fullModal .ftext { font-size:14.5px; line-height:1.75; color:#444; }
-  #fullModal .fby { margin-top:16px; font-size:12px; color:#888; font-weight:600; }
-  #fullModal .fclose { position:absolute; top:14px; right:16px; z-index:5; width:32px; height:32px; border-radius:50%;
-    border:none; background:rgba(0,0,0,.45); color:#fff; font-size:18px; cursor:pointer; }
-  #fullModal .fclose:hover { background:rgba(0,0,0,.7); }
   .pop-body { flex:1; min-height:0; overflow-y:auto; padding:14px 16px; }
   @media (max-width:640px){
-    #popup { width:340px; max-height:86vh; }
+    #popup { width:340px; }
+    #popup.expanded { width:min(94vw, 620px); }
+    .pop-main { flex:0 0 340px; width:340px; }
+    #popup.expanded .pop-full { flex:0 0 280px; width:280px; }
+    .pop-full-inner { width:280px; }
     .slider { height:150px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    #popup, .pop-full, .pop-full-inner { transition:none !important; }
   }
   .pop-body h2 { margin:0 0 2px; font-size:18px; }
   .pop-body .region { color:#888; font-size:11px; margin-bottom:10px; }
@@ -134,7 +147,21 @@
   .story-nav .dots { display:flex; gap:5px; } .story-nav .dot { width:6px; height:6px; border-radius:50%; background:#ccd; }
   .story-nav .dot.on { background:var(--served); }
 
-  #panel { background:var(--panel); border-left:1px solid rgba(255,255,255,.08); overflow-y:auto; padding:18px 18px; }
+  #panel { background:var(--panel); border-left:1px solid rgba(255,255,255,.08); overflow-x:hidden; overflow-y:auto;
+    padding:18px 18px; min-width:0; opacity:1; transition:opacity .25s ease, padding .35s ease; }
+  #app.panel-collapsed #panel { opacity:0; padding:0; pointer-events:none; overflow:hidden; }
+  .panel-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px; }
+  .panel-head .list-title { margin:0; flex:1; }
+  .panel-collapse { flex:none; width:28px; height:28px; border-radius:8px; border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.08); color:var(--text); font-size:16px; line-height:1; cursor:pointer; }
+  .panel-collapse:hover { background:rgba(255,255,255,.16); }
+  .panel-tab { position:absolute; right:0; top:50%; transform:translateY(-50%); z-index:25;
+    display:none; align-items:center; gap:6px; padding:10px 8px 10px 10px; border:none;
+    border-radius:10px 0 0 10px; background:var(--panel); color:var(--text); font-size:12px; font-weight:700;
+    cursor:pointer; box-shadow:-4px 0 16px rgba(0,0,0,.2); border:1px solid rgba(255,255,255,.12); border-right:none; }
+  .panel-tab:hover { background:#3d3d72; }
+  .panel-tab .tab-icon { font-size:16px; line-height:1; }
+  #app.panel-collapsed .panel-tab { display:flex; }
   .search { width:100%; padding:9px 12px; border-radius:8px; border:1px solid rgba(255,255,255,.18);
     background:rgba(255,255,255,.06); color:var(--text); font-size:13px; margin-bottom:14px; }
   .search::placeholder { color:var(--muted); }
@@ -146,7 +173,15 @@
   .clist li .r { font-size:11px; color:var(--muted); }
 
   @media (max-width:820px){ #app{ grid-template-columns:1fr; grid-template-rows:auto auto 55vh auto; }
-    #panel{ border-left:none; border-top:1px solid rgba(255,255,255,.08);} }
+    #app.panel-collapsed { grid-template-rows:auto auto 1fr 0fr; }
+    #panel{ border-left:none; border-top:1px solid rgba(255,255,255,.08); overflow-y:auto; }
+    #app.panel-collapsed #panel { max-height:0; border-top-color:transparent; }
+    .panel-tab { top:auto; bottom:16px; transform:none; border-radius:10px 10px 0 0; right:16px;
+      border:1px solid rgba(255,255,255,.12); border-bottom:none; padding:8px 14px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    #app, #panel { transition:none !important; }
+  }
 </style>
 </head>
 <body>
@@ -174,12 +209,14 @@
     </div>
     <div id="tip"></div>
     <div id="banner"></div>
+    <button type="button" class="panel-tab" id="panelTab" aria-controls="panel" aria-expanded="false" title="Show country list">
+      <span class="tab-icon" aria-hidden="true">‹</span><span>Countries</span>
+    </button>
   </div>
-  <aside id="panel"></aside>
+  <aside id="panel" aria-label="Country list"></aside>
 </div>
 <div id="backdrop"></div>
 <div id="popup"></div>
-<div id="fullModal"><div class="fbox" id="fbox"></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
@@ -190,53 +227,229 @@
 const PROGRAM = {
   "United States of America":{iso:"840",region:"Americas",since:2016,schools:142,educators:5100,students:180000,
     impact:{wellbeing:82,attendance:64,teacherRetention:71},programs:["Mindful Classrooms","Educator Well-being","Student Voice"],
-    stories:[{q:"The curriculum changed how our whole school handles conflict.",by:"Maria S., Principal, Ohio",role:"educator",
-              text:"Before the program, disagreements ended in the office. Now our fifth-graders run their own restorative circles. Suspensions are down 40% this year."},
-             {q:"I used to feel like a volcano. Now I know how to breathe first.",by:"Jayden, age 11, Texas",role:"student",
-              text:"When I get really mad I do the four-corner breathing my teacher taught us. My little brother uses it too now."}]},
+    stories:[
+      {q:"The curriculum changed how our whole school handles conflict.",by:"Maria S., Principal, Ohio",role:"educator",
+       text:"Before the program, disagreements ended in the office. Now our fifth-graders run their own restorative circles. Suspensions are down 40% this year.",
+       full:"Before the program, every disagreement seemed to end in my office. Teachers were exhausted from mediating, and students didn't feel heard. We piloted Mindful Classrooms in two grade levels first. Within six months, fifth-graders were running restorative circles on their own. Suspensions dropped 40% year over year, and staff surveys show educators feel more equipped — and less alone — when hard moments arise."},
+      {q:"I used to feel like a volcano. Now I know how to breathe first.",by:"Jayden, age 11, Texas",role:"student",
+       text:"When I get really mad I do the four-corner breathing my teacher taught us. My little brother uses it too now.",
+       full:"I used to get sent out of class a lot because I'd blow up before I could explain what was wrong. My teacher taught us four-corner breathing and a feelings check-in every morning. Now when I'm mad I pause, breathe, and write down what happened. My little brother started copying me at home. School feels safer because people listen before they yell."},
+      {q:"Parents notice the difference at home too.",by:"Denise R., Parent & PTA lead, Atlanta",role:"educator",
+       text:"Kids are naming emotions at the dinner table. That never happened before.",
+       full:"Our PTA was skeptical at first — another program, another binder. But within a semester, parents started reporting the same language at home: 'I need a reset,' 'I'm in the red zone.' Teachers finally have a shared vocabulary with families. Attendance at parent nights went up because people see real change, not just posters on a wall."}
+    ]},
   "Canada":{iso:"124",region:"Americas",since:2018,schools:28,educators:720,students:24000,
     impact:{wellbeing:76,attendance:58,teacherRetention:69},programs:["Mindful Classrooms","Student Voice"],
-    stories:[{q:"Students finally have language for what they feel.",by:"Teacher, Toronto",role:"educator"}]},
+    stories:[
+      {q:"Students finally have language for what they feel.",by:"Amira K., Teacher, Toronto",role:"educator",
+       text:"We went from 'I'm fine' to honest check-ins in under a month.",
+       full:"In a class of 28, almost everyone used to answer 'I'm fine' during morning meetings. We introduced a simple mood meter and paired it with student voice circles once a week. Students began naming anxiety before tests, loneliness at recess, pride after group work. Referrals didn't disappear overnight, but the quality of conversations changed completely — we intervene earlier now."},
+      {q:"I spoke at our school assembly about worry.",by:"Leo, age 13, Vancouver",role:"student",
+       text:"I told everyone that feeling nervous is normal. A lot of kids came up to me after.",
+       full:"I always thought I was the only one who got nervous before presentations. Our teacher asked if anyone wanted to share how they handle worry. I volunteered and talked about journaling and walking outside at lunch. After assembly, kids I barely knew said they felt the same way. It made the school feel smaller in a good way."}
+    ]},
+  "Mexico":{iso:"484",region:"Americas",since:2020,schools:17,educators:410,students:28500,
+    impact:{wellbeing:73,attendance:60,teacherRetention:62},programs:["Mindful Classrooms","Rural Outreach"],
+    stories:[
+      {q:"Rural schools finally have the same tools as the city.",by:"Carlos M., Coordinator, Oaxaca",role:"educator",
+       text:"Distance used to mean isolation. Now our facilitators connect weekly.",
+       full:"Our rural cohorts used to receive materials once a year and then figure it out alone. We built a lightweight facilitator network with weekly virtual check-ins and peer observation visits. Teachers swap lesson adaptations for multigrade classrooms, and student well-being data is tracked consistently for the first time across the region."},
+      {q:"I help my classmates when they feel sad.",by:"Sofía, age 10, Guadalajara",role:"student",
+       text:"We have a peace corner in our classroom. I sit with friends there.",
+       full:"When someone is crying we don't laugh anymore. We walk them to the peace corner, get water, and ask if they want to talk or just breathe. I like being a helper. My teacher says I'm a 'calm leader,' which makes me proud."}
+    ]},
+  "Brazil":{iso:"076",region:"Americas",since:2021,schools:13,educators:340,students:22000,
+    impact:{wellbeing:71,attendance:57,teacherRetention:58},programs:["Educator Well-being","Student Voice"],
+    stories:[
+      {q:"Teacher burnout was our hidden crisis.",by:"Fernanda L., School lead, São Paulo",role:"educator",
+       text:"We started with staff well-being before pushing another student initiative.",
+       full:"We had tried student programs before, but exhausted teachers couldn't sustain them. Educator Well-being sessions gave staff protected time, peer coaching, and clear boundaries around workload. Only then did classroom practices stick. Retention improved and classroom climate scores followed six months later."}
+    ]},
   "India":{iso:"356",region:"Asia",since:2019,schools:64,educators:2300,students:95000,
     impact:{wellbeing:79,attendance:73,teacherRetention:66},programs:["Mindful Classrooms","Rural Outreach","Educator Well-being"],
-    stories:[{q:"Attendance rose sharply after daily check-ins.",by:"Head, Pune",role:"educator",
-              text:"We started every morning with a two-minute check-in. Within a term, the children who used to skip class were the ones leading it."},
-             {q:"Now I tell my teacher when I feel worried.",by:"Ananya, age 10, Delhi",role:"student"}]},
+    stories:[
+      {q:"Attendance rose sharply after daily check-ins.",by:"Priya N., Head teacher, Pune",role:"educator",
+       text:"We started every morning with a two-minute check-in. Within a term, the children who used to skip class were the ones leading it.",
+       full:"Chronic absenteeism was tied to shame — students fell behind and stopped coming. A two-minute morning check-in lowered the stakes: name your mood, set one intention. Within one term, several previously disengaged students volunteered to lead the ritual. Attendance climbed and so did participation in afternoon clubs."},
+      {q:"Now I tell my teacher when I feel worried.",by:"Ananya, age 10, Delhi",role:"student",
+       text:"Before, I kept everything inside. Now I raise my hand.",
+       full:"I used to get stomach aches and wouldn't say why. We learned that worry can live in your body. Now I put a card on my desk — green, yellow, or red — and my teacher checks in privately. I don't miss as much school because someone notices early."},
+      {q:"Our village school finally feels connected.",by:"Ravi S., Facilitator, Rajasthan",role:"educator",
+       text:"Rural outreach brought mentors who understand our context.",
+       full:"Urban training models rarely fit our classrooms — different languages, multigrade rooms, seasonal migration. The Rural Outreach track paired us with mentors who adapted tools instead of copying them. Parents trust the program because facilitators visit homes and listen before prescribing solutions."}
+    ]},
   "Indonesia":{iso:"360",region:"Asia",since:2021,schools:19,educators:480,students:31000,
     impact:{wellbeing:74,attendance:61,teacherRetention:63},programs:["Mindful Classrooms"],
-    stories:[{q:"Our teachers feel supported for the first time.",by:"Coordinator, Jakarta",role:"educator"}]},
+    stories:[
+      {q:"Our teachers feel supported for the first time.",by:"Dewi A., Coordinator, Jakarta",role:"educator",
+       text:"Peer learning circles changed staff culture in one semester.",
+       full:"Teachers were isolated in their own classrooms, comparing themselves silently on social media. Monthly peer circles — structured, confidential, practical — normalized struggle and shared wins. Sick days dropped, collaboration increased, and students noticed calmer adults in the building."},
+      {q:"We made a calm-down playlist for our class.",by:"Bima, age 12, Surabaya",role:"student",
+       text:"Everyone added one song that helps them feel steady.",
+       full:"Our class made a playlist together — gamelan, pop, even one teacher's acoustic track. When the room gets loud, we play it for two minutes and reset. It sounds small, but it gave us ownership over our environment instead of just being told to be quiet."}
+    ]},
+  "Philippines":{iso:"608",region:"Asia",since:2022,schools:15,educators:390,students:26500,
+    impact:{wellbeing:75,attendance:63,teacherRetention:61},programs:["Mindful Classrooms","Rural Outreach"],
+    stories:[
+      {q:"After the typhoon, school became our anchor again.",by:"Elena V., Principal, Cebu",role:"educator",
+       text:"Routines for well-being helped students process trauma without forcing them to talk.",
+       full:"When classes resumed after the storm, many students were grieving losses we couldn't fix with worksheets. Predictable morning rituals — breathing, gratitude, optional sharing — gave children agency. Counselors reported fewer crisis escalations because teachers had language and structure before problems peaked."}
+    ]},
   "Saudi Arabia":{iso:"682",region:"Asia",since:2022,schools:11,educators:260,students:14000,
     impact:{wellbeing:70,attendance:55,teacherRetention:60},programs:["Educator Well-being"],
-    stories:[{q:"Well-being is now part of every morning.",by:"Educator, Riyadh",role:"educator"}]},
+    stories:[
+      {q:"Well-being is now part of every morning.",by:"Noura H., Educator, Riyadh",role:"educator",
+       text:"Five minutes of intentional calm changed the tone of the whole day.",
+       full:"We integrated a five-minute staff-and-student grounding practice at the start of each day. Skeptics worried about lost instructional time, but transitions shortened and disruptions fell. Educators report leaving school less depleted, which was the metric leadership cared about most."}
+    ]},
+  "Nepal":{iso:"524",region:"Asia",since:2023,schools:8,educators:175,students:9800,
+    impact:{wellbeing:78,attendance:68,teacherRetention:65},programs:["Rural Outreach","Student Voice"],
+    stories:[
+      {q:"Students designed our well-being board.",by:"Karma T., Teacher, Kathmandu",role:"educator",
+       text:"When students own the visuals, they use the tools more.",
+       full:"We stopped printing generic posters and ran a student design sprint instead. The well-being board now includes Nepali phrases, local symbols, and grade-level tips written by students. Usage of the calm corner tripled because it finally felt like theirs, not an import."}
+    ]},
   "Kenya":{iso:"404",region:"Africa",since:2019,schools:22,educators:540,students:38000,
     impact:{wellbeing:81,attendance:70,teacherRetention:64},programs:["Mindful Classrooms","Rural Outreach"],
-    stories:[{q:"The children lead the breathing exercises now.",by:"Grace W., Teacher, Nairobi",role:"educator",
-              text:"I only had to model the morning check-in for two weeks. Now the students remind me if we skip it. It has become the heartbeat of our classroom."},
-             {q:"School feels calm now. I like coming here.",by:"Amani, age 9, Kisumu",role:"student",
-              text:"We start the day sitting quietly and saying how we feel. On sad days my teacher notices and we talk. I have more friends this year."}]},
+    stories:[
+      {q:"The children lead the breathing exercises now.",by:"Grace W., Teacher, Nairobi",role:"educator",
+       text:"I only had to model the morning check-in for two weeks. Now the students remind me if we skip it.",
+       full:"I modeled the morning check-in for two weeks, then handed leadership to student captains. They rotate prompts, watch the clock, and invite quieter classmates in. The ritual became the heartbeat of our classroom — academic risk-taking went up because emotional safety went up first."},
+      {q:"School feels calm now. I like coming here.",by:"Amani, age 9, Kisumu",role:"student",
+       text:"We start the day sitting quietly and saying how we feel. On sad days my teacher notices and we talk.",
+       full:"Before, I sometimes hid behind the classroom because mornings at home were loud. Now we sit together and say how we feel. On sad days my teacher checks in without embarrassing me in front of everyone. I made two new friends this term because we learned how to repair after arguments."},
+      {q:"Girls stay in school when they feel seen.",by:"Faith O., Counselor, Nakuru",role:"educator",
+       text:"Targeted girl circles reduced early dropouts in our partner schools.",
+       full:"We paired Mindful Classrooms with small girl-led circles addressing safety, confidence, and attendance barriers. Girls who previously left after upper primary began staying through the term. The common thread in interviews: 'An adult listened before punishing me.'"}
+    ]},
   "Uganda":{iso:"800",region:"Africa",since:2020,schools:14,educators:300,students:21000,
     impact:{wellbeing:77,attendance:66,teacherRetention:61},programs:["Mindful Classrooms"],
-    stories:[{q:"Calm classrooms, calmer communities.",by:"Head, Kampala",role:"educator"}]},
+    stories:[
+      {q:"Calm classrooms, calmer communities.",by:"James O., Head teacher, Kampala",role:"educator",
+       text:"Students brought conflict-resolution language home to their families.",
+       full:"We tracked playground incidents and home visit anecdotes over a year. Students began mediating sibling conflicts and advocating for pauses during family disputes. The program didn't just change lessons — it gave children transferable skills their parents adopted because they worked."},
+      {q:"I don't fight on the field anymore.",by:"Samuel, age 12, Jinja",role:"student",
+       text:"We have a hand signal for 'time out' during football.",
+       full:"Football used to end in fights almost every day. Our coach and teacher taught a hand signal for timeout when emotions run high. We walk to the sideline, breathe, and decide if we want to keep playing. Games finish now. I even taught it to my cousins."}
+    ]},
   "Tanzania":{iso:"834",region:"Africa",since:2021,schools:12,educators:240,students:17000,
     impact:{wellbeing:75,attendance:62,teacherRetention:59},programs:["Rural Outreach"],
-    stories:[{q:"A quiet revolution in how we teach.",by:"Educator, Dodoma",role:"educator"}]},
+    stories:[
+      {q:"A quiet revolution in how we teach.",by:"Neema J., Educator, Dodoma",role:"educator",
+       text:"We stopped treating well-being as extra — it's how we teach.",
+       full:"Rural Outreach training reframed well-being as instructional design, not an add-on. We embedded reflection into science labs and literacy blocks. Teachers who once saw social-emotional learning as foreign now describe it as 'how we keep children in the room mentally, not just physically.'"},
+      {q:"My teacher asks how I slept.",by:"Zawadi, age 8, Arusha",role:"student",
+       text:"It helps when she knows I'm tired before math.",
+       full:"Some mornings I'm tired because we had guests at home. My teacher asks how we slept and changes the first activity if many of us are low-energy. I don't get in trouble for being slow on those days. I feel respected."}
+    ]},
+  "Rwanda":{iso:"646",region:"Africa",since:2022,schools:10,educators:210,students:14500,
+    impact:{wellbeing:80,attendance:69,teacherRetention:63},programs:["Mindful Classrooms","Student Voice"],
+    stories:[
+      {q:"Healing and learning can happen together.",by:"Claudine U., Facilitator, Kigali",role:"educator",
+       text:"Structured rituals created safety for hard conversations.",
+       full:"Our context carries historical weight that surfaces in classrooms subtly. Predictable rituals — openings, closings, optional sharing — created enough safety for honest conversations without forcing disclosure. Student voice sessions revealed bullying patterns early, before they became crises."}
+    ]},
+  "Ghana":{iso:"288",region:"Africa",since:2023,schools:7,educators:165,students:11200,
+    impact:{wellbeing:76,attendance:64,teacherRetention:60},programs:["Educator Well-being","Mindful Classrooms"],
+    stories:[
+      {q:"Teachers asked for support — and got it.",by:"Kwame A., District lead, Accra",role:"educator",
+       text:"When staff well-being improved, classroom climate followed within a term.",
+       full:"District leaders assumed student programs were the priority, but teachers pushed back: 'We cannot pour from empty cups.' Educator Well-being cohorts ran first. Within one term, classroom observations showed warmer tone, clearer boundaries, and fewer shouting matches. Student climate surveys improved without a separate student campaign."}
+    ]},
   "Dem. Rep. Congo":{iso:"180",region:"Africa",since:2022,schools:9,educators:180,students:12000,
     impact:{wellbeing:72,attendance:57,teacherRetention:55},programs:["Rural Outreach"],
-    stories:[{q:"Hope, taught daily.",by:"Coordinator, Goma",role:"educator"}]},
+    stories:[
+      {q:"Hope, taught daily.",by:"Patrick M., Coordinator, Goma",role:"educator",
+       text:"Even brief stability rituals matter when everything else is uncertain.",
+       full:"Our schools operate amid constant disruption — displacement, infrastructure gaps, staffing churn. Short, reliable rituals gave children something to predict when much else could not be predicted. Teachers described the program as 'small but steady,' which is exactly what families said they needed."},
+      {q:"We sing before we study.",by:"Amina, age 11, Bukavu",role:"student",
+       text:"The song reminds us we belong to the same class.",
+       full:"We sing the same welcome song every morning. New students learn it on day one. When someone is absent we ask if they are okay the next day. I like school more because we start together instead of jumping straight into copying from the board."}
+    ]},
   "Bhutan":{iso:"064",region:"Asia",since:2023,schools:6,educators:120,students:5400,
     impact:{wellbeing:85,attendance:78,teacherRetention:74},programs:["Mindful Classrooms","Student Voice"],
-    stories:[{q:"Gross National Happiness, in the classroom.",by:"Teacher, Thimphu",role:"educator"}]}
+    stories:[
+      {q:"Gross National Happiness, in the classroom.",by:"Sonam D., Teacher, Thimphu",role:"educator",
+       text:"National values aligned with what we were already trying to build.",
+       full:"GNH is not abstract here — it's a design principle. Mindful Classrooms gave us shared practices for compassion, reflection, and community responsibility. Student voice forums let children propose service projects tied to local needs. The program felt like an extension of national identity, not an import."},
+      {q:"I journal about gratitude every Friday.",by:"Pema, age 14, Paro",role:"student",
+       text:"It helps me notice good things even on hard weeks.",
+       full:"Fridays we write three gratitudes — small ones are allowed: hot lunch, a friend sharing a pen, clear weather. On hard weeks it feels impossible at first, then I always find something. My teacher reads hers aloud too, which makes it fair."}
+    ]},
+  "United Kingdom":{iso:"826",region:"Europe",since:2024,schools:9,educators:280,students:15400,
+    impact:{wellbeing:74,attendance:59,teacherRetention:67},programs:["Educator Well-being","Student Voice"],
+    stories:[
+      {q:"Staff rooms became places of honesty again.",by:"Hannah C., Deputy head, Manchester",role:"educator",
+       text:"Protected peer time reduced the 'performative okay' culture among teachers.",
+       full:"After years of pressure and post-pandemic fatigue, staff rooms were transactional. Educator Well-being cohorts created protected peer time with clear norms — no fixing, no judgment. Teachers began naming workload limits earlier. Supply cover requests dropped because fewer staff hit crisis-level burnout."}
+    ]},
+  "Australia":{iso:"036",region:"Oceania",since:2024,schools:11,educators:310,students:18600,
+    impact:{wellbeing:77,attendance:61,teacherRetention:68},programs:["Mindful Classrooms","Educator Well-being"],
+    stories:[
+      {q:"Remote schools need connection, not just content.",by:"Liam P., Facilitator, Darwin",role:"educator",
+       text:"Virtual circles kept isolated teachers from leaving mid-year.",
+       full:"Remote educators often quit from isolation, not lack of skill. We built lightweight virtual circles — same time each fortnight, rotating facilitation, practical swaps for mixed-age classes. Retention among our most isolated cohort improved because teachers felt professionally connected again."},
+      {q:"We have a feelings weather report.",by:"Mia, age 9, Brisbane",role:"student",
+       text:"Sunny, cloudy, or stormy — everyone shares without saying private stuff.",
+       full:"Our feelings weather report is quick: sunny, cloudy, or stormy. You don't have to explain unless you want to. Teachers adjust the day — more movement if we're stormy, partner work if we're sunny. It sounds silly but it works."}
+    ]}
 };
 const CITIES = [
   { name:"Honolulu", coords:[-157.86,21.31], key:"__Honolulu" },
-  { name:"Singapore", coords:[103.82,1.35], key:"__Singapore" }
+  { name:"Singapore", coords:[103.82,1.35], key:"__Singapore" },
+  { name:"New York", coords:[-74.01,40.71], key:"__NewYork" },
+  { name:"London", coords:[-0.12,51.51], key:"__London" },
+  { name:"Nairobi", coords:[36.82,-1.29], key:"__Nairobi" },
+  { name:"Mumbai", coords:[72.88,19.08], key:"__Mumbai" }
 ];
 PROGRAM["__Honolulu"]={label:"Honolulu, Hawaiʻi",region:"Americas",since:2017,schools:8,educators:190,students:6200,
   impact:{wellbeing:83,attendance:69,teacherRetention:72},programs:["Mindful Classrooms","Student Voice"],
-  stories:[{q:"Aloha as pedagogy.",by:"Educator, Oʻahu",role:"educator"}]};
+  stories:[
+    {q:"Aloha as pedagogy.",by:"Kai L., Educator, Oʻahu",role:"educator",
+     text:"Place-based practices rooted in community made the curriculum feel local.",
+     full:"We adapted Mindful Classrooms to honor place — moʻolelo storytelling, outdoor reflection, and community guests. Students connected breathing practices to ocean imagery and family traditions. Engagement rose because the tools felt culturally grounded, not transplanted."}
+  ]};
 PROGRAM["__Singapore"]={label:"Singapore",region:"Asia",since:2022,schools:5,educators:130,students:4100,
   impact:{wellbeing:80,attendance:67,teacherRetention:70},programs:["Educator Well-being"],
-  stories:[{q:"Small nation, big shift in student well-being.",by:"Principal",role:"educator"}]};
+  stories:[
+    {q:"Small nation, big shift in student well-being.",by:"Mei Lin T., Principal",role:"educator",
+     text:"A city-state pilot became a model for dense urban schools.",
+     full:"Space is limited and schedules are tight, so we integrated micro-practices — ninety-second resets between blocks, silent transitions, staff breathing before assemblies. The model spread to three sister schools because it respected time constraints instead of fighting them."}
+  ]};
+PROGRAM["__NewYork"]={label:"New York City, USA",region:"Americas",since:2018,schools:24,educators:680,students:28500,
+  impact:{wellbeing:79,attendance:62,teacherRetention:70},programs:["Mindful Classrooms","Educator Well-being","Student Voice"],
+  stories:[
+    {q:"A borough-wide cohort changed our staff culture.",by:"Jordan P., Coach, Brooklyn",role:"educator",
+     text:"Cross-school peer visits made best practices spread faster than top-down training.",
+     full:"We linked twelve schools in a borough cohort with monthly peer visits. Teachers filmed short practice clips, shared adaptations for large classes, and celebrated wins publicly. Student voice forums ran in parallel so children shaped norms, not just adults."},
+    {q:"I run the morning check-in on Mondays.",by:"Zara, age 12, Bronx",role:"student",
+     text:"My job is to make sure everyone gets a turn.",
+     full:"I'm the Monday check-in leader. I ask a question like 'What's one thing you're looking forward to?' and make sure quiet kids get a turn without pressure. It made me more confident in other classes too."}
+  ]};
+PROGRAM["__London"]={label:"London, United Kingdom",region:"Europe",since:2024,schools:6,educators:210,students:11800,
+  impact:{wellbeing:75,attendance:58,teacherRetention:66},programs:["Educator Well-being","Student Voice"],
+  stories:[
+    {q:"Secondary schools need different tools.",by:"Oliver W., Lead, Southwark",role:"educator",
+     text:"We adapted practices for adolescent skepticism — and it worked.",
+     full:"Teenagers saw primary-style rituals as childish until we co-designed them. Student committees renamed practices, chose music, and set privacy rules. Participation jumped when adolescents owned the format instead of inheriting it."}
+  ]};
+PROGRAM["__Nairobi"]={label:"Nairobi, Kenya",region:"Africa",since:2019,schools:11,educators:290,students:19200,
+  impact:{wellbeing:82,attendance:71,teacherRetention:65},programs:["Mindful Classrooms","Rural Outreach"],
+  stories:[
+    {q:"Urban schools became hubs for rural training.",by:"Grace W., Teacher, Nairobi",role:"educator",
+     text:"City educators mentor rural partners — both sides grow.",
+     full:"Nairobi partner schools host quarterly exchanges where urban and rural teachers co-teach, observe, and adapt materials for different contexts. City teachers learn humility and practicality; rural teachers gain allies and resources. The network keeps growing without centralizing everything in one office."}
+  ]};
+PROGRAM["__Mumbai"]={label:"Mumbai, India",region:"Asia",since:2020,schools:14,educators:420,students:31000,
+  impact:{wellbeing:78,attendance:72,teacherRetention:64},programs:["Mindful Classrooms","Educator Well-being"],
+  stories:[
+    {q:"Commute stress was showing up in first period.",by:"Rahul K., Teacher, Mumbai",role:"educator",
+     text:"A ten-minute arrival ritual helped students transition from crowded trains to class.",
+     full:"Many students arrive after long commutes — overstimulated, hungry, late. We built a ten-minute arrival ritual: hydrate, breathe, optional journal. First-period disruptions fell and teachers recovered instructional time by investing ten minutes upfront."},
+    {q:"My friends and I made a worry box.",by:"Isha, age 11, Mumbai",role:"student",
+     text:"We drop notes when we don't want to speak out loud.",
+     full:"Sometimes you want help but don't want everyone to know. We decorated a worry box and our teacher checks it at lunch. She talks to us privately. It feels safer than raising your hand about something embarrassing."}
+  ]};
 
 // Placeholder image generator (offline-safe). Set story.img to a real URL/path to use photos.
 function ph(label,seed){
@@ -255,12 +468,14 @@ Object.keys(PROGRAM).forEach(k=>{ (PROGRAM[k].stories||[]).forEach((s,i)=>{
   if(!s.text) s.text = s.q;
   if(!s.img)  s.img  = ph((PROGRAM[k].label||k)+" · "+(i+1), k.length+i);
   if(!s.cap)  s.cap  = (s.role==="student"?"A student":"An educator")+" at a partner school in "+(PROGRAM[k].label||k);
-  if(!s.full) s.full = s.text + " " + s.text; // demo long text; replace with the real full story
+  if(!s.full) s.full = s.text + (s.text.length > 80
+    ? " This is placeholder copy for team review — replace with the real full story, photo, and attribution before launch."
+    : " " + s.text + " This is placeholder copy for team review — replace with the real full story before launch.");
 }); });
 // id -> program key
 const isoToKey={}; Object.keys(PROGRAM).forEach(k=>{ if(PROGRAM[k].iso) isoToKey[PROGRAM[k].iso]=k; });
 
-const REGIONS=["All","Americas","Africa","Asia"];
+const REGIONS=["All","Americas","Africa","Asia","Europe","Oceania"];
 let activeRegion="All", selected=null, storyIdx=0;
 
 const svg=d3.select("#map"), W=960,H=500;
@@ -345,38 +560,55 @@ function bar(label,val){ return `<div class="bar-row"><div class="lab"><span>${l
   <div class="bar"><span data-w="${val}"></span></div></div>`; }
 
 function openPopup(k,evt){
-  selected=k; storyIdx=0;
+  selected=k; storyIdx=0; fullOpen=false;
+  popup.classList.remove("expanded");
   d3.selectAll("path.country").classed("active",function(){ return this.dataset.key===k; });
   const d=PROGRAM[k];
-  popup.innerHTML=`<button class="pop-close" id="popClose">×</button>
-    <div class="slider" id="slider"></div>
-    <div class="pop-body">
-      <h2>${nameOf(k)}</h2>
-      <div class="region">${d.region} · active since ${d.since}</div>
-      <div class="metrics">
-        <div class="metric"><div class="n">${d.schools}</div><div class="l">Schools</div></div>
-        <div class="metric"><div class="n">${fmt(d.educators)}</div><div class="l">Educators</div></div>
-        <div class="metric"><div class="n">${fmt(d.students)}</div><div class="l">Students</div></div>
+  popup.innerHTML=`<div class="pop-shell">
+    <div class="pop-main">
+      <button class="pop-close" id="popClose">×</button>
+      <div class="slider" id="slider"></div>
+      <div class="pop-body">
+        <h2>${nameOf(k)}</h2>
+        <div class="region">${d.region} · active since ${d.since}</div>
+        <div class="metrics">
+          <div class="metric"><div class="n">${d.schools}</div><div class="l">Schools</div></div>
+          <div class="metric"><div class="n">${fmt(d.educators)}</div><div class="l">Educators</div></div>
+          <div class="metric"><div class="n">${fmt(d.students)}</div><div class="l">Students</div></div>
+        </div>
+        <div class="subhead">Measured impact</div>
+        ${bar("Student well-being improved",d.impact.wellbeing)}
+        ${bar("Attendance up",d.impact.attendance)}
+        ${bar("Teacher retention",d.impact.teacherRetention)}
+        <div class="subhead">Programs running</div>
+        <div class="tags">${d.programs.map(p=>`<span class="tag">${p}</span>`).join("")}</div>
+        <div class="subhead">Voices from the ground</div>
+        <div id="storyBox"></div>
       </div>
-      <div class="subhead">Measured impact</div>
-      ${bar("Student well-being improved",d.impact.wellbeing)}
-      ${bar("Attendance up",d.impact.attendance)}
-      ${bar("Teacher retention",d.impact.teacherRetention)}
-      <div class="subhead">Programs running</div>
-      <div class="tags">${d.programs.map(p=>`<span class="tag">${p}</span>`).join("")}</div>
-      <div class="subhead">Voices from the ground</div>
-      <div id="storyBox"></div>
-    </div>`;
+    </div>
+    <div class="pop-full" id="popFull" aria-hidden="true"></div>
+  </div>`;
   document.getElementById("popClose").onclick=closePopup;
   backdrop.classList.add("show"); popup.classList.add("show");
-  positionPopup(evt);
-  requestAnimationFrame(()=>popup.querySelectorAll(".bar > span").forEach(s=>s.style.width=s.dataset.w+"%"));
   renderStory(k);
+  // Measure & clamp AFTER content is in so the popup's real height is known —
+  // otherwise a taller-than-expected popup near the bottom edge gets clipped.
+  positionPopup(evt);
+  requestAnimationFrame(()=>{
+    popup.querySelectorAll(".bar > span").forEach(s=>s.style.width=s.dataset.w+"%");
+    keepInView();
+  });
   startAuto(k);
   renderList();
 }
+function popupWidth(){
+  const narrow=window.innerWidth<=640;
+  const main=narrow?340:400;
+  const full=popup.classList.contains("expanded")?(narrow?280:360):0;
+  return main+full;
+}
 function positionPopup(evt){
-  const pw=popup.offsetWidth||340, phh=popup.offsetHeight||500, m=12;
+  const pw=popupWidth(), phh=popup.offsetHeight||500, m=12;
   let x=(evt?evt.clientX:window.innerWidth/2)+16, y=(evt?evt.clientY:window.innerHeight/2)-40;
   if(x+pw>window.innerWidth-m) x=window.innerWidth-pw-m;
   if(x<m) x=m;
@@ -384,13 +616,26 @@ function positionPopup(evt){
   if(y<m) y=m;
   popup.style.left=x+"px"; popup.style.top=y+"px";
 }
-function closePopup(){ selected=null; stopAuto(); popup.classList.remove("show"); backdrop.classList.remove("show");
+// Keep the popup anchored where it opened; only nudge it left/up if the
+// wider (expanded) popup would spill past the viewport edge.
+function keepInView(){
+  const pw=popupWidth(), phh=popup.offsetHeight||500, m=12;
+  let x=parseFloat(popup.style.left)||0, y=parseFloat(popup.style.top)||0;
+  if(x+pw>window.innerWidth-m) x=window.innerWidth-pw-m;
+  if(x<m) x=m;
+  if(y+phh>window.innerHeight-m) y=window.innerHeight-phh-m;
+  if(y<m) y=m;
+  popup.style.left=x+"px"; popup.style.top=y+"px";
+}
+function closePopup(){ selected=null; fullOpen=false; stopAuto();
+  popup.classList.remove("show","expanded"); backdrop.classList.remove("show");
   d3.selectAll("path.country").classed("active",false); renderList(); }
 backdrop.onclick=closePopup;
 document.addEventListener("keydown",e=>{ if(e.key!=="Escape") return;
-  if(fullModal.classList.contains("show")) closeFull(); else closePopup(); });
+  if(fullOpen) closeFull(); else closePopup(); });
 
 function renderStory(k){
+  if(fullOpen) closeFull();
   const s=PROGRAM[k].stories, box=document.getElementById("storyBox"); if(!box||!s||!s.length) return;
   const idx=storyIdx%s.length, cur=s[idx];
   const rc=cur.role==="student"?"student":"educator", rl=cur.role==="student"?"Shared by a student":"Shared by an educator";
@@ -419,29 +664,54 @@ function stopAuto(){ if(autoTimer){ clearInterval(autoTimer); autoTimer=null; } 
 popup.addEventListener("mouseenter",()=>autoPaused=true);
 popup.addEventListener("mouseleave",()=>autoPaused=false);
 
-// ---------- READ-FULL-STORY MODAL ----------
-const fullModal=document.getElementById("fullModal"), fbox=document.getElementById("fbox");
+// ---------- READ FULL STORY (expand popup to the right) ----------
+let fullOpen=false;
 function openFull(k,idx){
   const cur=PROGRAM[k].stories[idx];
   const rl=cur.role==="student"?"Shared by a student":"Shared by an educator";
-  fbox.innerHTML=`<button class="fclose" id="fClose">×</button>
-    <img src="${cur.img}" alt="Story photo">
-    <div class="fcap">${cur.cap}</div>
-    <div class="fbody">
+  const panel=document.getElementById("popFull");
+  panel.innerHTML=`<div class="pop-full-inner">
+    <button class="full-back" id="fullBack" aria-label="Back to summary">←</button>
+    <div class="full-body">
       <div class="frole">${rl} · ${nameOf(k)}</div>
       <div class="fq">“${cur.q}”</div>
       <div class="ftext">${cur.full}</div>
       <div class="fby">— ${cur.by}</div>
-    </div>`;
-  document.getElementById("fClose").onclick=closeFull;
-  fullModal.classList.add("show"); autoPaused=true;
+    </div>
+  </div>`;
+  document.getElementById("fullBack").onclick=closeFull;
+  panel.setAttribute("aria-hidden","false");
+  fullOpen=true; autoPaused=true;
+  popup.classList.add("expanded");
+  keepInView();
 }
-function closeFull(){ fullModal.classList.remove("show"); autoPaused=false; }
-fullModal.addEventListener("click",e=>{ if(e.target===fullModal) closeFull(); });
+function closeFull(){
+  fullOpen=false; autoPaused=false;
+  popup.classList.remove("expanded");
+  const panel=document.getElementById("popFull");
+  if(panel){ panel.innerHTML=""; panel.setAttribute("aria-hidden","true"); }
+  keepInView();
+}
 
 // ---------- SIDE LIST ----------
-panel.innerHTML=`<input class="search" id="search" placeholder="Search countries…" />
-  <div class="list-title" id="listTitle">Where we work</div><ul class="clist" id="clist"></ul>`;
+let panelOpen=true;
+const app=document.getElementById("app");
+function setPanelOpen(open){
+  panelOpen=open;
+  app.classList.toggle("panel-collapsed",!open);
+  const btn=document.getElementById("panelCollapse");
+  const tab=document.getElementById("panelTab");
+  if(btn){ btn.setAttribute("aria-expanded",open); btn.title=open?"Collapse country list":"Show country list"; }
+  if(tab){ tab.setAttribute("aria-expanded",open); }
+}
+panel.innerHTML=`<div class="panel-head">
+    <div class="list-title" id="listTitle">Where we work</div>
+    <button type="button" class="panel-collapse" id="panelCollapse" aria-controls="panel" aria-expanded="true" title="Collapse country list">›</button>
+  </div>
+  <input class="search" id="search" placeholder="Search countries…" />
+  <ul class="clist" id="clist"></ul>`;
+document.getElementById("panelCollapse").onclick=()=>setPanelOpen(false);
+document.getElementById("panelTab").onclick=()=>setPanelOpen(true);
 document.getElementById("search").addEventListener("input",renderList);
 function renderList(){
   const list=document.getElementById("clist"); if(!list) return;

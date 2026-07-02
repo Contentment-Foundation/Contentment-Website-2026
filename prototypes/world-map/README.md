@@ -30,7 +30,8 @@ Open http://localhost:8080/foundation-reach-map.html (needs internet for D3 + ma
   - Each story: `{ q, text, by, role, img, cap, full }`. Missing fields are auto-filled; images are
     placeholder SVGs until real photos are set via `img` (URL or local path).
 - **Interactions:** hover tooltip, click → floating popup (slider on top), region filters, searchable
-  country list, animated totals, slider autoplay (pauses on hover), and a "Read full story" modal.
+  country list, animated totals, slider autoplay (pauses on hover), and a "Read full story" panel that
+  slides in from the right inside the same popup.
 
 ## To integrate after approval
 
