@@ -126,17 +126,20 @@
         <code>https://drive.google.com/file/d/1ABC…xyz/view?usp=sharing</code></li>
     </ol>
 
-    <h3>3. Convert to a direct image link</h3>
-    <p>The website cannot use the Drive preview page. Copy the <strong>file ID</strong> (the long string between <code>/d/</code> and <code>/view</code>) and use this format:</p>
-    <pre><code>https://drive.google.com/uc?export=view&amp;id=FILE_ID_HERE</code></pre>
-    <p>Send that URL to whoever updates the data file, along with the quote, full story, and attribution.</p>
+    <h3>3. Paste it into the Pin form — no manual conversion needed</h3>
+    <p>Paste that share link straight into the <strong>Photo — Google Drive link</strong> field on <a href="story-board.html">Story Board</a>'s Pin/Edit form. It extracts the file ID and builds the direct preview link for you automatically, and shows a live preview right there so you can confirm it worked before saving. You don't need to hand-edit the URL yourself.</p>
+    <div class="callout">
+      <strong>Only if you're hand-editing <code>program-data.js</code> directly</strong> (developers, not content contributors): the direct format is
+      <code>https://drive.google.com/thumbnail?id=FILE_ID&amp;sz=w1000</code> — Drive's own thumbnail service, not the older <code>uc?export=view</code> trick. The old format is meant for downloading the original file and often fails to hotlink (a "can't scan this file for viruses" page instead of the image, or intermittent throttling), especially on larger photos.
+    </div>
 
-    <h3>If the image doesn’t show</h3>
+    <h3>If the image still doesn't show</h3>
     <ul>
-      <li>Confirm sharing is <em>Anyone with the link</em></li>
-      <li>Try re-copying the file ID into the direct URL format above</li>
+      <li>Confirm sharing is <em>Anyone with the link</em> — this is the most common cause</li>
+      <li>Try re-sharing and re-copying the link — Drive occasionally issues a fresh link with a different ID</li>
       <li>Use a JPG under ~500 KB if loading is slow</li>
     </ul>
+    <p><strong>Be aware:</strong> Google Drive isn't an official image CDN, and hotlinking a Drive file on a public website is best-effort — Google can still intermittently rate-limit or block repeated external requests to a file even when it's correctly shared and correctly formatted. This isn't something our conversion step can fix; it's a Drive-side limitation. For any photo that needs to be reliably up for launch (not just a quick prototype pass), ask engineering to add it directly to <code>site/assets/</code> instead — that's fully under our control and doesn't depend on Google's hotlinking behavior at all.</p>
 
     <h2>YouTube — video</h2>
 
@@ -167,7 +170,7 @@
   q: "The curriculum changed how our whole school handles conflict.",
   by: "Maria S., Principal, Ohio",
   role: "educator",
-  img: "https://drive.google.com/uc?export=view&amp;id=YOUR_FILE_ID",
+  img: "https://drive.google.com/thumbnail?id=YOUR_FILE_ID&amp;sz=w1000",
   cap: "Maria leading a restorative circle, 2025",
   video: "https://www.youtube.com/watch?v=YOUR_VIDEO_ID",
   text: "Short teaser for the map popup…",

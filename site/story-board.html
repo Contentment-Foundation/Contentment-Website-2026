@@ -339,6 +339,9 @@
     width:100%; border:1.5px solid var(--line); border-radius:10px; padding:10px 13px;
     font-family:Inter,sans-serif; font-size:13.5px; color:var(--ink); background:#fff; }
   #pinModal textarea { resize:vertical; min-height:84px; }
+  #pinModal input[type=file] { width:100%; border:1.5px dashed var(--line); border-radius:10px;
+    padding:9px 12px; font-family:Inter,sans-serif; font-size:12.5px; color:var(--ink); background:#fff; }
+  #pinModal input[type=file]:focus { outline:none; border-color:var(--ocean); }
   #pinModal textarea:focus, #pinModal input:focus, #pinModal select:focus {
     outline:none; border-color:var(--ocean); }
   #pinModal .pm-count { text-align:right; font-size:11px; color:var(--muted); margin-top:4px; }
@@ -504,9 +507,13 @@
       </div>
     </div>
 
-    <label class="pm-label" for="pmDrive">Photo — Google Drive link</label>
+    <label class="pm-label" for="pmUpload">Photo — upload from your device <span style="text-transform:none;font-weight:400;">(recommended)</span></label>
+    <input type="file" id="pmUpload" accept="image/*" />
+    <div class="pm-hint">Loads instantly and always works — the file never leaves your browser for this preview, no Google Drive dependency at all.</div>
+
+    <label class="pm-label" for="pmDrive">— or a Google Drive link <span style="text-transform:none;font-weight:400;">(optional, used only if no file is uploaded above)</span></label>
     <input type="text" id="pmDrive" placeholder="Paste a Google Drive share link (Anyone with the link)" />
-    <div class="pm-hint">Share the file as "Anyone with the link" first — we'll convert it to a direct preview automatically.</div>
+    <div class="pm-hint">Share the file as "Anyone with the link" first. Heads up: Google Drive actively rate-limits repeated external requests to a file (we've confirmed this — Drive returns "429 Too Many Requests" once it detects hotlinking from another site), so it can fail intermittently even when set up correctly. Prefer the upload option above; ask engineering to add anything permanent to <code>site/assets/</code> instead of relying on a Drive link long-term.</div>
 
     <label class="pm-label" for="pmVideo">Video — YouTube link <span style="text-transform:none;font-weight:400;">(optional)</span></label>
     <input type="text" id="pmVideo" placeholder="Paste a YouTube watch or share link" />
@@ -822,13 +829,18 @@ function youtubeId(url){
 }
 
 // Converts a Google Drive "share" link into a direct, embeddable image URL.
+// Uses Drive's own thumbnail service (thumbnail?id=...&sz=...) rather than the older
+// uc?export=view trick — that older format is meant for downloading the original file and
+// routinely fails to hotlink on external sites (virus-scan interstitial on larger files,
+// intermittent throttling). The thumbnail endpoint is what Drive's own UI uses to render
+// previews, so it reliably returns an actual image regardless of file size.
 // Non-Drive URLs (e.g. an already-direct image link) pass through unchanged.
 function resolvePhotoUrl(raw){
   const trimmed=(raw||"").trim();
   if(!trimmed) return null;
   if(!/drive\.google\.com/.test(trimmed)) return trimmed;
   const m=trimmed.match(/\/file\/d\/([\w-]+)/)||trimmed.match(/[?&]id=([\w-]+)/);
-  return m ? `https://drive.google.com/uc?export=view&id=${m[1]}` : trimmed;
+  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000` : trimmed;
 }
 // Resolves what image a card should show: Drive photo > YouTube thumbnail > generated placeholder.
 function resolveCardImage(driveRaw, videoRaw, role){
@@ -909,12 +921,13 @@ const pmQuote=document.getElementById("pmQuote"), pmCount=document.getElementByI
 const pmName=document.getElementById("pmName"), pmLocation=document.getElementById("pmLocation");
 const pmRegionSel=document.getElementById("pmRegion"), pmSizeSel=document.getElementById("pmSize");
 const pmDrive=document.getElementById("pmDrive"), pmVideo=document.getElementById("pmVideo");
+const pmUpload=document.getElementById("pmUpload");
 const pmPreview=document.getElementById("pmPreview");
 const pmPreviewImg=document.getElementById("pmPreviewImg"), pmPreviewEmpty=document.getElementById("pmPreviewEmpty"),
   pmPreviewPlay=document.getElementById("pmPreviewPlay");
 const PM_EMPTY_TEXT=pmPreviewEmpty.textContent;
 const PM_SHAPES=["shape-notebook","shape-polaroid","shape-torn","shape-rounded","shape-circle","shape-sticky"];
-let pmRole="educator", pmShape="shape-notebook", editingId=null;
+let pmRole="educator", pmShape="shape-notebook", editingId=null, pmUploadedImg=null;
 
 REGIONS.filter(r=>r!=="All").forEach(r=>{
   const o=document.createElement("option"); o.value=r; o.textContent=r; pmRegionSel.appendChild(o);
@@ -935,16 +948,23 @@ function updatePmPreview(){
   if(pmShape==="shape-sticky"){
     pmPreviewImg.style.display="none"; pmPreviewImg.removeAttribute("src");
     pmPreviewPlay.style.display="none";
-    const hasLink=!!(pmDrive.value.trim()||pmVideo.value.trim());
+    const hasLink=!!(pmUploadedImg||pmDrive.value.trim()||pmVideo.value.trim());
     pmPreviewEmpty.style.display="block";
     pmPreviewEmpty.textContent=hasLink
-      ? "Sticky Note cards show text only — the link is kept as reference, not shown as a photo."
+      ? "Sticky Note cards show text only — the photo/link is kept as reference, not shown as a photo."
       : PM_EMPTY_TEXT;
     return;
   }
 
-  const direct=resolvePhotoUrl(pmDrive.value);
+  // An uploaded file always wins — it's a local data URI, no network request, can't fail or be rate-limited.
   const yt=youtubeId(pmVideo.value);
+  if(pmUploadedImg){
+    pmPreviewImg.src=pmUploadedImg; pmPreviewImg.style.display="block"; pmPreviewEmpty.style.display="none";
+    pmPreviewPlay.style.display=yt?"flex":"none";
+    return;
+  }
+
+  const direct=resolvePhotoUrl(pmDrive.value);
   pmPreviewEmpty.textContent=PM_EMPTY_TEXT;
   if(direct){
     pmPreviewImg.src=direct; pmPreviewImg.style.display="block"; pmPreviewEmpty.style.display="none";
@@ -958,12 +978,27 @@ function updatePmPreview(){
   }
 }
 pmPreviewImg.onerror=()=>{
+  if(pmUploadedImg) return; // a local data URI never fails to load — an error here means a Drive/YouTube fetch failed
   pmPreviewImg.style.display="none";
   pmPreviewEmpty.style.display="block"; pmPreviewPlay.style.display="none";
-  pmPreviewEmpty.textContent="Couldn't load that — check the Drive file is shared \"Anyone with the link\"";
+  pmPreviewEmpty.textContent="Couldn't load that — Drive may be rate-limiting this file, or check it's shared \"Anyone with the link\". Try the upload option instead.";
 };
-pmDrive.addEventListener("input",updatePmPreview);
-pmVideo.addEventListener("input",updatePmPreview);
+pmUpload.addEventListener("change",()=>{
+  const file=pmUpload.files&&pmUpload.files[0];
+  if(!file){ pmUploadedImg=null; updatePmPreview(); return; }
+  const reader=new FileReader();
+  reader.onload=()=>{ pmUploadedImg=reader.result; updatePmPreview(); };
+  reader.readAsDataURL(file);
+});
+// Debounced so editing/pasting a link doesn't re-fetch on every keystroke — reduces the odds of
+// tripping Google Drive's own rate limiting on repeated hotlink-style requests to the same file.
+let pmPreviewDebounce=null;
+function schedulePmPreview(){
+  clearTimeout(pmPreviewDebounce);
+  pmPreviewDebounce=setTimeout(updatePmPreview,450);
+}
+pmDrive.addEventListener("input",schedulePmPreview);
+pmVideo.addEventListener("input",schedulePmPreview);
 
 function setPmRole(role){
   pmRole=role;
@@ -982,6 +1017,10 @@ function fillPinForm(s){
   pmSizeSel.value=String(s.cardWidth||240);
   setPmShape(PM_SHAPES.includes(s.shape)?s.shape:"shape-notebook");
   pmDrive.value=s.driveUrl||""; pmVideo.value=s.video||"";
+  // A browser can't restore a File into an <input type=file>, but if the story's image is a
+  // previously-uploaded data URI (not our placeholder SVG), keep it so editing doesn't lose the photo.
+  pmUploadedImg=(s.img&&s.img.startsWith("data:")&&!s.img.includes("svg+xml"))?s.img:null;
+  pmUpload.value="";
   updatePmPreview();
 }
 function resetPinForm(){
@@ -991,6 +1030,7 @@ function resetPinForm(){
   pmRegionSel.selectedIndex=0; pmSizeSel.value="240";
   setPmShape("shape-notebook");
   pmDrive.value=""; pmVideo.value="";
+  pmUploadedImg=null; pmUpload.value="";
   updatePmPreview();
 }
 function openPinModal(story){
@@ -1070,7 +1110,7 @@ document.getElementById("pmSubmit").onclick=()=>{
   const cardWidth=+pmSizeSel.value;
   const driveUrl=pmDrive.value.trim();
   const videoUrl=pmVideo.value.trim();
-  const img=resolveCardImage(driveUrl,videoUrl,pmRole);
+  const img=pmUploadedImg||resolveCardImage(driveUrl,videoUrl,pmRole);
   const hasVideo=!!youtubeId(videoUrl);
 
   if(editingId!=null){
