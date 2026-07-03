@@ -88,7 +88,7 @@
       </div>
       <div class="phase-card later">
         <strong>Phase 2 — Coming</strong>
-        <span>A <strong>web admin portal</strong> so program and comms staff can add, preview, and publish stories without editing code — with photo upload, link import, and a review step before go-live.</span>
+        <span>A <strong>web admin portal</strong> so program and comms staff can add, preview, and publish stories without editing code — with photo upload, link import, and a review step before go-live. The Pin form's device-upload option today previews that photo-upload experience, but needs a real backend before it can actually publish anything.</span>
       </div>
     </div>
 
@@ -103,7 +103,7 @@
         <tr><td><strong>Attribution</strong></td><td>Jayden, age 11, Texas</td><td>Follow school privacy rules</td></tr>
         <tr><td><strong>Role</strong></td><td>Educator or Student</td><td>Powers the filter buttons</td></tr>
         <tr><td><strong>Country</strong></td><td>United States of America</td><td>Must match the map country name</td></tr>
-        <tr><td><strong>Photo</strong></td><td>Google Drive link</td><td>Direct image URL (see below)</td></tr>
+        <tr><td><strong>Photo</strong></td><td>Google Drive link</td><td>Direct image URL (see below). The Pin form's "upload from device" option is preview-only for now — see below</td></tr>
         <tr><td><strong>Video</strong> (optional)</td><td>YouTube link</td><td>Public or Unlisted; captions recommended</td></tr>
         <tr><td><strong>Photo caption</strong> (optional)</td><td>Jayden after morning check-in, 2025</td><td>Helps accessibility</td></tr>
       </tbody>
@@ -112,6 +112,14 @@
     <div class="callout">
       <strong>One file, two places.</strong> Stories added today live in <code>site/program-data.js</code>. That same data powers both the <a href="story-board.html">Story Board</a> and the <a href="foundation-reach-map.html">Foundation Reach map</a>.
     </div>
+
+    <h2>Uploading a photo directly (in the Pin form)</h2>
+    <p>The Pin/Edit form on <a href="story-board.html">Story Board</a> has an "upload from your device" option, listed first and recommended over pasting a link. It reads the photo straight out of your browser and shows it on the card instantly — no Google Drive sharing, no link, no waiting on anything external.</p>
+    <div class="callout">
+      <strong>Prototype only — nothing is saved.</strong> The uploaded photo lives only in your browser tab's memory for that session. Refresh the page, close the tab, or open Story Board on another device, and it's gone — it never gets written to <code>program-data.js</code>, and no one else viewing the live site sees it. It's genuinely useful for previewing how a photo will crop into a given card style during a live review call, but it is <strong>not</strong> a way to publish a real story yet.
+    </div>
+    <p>Making an upload actually stick — persisting it, serving it to every visitor, showing up after a refresh — needs a real backend: somewhere to store the file long-term (a database or file storage service) and a server to save it there and hand it back out. A static site with no backend can't do that on its own; this is exactly the Phase 2 admin portal described below, and the upload button in the Pin form today is a preview of that experience, not the finished thing.</p>
+    <p>For a photo that needs to actually go live right now, still route it through Google Drive (below) or send it to the technical contact for <code>site/assets/</code> — either of those actually persists.</p>
 
     <h2>Google Drive — photos</h2>
 
@@ -193,7 +201,7 @@
     <p>Non-technical staff will sign in to a simple web form:</p>
     <ul>
       <li>Pick country, role, and write the quote + full story</li>
-      <li>Upload a photo or paste Google Drive / YouTube links</li>
+      <li>Upload a photo or paste Google Drive / YouTube links — and have it actually persist, unlike the preview-only upload in the Pin form today</li>
       <li>Preview exactly how the card and modal will look</li>
       <li>Submit for review → approved stories publish automatically</li>
     </ul>
