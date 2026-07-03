@@ -866,33 +866,33 @@ let modalTrigger=null;
 function openModal(id){
   const s=stories.find(x=>x.id===id); if(!s) return;
   modalTrigger=document.activeElement;
-  const wrap=document.getElementById(“mMediaWrap”);
-  const vid=document.getElementById(“mVideo”);
+  const wrap=document.getElementById("mMediaWrap");
+  const vid=document.getElementById("mVideo");
   const yt=youtubeId(s.video);
   if(yt){
-    wrap.classList.add(“has-video”);
-    vid.src=”https://www.youtube.com/embed/”+yt+”?rel=0”;
-    document.getElementById(“mImg”).alt=””;
+    wrap.classList.add("has-video");
+    vid.src="https://www.youtube.com/embed/"+yt+"?rel=0";
+    document.getElementById("mImg").alt="";
   }else{
-    wrap.classList.remove(“has-video”);
-    vid.removeAttribute(“src”);
-    document.getElementById(“mImg”).src=s.img;
-    document.getElementById(“mImg”).alt=s.cap||””;
+    wrap.classList.remove("has-video");
+    vid.removeAttribute("src");
+    document.getElementById("mImg").src=s.img;
+    document.getElementById("mImg").alt=s.cap||"";
   }
-  document.getElementById(“mRole”).textContent=s.role===”student”?”Student voice”:”Educator voice”;
-  document.getElementById(“mPlace”).textContent=s.place+” · “+s.region;
-  document.getElementById(“mQ”).textContent=”””+s.q+”””;
-  document.getElementById(“mText”).textContent=s.full;
-  document.getElementById(“mBy”).textContent=”— “+s.by;
+  document.getElementById("mRole").textContent=s.role==="student"?"Student voice":"Educator voice";
+  document.getElementById("mPlace").textContent=s.place+" · "+s.region;
+  document.getElementById("mQ").textContent="“"+s.q+"”";
+  document.getElementById("mText").textContent=s.full;
+  document.getElementById("mBy").textContent="— "+s.by;
   modal.dataset.storyId=s.id;
   resetDeleteConfirm();
-  modal.classList.add(“show”); modalBg.classList.add(“show”);
-  setTimeout(()=>{ document.getElementById(“mClose”).focus(); }, 0);
+  modal.classList.add("show"); modalBg.classList.add("show");
+  setTimeout(()=>{ document.getElementById("mClose").focus(); }, 0);
 }
 function closeModal(){
-  modal.classList.remove(“show”); modalBg.classList.remove(“show”);
-  document.getElementById(“mVideo”).removeAttribute(“src”);
-  document.getElementById(“mMediaWrap”).classList.remove(“has-video”);
+  modal.classList.remove("show"); modalBg.classList.remove("show");
+  document.getElementById("mVideo").removeAttribute("src");
+  document.getElementById("mMediaWrap").classList.remove("has-video");
   stopListening();
   resetDeleteConfirm();
   if(modalTrigger) modalTrigger.focus();

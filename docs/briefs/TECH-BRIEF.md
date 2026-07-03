@@ -407,6 +407,21 @@ TICKET-101  DNS cutover + production deploy
 
 ---
 
+## Open Decisions — Awaiting Sign-off
+
+These forks block multiple Phase 1 tickets. Full detail in `docs/planning/DECISIONS.md` (GitHub).
+
+| # | Decision | Options on the table | Waiting on | Tickets gated |
+|---|----------|---------------------|------------|---------------|
+| DECISION-002 | Cookie consent banner | GA4 Consent Mode v2 + Osano free tier vs custom `<dialog>` | Team sign-off | FEAT-071, FEAT-080 |
+| DECISION-003 | Build tool | Astro 4.x (current plan) vs static + `_partials/` inject script | Anik Ghosh | FEAT-002 and all downstream Phase 1 tickets |
+| DECISION-004 | PostHog hosting | Cloud (faster to ship) vs self-hosted on GCP (no third-party data) | Somesh / team | FEAT-080 |
+| DECISION-005 | Homeroom tier amounts | $5 / $25 / $100 vs $25 / $50 / $100 | Finance / Leadership | FEAT-051 copy, FEAT-060 URL wiring |
+
+> For resolved decisions (analytics stack, Vercel as host, GCP Cloud SQL) see `docs/planning/DECISIONS.md`.
+
+---
+
 ## Related Documents
 
 | Need | Document |
