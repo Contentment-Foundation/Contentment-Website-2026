@@ -276,6 +276,14 @@
     cursor:pointer; transition:.15s; }
   #modal .mlisten:hover { border-color:var(--ocean); background:rgba(31,175,192,.06); }
   #modal .mlisten.playing { background:var(--ocean); color:#fff; border-color:var(--ocean); }
+  #modal .m-actions { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  #modal .m-edit, #modal .m-delete { display:inline-flex; align-items:center; gap:6px;
+    padding:8px 14px; border:1.5px solid var(--line); border-radius:999px; background:#fff;
+    font-family:Inter,sans-serif; font-weight:700; font-size:12px; cursor:pointer; transition:.15s; }
+  #modal .m-edit:hover { border-color:var(--ocean); background:rgba(31,175,192,.06); color:var(--deep); }
+  #modal .m-delete { color:#b91c1c; }
+  #modal .m-delete:hover { border-color:#e74c3c; background:#fde8e8; }
+  #modal .m-delete.confirming { background:#e74c3c; border-color:#e74c3c; color:#fff; }
 
   .zoom-hint { position:absolute; bottom:14px; left:14px; font-size:13px; color:var(--deep);
     font-family:Caveat,cursive; font-weight:600;
@@ -335,7 +343,7 @@
     outline:none; border-color:var(--ocean); }
   #pinModal .pm-count { text-align:right; font-size:11px; color:var(--muted); margin-top:4px; }
   #pinModal .pm-row2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  #pinModal .pm-aesthetics { display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
+  #pinModal .pm-aesthetics { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:9px; }
   #pinModal .pm-swatch { border:1.5px solid var(--line); border-radius:10px; padding:10px 8px;
     cursor:pointer; text-align:center; background:#fff; transition:.15s; }
   #pinModal .pm-swatch.active { border-color:var(--teal); box-shadow:0 0 0 2px rgba(31,175,192,.2); }
@@ -347,11 +355,23 @@
     border-left:3px solid rgba(255,120,100,.5); }
   #pinModal .pm-swatch[data-shape="shape-torn"] { background:rgba(79,169,140,.08); }
   #pinModal .pm-swatch[data-shape="shape-rounded"] { background:rgba(2,78,112,.05); }
+  #pinModal .pm-swatch[data-shape="shape-circle"] { background:rgba(31,175,192,.05); }
+  #pinModal .pm-swatch[data-shape="shape-sticky"] { background:#fffaeb; border-left:3px solid rgba(232,180,0,.5); }
   #pinModal .pm-submit { width:100%; margin-top:20px; padding:14px; border:none; border-radius:12px;
     background:linear-gradient(135deg,#f39c12,#e07b1f); color:#fff; font-family:Inter,sans-serif;
     font-weight:700; font-size:14.5px; cursor:pointer; box-shadow:0 8px 20px rgba(224,123,31,.3);
     transition:.15s; }
   #pinModal .pm-submit:hover { transform:translateY(-1px); box-shadow:0 10px 24px rgba(224,123,31,.4); }
+  #pinModal .pm-hint { font-size:10.5px; color:var(--muted); margin-top:5px; line-height:1.4; }
+  #pinModal .pm-preview { position:relative; margin-top:10px; height:130px; border-radius:10px;
+    border:1.5px dashed var(--line); background:#f7f9fa; overflow:hidden;
+    display:flex; align-items:center; justify-content:center; }
+  #pinModal .pm-preview img { width:100%; height:100%; object-fit:cover; display:none; }
+  #pinModal .pm-preview-empty { font-size:11.5px; color:var(--muted); text-align:center; padding:0 20px; }
+  #pinModal .pm-preview-play { display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:38px; height:38px; border-radius:50%; background:rgba(2,78,112,.55); color:#fff;
+    align-items:center; justify-content:center; font-size:14px; pointer-events:none; }
+  #pinModal .pm-preview.circle-crop { width:130px; border-radius:50%; margin-left:auto; margin-right:auto; }
   @media (max-width:520px){ #pinModal .pm-row2 { grid-template-columns:1fr 1fr; } }
 </style>
 </head>
@@ -433,6 +453,10 @@
     <button type="button" class="mlisten" id="mListen">
       <span id="mListenIcon">🔊</span> <span id="mListenLabel">Listen to story</span>
     </button>
+    <div class="m-actions">
+      <button type="button" class="m-edit" id="mEdit">✎ Edit story</button>
+      <button type="button" class="m-delete" id="mDelete">🗑 Delete</button>
+    </div>
   </div>
 </div>
 
@@ -480,12 +504,28 @@
       </div>
     </div>
 
+    <label class="pm-label" for="pmDrive">Photo — Google Drive link</label>
+    <input type="text" id="pmDrive" placeholder="Paste a Google Drive share link (Anyone with the link)" />
+    <div class="pm-hint">Share the file as "Anyone with the link" first — we'll convert it to a direct preview automatically.</div>
+
+    <label class="pm-label" for="pmVideo">Video — YouTube link <span style="text-transform:none;font-weight:400;">(optional)</span></label>
+    <input type="text" id="pmVideo" placeholder="Paste a YouTube watch or share link" />
+
+    <label class="pm-label">Preview</label>
+    <div class="pm-preview" id="pmPreview">
+      <div class="pm-preview-empty" id="pmPreviewEmpty">No media yet — add a Drive photo link or YouTube link above</div>
+      <img id="pmPreviewImg" alt="" />
+      <span class="pm-preview-play" id="pmPreviewPlay" aria-hidden="true">▶</span>
+    </div>
+
     <label class="pm-label">Choose sticky note aesthetics</label>
     <div class="pm-aesthetics" id="pmAesthetics">
       <button type="button" class="pm-swatch active" data-shape="shape-notebook"><strong>Notebook Lines</strong><small>Sample</small></button>
       <button type="button" class="pm-swatch" data-shape="shape-polaroid"><strong>Polaroid Frame</strong><small>Sample</small></button>
       <button type="button" class="pm-swatch" data-shape="shape-torn"><strong>Torn Edge</strong><small>Sample</small></button>
       <button type="button" class="pm-swatch" data-shape="shape-rounded"><strong>Clean Pastel</strong><small>Sample</small></button>
+      <button type="button" class="pm-swatch" data-shape="shape-circle"><strong>Circle Photo</strong><small>Sample</small></button>
+      <button type="button" class="pm-swatch" data-shape="shape-sticky"><strong>Sticky Note</strong><small>Text only</small></button>
     </div>
 
     <button type="button" class="pm-submit" id="pmSubmit">+ Pin Story Live</button>
@@ -781,6 +821,24 @@ function youtubeId(url){
   return m?m[1]:null;
 }
 
+// Converts a Google Drive "share" link into a direct, embeddable image URL.
+// Non-Drive URLs (e.g. an already-direct image link) pass through unchanged.
+function resolvePhotoUrl(raw){
+  const trimmed=(raw||"").trim();
+  if(!trimmed) return null;
+  if(!/drive\.google\.com/.test(trimmed)) return trimmed;
+  const m=trimmed.match(/\/file\/d\/([\w-]+)/)||trimmed.match(/[?&]id=([\w-]+)/);
+  return m ? `https://drive.google.com/uc?export=view&id=${m[1]}` : trimmed;
+}
+// Resolves what image a card should show: Drive photo > YouTube thumbnail > generated placeholder.
+function resolveCardImage(driveRaw, videoRaw, role){
+  const direct=resolvePhotoUrl(driveRaw);
+  if(direct) return direct;
+  const yt=youtubeId(videoRaw);
+  if(yt) return `https://img.youtube.com/vi/${yt}/hqdefault.jpg`;
+  return placeholderStoryImg(role);
+}
+
 // Modal
 function openModal(id){
   const s=stories.find(x=>x.id===id); if(!s) return;
@@ -803,6 +861,7 @@ function openModal(id){
   document.getElementById("mText").textContent=s.full;
   document.getElementById("mBy").textContent="— "+s.by;
   modal.dataset.storyId=s.id;
+  resetDeleteConfirm();
   modal.classList.add("show"); modalBg.classList.add("show");
 }
 function closeModal(){
@@ -810,6 +869,7 @@ function closeModal(){
   document.getElementById("mVideo").removeAttribute("src");
   document.getElementById("mMediaWrap").classList.remove("has-video");
   stopListening();
+  resetDeleteConfirm();
 }
 document.getElementById("mClose").onclick=closeModal;
 modalBg.onclick=closeModal;
@@ -848,7 +908,13 @@ const pinModal=document.getElementById("pinModal"), pinModalBg=document.getEleme
 const pmQuote=document.getElementById("pmQuote"), pmCount=document.getElementById("pmCount");
 const pmName=document.getElementById("pmName"), pmLocation=document.getElementById("pmLocation");
 const pmRegionSel=document.getElementById("pmRegion"), pmSizeSel=document.getElementById("pmSize");
-let pmRole="educator", pmShape="shape-notebook";
+const pmDrive=document.getElementById("pmDrive"), pmVideo=document.getElementById("pmVideo");
+const pmPreview=document.getElementById("pmPreview");
+const pmPreviewImg=document.getElementById("pmPreviewImg"), pmPreviewEmpty=document.getElementById("pmPreviewEmpty"),
+  pmPreviewPlay=document.getElementById("pmPreviewPlay");
+const PM_EMPTY_TEXT=pmPreviewEmpty.textContent;
+const PM_SHAPES=["shape-notebook","shape-polaroid","shape-torn","shape-rounded","shape-circle","shape-sticky"];
+let pmRole="educator", pmShape="shape-notebook", editingId=null;
 
 REGIONS.filter(r=>r!=="All").forEach(r=>{
   const o=document.createElement("option"); o.value=r; o.textContent=r; pmRegionSel.appendChild(o);
@@ -857,21 +923,121 @@ document.querySelectorAll(".pm-role-btn").forEach(b=>{
   b.onclick=()=>{ pmRole=b.dataset.role; document.querySelectorAll(".pm-role-btn").forEach(x=>x.classList.toggle("active",x===b)); };
 });
 document.querySelectorAll(".pm-swatch").forEach(b=>{
-  b.onclick=()=>{ pmShape=b.dataset.shape; document.querySelectorAll(".pm-swatch").forEach(x=>x.classList.toggle("active",x===b)); };
+  b.onclick=()=>setPmShape(b.dataset.shape);
 });
-pmQuote.addEventListener("input",()=>{ pmCount.textContent=180-pmQuote.value.length; });
+pmQuote.addEventListener("input",()=>{ pmCount.textContent=Math.max(0,180-pmQuote.value.length); });
 
-function openPinModal(){
+function updatePmPreview(){
+  pmPreview.classList.toggle("circle-crop",pmShape==="shape-circle");
+
+  // Sticky Note cards are text-only (matches .frame.shape-sticky hiding .media on the board) —
+  // never render a photo/video thumbnail; just note that the link is kept as reference.
+  if(pmShape==="shape-sticky"){
+    pmPreviewImg.style.display="none"; pmPreviewImg.removeAttribute("src");
+    pmPreviewPlay.style.display="none";
+    const hasLink=!!(pmDrive.value.trim()||pmVideo.value.trim());
+    pmPreviewEmpty.style.display="block";
+    pmPreviewEmpty.textContent=hasLink
+      ? "Sticky Note cards show text only — the link is kept as reference, not shown as a photo."
+      : PM_EMPTY_TEXT;
+    return;
+  }
+
+  const direct=resolvePhotoUrl(pmDrive.value);
+  const yt=youtubeId(pmVideo.value);
+  pmPreviewEmpty.textContent=PM_EMPTY_TEXT;
+  if(direct){
+    pmPreviewImg.src=direct; pmPreviewImg.style.display="block"; pmPreviewEmpty.style.display="none";
+    pmPreviewPlay.style.display=yt?"flex":"none";
+  }else if(yt){
+    pmPreviewImg.src=`https://img.youtube.com/vi/${yt}/hqdefault.jpg`;
+    pmPreviewImg.style.display="block"; pmPreviewEmpty.style.display="none"; pmPreviewPlay.style.display="flex";
+  }else{
+    pmPreviewImg.style.display="none"; pmPreviewImg.removeAttribute("src");
+    pmPreviewEmpty.style.display="block"; pmPreviewPlay.style.display="none";
+  }
+}
+pmPreviewImg.onerror=()=>{
+  pmPreviewImg.style.display="none";
+  pmPreviewEmpty.style.display="block"; pmPreviewPlay.style.display="none";
+  pmPreviewEmpty.textContent="Couldn't load that — check the Drive file is shared \"Anyone with the link\"";
+};
+pmDrive.addEventListener("input",updatePmPreview);
+pmVideo.addEventListener("input",updatePmPreview);
+
+function setPmRole(role){
+  pmRole=role;
+  document.querySelectorAll(".pm-role-btn").forEach(b=>b.classList.toggle("active",b.dataset.role===role));
+}
+function setPmShape(shape){
+  pmShape=shape;
+  document.querySelectorAll(".pm-swatch").forEach(b=>b.classList.toggle("active",b.dataset.shape===shape));
+  updatePmPreview();
+}
+function fillPinForm(s){
+  setPmRole(s.role==="student"?"student":"educator");
+  pmQuote.value=s.q||""; pmCount.textContent=Math.max(0,180-pmQuote.value.length);
+  pmName.value=s.by||""; pmLocation.value=s.place||"";
+  pmRegionSel.value=s.region||pmRegionSel.options[0].value;
+  pmSizeSel.value=String(s.cardWidth||240);
+  setPmShape(PM_SHAPES.includes(s.shape)?s.shape:"shape-notebook");
+  pmDrive.value=s.driveUrl||""; pmVideo.value=s.video||"";
+  updatePmPreview();
+}
+function resetPinForm(){
+  setPmRole("educator");
+  pmQuote.value=""; pmCount.textContent="180";
+  pmName.value=""; pmLocation.value="";
+  pmRegionSel.selectedIndex=0; pmSizeSel.value="240";
+  setPmShape("shape-notebook");
+  pmDrive.value=""; pmVideo.value="";
+  updatePmPreview();
+}
+function openPinModal(story){
+  editingId=story?story.id:null;
+  document.getElementById("pmTitle").textContent=story?"Edit Your Classroom Story":"Pin Your Classroom Story";
+  document.getElementById("pmSubmit").textContent=story?"Save Changes":"+ Pin Story Live";
+  pmQuote.style.borderColor="";
+  if(story) fillPinForm(story); else resetPinForm();
   pinModal.classList.add("show"); pinModalBg.classList.add("show");
   requestAnimationFrame(()=>pmQuote.focus());
 }
 function closePinModal(){
   pinModal.classList.remove("show"); pinModalBg.classList.remove("show");
 }
-document.getElementById("btnPin").onclick=openPinModal;
+document.getElementById("btnPin").onclick=()=>openPinModal();
 document.getElementById("pmClose").onclick=closePinModal;
 pinModalBg.onclick=closePinModal;
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&pinModal.classList.contains("show")) closePinModal(); });
+
+// Edit / delete an existing pinned card, from the story detail modal
+const mEdit=document.getElementById("mEdit"), mDelete=document.getElementById("mDelete");
+let deleteArmed=false, deleteTimer=null;
+function resetDeleteConfirm(){
+  clearTimeout(deleteTimer);
+  deleteArmed=false;
+  mDelete.classList.remove("confirming");
+  mDelete.textContent="🗑 Delete";
+}
+mEdit.onclick=()=>{
+  const s=stories.find(x=>x.id===+modal.dataset.storyId); if(!s) return;
+  closeModal();
+  openPinModal(s);
+};
+mDelete.onclick=()=>{
+  const id=+modal.dataset.storyId;
+  if(!deleteArmed){
+    deleteArmed=true;
+    mDelete.classList.add("confirming");
+    mDelete.textContent="Click again to confirm";
+    deleteTimer=setTimeout(resetDeleteConfirm,3000);
+    return;
+  }
+  resetDeleteConfirm();
+  stories=stories.filter(x=>x.id!==id);
+  closeModal();
+  renderCards();
+};
 
 function placeholderStoryImg(role){
   const colors=role==="student"?["4FA98C","1FAFC0"]:["0080B0","024E70"];
@@ -884,6 +1050,16 @@ function placeholderStoryImg(role){
   return "data:image/svg+xml,"+encodeURIComponent(svg);
 }
 
+function flashCard(id){
+  requestAnimationFrame(()=>{
+    const wrap=boardSurface.querySelector(`.frame-wrap[data-id="${id}"]`);
+    if(!wrap) return;
+    wrap.classList.add("just-pinned");
+    setTimeout(()=>wrap.classList.remove("just-pinned"),2400);
+    if(gridMode) wrap.scrollIntoView({behavior:"smooth",block:"center"});
+  });
+}
+
 document.getElementById("pmSubmit").onclick=()=>{
   const q=pmQuote.value.trim();
   if(!q){ pmQuote.focus(); pmQuote.style.borderColor="#e74c3c"; return; }
@@ -892,10 +1068,28 @@ document.getElementById("pmSubmit").onclick=()=>{
   const place=pmLocation.value.trim()||"Somewhere out there";
   const by=pmName.value.trim()||"Anonymous";
   const cardWidth=+pmSizeSel.value;
+  const driveUrl=pmDrive.value.trim();
+  const videoUrl=pmVideo.value.trim();
+  const img=resolveCardImage(driveUrl,videoUrl,pmRole);
+  const hasVideo=!!youtubeId(videoUrl);
+
+  if(editingId!=null){
+    const idx=stories.findIndex(x=>x.id===editingId);
+    if(idx>-1){
+      stories[idx]={...stories[idx], place, region, role:pmRole, q, text:q, full:q, by,
+        img, driveUrl, video:videoUrl||null, hasVideo, shape:pmShape, cardWidth};
+    }
+    const editedId=editingId;
+    closePinModal();
+    renderCards();
+    flashCard(editedId);
+    return;
+  }
+
   const n=stories.length;
   stories.push({
     id:n, place, region, role:pmRole, q, text:q, full:q, by,
-    img:placeholderStoryImg(pmRole), cap:"", video:null, hasVideo:false,
+    img, driveUrl, cap:"", video:videoUrl||null, hasVideo,
     shape:pmShape, tape:"t"+(n%4), pin:PIN_COLORS[n%PIN_COLORS.length],
     sticker:STICKERS[n%STICKERS.length],
     rot:((hash(n)%7)-3)+"deg",
@@ -907,15 +1101,7 @@ document.getElementById("pmSubmit").onclick=()=>{
 
   resetFilters();
   closePinModal();
-  pmQuote.value=""; pmCount.textContent="180"; pmName.value=""; pmLocation.value="";
-
-  requestAnimationFrame(()=>{
-    const wrap=boardSurface.querySelector(`.frame-wrap[data-id="${n}"]`);
-    if(!wrap) return;
-    wrap.classList.add("just-pinned");
-    setTimeout(()=>wrap.classList.remove("just-pinned"),2400);
-    if(gridMode) wrap.scrollIntoView({behavior:"smooth",block:"center"});
-  });
+  flashCard(n);
 };
 
 // Background map

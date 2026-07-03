@@ -7,20 +7,23 @@ const PROGRAM = {
     stories:[
       {q:"The curriculum changed how our whole school handles conflict.",by:"Maria S., Principal, Ohio",role:"educator",
        text:"Before the program, disagreements ended in the office. Now our fifth-graders run their own restorative circles. Suspensions are down 40% this year.",
-       full:"Before the program, every disagreement seemed to end in my office. Teachers were exhausted from mediating, and students didn't feel heard. We piloted Mindful Classrooms in two grade levels first. Within six months, fifth-graders were running restorative circles on their own. Suspensions dropped 40% year over year, and staff surveys show educators feel more equipped — and less alone — when hard moments arise."},
+       full:"Before the program, every disagreement seemed to end in my office. Teachers were exhausted from mediating, and students didn't feel heard. We piloted Mindful Classrooms in two grade levels first. Within six months, fifth-graders were running restorative circles on their own. Suspensions dropped 40% year over year, and staff surveys show educators feel more equipped — and less alone — when hard moments arise.",
+       video:"https://youtu.be/j1qMIFUHoFU" /* DEMO placeholder: real TCF channel video (Schools of Wellbeing — Grenada Elementary, California), remove once a real matching clip exists */},
       {q:"I used to feel like a volcano. Now I know how to breathe first.",by:"Jayden, age 11, Texas",role:"student",
        text:"When I get really mad I do the four-corner breathing my teacher taught us. My little brother uses it too now.",
        full:"I used to get sent out of class a lot because I'd blow up before I could explain what was wrong. My teacher taught us four-corner breathing and a feelings check-in every morning. Now when I'm mad I pause, breathe, and write down what happened. My little brother started copying me at home. School feels safer because people listen before they yell."},
       {q:"Parents notice the difference at home too.",by:"Denise R., Parent & PTA lead, Atlanta",role:"educator",
        text:"Kids are naming emotions at the dinner table. That never happened before.",
-       full:"Our PTA was skeptical at first — another program, another binder. But within a semester, parents started reporting the same language at home: 'I need a reset,' 'I'm in the red zone.' Teachers finally have a shared vocabulary with families. Attendance at parent nights went up because people see real change, not just posters on a wall."}
+       full:"Our PTA was skeptical at first — another program, another binder. But within a semester, parents started reporting the same language at home: 'I need a reset,' 'I'm in the red zone.' Teachers finally have a shared vocabulary with families. Attendance at parent nights went up because people see real change, not just posters on a wall.",
+       video:"https://youtu.be/eZXBmoe-RZk" /* DEMO placeholder: real TCF channel video (Schools of Wellbeing — Corbett Prep, Tampa FL), remove once a real matching clip exists */}
     ]},
   "Canada":{iso:"124",region:"Americas",since:2018,schools:28,educators:720,students:24000,
     impact:{wellbeing:76,attendance:58,teacherRetention:69},programs:["Mindful Classrooms","Student Voice"],
     stories:[
       {q:"Students finally have language for what they feel.",by:"Amira K., Teacher, Toronto",role:"educator",
        text:"We went from 'I'm fine' to honest check-ins in under a month.",
-       full:"In a class of 28, almost everyone used to answer 'I'm fine' during morning meetings. We introduced a simple mood meter and paired it with student voice circles once a week. Students began naming anxiety before tests, loneliness at recess, pride after group work. Referrals didn't disappear overnight, but the quality of conversations changed completely — we intervene earlier now."},
+       full:"In a class of 28, almost everyone used to answer 'I'm fine' during morning meetings. We introduced a simple mood meter and paired it with student voice circles once a week. Students began naming anxiety before tests, loneliness at recess, pride after group work. Referrals didn't disappear overnight, but the quality of conversations changed completely — we intervene earlier now.",
+       video:"https://youtu.be/3x9WtrhjKPc" /* DEMO placeholder: real TCF channel video (Schools of Wellbeing — Henry Lord Community School, Fall River MA), remove once a real matching clip exists */},
       {q:"I spoke at our school assembly about worry.",by:"Leo, age 13, Vancouver",role:"student",
        text:"I told everyone that feeling nervous is normal. A lot of kids came up to me after.",
        full:"I always thought I was the only one who got nervous before presentations. Our teacher asked if anyone wanted to share how they handle worry. I volunteered and talked about journaling and walking outside at lunch. After assembly, kids I barely knew said they felt the same way. It made the school feel smaller in a good way."}
@@ -47,7 +50,8 @@ const PROGRAM = {
     stories:[
       {q:"Attendance rose sharply after daily check-ins.",by:"Priya N., Head teacher, Pune",role:"educator",
        text:"We started every morning with a two-minute check-in. Within a term, the children who used to skip class were the ones leading it.",
-       full:"Chronic absenteeism was tied to shame — students fell behind and stopped coming. A two-minute morning check-in lowered the stakes: name your mood, set one intention. Within one term, several previously disengaged students volunteered to lead the ritual. Attendance climbed and so did participation in afternoon clubs."},
+       full:"Chronic absenteeism was tied to shame — students fell behind and stopped coming. A two-minute morning check-in lowered the stakes: name your mood, set one intention. Within one term, several previously disengaged students volunteered to lead the ritual. Attendance climbed and so did participation in afternoon clubs.",
+       video:"https://youtu.be/QSbvbbkQcGI" /* DEMO placeholder: real TCF channel video (The Four Pillars of Wellbeing — Corbett Prep, Tampa FL), remove once a real matching clip exists */},
       {q:"Now I tell my teacher when I feel worried.",by:"Ananya, age 10, Delhi",role:"student",
        text:"Before, I kept everything inside. Now I raise my hand.",
        full:"I used to get stomach aches and wouldn't say why. We learned that worry can live in your body. Now I put a card on my desk — green, yellow, or red — and my teacher checks in privately. I don't miss as much school because someone notices early."},
@@ -104,7 +108,8 @@ const PROGRAM = {
     stories:[
       {q:"Calm classrooms, calmer communities.",by:"James O., Head teacher, Kampala",role:"educator",
        text:"Students brought conflict-resolution language home to their families.",
-       full:"We tracked playground incidents and home visit anecdotes over a year. Students began mediating sibling conflicts and advocating for pauses during family disputes. The program didn't just change lessons — it gave children transferable skills their parents adopted because they worked."},
+       full:"We tracked playground incidents and home visit anecdotes over a year. Students began mediating sibling conflicts and advocating for pauses during family disputes. The program didn't just change lessons — it gave children transferable skills their parents adopted because they worked.",
+       video:"https://youtu.be/nGA-M7GDQg0" /* DEMO placeholder: real TCF channel video ("The Bank of Trust"), remove once a real matching clip exists */},
       {q:"I don't fight on the field anymore.",by:"Samuel, age 12, Jinja",role:"student",
        text:"We have a hand signal for 'time out' during football.",
        full:"Football used to end in fights almost every day. Our coach and teacher taught a hand signal for timeout when emotions run high. We walk to the sideline, breathe, and decide if we want to keep playing. Games finish now. I even taught it to my cousins."}
@@ -148,10 +153,12 @@ const PROGRAM = {
     stories:[
       {q:"Gross National Happiness, in the classroom.",by:"Sonam D., Teacher, Thimphu",role:"educator",
        text:"National values aligned with what we were already trying to build.",
-       full:"GNH is not abstract here — it's a design principle. Mindful Classrooms gave us shared practices for compassion, reflection, and community responsibility. Student voice forums let children propose service projects tied to local needs. The program felt like an extension of national identity, not an import."},
+       full:"GNH is not abstract here — it's a design principle. Mindful Classrooms gave us shared practices for compassion, reflection, and community responsibility. Student voice forums let children propose service projects tied to local needs. The program felt like an extension of national identity, not an import.",
+       video:"https://youtu.be/BZ_rDqmtm1U" /* DEMO placeholder: real TCF channel video (ELC High School — TCF in Bhutan), remove once a real matching clip exists */},
       {q:"I journal about gratitude every Friday.",by:"Pema, age 14, Paro",role:"student",
        text:"It helps me notice good things even on hard weeks.",
-       full:"Fridays we write three gratitudes — small ones are allowed: hot lunch, a friend sharing a pen, clear weather. On hard weeks it feels impossible at first, then I always find something. My teacher reads hers aloud too, which makes it fair."}
+       full:"Fridays we write three gratitudes — small ones are allowed: hot lunch, a friend sharing a pen, clear weather. On hard weeks it feels impossible at first, then I always find something. My teacher reads hers aloud too, which makes it fair.",
+       video:"https://youtu.be/5pLIASeoSMU" /* DEMO placeholder: real TCF channel video (Schools of Wellbeing — Shari ECCD Centre, Paro Bhutan — exact city match), remove once a real matching clip exists */}
     ]},
   "United Kingdom":{iso:"826",region:"Europe",since:2024,schools:9,educators:280,students:15400,
     impact:{wellbeing:74,attendance:59,teacherRetention:67},programs:["Educator Well-being","Student Voice"],
