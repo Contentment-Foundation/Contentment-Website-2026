@@ -3,184 +3,122 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Foundation Reach Map — Design Prototype</title>
+<title>Foundation Reach — Design Prototype</title>
 <style>
-  .proto-banner { grid-column:1 / -1; padding:10px 24px; background:#ffdd57; color:#4a3b00;
-    font-size:13px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-  .proto-banner a { color:#024E70; font-weight:700; text-decoration:none; white-space:nowrap; }
-  .proto-banner a:hover { text-decoration:underline; }
   :root {
-    --bg:#3f3f78; --panel:#33335f; --map-bg:#4a4a8a;
+    --bg:#3f3f78; --map-bg:#4a4a8a;
     --country:#6b6ba3; --country-stroke:#3f3f78;
     --served:#7ec98f; --served-hi:#a5e0b2; --served-dim:#5c8a6a;
     --pin:#8be0a0; --pin-stroke:#ffffff;
-    --text:#eef0f8; --muted:#b9bbd6; --card:#ffffff; --ink:#2a2a4a; --accent:#2a7d47;
+    --text:#eef0f8; --muted:#b9bbd6;
+    --card:#ffffff; --ink:#2a2a4a;
+    --green:#4FA98C; --teal:#1FAFC0;
   }
   * { box-sizing:border-box; }
   html,body { margin:0; background:var(--bg); color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
-  #app { display:grid; grid-template-columns:1fr 320px; grid-template-rows:auto auto 1fr; min-height:100vh; height:100vh;
-    transition:grid-template-columns .35s cubic-bezier(.4,0,.2,1); }
-  #app.panel-collapsed { grid-template-columns:1fr 0px; }
-  header { grid-column:1 / -1; padding:16px 24px; border-bottom:1px solid rgba(255,255,255,.08);
-    display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
-  header h1 { font-size:18px; margin:0; letter-spacing:.4px; white-space:nowrap; }
-  .totals { display:flex; gap:24px; margin-left:auto; }
-  .total .n { font-size:22px; font-weight:800; line-height:1; }
-  .total .l { font-size:10px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); }
-  .filters { display:flex; gap:8px; flex-wrap:wrap; }
-  .chip { border:1px solid rgba(255,255,255,.25); background:transparent; color:var(--text);
-    padding:5px 12px; border-radius:999px; font-size:12px; cursor:pointer; transition:.15s; }
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    overflow:hidden; height:100%; }
+  #app { display:grid; grid-template-rows:auto auto 1fr; height:100vh; }
+
+  /* proto banner */
+  .proto-banner { padding:9px 20px; background:#ffdd57; color:#4a3b00; font-size:12px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:1px solid rgba(0,0,0,.06); }
+  .proto-banner a { color:#024E70; font-weight:700; text-decoration:none; white-space:nowrap; }
+  .proto-banner a:hover { text-decoration:underline; }
+
+  /* header */
+  header { padding:12px 22px; border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+  .header-label { white-space:nowrap; }
+  .header-label h1 { font-size:16px; margin:0 0 1px; letter-spacing:.3px; }
+  .header-label p  { font-size:11px; color:var(--muted); margin:0; }
+  .filters { display:flex; gap:6px; flex-wrap:wrap; margin-left:auto; }
+  .chip { border:1px solid rgba(255,255,255,.22); background:transparent; color:var(--text);
+    padding:4px 13px; border-radius:999px; font-size:12px; cursor:pointer; transition:.14s; }
   .chip:hover { background:rgba(255,255,255,.1); }
   .chip.active { background:var(--served); color:#12331e; border-color:var(--served); font-weight:700; }
 
+  /* map */
   #mapWrap { position:relative; background:var(--map-bg); overflow:hidden; }
   svg { display:block; width:100%; height:100%; outline:none; }
   .country { fill:var(--country); stroke:var(--country-stroke); stroke-width:.4px; outline:none; }
-  .country:focus { outline:none; }
+  .country:focus         { outline:none; }
   .country:focus-visible { outline:2px solid rgba(255,255,255,.75); outline-offset:2px; }
-  .country.served { fill:var(--served); cursor:pointer; transition:fill .15s; }
-  .country.served:hover { fill:var(--served-hi); }
-  .country.active { fill:var(--served-hi); stroke:#fff; stroke-width:1.1px; }
-  .country.dim { fill:var(--served-dim); opacity:.45; cursor:default; }
-  .pin { fill:var(--pin); stroke:var(--pin-stroke); stroke-width:1.4px; cursor:pointer; outline:none; }
-  .pin:focus { outline:none; }
-  .pin:focus-visible { outline:2px solid rgba(255,255,255,.75); outline-offset:3px; }
-  .pin-pulse { fill:var(--pin); opacity:.5; pointer-events:none; }
-  .pin-label { fill:var(--text); font-size:9px; font-weight:700; pointer-events:none;
+  .country.served        { fill:var(--served); cursor:pointer; transition:fill .15s; }
+  .country.served:hover  { fill:var(--served-hi); }
+  .country.active        { fill:var(--served-hi); stroke:#fff; stroke-width:1px; }
+  .country.dim           { fill:var(--served-dim); opacity:.45; cursor:default; }
+  .pin                   { fill:var(--pin); stroke:var(--pin-stroke); stroke-width:1.4px; cursor:pointer; outline:none; }
+  .pin:focus             { outline:none; }
+  .pin:focus-visible     { outline:2px solid rgba(255,255,255,.75); outline-offset:3px; }
+  .pin-pulse             { fill:var(--pin); opacity:.5; pointer-events:none; }
+  .pin-label             { fill:var(--text); font-size:9px; font-weight:700; pointer-events:none;
     text-transform:uppercase; letter-spacing:.5px; }
-  .legend { position:absolute; left:16px; bottom:14px; display:flex; gap:16px;
-    background:rgba(0,0,0,.22); padding:8px 12px; border-radius:8px; font-size:11px; }
-  .legend i { display:inline-block; width:11px; height:11px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
 
+  .legend { position:absolute; left:16px; bottom:14px; display:flex; gap:16px;
+    background:rgba(0,0,0,.25); padding:8px 14px; border-radius:8px; font-size:11px; color:var(--text); }
+  .legend i { display:inline-block; width:10px; height:10px; border-radius:3px;
+    margin-right:5px; vertical-align:-1px; }
+
+  /* hover tooltip */
   #tip { position:absolute; pointer-events:none; z-index:30; background:#fff; color:var(--ink);
-    border-radius:8px; padding:8px 10px; font-size:12px; box-shadow:0 8px 24px rgba(0,0,0,.3);
+    border-radius:8px; padding:8px 12px; font-size:12px; box-shadow:0 8px 24px rgba(0,0,0,.3);
     opacity:0; transition:opacity .1s; white-space:nowrap; }
   #tip.show { opacity:1; }
-  #tip b { color:var(--accent); }
+  #tip b { color:#2a7d47; }
 
+  /* error banner */
   #banner { display:none; position:absolute; top:12px; left:50%; transform:translateX(-50%);
-    background:#ffdd57; color:#4a3b00; padding:10px 16px; border-radius:8px; font-size:13px; z-index:60;
-    max-width:80%; box-shadow:0 6px 20px rgba(0,0,0,.3); }
+    background:#ffdd57; color:#4a3b00; padding:10px 16px; border-radius:8px; font-size:13px;
+    z-index:60; max-width:80%; box-shadow:0 6px 20px rgba(0,0,0,.3); }
 
-  /* FLOATING POPUP */
-  #backdrop { position:fixed; inset:0; background:rgba(20,20,45,.45); z-index:40; opacity:0;
-    pointer-events:none; transition:opacity .18s; }
+  /* --- EDUCATOR SPOTLIGHT POPUP --- */
+  #backdrop { position:fixed; inset:0; background:rgba(10,10,30,.5); z-index:40;
+    opacity:0; pointer-events:none; transition:opacity .18s; }
   #backdrop.show { opacity:1; pointer-events:auto; }
-  #popup { position:fixed; z-index:50; width:400px; max-width:94vw; max-height:82vh; overflow:hidden;
-    background:var(--card); color:var(--ink); border-radius:14px; box-shadow:0 20px 50px rgba(0,0,0,.4);
-    opacity:0; transform:scale(.96); pointer-events:none;
-    transition:opacity .16s, transform .16s, width .38s cubic-bezier(.4,0,.2,1); }
-  #popup.show { opacity:1; transform:scale(1); pointer-events:auto; }
-  #popup.expanded { width:760px; }
-  .pop-shell { display:flex; height:100%; max-height:82vh; }
-  .pop-main { position:relative; flex:0 0 400px; width:400px; display:flex; flex-direction:column; min-width:0;
-    max-height:82vh; overflow:hidden; }
-  .pop-full { flex:0 0 0; width:0; overflow:hidden; background:#fafbfd;
-    border-left:1px solid transparent; transition:flex-basis .38s cubic-bezier(.4,0,.2,1),
-    width .38s cubic-bezier(.4,0,.2,1), border-color .38s; }
-  #popup.expanded .pop-full { flex:0 0 360px; width:360px; border-left-color:#e7e8ef; }
-  .pop-full-inner { width:360px; height:100%; max-height:82vh; display:flex; flex-direction:column;
-    transform:translateX(24px); opacity:0; transition:transform .38s cubic-bezier(.4,0,.2,1), opacity .28s ease; }
-  #popup.expanded .pop-full-inner { transform:translateX(0); opacity:1; }
-  .pop-close { position:absolute; top:10px; right:10px; z-index:5; width:28px; height:28px; border-radius:50%;
-    border:none; background:rgba(0,0,0,.35); color:#fff; font-size:16px; cursor:pointer; }
-  .pop-close:hover { background:rgba(0,0,0,.6); }
-  .full-head { display:flex; align-items:center; gap:10px; padding:12px 16px 10px; flex:none;
-    border-bottom:1px solid #e7e8ef; }
-  .full-head-title { font-size:14px; font-weight:800; color:var(--ink); }
-  .full-back { flex:none; width:28px; height:28px; border-radius:50%;
-    border:none; background:#e7e8ef; color:#444; font-size:16px; cursor:pointer; }
-  .full-back:hover { background:#d7d9e6; }
-  .full-body { flex:1; min-height:0; overflow-y:auto; padding:14px 16px; }
-  .stories-trigger { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%;
-    margin-top:4px; padding:11px 14px; border:1px solid #bfe0c9; border-radius:10px; cursor:pointer;
-    background:#eaf3ec; color:var(--accent); font-size:13px; font-weight:700; text-align:left;
-    transition:background .15s, transform .15s; }
-  .stories-trigger:hover { background:#dcefe1; }
-  .stories-trigger .st-arrow { font-size:16px; transition:transform .2s ease; }
-  #popup.expanded .stories-trigger .st-arrow { transform:translateX(3px); }
-  .pop-body { flex:1; min-height:0; overflow-y:auto; padding:14px 16px; }
-  @media (max-width:640px){
-    #popup { width:340px; }
-    #popup.expanded { width:min(94vw, 620px); }
-    .pop-main { flex:0 0 340px; width:340px; }
-    #popup.expanded .pop-full { flex:0 0 280px; width:280px; }
-    .pop-full-inner { width:280px; }
+
+  #popup { position:fixed; z-index:50; width:320px; max-width:90vw;
+    background:var(--card); color:var(--ink); border-radius:18px;
+    box-shadow:0 28px 64px rgba(0,0,0,.52);
+    opacity:0; transform:scale(.94) translateY(10px); pointer-events:none;
+    transition:opacity .18s, transform .22s cubic-bezier(.34,1.3,.64,1);
+    overflow:hidden; }
+  #popup.show { opacity:1; transform:scale(1) translateY(0); pointer-events:auto; }
+
+  .pop-close { position:absolute; top:10px; right:10px; z-index:5;
+    width:28px; height:28px; border-radius:50%; border:none;
+    background:rgba(0,0,0,.42); color:#fff; font-size:16px; line-height:28px;
+    text-align:center; cursor:pointer; transition:background .12s; }
+  .pop-close:hover { background:rgba(0,0,0,.68); }
+
+  .pop-photo { width:100%; height:210px; object-fit:cover; display:block;
+    background:linear-gradient(135deg,#c8d6e2,#9ab5c8); }
+
+  .pop-body { padding:18px 20px 24px; }
+
+  .pop-country { font-size:10px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.7px; color:var(--green); margin:0 0 10px; }
+
+  .pop-quote { font-style:italic; font-size:15px; line-height:1.55; color:var(--ink);
+    margin:0 0 16px; position:relative; padding:0 4px; }
+  .pop-quote::before { content:'“'; font-style:normal; font-family:Georgia,serif;
+    font-size:32px; line-height:0; vertical-align:-10px; color:var(--green);
+    margin-right:2px; opacity:.75; }
+  .pop-quote::after  { content:'”'; font-style:normal; font-family:Georgia,serif;
+    font-size:32px; line-height:0; vertical-align:-10px; color:var(--green);
+    margin-left:2px; opacity:.75; }
+
+  .pop-divider { height:1px; background:rgba(2,78,112,.08); margin:0 0 14px; }
+
+  .pop-by   { font-weight:700; font-size:13.5px; color:var(--ink); margin:0 0 2px; }
+  .pop-role { font-size:12px; color:#777; margin:0; line-height:1.4; }
+
+  @media (max-width:540px){
+    #popup { width:calc(100vw - 24px); }
+    .pop-photo { height:170px; }
   }
   @media (prefers-reduced-motion: reduce){
-    #popup, .pop-full, .pop-full-inner, .story-block summary::after { transition:none !important; }
-  }
-  .pop-body h2 { margin:0 0 2px; font-size:18px; }
-  .pop-body .region { color:#888; font-size:11px; margin-bottom:10px; }
-  .metrics { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-bottom:10px; }
-  .metric { background:#f2f3f8; border-radius:8px; padding:7px 4px; text-align:center; }
-  .metric .n { font-size:16px; font-weight:800; color:var(--ink); }
-  .metric .l { font-size:8px; text-transform:uppercase; letter-spacing:.3px; color:#888; }
-  .subhead { font-size:10px; text-transform:uppercase; letter-spacing:.6px; color:#999; margin:10px 0 6px; }
-  .bar-row { margin-bottom:7px; }
-  .bar-row .lab { display:flex; justify-content:space-between; font-size:11px; margin-bottom:3px; color:#444; }
-  .bar { height:7px; background:#e7e8ef; border-radius:99px; overflow:hidden; }
-  .bar > span { display:block; height:100%; background:linear-gradient(90deg,#7ec98f,#4fae6f); border-radius:99px; width:0; transition:width .6s ease; }
-  .tags { display:flex; flex-wrap:wrap; gap:6px; }
-  .tag { font-size:11px; background:#eaf3ec; color:#2a7d47; border:1px solid #bfe0c9; padding:3px 9px; border-radius:999px; }
-  .story-list { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
-  .story-block { background:#f7f8fc; border-radius:8px; border:1px solid #e7e8ef; overflow:hidden; }
-  .story-block[open] { border-color:#bfe0c9; background:#f4faf6; }
-  .story-block summary { list-style:none; cursor:pointer; padding:10px 32px 10px 12px; position:relative;
-    display:flex; flex-direction:column; gap:5px; }
-  .story-block summary::-webkit-details-marker { display:none; }
-  .story-block summary::after { content:"›"; position:absolute; right:12px; top:14px; font-size:16px;
-    color:#888; transition:transform .2s ease; }
-  .story-block[open] summary::after { transform:rotate(90deg); color:var(--accent); }
-  .story-sum-q { font-style:italic; font-size:12.5px; line-height:1.35; color:#333; }
-  .story-sum-by { font-size:10.5px; color:#888; font-weight:600; }
-  .story-block-body { padding:0 12px 12px; border-top:1px solid #e7e8ef; }
-  .story-block[open] .story-block-body { padding-top:10px; }
-  .story-thumb { width:100%; height:100px; object-fit:cover; border-radius:6px; margin-bottom:8px; display:block; }
-  .story-preview { font-size:12px; line-height:1.5; color:#555; margin:0 0 8px; }
-  .role-badge { display:inline-block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
-    padding:2px 7px; border-radius:999px; margin-bottom:2px; align-self:flex-start; }
-  .role-badge.educator { background:#e3f1ff; color:#1c6fb8; }
-  .role-badge.student { background:#eafbe9; color:#2a7d47; }
-  .full-link { display:inline-block; font-size:12px; font-weight:700; color:var(--accent);
-    cursor:pointer; text-decoration:none; }
-  .full-link:hover { text-decoration:underline; }
-
-  #panel { background:var(--panel); border-left:1px solid rgba(255,255,255,.08); overflow-x:hidden; overflow-y:auto;
-    padding:18px 18px; min-width:0; opacity:1; transition:opacity .25s ease, padding .35s ease; }
-  #app.panel-collapsed #panel { opacity:0; padding:0; pointer-events:none; overflow:hidden; }
-  .panel-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px; }
-  .panel-head .list-title { margin:0; flex:1; }
-  .panel-collapse { flex:none; width:28px; height:28px; border-radius:8px; border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.08); color:var(--text); font-size:16px; line-height:1; cursor:pointer; }
-  .panel-collapse:hover { background:rgba(255,255,255,.16); }
-  .panel-tab { position:absolute; right:0; top:50%; transform:translateY(-50%); z-index:25;
-    display:none; align-items:center; gap:6px; padding:10px 8px 10px 10px; border:none;
-    border-radius:10px 0 0 10px; background:var(--panel); color:var(--text); font-size:12px; font-weight:700;
-    cursor:pointer; box-shadow:-4px 0 16px rgba(0,0,0,.2); border:1px solid rgba(255,255,255,.12); border-right:none; }
-  .panel-tab:hover { background:#3d3d72; }
-  .panel-tab .tab-icon { font-size:16px; line-height:1; }
-  #app.panel-collapsed .panel-tab { display:flex; }
-  .search { width:100%; padding:9px 12px; border-radius:8px; border:1px solid rgba(255,255,255,.18);
-    background:rgba(255,255,255,.06); color:var(--text); font-size:13px; margin-bottom:14px; }
-  .search::placeholder { color:var(--muted); }
-  .list-title { font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin:4px 0 10px; }
-  .clist { list-style:none; margin:0; padding:0; }
-  .clist li { display:flex; justify-content:space-between; align-items:center; padding:9px 10px; border-radius:8px;
-    cursor:pointer; transition:.12s; font-size:13px; }
-  .clist li:hover { background:rgba(255,255,255,.08); }
-  .clist li .r { font-size:11px; color:var(--muted); }
-
-  @media (max-width:820px){ #app{ grid-template-columns:1fr; grid-template-rows:auto auto 55vh auto; }
-    #app.panel-collapsed { grid-template-rows:auto auto 1fr 0fr; }
-    #panel{ border-left:none; border-top:1px solid rgba(255,255,255,.08); overflow-y:auto; }
-    #app.panel-collapsed #panel { max-height:0; border-top-color:transparent; }
-    .panel-tab { top:auto; bottom:16px; transform:none; border-radius:10px 10px 0 0; right:16px;
-      border:1px solid rgba(255,255,255,.12); border-bottom:none; padding:8px 14px; }
-  }
-  @media (prefers-reduced-motion: reduce){
-    #app, #panel { transition:none !important; }
+    #popup, #backdrop { transition:none !important; }
   }
 </style>
 </head>
@@ -192,29 +130,22 @@
     <a href="story-board.html">Story Board →</a>
   </div>
   <header>
-    <h1>🌱 Foundation Reach</h1>
-    <div class="filters" id="filters"></div>
-    <div class="totals">
-      <div class="total"><div class="n" data-count="0" id="tCountries">0</div><div class="l">Countries</div></div>
-      <div class="total"><div class="n" data-count="0" id="tSchools">0</div><div class="l">Schools</div></div>
-      <div class="total"><div class="n" data-count="0" id="tEducators">0</div><div class="l">Educators</div></div>
-      <div class="total"><div class="n" data-count="0" id="tStudents">0</div><div class="l">Students</div></div>
+    <div class="header-label">
+      <h1>🌱 Foundation Reach</h1>
+      <p>Meet the educators behind the work</p>
     </div>
+    <div class="filters" id="filters"></div>
   </header>
   <div id="mapWrap">
     <svg id="map" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid meet"></svg>
     <div class="legend">
-      <span><i style="background:#7ec98f"></i>Program active</span>
+      <span><i style="background:#7ec98f"></i>Program active — click to meet an educator</span>
       <span><i style="background:#6b6ba3"></i>Not yet served</span>
-      <span><i style="background:#8be0a0;border-radius:50%"></i>City site</span>
+      <span><i style="background:#8be0a0;border-radius:50%"></i>City spotlight</span>
     </div>
     <div id="tip"></div>
     <div id="banner"></div>
-    <button type="button" class="panel-tab" id="panelTab" aria-controls="panel" aria-expanded="false" title="Show country list">
-      <span class="tab-icon" aria-hidden="true">‹</span><span>Countries</span>
-    </button>
   </div>
-  <aside id="panel" aria-label="Country list"></aside>
 </div>
 <div id="backdrop"></div>
 <div id="popup"></div>
@@ -224,262 +155,159 @@
 <script src="program-data.js"></script>
 <script>
 
-const REGIONS=["All","Americas","Africa","Asia","Europe","Oceania"];
-let activeRegion="All", selected=null;
+const REGIONS = ["All","Americas","Africa","Asia","Europe","Oceania"];
+let activeRegion = "All", selected = null;
 
-const svg=d3.select("#map"), W=960,H=500;
-const projection=d3.geoNaturalEarth1().scale(178).translate([W/2,H/2+8]);
-const path=d3.geoPath(projection);
-const tip=document.getElementById("tip"), mapWrap=document.getElementById("mapWrap");
-const panel=document.getElementById("panel"), popup=document.getElementById("popup"), backdrop=document.getElementById("backdrop");
-const fmt=n=> n>=1000 ? (n/1000).toFixed(n%1000?1:0)+"k" : n;
-const nameOf=k=> PROGRAM[k].label || k;
-const inRegion=k=> activeRegion==="All"||PROGRAM[k].region===activeRegion;
+const svg       = d3.select("#map");
+const W = 960, H = 500;
+const projection = d3.geoNaturalEarth1().scale(178).translate([W/2, H/2+8]);
+const path       = d3.geoPath(projection);
+const tip        = document.getElementById("tip");
+const mapWrap    = document.getElementById("mapWrap");
+const popup      = document.getElementById("popup");
+const backdrop   = document.getElementById("backdrop");
+
+const nameOf   = k => PROGRAM[k].label || k;
+const inRegion = k => activeRegion === "All" || PROGRAM[k].region === activeRegion;
+
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function showBanner(msg){ const b=document.getElementById("banner"); b.textContent=msg; b.style.display="block"; }
 
 if(typeof d3==="undefined"||typeof topojson==="undefined"){
-  showBanner("Libraries didn't load — this page needs an internet connection (it pulls D3 and the map from a CDN). Open the file in a normal browser tab while online.");
+  showBanner("Libraries didn't load — this page needs an internet connection (D3 + TopoJSON load from CDN).");
 } else if(typeof PROGRAM==="undefined"){
-  showBanner("Program data didn't load — program-data.js is missing or failed to load next to this file.");
-}
-function showBanner(msg){ const b=document.getElementById("banner"); b.textContent=msg; b.style.display="block"; }
-function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-
-// filter chips
-const fWrap=document.getElementById("filters");
-REGIONS.forEach(r=>{ const b=document.createElement("button"); b.className="chip"+(r==="All"?" active":"");
-  b.textContent=r; b.onclick=()=>{activeRegion=r; [...fWrap.children].forEach(c=>c.classList.toggle("active",c===b)); applyFilter(); renderList();};
-  fWrap.appendChild(b); });
-
-function animate(el,to){ const start=+el.dataset.count||0,t0=performance.now(),dur=700;
-  (function step(t){ const p=Math.min(1,(t-t0)/dur),v=Math.round(start+(to-start)*p);
-    el.textContent=fmt(v); if(p<1) requestAnimationFrame(step); else el.dataset.count=to; })(t0); }
-function updateTotals(){
-  const keys=Object.keys(PROGRAM).filter(inRegion), geo=keys.filter(k=>!k.startsWith("__"));
-  // City pins (e.g. __Nairobi) are a drill-down into their country's own numbers,
-  // not additional population — sum over `geo` only or totals double-count them.
-  const sum=f=>geo.reduce((a,k)=>a+PROGRAM[k][f],0);
-  animate(document.getElementById("tCountries"),geo.length);
-  animate(document.getElementById("tSchools"),sum("schools"));
-  animate(document.getElementById("tEducators"),sum("educators"));
-  animate(document.getElementById("tStudents"),sum("students"));
+  showBanner("program-data.js didn't load — make sure it's in the same folder as this file.");
 }
 
-if(typeof d3!=="undefined" && typeof topojson!=="undefined" && typeof PROGRAM!=="undefined"){
-d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world=>{
-  const feats=topojson.feature(world,world.objects.countries).features;
-  // resolve program key by ISO id first, then name
-  feats.forEach(f=>{ f.__key = isoToKey[String(f.id)] || (PROGRAM[f.properties&&f.properties.name]?f.properties.name:null); });
-  const matched=feats.filter(f=>f.__key).length;
-  if(matched===0) showBanner("Map loaded but no countries matched the data keys — check the ISO codes in PROGRAM.");
+// Region filter chips
+const fWrap = document.getElementById("filters");
+REGIONS.forEach(r => {
+  const b = document.createElement("button");
+  b.className = "chip" + (r === "All" ? " active" : "");
+  b.textContent = r;
+  b.onclick = () => {
+    activeRegion = r;
+    [...fWrap.children].forEach(c => c.classList.toggle("active", c === b));
+    applyFilter();
+  };
+  fWrap.appendChild(b);
+});
 
-  svg.append("g").selectAll("path").data(feats).join("path")
-    .attr("d",path)
-    .attr("class",f=>"country"+(f.__key?" served":""))
-    .attr("data-key",f=>f.__key||"")
-    .attr("tabindex",f=>f.__key?0:null)
-    .attr("role",f=>f.__key?"button":null)
-    .attr("aria-label",f=>f.__key?nameOf(f.__key):null)
-    .on("mousemove",(e,f)=>{ if(f.__key&&inRegion(f.__key)) quickTip(f.__key,e); })
-    .on("mouseleave",hideTip)
-    .on("click",(e,f)=>{ if(f.__key&&inRegion(f.__key)){ openPopup(f.__key,e); e.stopPropagation(); } })
-    .on("keydown",(e,f)=>{ if(f.__key&&inRegion(f.__key)&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(f.__key,null); } });
+// Draw map
+if(typeof d3 !== "undefined" && typeof topojson !== "undefined" && typeof PROGRAM !== "undefined"){
+  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world => {
+    const feats = topojson.feature(world, world.objects.countries).features;
+    feats.forEach(f => {
+      f.__key = isoToKey[String(f.id)] ||
+                (PROGRAM[f.properties && f.properties.name] ? f.properties.name : null);
+    });
 
-  const pins=svg.append("g").selectAll("g").data(CITIES).join("g")
-    .attr("transform",d=>`translate(${projection(d.coords)})`);
-  const pulse=pins.append("circle").attr("class","pin-pulse").attr("r",4);
-  pulse.append("animate").attr("attributeName","r").attr("values","4;12;4").attr("dur","2.4s").attr("repeatCount","indefinite");
-  pulse.append("animate").attr("attributeName","opacity").attr("values",".5;0;.5").attr("dur","2.4s").attr("repeatCount","indefinite");
-  pins.append("circle").attr("class","pin").attr("r",4)
-    .attr("tabindex",0).attr("role","button").attr("aria-label",d=>nameOf(d.key))
-    .on("mousemove",(e,d)=>{ if(inRegion(d.key)) quickTip(d.key,e); }).on("mouseleave",hideTip)
-    .on("click",(e,d)=>{ if(inRegion(d.key)){ openPopup(d.key,e); e.stopPropagation(); } })
-    .on("keydown",(e,d)=>{ if(inRegion(d.key)&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(d.key,null); } });
-  pins.append("text").attr("class","pin-label").attr("x",8).attr("y",3).text(d=>d.name);
+    svg.append("g").selectAll("path").data(feats).join("path")
+      .attr("d", path)
+      .attr("class", f => "country" + (f.__key ? " served" : ""))
+      .attr("data-key", f => f.__key || "")
+      .attr("tabindex",  f => f.__key ? 0 : null)
+      .attr("role",      f => f.__key ? "button" : null)
+      .attr("aria-label",f => f.__key ? "Meet an educator from " + nameOf(f.__key) : null)
+      .on("mousemove",  (e,f) => { if(f.__key && inRegion(f.__key)) quickTip(f.__key, e); })
+      .on("mouseleave", hideTip)
+      .on("click",      (e,f) => { if(f.__key && inRegion(f.__key)){ openPopup(f.__key, e); e.stopPropagation(); } })
+      .on("keydown",    (e,f) => { if(f.__key && inRegion(f.__key) && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(f.__key, null); } });
 
-  applyFilter(); updateTotals(); renderList();
-}).catch(err=>{ showBanner("Could not load map data from CDN: "+err); });
+    // City pins
+    const pins = svg.append("g").selectAll("g").data(CITIES).join("g")
+      .attr("transform", d => `translate(${projection(d.coords)})`);
+    const pulse = pins.append("circle").attr("class","pin-pulse").attr("r",4);
+    pulse.append("animate").attr("attributeName","r").attr("values","4;12;4").attr("dur","2.4s").attr("repeatCount","indefinite");
+    pulse.append("animate").attr("attributeName","opacity").attr("values",".5;0;.5").attr("dur","2.4s").attr("repeatCount","indefinite");
+    pins.append("circle").attr("class","pin").attr("r",4)
+      .attr("tabindex",0).attr("role","button")
+      .attr("aria-label", d => "Meet an educator from " + nameOf(d.key))
+      .on("mousemove",  (e,d) => { if(inRegion(d.key)) quickTip(d.key, e); })
+      .on("mouseleave", hideTip)
+      .on("click",      (e,d) => { if(inRegion(d.key)){ openPopup(d.key, e); e.stopPropagation(); } })
+      .on("keydown",    (e,d) => { if(inRegion(d.key) && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(d.key, null); } });
+    pins.append("text").attr("class","pin-label").attr("x",8).attr("y",3).text(d => d.name);
+
+    applyFilter();
+  }).catch(err => showBanner("Could not load map data from CDN: " + err));
 }
 
-// hover tooltip
-function quickTip(k,e){ const d=PROGRAM[k];
-  tip.innerHTML=`<b>${esc(nameOf(k))}</b> — ${d.schools} schools · ${fmt(d.students)} students · click for details`;
-  tip.classList.add("show"); const r=mapWrap.getBoundingClientRect();
-  let x=e.clientX-r.left+12,y=e.clientY-r.top+12;
-  if(x+tip.offsetWidth>r.width) x=e.clientX-r.left-tip.offsetWidth-12;
-  tip.style.left=x+"px"; tip.style.top=y+"px"; }
+// Hover tooltip — just country + educator first name
+function quickTip(k, e){
+  const s = PROGRAM[k].stories && PROGRAM[k].stories[0];
+  const firstName = s ? s.by.split(",")[0].trim() : "an educator";
+  tip.innerHTML = `<b>${esc(nameOf(k))}</b> — click to meet ${esc(firstName)}`;
+  tip.classList.add("show");
+  const r = mapWrap.getBoundingClientRect();
+  let x = e.clientX - r.left + 14;
+  let y = e.clientY - r.top  + 14;
+  if(x + tip.offsetWidth  > r.width)  x = e.clientX - r.left - tip.offsetWidth  - 14;
+  if(y + tip.offsetHeight > r.height) y = e.clientY - r.top  - tip.offsetHeight - 14;
+  tip.style.left = x + "px";
+  tip.style.top  = y + "px";
+}
 function hideTip(){ tip.classList.remove("show"); }
 
 function applyFilter(){
-  d3.selectAll("path.country").classed("dim",function(){ const k=this.dataset.key; return k && !inRegion(k); })
-    .classed("active",function(){ return this.dataset.key===selected; });
-  updateTotals();
+  d3.selectAll("path.country")
+    .classed("dim",    function(){ const k=this.dataset.key; return k && !inRegion(k); })
+    .classed("active", function(){ return this.dataset.key === selected; });
 }
 
-// ---------- FLOATING POPUP ----------
-function bar(label,val){ return `<div class="bar-row"><div class="lab"><span>${label}</span><span>${val}%</span></div>
-  <div class="bar"><span data-w="${val}"></span></div></div>`; }
+// ---------- EDUCATOR SPOTLIGHT POPUP ----------
+function openPopup(k, evt){
+  selected = k;
+  d3.selectAll("path.country").classed("active", function(){ return this.dataset.key === k; });
 
-function openPopup(k,evt){
-  selected=k; fullOpen=false;
-  popup.classList.remove("expanded");
-  d3.selectAll("path.country").classed("active",function(){ return this.dataset.key===k; });
-  const d=PROGRAM[k];
-  popup.innerHTML=`<div class="pop-shell">
-    <div class="pop-main">
-      <button class="pop-close" id="popClose">×</button>
-      <div class="pop-body">
-        <h2>${esc(nameOf(k))}</h2>
-        <div class="region">${esc(d.region)} · active since ${d.since}</div>
-        <div class="metrics">
-          <div class="metric"><div class="n">${d.schools}</div><div class="l">Schools</div></div>
-          <div class="metric"><div class="n">${fmt(d.educators)}</div><div class="l">Educators</div></div>
-          <div class="metric"><div class="n">${fmt(d.students)}</div><div class="l">Students</div></div>
-        </div>
-        <div class="subhead">Measured impact</div>
-        ${bar("Student well-being improved",d.impact.wellbeing)}
-        ${bar("Attendance up",d.impact.attendance)}
-        ${bar("Teacher retention",d.impact.teacherRetention)}
-        <div class="subhead">Programs running</div>
-        <div class="tags">${d.programs.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}</div>
-        <div class="subhead">Voices from the ground</div>
-        <button type="button" class="stories-trigger" id="storiesTrigger">
-          <span>Read the ${d.stories.length} ${d.stories.length===1?"story":"stories"} from ${esc(nameOf(k))}</span>
-          <span class="st-arrow" aria-hidden="true">→</span>
-        </button>
-      </div>
-    </div>
-    <div class="pop-full" id="popFull" aria-hidden="true"></div>
-  </div>`;
-  document.getElementById("popClose").onclick=closePopup;
-  document.getElementById("storiesTrigger").onclick=()=>{ fullOpen?closeStories():openStories(k); };
-  backdrop.classList.add("show"); popup.classList.add("show");
-  // Measure & clamp AFTER content is in so the popup's real height is known —
-  // otherwise a taller-than-expected popup near the bottom edge gets clipped.
+  const s = PROGRAM[k].stories && PROGRAM[k].stories[0];
+  if(!s) return;
+
+  // Split "Maria S., Principal, Ohio" → name + role+location detail
+  const parts   = s.by.split(",").map(p => p.trim());
+  const byName   = parts[0];
+  const byDetail = parts.slice(1).join(", ");
+
+  popup.innerHTML = `
+    <button class="pop-close" id="popClose" aria-label="Close">×</button>
+    <img class="pop-photo" src="${esc(s.img)}" alt="${esc(s.cap || byName)}" />
+    <div class="pop-body">
+      <div class="pop-country">${esc(nameOf(k))}</div>
+      <p class="pop-quote">${esc(s.q)}</p>
+      <div class="pop-divider"></div>
+      <div class="pop-by">${esc(byName)}</div>
+      ${byDetail ? `<p class="pop-role">${esc(byDetail)}</p>` : ""}
+    </div>`;
+
+  document.getElementById("popClose").onclick = closePopup;
+  backdrop.classList.add("show");
+  popup.classList.add("show");
   positionPopup(evt);
-  requestAnimationFrame(()=>{
-    popup.querySelectorAll(".bar > span").forEach(s=>s.style.width=s.dataset.w+"%");
-    keepInView();
-  });
-  renderList();
 }
-function popupWidth(){
-  const narrow=window.innerWidth<=640;
-  const main=narrow?340:400;
-  const full=popup.classList.contains("expanded")?(narrow?280:360):0;
-  return main+full;
-}
+
 function positionPopup(evt){
-  const pw=popupWidth(), phh=popup.offsetHeight||500, m=12;
-  let x=(evt?evt.clientX:window.innerWidth/2)+16, y=(evt?evt.clientY:window.innerHeight/2)-40;
-  if(x+pw>window.innerWidth-m) x=window.innerWidth-pw-m;
-  if(x<m) x=m;
-  if(y+phh>window.innerHeight-m) y=window.innerHeight-phh-m;
-  if(y<m) y=m;
-  popup.style.left=x+"px"; popup.style.top=y+"px";
-}
-// Keep the popup anchored where it opened; only nudge it left/up if the
-// wider (expanded) popup would spill past the viewport edge.
-function keepInView(){
-  const pw=popupWidth(), phh=popup.offsetHeight||500, m=12;
-  let x=parseFloat(popup.style.left)||0, y=parseFloat(popup.style.top)||0;
-  if(x+pw>window.innerWidth-m) x=window.innerWidth-pw-m;
-  if(x<m) x=m;
-  if(y+phh>window.innerHeight-m) y=window.innerHeight-phh-m;
-  if(y<m) y=m;
-  popup.style.left=x+"px"; popup.style.top=y+"px";
-}
-function closePopup(){ selected=null; fullOpen=false;
-  popup.classList.remove("show","expanded"); backdrop.classList.remove("show");
-  d3.selectAll("path.country").classed("active",false); renderList(); }
-backdrop.onclick=closePopup;
-document.addEventListener("keydown",e=>{ if(e.key!=="Escape") return;
-  if(fullOpen) closeStories(); else closePopup(); });
-
-// ---------- STORIES (slide out to the right, all listed as collapsible blocks) ----------
-let fullOpen=false;
-function openStories(k){
-  const s=PROGRAM[k].stories;
-  if(!s||!s.length) return;
-  const panel=document.getElementById("popFull");
-  panel.innerHTML=`<div class="pop-full-inner">
-    <div class="full-head">
-      <button class="full-back" id="fullBack" aria-label="Back to summary">←</button>
-      <div class="full-head-title">Voices from ${esc(nameOf(k))}</div>
-    </div>
-    <div class="full-body">
-      <div class="story-list">${s.map((st,i)=>{
-        const rc=st.role==="student"?"student":"educator";
-        const rl=st.role==="student"?"Student voice":"Educator voice";
-        return `<details class="story-block"${i===0?" open":""}>
-          <summary>
-            <span class="role-badge ${rc}">${rl}</span>
-            <span class="story-sum-q">“${esc(st.q)}”</span>
-            <span class="story-sum-by">— ${esc(st.by)}</span>
-          </summary>
-          <div class="story-block-body">
-            <img class="story-thumb" src="${esc(st.img)}" alt="${esc(st.cap||"")}">
-            <p class="story-preview">${esc(st.full)}</p>
-          </div>
-        </details>`;
-      }).join("")}</div>
-    </div>
-  </div>`;
-  document.getElementById("fullBack").onclick=closeStories;
-  panel.querySelectorAll(".story-block").forEach(det=>{
-    det.addEventListener("toggle",()=>requestAnimationFrame(()=>keepInView()));
-  });
-  panel.setAttribute("aria-hidden","false");
-  fullOpen=true;
-  popup.classList.add("expanded");
-  const trigger=document.getElementById("storiesTrigger");
-  if(trigger) trigger.setAttribute("aria-expanded","true");
-  keepInView();
-}
-function closeStories(){
-  fullOpen=false;
-  popup.classList.remove("expanded");
-  const panel=document.getElementById("popFull");
-  if(panel){ panel.innerHTML=""; panel.setAttribute("aria-hidden","true"); }
-  const trigger=document.getElementById("storiesTrigger");
-  if(trigger) trigger.setAttribute("aria-expanded","false");
-  keepInView();
+  const pw = popup.offsetWidth  || 320;
+  const ph = popup.offsetHeight || 400;
+  const m  = 16;
+  let x = evt ? evt.clientX + 18 : window.innerWidth  / 2 - pw / 2;
+  let y = evt ? evt.clientY - 40 : window.innerHeight / 2 - ph / 2;
+  if(x + pw > window.innerWidth  - m) x = window.innerWidth  - pw - m;
+  if(y + ph > window.innerHeight - m) y = window.innerHeight - ph - m;
+  if(x < m) x = m;
+  if(y < m) y = m;
+  popup.style.left = x + "px";
+  popup.style.top  = y + "px";
 }
 
-// ---------- SIDE LIST ----------
-let panelOpen=true;
-const app=document.getElementById("app");
-function setPanelOpen(open){
-  panelOpen=open;
-  app.classList.toggle("panel-collapsed",!open);
-  const btn=document.getElementById("panelCollapse");
-  const tab=document.getElementById("panelTab");
-  if(btn){ btn.setAttribute("aria-expanded",open); btn.title=open?"Collapse country list":"Show country list"; }
-  if(tab){ tab.setAttribute("aria-expanded",open); }
+function closePopup(){
+  selected = null;
+  popup.classList.remove("show");
+  backdrop.classList.remove("show");
+  d3.selectAll("path.country").classed("active", false);
 }
-panel.innerHTML=`<div class="panel-head">
-    <div class="list-title" id="listTitle">Where we work</div>
-    <button type="button" class="panel-collapse" id="panelCollapse" aria-controls="panel" aria-expanded="true" title="Collapse country list">›</button>
-  </div>
-  <input class="search" id="search" placeholder="Search countries…" />
-  <ul class="clist" id="clist"></ul>`;
-document.getElementById("panelCollapse").onclick=()=>setPanelOpen(false);
-document.getElementById("panelTab").onclick=()=>setPanelOpen(true);
-document.getElementById("search").addEventListener("input",renderList);
-function renderList(){
-  const list=document.getElementById("clist"); if(!list) return;
-  document.getElementById("listTitle").textContent="Where we work"+(activeRegion!=="All"?" · "+activeRegion:"");
-  const q=(document.getElementById("search").value||"").toLowerCase();
-  const keys=Object.keys(PROGRAM).filter(inRegion).filter(k=>nameOf(k).toLowerCase().includes(q))
-    .sort((a,b)=>PROGRAM[b].students-PROGRAM[a].students);
-  list.innerHTML=keys.map(k=>`<li data-k="${esc(k)}" tabindex="0" role="button" style="${k===selected?'background:var(--served);color:#12331e;font-weight:700':''}">
-    <span>${esc(nameOf(k))}</span><span class="r" style="${k===selected?'color:#1c5230':''}">${PROGRAM[k].schools} schools</span></li>`).join("");
-  [...list.children].forEach(li=>{
-    li.onmouseenter=()=>d3.selectAll("path.country").filter(function(){return this.dataset.key===li.dataset.k;}).classed("active",true);
-    li.onmouseleave=()=>d3.selectAll("path.country").filter(function(){return this.dataset.key===li.dataset.k;}).classed("active",li.dataset.k===selected);
-    li.onclick=()=>openPopup(li.dataset.k,null);
-    li.onkeydown=(e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openPopup(li.dataset.k,null); } };
-  });
-}
+backdrop.onclick = closePopup;
+document.addEventListener("keydown", e => { if(e.key === "Escape") closePopup(); });
+
 </script>
 </body>
 </html>
