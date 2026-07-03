@@ -247,10 +247,19 @@ function ph(label,seed){
     <text x='32' y='298' font-family='sans-serif' font-size='12' fill='rgba(255,255,255,0.7)'>PROGRAM PHOTO · replace via story.img</text></svg>`;
   return "data:image/svg+xml;utf8,"+encodeURIComponent(svg);
 }
+// Extracts an 11-char YouTube video ID from any watch/share/embed URL shape.
+function ytIdFromUrl(url){
+  if(!url) return null;
+  const m=String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
+  return m?m[1]:null;
+}
 Object.keys(PROGRAM).forEach(k=>{ (PROGRAM[k].stories||[]).forEach((s,i)=>{
   if(!s.role) s.role = i%2 ? "student":"educator";
   if(!s.text) s.text = s.q;
-  if(!s.img)  s.img  = ph((PROGRAM[k].label||k)+" · "+(i+1), k.length+i);
+  if(!s.img){
+    const yt=ytIdFromUrl(s.video);
+    s.img = yt ? `https://img.youtube.com/vi/${yt}/hqdefault.jpg` : ph((PROGRAM[k].label||k)+" · "+(i+1), k.length+i);
+  }
   if(!s.cap)  s.cap  = (s.role==="student"?"A student":"An educator")+" at a partner school in "+(PROGRAM[k].label||k);
   if(!s.full) s.full = s.text + (s.text.length > 80
     ? " This is placeholder copy for team review — replace with the real full story, photo, and attribution before launch."
