@@ -206,6 +206,8 @@ if (!isNew) return new Response('Already processed', { status: 200 });
 - [ ] Transactional email provider configured for team notifications — see DECISIONS.md #003
 - [ ] Webhook idempotency check implemented in `/api/keela-webhook` (§7b above)
 - [ ] Rate limiting on all `/api/*` routes via @upstash/ratelimit (see TECHNICAL-ARCHITECTURE.md §10)
+- [ ] All external links (Google Drive docs, social profiles, third-party sites) include `rel="noopener noreferrer"` — prevents opened pages accessing our window context
+- [ ] Google Drive brief links confirmed as view-only / Anyone with the link (no edit access)
 
 ---
 

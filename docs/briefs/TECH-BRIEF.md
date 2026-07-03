@@ -16,7 +16,8 @@
 | Prototype preview (now) | Netlify (interim) | `contentmentweb2.netlify.app` |
 | Production | Vercel | `contentment.org` |
 | PR previews | Vercel | `*.vercel.app` |
-| Local (Astro) | `astro dev` | `localhost:4321` |
+| Local — prototype (now) | `python3 -m http.server 8080` in `site/` | `localhost:8080` |
+| Local — post-scaffold (after TICKET-002) | `npm run dev` (`astro dev`) | `localhost:4321` |
 
 ```
 Browser
@@ -319,7 +320,8 @@ Store in **Vercel project → Settings → Environment Variables**. Commit `.env
 | Production | https://contentment.org | `main` |
 | Dev preview (interim) | https://contentmentweb2.netlify.app | Netlify connected branch |
 | Preview | `*.vercel.app` | Every PR branch (automatic) |
-| Local | `localhost:4321` (Astro) or `vercel dev` | — |
+| Local (prototype now) | `python3 -m http.server 8080` in `site/` → `localhost:8080` | — |
+| Local (post-scaffold) | `npm run dev` (`astro dev`) → `localhost:4321` | After TICKET-002 |
 
 **Redirects to configure in `vercel.json`:**
 

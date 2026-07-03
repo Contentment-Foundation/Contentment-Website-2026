@@ -35,13 +35,17 @@
   .chip.active { background:var(--served); color:#12331e; border-color:var(--served); font-weight:700; }
 
   #mapWrap { position:relative; background:var(--map-bg); overflow:hidden; }
-  svg { display:block; width:100%; height:100%; }
-  .country { fill:var(--country); stroke:var(--country-stroke); stroke-width:.4px; }
+  svg { display:block; width:100%; height:100%; outline:none; }
+  .country { fill:var(--country); stroke:var(--country-stroke); stroke-width:.4px; outline:none; }
+  .country:focus { outline:none; }
+  .country:focus-visible { outline:2px solid rgba(255,255,255,.75); outline-offset:2px; }
   .country.served { fill:var(--served); cursor:pointer; transition:fill .15s; }
   .country.served:hover { fill:var(--served-hi); }
   .country.active { fill:var(--served-hi); stroke:#fff; stroke-width:1.1px; }
   .country.dim { fill:var(--served-dim); opacity:.45; cursor:default; }
-  .pin { fill:var(--pin); stroke:var(--pin-stroke); stroke-width:1.4px; cursor:pointer; }
+  .pin { fill:var(--pin); stroke:var(--pin-stroke); stroke-width:1.4px; cursor:pointer; outline:none; }
+  .pin:focus { outline:none; }
+  .pin:focus-visible { outline:2px solid rgba(255,255,255,.75); outline-offset:3px; }
   .pin-pulse { fill:var(--pin); opacity:.5; pointer-events:none; }
   .pin-label { fill:var(--text); font-size:9px; font-weight:700; pointer-events:none;
     text-transform:uppercase; letter-spacing:.5px; }

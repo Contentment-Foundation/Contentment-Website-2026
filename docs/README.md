@@ -1,35 +1,53 @@
-# Contentment Foundation — Project Documentation
+# Documentation Index — contentment.org
+
+> *Navigation index for all files in `docs/`. For full project orientation, read [`../README.md`](../README.md) first.*
 
 > **Contact:** somesh@contentment.org
 
 Planning and content docs for the contentment.org redesign (Q2 2026). All files are draft unless marked approved.
 
-## Source of truth — start here
+## Document flow — use in this order
+
+```
+PRD.md → TECHNICAL-ARCHITECTURE.md → DECISIONS.md → FEATURE-TICKETS.md → TRACKER.md
+```
+
+1. **PRD** — defines what and why
+2. **TECHNICAL-ARCHITECTURE** — defines how (stack, integrations, env vars)
+3. **DECISIONS** — resolve open choices before writing tickets
+4. **FEATURE-TICKETS** — write the spec (what to build, acceptance criteria)
+5. **TRACKER** — update live status (always last; reflects what's defined in 1–4)
+
+Briefs (`docs/briefs/`) are stakeholder summaries. Correspondence (`docs/correspondence/`) holds external review responses. Neither is a spec — `docs/planning/` wins on all conflicts.
+
+---
+
+## Source of truth
 
 **`docs/planning/` is canonical for how we build.** If anything else disagrees (HTML briefs, `*-BRIEF.md` summaries, old notes), **`planning/` wins.**
 
 | Layer | Location | Role |
 |-------|----------|------|
-| **Execution (canonical)** | [`planning/`](./planning/) | PRD, technical architecture, tickets, security, frontend spec, decisions |
-| **Content & IA** | [`docs/research/`](./research/) | Messaging, voice, evidence, sitemap — not duplicated in `planning/` |
-| **Team orientation (optional)** | [`docs/briefs/`](./briefs/) | Short readable summaries for stakeholders; must align with `planning/` |
+| **Execution (canonical)** | [`planning/`](./planning/) | PRD, technical architecture, tickets, decisions, security, frontend spec, tracker |
+| **Content & IA** | [`research/`](./research/) | Messaging, voice, evidence, sitemap — not duplicated in `planning/` |
+| **Team orientation** | [`briefs/`](./briefs/) | Short readable summaries for stakeholders; must align with `planning/` |
+| **External comms** | [`correspondence/`](./correspondence/) | Review responses, stakeholder communications |
 | **Deploy copy** | `site/docs/` (gitignored) | Generated on Netlify build from `docs/briefs/*.html` — not stored in repo |
-
-See [`planning/README.md`](./planning/README.md) for the build hierarchy.
 
 ---
 
 ## Planning & execution (canonical)
 
-| Doc | File |
-|-----|------|
-| PRD | [planning/PRD.md](./planning/PRD.md) |
-| Technical architecture | [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md) |
-| Open technical decisions | [planning/DECISIONS.md](./planning/DECISIONS.md) |
-| Security & access | [planning/SECURITY-AND-ACCESS.md](./planning/SECURITY-AND-ACCESS.md) |
-| Frontend specification | [planning/FRONTEND-SPECIFICATION.md](./planning/FRONTEND-SPECIFICATION.md) |
-| Accessibility checklist & ARIA patterns | [planning/ACCESSIBILITY.md](./planning/ACCESSIBILITY.md) |
-| Feature tickets | [planning/FEATURE-TICKETS.md](./planning/FEATURE-TICKETS.md) |
+| Doc | File | Purpose |
+|-----|------|---------|
+| PRD | [planning/PRD.md](./planning/PRD.md) | Product requirements, audiences, success metrics, phase gates |
+| Technical architecture | [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md) | Stack, integrations, env vars, CI/CD, DNS runbook, `vercel.json` spec |
+| Open technical decisions | [planning/DECISIONS.md](./planning/DECISIONS.md) | Resolved and open choices — check here before reopening a decision |
+| Security & access | [planning/SECURITY-AND-ACCESS.md](./planning/SECURITY-AND-ACCESS.md) | Security posture, pre-launch checklist, error handling |
+| Frontend specification | [planning/FRONTEND-SPECIFICATION.md](./planning/FRONTEND-SPECIFICATION.md) | Design system, CSS tokens, components, integration specs |
+| Accessibility | [planning/ACCESSIBILITY.md](./planning/ACCESSIBILITY.md) | WCAG 2.1 AA target, ARIA pattern map, known gaps |
+| Feature tickets (spec) | [planning/FEATURE-TICKETS.md](./planning/FEATURE-TICKETS.md) | Acceptance criteria, AI prompt seeds — the spec, not a status tracker |
+| **Tracker (status)** | [planning/TRACKER.md](./planning/TRACKER.md) | **Live status of every ticket — owner, dates, blockers, critical path** |
 
 ---
 
@@ -81,6 +99,16 @@ Leave a key as `''` to hide that link. The web briefs on Netlify remain the prim
 Production target: Vercel → `contentment.org` — see [research/WEBSITE-ARCHITECTURE.md](./research/WEBSITE-ARCHITECTURE.md) and [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md).
 
 All `.md` files remain in the private GitHub repo — not published to public Drive.
+
+## Correspondence — `docs/correspondence/`
+
+External review responses and stakeholder communications. Not planning docs — do not use these as specs.
+
+| Document | Purpose |
+|----------|---------|
+| [ANIK-REVIEW-RESPONSE.md](./correspondence/ANIK-REVIEW-RESPONSE.md) | Response to Anik Ghosh's engineering review (Jul 2026) — issue tracker, hyperlinked doc refs |
+
+---
 
 ## Authority order (conflicts)
 

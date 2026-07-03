@@ -325,8 +325,9 @@ Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../brie
 | `PUBLIC_KEELA_TIER_5_URL` | 1 | Yes | Keela hosted checkout — $5/month Homeroom tier |
 | `PUBLIC_KEELA_TIER_25_URL` | 1 | Yes | Keela hosted checkout — $25/month tier |
 | `PUBLIC_KEELA_TIER_100_URL` | 1 | Yes | Keela hosted checkout — $100/month tier |
-| `PUBLIC_PLAUSIBLE_DOMAIN` | 1 | Yes* | Plausible analytics domain (*recommended — see DECISION-001) |
-| `PUBLIC_GA_ID` | 1 | If GA4 added | Google Analytics 4 measurement ID — only if paid ads confirmed |
+| `PUBLIC_GA_ID` | 1 | Yes | Google Analytics 4 measurement ID (existing account — primary analytics) |
+| `PUBLIC_POSTHOG_KEY` | 1 | Yes | PostHog project API key — product analytics + funnels (cookieless mode) |
+| `PUBLIC_POSTHOG_HOST` | 1 | Yes | PostHog host — `https://app.posthog.com` or self-hosted GCP endpoint |
 | `PUBLIC_RAISELY_CAMPAIGN_URL` | 1.5 | If fundraise page | Raisely peer-to-peer campaign link |
 
 ### 6.2 Core integrations (server-only)
@@ -406,7 +407,9 @@ PUBLIC_SITE_URL=
 PUBLIC_KEELA_TIER_5_URL=
 PUBLIC_KEELA_TIER_25_URL=
 PUBLIC_KEELA_TIER_100_URL=
-PUBLIC_PLAUSIBLE_DOMAIN=
+PUBLIC_GA_ID=
+PUBLIC_POSTHOG_KEY=
+PUBLIC_POSTHOG_HOST=
 PUBLIC_RAISELY_CAMPAIGN_URL=
 
 # Server — core

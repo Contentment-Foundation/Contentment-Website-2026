@@ -11,42 +11,46 @@ Each decision below is a blocker for at least one TICKET. **Recommended options 
 
 ## DECISION-001 — Primary analytics tool
 
-**Blocks:** TICKET-080, TICKET-071 (cookie consent wording in /privacy)
+**Blocks:** TICKET-080, TICKET-071 (cookie consent wording in /privacy)  
+**Status:** ✅ Resolved — July 2026
 
-| Option | Description | Cookie banner needed? |
-|--------|-------------|----------------------|
-| **Plausible only** (recommended) | Privacy-first, GDPR compliant out of the box, < 1 KB script, no cookie storage | No |
-| Plausible + GA4 | Plausible as primary, GA4 only if paid Google Ads are running | Yes — GA4 sets cookies |
-| GA4 only | Full Google stack; needed for advanced audiences and Google Ads | Yes |
+**Confirmed stack (Plausible dropped — paid; using tools we already own):**
 
-**Recommendation:** **Plausible only** for Phase 1. Add GA4 only if paid Google Ads campaigns are confirmed for Festival 2026 or Homeroom launch. **Microsoft Clarity** (heatmaps/session replay) may run alongside Plausible for CRO — it is not the primary analytics tool; see DECISION-002 for privacy wording.
+| Tool | Role | Cost | Cookie banner? |
+|------|------|------|----------------|
+| **GA4** | Primary — traffic, funnels, campaign attribution, conversion events | Free (existing account) | Yes — see DECISION-002 |
+| **Microsoft Clarity** | Heatmaps + session recordings — CRO, drop-off analysis | Free (existing account) | No — first-party session cookies only, no personal data |
+| **Bing Webmaster Tools** | Bing + Copilot AI indexing, keyword data | Free (existing account) | No |
+| **PostHog** | Product analytics, funnel cohorts, feature flags, A/B testing | Free tier (1M events/month) | Depends on config — cookieless mode available |
+| + Anik's suggestions | TBD after engineering review | — | — |
 
-**Suggested choice:** Plausible only (add GA4 later if paid ads confirmed).
+**Plausible — dropped.** Was recommended as the privacy-first primary but carries a monthly subscription cost. GA4 already exists and covers the same traffic + event tracking needs; Clarity covers CRO; PostHog covers product analytics and funnels. No reason to pay for a fourth tool.
 
 **Decision:**
-- [ ] Signed off — option chosen: **Plausible only**
-- [ ] Date: _________________
+- [x] Signed off — option chosen: **GA4 + Microsoft Clarity + Bing Webmaster Tools + PostHog**
+- [x] Date: 3 July 2026
 
 ---
 
 ## DECISION-002 — Cookie consent mechanism
 
 **Blocks:** TICKET-071, TICKET-080  
-**Depends on:** DECISION-001
+**Depends on:** DECISION-001  
+**Status:** ✅ Resolved — July 2026
 
-| Scenario | Required? | Tool |
-|----------|-----------|------|
-| Plausible only | No — cookieless by default | No banner needed |
-| GA4 added | Yes — GDPR, PECR (UK), ePrivacy (EU) | Cookiebot, Osano, or custom `<dialog>` |
-| Microsoft Clarity | No — Clarity uses session cookies but no personal data tracking by default | Check jurisdiction |
+| Tool in stack | Cookie behaviour | Banner required? |
+|---------------|-----------------|-----------------|
+| **GA4** | Sets `_ga`, `_gid` cookies — tracks users across sessions | **Yes** — GDPR, PECR (UK), ePrivacy (EU) |
+| **Microsoft Clarity** | First-party session cookies — no cross-site tracking, no personal data sold | No — disclose in privacy policy |
+| **PostHog** | Cookieless mode available (`persistence: 'memory'`) — opt for this at init | No if cookieless mode used |
+| **Bing Webmaster Tools** | Server-side only — no browser cookies | No |
 
-**Recommendation:** With **Plausible only** (DECISION-001): **no cookie banner**. Update `/privacy` to disclose Plausible (cookieless) and, if Clarity is enabled, that Clarity uses first-party session cookies for heatmaps — no personal data sold. If GA4 is added later, adopt **Osano** (free tier).
+**Decision:** GA4 is now in the confirmed stack, so a **cookie consent banner is required** for EU/UK visitors. Use **Osano** (free tier) or a lightweight custom `<dialog>` consent UI. Implement GA4 with [Consent Mode v2](https://developers.google.com/tag-platform/security/guides/consent?hl=en) so analytics fire in a cookieless/modelled state before consent is given — this preserves funnel data without violating GDPR.
 
-**Suggested choice:** No banner for Phase 1; privacy policy disclosure only.
+**Action for `/privacy`:** Disclose GA4 (cookies, purpose, retention), Clarity (session heatmaps, no personal data sold), PostHog (cookieless, event analytics). Link to Google's and Microsoft's privacy policies.
 
-**Decision:**
-- [ ] Signed off — option chosen: **No banner — privacy policy disclosure only**
-- [ ] Date: _________________
+- [x] Signed off — option chosen: **Cookie banner for GA4 (Consent Mode v2) + privacy policy disclosure for Clarity + PostHog**
+- [x] Date: 3 July 2026
 
 ---
 
@@ -177,8 +181,8 @@ UPSTASH_REDIS_REST_TOKEN=   # from Upstash dashboard (server-only)
 
 | # | Decision | Status | Date | Chosen |
 |---|----------|--------|------|--------|
-| 001 | Primary analytics tool | **Recommended** | — | Plausible only |
-| 002 | Cookie consent mechanism | **Recommended** | — | No banner — privacy policy disclosure only |
+| 001 | Primary analytics tool | **Resolved** | 3 Jul 2026 | GA4 + Clarity + Bing Webmaster + PostHog (Plausible dropped) |
+| 002 | Cookie consent mechanism | **Resolved** | 3 Jul 2026 | Cookie banner for GA4 (Consent Mode v2) + privacy disclosure for Clarity + PostHog |
 | 003 | Transactional email provider | **Recommended** | — | Resend |
 | 004 | Rate limiting implementation | **Recommended** | — | @upstash/ratelimit + Upstash Redis |
 | 005 | Image optimization approach | Open | — | — |
