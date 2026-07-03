@@ -175,5 +175,6 @@ Every page moves a visitor one step. No page does all five.
 | Full product requirements | `docs/planning/PRD.md` |
 | Tech stack, data model, env vars | `docs/planning/TECHNICAL-ARCHITECTURE.md` |
 | Design system, components, integrations | `docs/planning/FRONTEND-SPECIFICATION.md` |
+| Accessibility checklist, ARIA patterns, keyboard/focus rules | `docs/planning/ACCESSIBILITY.md` |
 | Auth, data privacy, error handling, edge cases | `docs/planning/SECURITY-AND-ACCESS.md` |
 | Every build ticket with acceptance criteria | `docs/planning/FEATURE-TICKETS.md` |

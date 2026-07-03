@@ -177,6 +177,44 @@ All titles ≤ 60 characters. All descriptions 140–160 characters.
 
 **OG image brief:** 1200 × 630 px. Dark hero with TCF wordmark top-left. Page-specific headline in Newsreader. Teal accent. Bhutan or Kenya educator photo where appropriate. Create one per Phase 1 page.
 
+> **Dependency:** the OG image brief above can't be finalized until the logo asset in the next section ships — sequence logo delivery *before* OG image production, not in parallel.
+
+### Brand assets — logo, favicon & app icons
+
+**Status: not yet in the repo.** No logo file or favicon exists in `site/assets/` today, and the JSON-LD below still points at a placeholder path (`/assets/logo.svg`). This blocks OG image production, structured data, the browser tab icon, and social profile consistency — treat it as a launch blocker, not a nice-to-have.
+
+**Original logo — required variants**
+
+| Asset | Format | Used for |
+|-------|--------|----------|
+| Primary lockup (wordmark) | SVG, transparent bg | Header, footer, OG image lockup, JSON-LD `logo` field, press kit |
+| Icon-only mark | SVG, square | Source for favicon + app icons — must read clearly at 16px |
+| Reversed / white version | SVG or PNG | Dark hero sections, footer, dark browser chrome |
+| Raster export | PNG, min 512×512 | Fallback for scrapers/email clients that skip SVG |
+
+**Favicon & app icon spec** (generate from the icon-only mark once finalized)
+
+| File | Size | Purpose |
+|------|------|---------|
+| `favicon.ico` | 16×16, 32×32, 48×48 (multi-size ICO) | Legacy browser tab icon |
+| `favicon-32x32.png` / `favicon-16x16.png` | 32×32 / 16×16 | Modern browsers |
+| `apple-touch-icon.png` | 180×180 | iOS home screen / Safari |
+| `android-chrome-192x192.png` / `android-chrome-512x512.png` | 192×192 / 512×512 | Android home screen, PWA manifest |
+| `safari-pinned-tab.svg` | monochrome SVG | Safari pinned tab (macOS) |
+| `site.webmanifest` | — | Declares icons, `theme_color` (`--ocean` #0080B0), `background_color` (`--paper` #FBFAF7), `name`/`short_name` |
+
+**Head tags** (add to `BaseLayout.astro`; retrofit onto `site/index.html` in the interim):
+
+```html
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0080B0">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0080B0">
+```
+
 ### Structured data — JSON-LD
 
 **Homepage — Organization schema:**
@@ -474,7 +512,9 @@ utm_content=  hero-banner | story-card | countdown-post | speaker-announcement
 
 | # | Action | Owner | When |
 |---|--------|-------|------|
-| 1 | Create OG images (1200×630) for all Phase 1 pages | Design | Before launch |
+| 0a | Finalize the original TCF logo — primary lockup, icon-only mark, reversed/white version (all SVG) | Design | Before launch — blocks #1 and #0b |
+| 0b | Generate favicon + app icon set + `site.webmanifest` from the finalized icon-only mark | Design + Engineering | Before launch |
+| 1 | Create OG images (1200×630) for all Phase 1 pages | Design | Before launch — depends on #0a |
 | 2 | Write Homeroom FAQ answers for FAQPage schema | Copy | Before /give/monthly ships |
 | 3 | Register on Charity Navigator + Candid (GuideStar) | Ops | Before launch |
 | 4 | Claim Google Knowledge Panel | Marketing | Day 1 post-launch |
@@ -496,4 +536,5 @@ utm_content=  hero-banner | story-card | countdown-post | speaker-announcement
 | Site architecture (full URL inventory) | `docs/WEBSITE-ARCHITECTURE.md` |
 | PRD (success metrics, feature list) | `docs/planning/PRD.md` |
 | Frontend spec (integration specs for analytics) | `docs/planning/FRONTEND-SPECIFICATION.md` |
+| Accessibility checklist & ARIA patterns | `docs/planning/ACCESSIBILITY.md` |
 | Feature tickets (TICKET-080 analytics, TICKET-081 SEO) | `docs/planning/FEATURE-TICKETS.md` |

@@ -462,11 +462,12 @@ Reusable template for `/festival/2026` and `/10years`. Dedicated analytics. Emai
 | **Dependencies** | All must-have tickets |
 
 **Description:**  
-Run full QA: all routes, all CTAs, forms, mobile, a11y axe scan, cross-browser (Chrome, Safari, Firefox), performance Lighthouse, messaging handoff checklist §12.
+Run full QA: all routes, all CTAs, forms, mobile, a11y axe scan, cross-browser (Chrome, Safari, Firefox), performance Lighthouse, messaging handoff checklist §12. For the a11y pass, work through `ACCESSIBILITY.md` §1 (checklist) and §4 (known gaps) rather than just the axe scan — axe catches missing attributes, not missing focus management.
 
 **Acceptance criteria:**
 - [ ] All must-have tickets closed
 - [ ] No critical a11y issues
+- [ ] `ACCESSIBILITY.md` §4 known gaps resolved or explicitly deferred with a ticket
 - [ ] Keela live transaction verified
 - [ ] Redirect plan for old URLs executed
 - [ ] `somesh@contentment.org` monitored for form notifications
@@ -511,6 +512,7 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | PRD | [PRD.md](./PRD.md) |
 | Technical architecture | [TECHNICAL-ARCHITECTURE.md](./TECHNICAL-ARCHITECTURE.md) |
 | Frontend spec | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) |
+| Accessibility checklist & ARIA patterns (TICKET-100 a11y pass) | [ACCESSIBILITY.md](./ACCESSIBILITY.md) |
 | Open decisions | [DECISIONS.md](./DECISIONS.md) |
 
 ---

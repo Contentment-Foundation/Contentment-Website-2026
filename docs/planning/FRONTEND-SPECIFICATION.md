@@ -188,6 +188,8 @@ Every page includes:
 | Skip link | Add to shared layout (MVP ticket) |
 | Color contrast | Teal on white and white on deep meet AA for body text |
 
+**Full checklist + ARIA pattern reference:** see [`ACCESSIBILITY.md`](ACCESSIBILITY.md) — page-level checklist (drawn from the A11y Project), a component → WAI-ARIA APG pattern map for every interactive element we've built (accordion, modals, filter panel, toggles, planned carousel), and a running list of known gaps in the current prototypes.
+
 ---
 
 ## 6. Integrations

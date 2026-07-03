@@ -12,6 +12,7 @@ Build-ready documents for the contentment.org redesign. All execution docs assum
 | Open Technical Decisions | [DECISIONS.md](./DECISIONS.md) | Engineering lead |
 | Security & Access | [SECURITY-AND-ACCESS.md](./SECURITY-AND-ACCESS.md) | Security |
 | Frontend Specification | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) | Design / Frontend |
+| Accessibility Checklist & ARIA Patterns | [ACCESSIBILITY.md](./ACCESSIBILITY.md) | Design / Frontend / QA |
 | Feature Tickets | [FEATURE-TICKETS.md](./FEATURE-TICKETS.md) | Engineering lead |
 
 ## Source of truth hierarchy
@@ -20,6 +21,7 @@ Build-ready documents for the contentment.org redesign. All execution docs assum
 PRD (scope & MVP)
   ↓
 Frontend Spec (locked UI — site/index.html)
+  ↓ Accessibility Checklist (a11y for that same locked UI)
   ↓
 Technical Architecture + Security (how we build)
   ↓

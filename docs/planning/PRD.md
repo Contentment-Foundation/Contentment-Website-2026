@@ -74,7 +74,7 @@ A **marketing and conversion website** for a global nonprofit. It is not a learn
 | F7 | **Keela donation integration** | All Homeroom CTAs resolve to live recurring donation flow |
 | F8 | **Newsletter signup** | Footer + `/updates`; connected to email provider |
 | F9 | **Analytics & UTM** | Page views, conversion events, campaign attribution |
-| F10 | **Accessibility baseline** | WCAG 2.1 AA targets; `prefers-reduced-motion` preserved |
+| F10 | **Accessibility baseline** | WCAG 2.1 AA targets; `prefers-reduced-motion` preserved; see `ACCESSIBILITY.md` for the full checklist + ARIA pattern reference |
 | F11 | **Legal pages** | `/privacy`, `/terms` (can be simple v1) |
 | F12 | **Mobile navigation** | Full mobile menu (prototype has button only) |
 
@@ -233,6 +233,7 @@ See [Messaging & Copy §11](../research/MESSAGING-AND-COPY.md) for full open dec
 | Feature tickets | [FEATURE-TICKETS.md](./FEATURE-TICKETS.md) |
 | Technical architecture | [TECHNICAL-ARCHITECTURE.md](./TECHNICAL-ARCHITECTURE.md) |
 | Frontend spec (locked UI) | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) |
+| Accessibility checklist & ARIA patterns | [ACCESSIBILITY.md](./ACCESSIBILITY.md) |
 | Site map | [WEBSITE-ARCHITECTURE.md](../research/WEBSITE-ARCHITECTURE.md) |
 | Messaging brief | [MESSAGING-AND-COPY.md](../research/MESSAGING-AND-COPY.md) |
 

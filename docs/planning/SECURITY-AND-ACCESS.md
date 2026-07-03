@@ -215,6 +215,7 @@ if (!isNew) return new Response('Already processed', { status: 200 });
 |----------|----------|
 | Technical architecture | [TECHNICAL-ARCHITECTURE.md](./TECHNICAL-ARCHITECTURE.md) |
 | Frontend integrations | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) |
+| Accessibility checklist & ARIA patterns | [ACCESSIBILITY.md](./ACCESSIBILITY.md) |
 | PRD | [PRD.md](./PRD.md) |
 | Open decisions | [DECISIONS.md](./DECISIONS.md) |
 

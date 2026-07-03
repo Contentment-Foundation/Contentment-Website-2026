@@ -28,6 +28,7 @@ See [`planning/README.md`](./planning/README.md) for the build hierarchy.
 | Open technical decisions | [planning/DECISIONS.md](./planning/DECISIONS.md) |
 | Security & access | [planning/SECURITY-AND-ACCESS.md](./planning/SECURITY-AND-ACCESS.md) |
 | Frontend specification | [planning/FRONTEND-SPECIFICATION.md](./planning/FRONTEND-SPECIFICATION.md) |
+| Accessibility checklist & ARIA patterns | [planning/ACCESSIBILITY.md](./planning/ACCESSIBILITY.md) |
 | Feature tickets | [planning/FEATURE-TICKETS.md](./planning/FEATURE-TICKETS.md) |
 
 ---

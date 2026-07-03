@@ -658,6 +658,7 @@ Run in sequence. `hello@contentment.org` email must not be interrupted during cu
 | PRD | [PRD.md](./PRD.md) |
 | Security & access | [SECURITY-AND-ACCESS.md](./SECURITY-AND-ACCESS.md) |
 | Frontend spec | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) |
+| Accessibility checklist & ARIA patterns | [ACCESSIBILITY.md](./ACCESSIBILITY.md) |
 | Feature tickets | [FEATURE-TICKETS.md](./FEATURE-TICKETS.md) |
 | Open decisions | [DECISIONS.md](./DECISIONS.md) |
 

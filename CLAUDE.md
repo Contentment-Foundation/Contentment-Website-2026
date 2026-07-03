@@ -30,7 +30,7 @@ site/                    Phase-1 build (what ships now)
   docs/                  GENERATED at build time, gitignored — never edit here
 contentment-home.html    portable single-file build (regenerate from site/index.html)
 docs/                    planning + content (source of truth for the rebuild)
-  planning/              PRD, TECHNICAL-ARCHITECTURE, FRONTEND-SPEC, FEATURE-TICKETS, DECISIONS, SECURITY
+  planning/              PRD, TECHNICAL-ARCHITECTURE, FRONTEND-SPEC, ACCESSIBILITY, FEATURE-TICKETS, DECISIONS, SECURITY
   research/              MESSAGING-AND-COPY, VOICE-AND-TONE, WEBSITE-ARCHITECTURE, EVIDENCE
   briefs/               stakeholder summaries (.md/.html/.docx) — NOT authoritative specs
   index.html, *-BRIEF.html   sources for the /docs/* routes
@@ -45,6 +45,7 @@ For anything about scope, UI, or build approach, defer to `docs/planning/` in th
 ```
 PRD.md (scope & MVP)
   → FRONTEND-SPECIFICATION.md (locked UI = site/index.html)
+    → ACCESSIBILITY.md (a11y checklist + ARIA pattern reference for that UI)
   → TECHNICAL-ARCHITECTURE.md + SECURITY-AND-ACCESS.md (how we build)
   → FEATURE-TICKETS.md (execution order)
 ```

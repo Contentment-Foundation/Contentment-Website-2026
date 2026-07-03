@@ -423,6 +423,7 @@ Content teams should define clear boundaries so these pages do not duplicate eac
 | Docs index | [`README.md`](./README.md) |
 | Planning & execution | [`planning/`](./planning/) |
 | Technical architecture | [`planning/TECHNICAL-ARCHITECTURE.md`](./planning/TECHNICAL-ARCHITECTURE.md) |
+| Accessibility checklist & ARIA patterns (applies to every route below) | [`../planning/ACCESSIBILITY.md`](../planning/ACCESSIBILITY.md) |
 | Open technical decisions | [`planning/DECISIONS.md`](./planning/DECISIONS.md) |
 | Automation & webhooks | [`AUTOMATION-BRIEF.md`](./AUTOMATION-BRIEF.md) |
 | Homepage build & dev notes | [`README.md`](../README.md) |

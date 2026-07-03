@@ -412,6 +412,7 @@ TICKET-101  DNS cutover + production deploy
 | Site architecture, `/events`, deployment model | `docs/WEBSITE-ARCHITECTURE.md` |
 | Automation, Slack, Zoom, Keela webhooks | `docs/AUTOMATION-BRIEF.md` |
 | Design tokens, component classes, integration specs | `docs/planning/FRONTEND-SPECIFICATION.md` |
+| Accessibility checklist, ARIA patterns, known gaps | `docs/planning/ACCESSIBILITY.md` |
 | Auth, RLS, error handling, edge cases (15 items) | `docs/planning/SECURITY-AND-ACCESS.md` |
 | All feature tickets with acceptance criteria | `docs/planning/FEATURE-TICKETS.md` |
 | Full PRD — features, flows, success metrics | `docs/planning/PRD.md` |

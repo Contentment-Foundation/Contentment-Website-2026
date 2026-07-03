@@ -400,3 +400,4 @@ Phase 2 (Homeroom gated hub live):
 | Flodesk email sequence content | `docs/GROWTH-BRIEF.md` (Section 2 — User Journeys) |
 | Feature tickets for analytics and integrations | `docs/planning/FEATURE-TICKETS.md` (TICKET-070, TICKET-080) |
 | Security and access rules | `docs/planning/SECURITY-AND-ACCESS.md` |
+| Accessibility checklist & ARIA patterns (form/notification UI touches this) | `docs/planning/ACCESSIBILITY.md` |

@@ -24,7 +24,7 @@
       section,table,.phase,.journey-band{break-inside:avoid;}
       @page{margin:14mm 13mm;size:A4;}
     }
-    .wrap{max-width:980px;margin:0 auto;padding:0 30px;}
+    .wrap{max-width:960px;margin:0 auto;padding:0 32px;}
     .doc-nav{background:var(--deep2);padding:10px 0;font-size:12px;}
     .doc-nav .wrap{display:flex;gap:20px;}
     .doc-nav a{color:rgba(255,255,255,.65);text-decoration:none;}
@@ -49,23 +49,26 @@
     .pill-white{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15);}
 
     /* LAYOUT */
-    .main{padding:30px 0 44px;}
-    section{margin-bottom:26px;}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+    .main{padding:36px 0 48px;}
+    section{margin-bottom:28px;width:100%;}
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start;width:100%;}
+    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start;width:100%;}
+    .col-stack{display:flex;flex-direction:column;gap:12px;width:100%;min-width:0;}
+    .col-stack > *{width:100%;}
+    .subsection-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--deep);margin-bottom:8px;}
 
     /* SECTION TITLE */
-    .section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--ocean);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+    .section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--ocean);margin-bottom:10px;display:flex;align-items:center;gap:8px;width:100%;}
     .section-title::after{content:'';flex:1;height:1px;background:var(--line);}
 
     /* TABLES */
-    table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
+    table{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
     thead tr{background:var(--deep);color:#fff;}
-    thead th{padding:8px 12px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+    thead th{padding:9px 13px;text-align:left;font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;}
     tbody tr{border-bottom:1px solid var(--line);}
     tbody tr:last-child{border-bottom:none;}
     tbody tr:nth-child(even){background:var(--paper2);}
-    td{padding:8px 12px;color:var(--slate);vertical-align:top;}
+    td{padding:8px 13px;color:var(--slate);vertical-align:top;}
     td strong{color:var(--ink);}
     td code{font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);}
     .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em;}
@@ -74,13 +77,13 @@
     .tag-low{background:#d1fae5;color:#065f46;}
 
     /* CODE BLOCKS */
-    .code-block{background:#1a2332;border-radius:12px;padding:15px 18px;font-family:var(--mono);font-size:11px;line-height:1.9;overflow-x:auto;box-shadow:var(--shadow);color:#94a3b8;}
+    .code-block{width:100%;background:#1a2332;border-radius:12px;padding:15px 18px;font-family:var(--mono);font-size:11px;line-height:1.9;overflow-x:auto;box-shadow:var(--shadow);color:#94a3b8;}
     .c-key{color:#7dd3fc;} .c-val{color:#86efac;} .c-str{color:#fca5a5;}
     .c-fn{color:#fcd34d;} .c-white{color:#e2e8f0;} .c-teal{color:#5eead4;}
     .c-comment{color:#4a6480;} .c-op{color:#64748b;}
 
     /* JOURNEY */
-    .journey-band{background:linear-gradient(165deg,var(--deep) 0%,var(--deep2) 100%);border-radius:14px;padding:20px 22px;margin-bottom:10px;}
+    .journey-band{width:100%;background:linear-gradient(165deg,var(--deep) 0%,var(--deep2) 100%);border-radius:14px;padding:20px 22px;margin-bottom:10px;}
     .journey-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);margin-bottom:12px;}
     .journey-steps{display:flex;gap:0;overflow-x:auto;}
     .j-step{flex:1;min-width:110px;padding:0 14px;border-right:1px solid rgba(255,255,255,.1);}
@@ -96,33 +99,33 @@
     .char-ok{color:var(--green);font-weight:600;}
 
     /* AIO CARDS */
-    .aio-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+    .aio-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;}
     .aio-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
     .aio-card h4{font-size:12px;font-weight:700;color:var(--deep);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
     .aio-card h4::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;}
     .aio-card p{font-size:11.5px;color:var(--slate);line-height:1.55;}
 
     /* CHECKLIST */
-    .checklist{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+    .checklist{display:grid;grid-template-columns:1fr;gap:6px;width:100%;}
     .check-item{display:flex;align-items:flex-start;gap:8px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:11.5px;color:var(--slate);}
     .check-box{width:15px;height:15px;border:2px solid var(--line);border-radius:4px;flex-shrink:0;margin-top:1px;}
 
     /* FUNNEL */
-    .funnel{display:flex;flex-direction:column;gap:4px;}
+    .funnel{display:flex;flex-direction:column;gap:4px;width:100%;}
     .funnel-step{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 14px;box-shadow:0 2px 8px rgba(2,55,79,.05);}
     .funnel-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--teal));color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .funnel-text{font-size:12px;color:var(--slate);}
     .funnel-text strong{color:var(--ink);}
 
     /* EMAIL SEQUENCE */
-    .email-seq{display:flex;flex-direction:column;gap:6px;}
+    .email-seq{display:flex;flex-direction:column;gap:6px;width:100%;}
     .email-row{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;}
     .email-day{font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;width:56px;flex-shrink:0;margin-top:1px;}
     .email-body h4{font-size:12px;font-weight:600;color:var(--ink);}
     .email-body p{font-size:11.5px;color:var(--slate);}
 
     /* CADENCE */
-    .cadence-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .cadence-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;}
     .cadence-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
     .cadence-card .period{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green2);margin-bottom:8px;}
     .cadence-card ul{list-style:none;}
@@ -131,14 +134,15 @@
     .cadence-card li::before{content:'→';color:var(--teal);flex-shrink:0;}
 
     /* ACTIONS */
-    .action-row{display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 14px;margin-bottom:6px;}
+    .action-list{display:flex;flex-direction:column;gap:6px;width:100%;}
+    .action-row{display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 14px;width:100%;}
     .action-num{width:22px;height:22px;border-radius:50%;background:var(--deep);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
     .action-text{flex:1;font-size:12px;color:var(--slate);}
     .action-text strong{color:var(--ink);}
     .action-owner{font-size:10.5px;color:var(--teal);white-space:nowrap;}
 
     /* DOCS */
-    .docs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .docs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;}
     .doc-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);}
     .doc-card h4{font-size:11.5px;font-weight:700;color:var(--deep);margin-bottom:3px;}
     .doc-card p{font-size:11px;color:var(--slate);line-height:1.45;}
@@ -149,6 +153,11 @@
     .page-footer strong{color:rgba(255,255,255,.7);}
     .print-btn{position:fixed;bottom:24px;right:24px;background:var(--ocean);color:#fff;border:none;border-radius:999px;padding:11px 20px;font-family:var(--body);font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(0,128,176,.35);transition:transform .15s,box-shadow .15s;}
     .print-btn:hover{transform:translateY(-2px);}
+
+    @media (max-width:760px){
+      .grid-2,.grid-3,.aio-grid,.cadence-grid,.docs-grid{grid-template-columns:1fr;}
+      .action-owner{white-space:normal;}
+    }
   </style>
 </head>
 <body>
@@ -199,8 +208,8 @@
   <section>
     <div class="section-title">Analytics Setup</div>
     <div class="grid-2">
-      <div>
-        <table style="margin-bottom:12px;">
+      <div class="col-stack">
+        <table>
           <thead><tr><th>Tool</th><th>Purpose</th><th>Why</th></tr></thead>
           <tbody>
             <tr><td><strong>Plausible</strong> (primary)</td><td>Traffic + events</td><td>Privacy-first; GDPR compliant; no cookie banner needed; &lt;1 KB script</td></tr>
@@ -223,9 +232,9 @@
           </tbody>
         </table>
       </div>
-      <div>
-        <p style="font-size:11px;font-weight:700;color:var(--deep);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Conversion events to instrument</p>
-        <table style="margin-bottom:12px;">
+      <div class="col-stack">
+        <p class="subsection-title">Conversion events to instrument</p>
+        <table>
           <thead><tr><th>Event</th><th>Trigger</th></tr></thead>
           <tbody>
             <tr><td><code>cta_homeroom_click</code></td><td>Any Homeroom CTA click</td></tr>
@@ -238,8 +247,8 @@
             <tr><td><code>event_rsvp_click</code></td><td>Event card RSVP click</td></tr>
           </tbody>
         </table>
-        <p style="font-size:11px;font-weight:700;color:var(--deep);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">UTM taxonomy</p>
-        <div class="code-block" style="font-size:10.5px;">
+        <p class="subsection-title">UTM taxonomy</p>
+        <div class="code-block">
 <span class="c-key">utm_source</span>   newsletter · instagram · linkedin · google · partner<br>
 <span class="c-key">utm_medium</span>   email · social · paid · organic · referral · qr<br>
 <span class="c-key">utm_campaign</span> homeroom-launch · festival-2026 · anniversary<br>
@@ -301,10 +310,11 @@
   </section>
 
   <!-- DROP-OFF + EMAIL SEQUENCE -->
-  <div class="grid-2" style="margin-bottom:26px;">
-    <section style="margin-bottom:0;">
-      <div class="section-title">Drop-off Interventions</div>
-      <table>
+  <section>
+    <div class="grid-2">
+      <div class="col-stack">
+        <div class="section-title">Drop-off Interventions</div>
+        <table>
         <thead><tr><th>Drop-off point</th><th>Signal</th><th>Intervention</th></tr></thead>
         <tbody>
           <tr><td>Homepage bounce</td><td>&lt;10s session</td><td>A/B test hero headline; Bhutan photo vs teacher close-up</td></tr>
@@ -312,24 +322,24 @@
           <tr><td>Reaches /give/monthly — no convert</td><td>High exit rate</td><td>Simplify tier UI; surface Priscillah quote earlier</td></tr>
           <tr><td>Donates but ignores welcome email</td><td>Low open rate</td><td>Improve subject line; send within 2 min of Keela confirmation</td></tr>
         </tbody>
-      </table>
-    </section>
-    <section style="margin-bottom:0;">
-      <div class="section-title">Flodesk Welcome Email Sequence</div>
-      <div class="email-seq">
+        </table>
+      </div>
+      <div class="col-stack">
+        <div class="section-title">Flodesk Welcome Email Sequence</div>
+        <div class="email-seq">
         <div class="email-row"><div class="email-day">Immediate</div><div class="email-body"><h4>Welcome — you're in</h4><p>Founding Member confirmation, what happens next, your seat in the movement</p></div></div>
         <div class="email-row"><div class="email-day">Day 3</div><div class="email-body"><h4>Your seat in action</h4><p>One educator story — the ripple effect of their $5/month contribution</p></div></div>
         <div class="email-row"><div class="email-day">Day 7</div><div class="email-body"><h4>The community you joined</h4><p>Upcoming events, newsletter intro, /why share prompt</p></div></div>
-        <div class="email-row"><div class="email-day">Monthly</div><div class="email-body"><h4>TCF Newsletter</div><p>Updates, new stories, events, movement moments, renewal reminder</p></div></div>
+        <div class="email-row"><div class="email-day">Monthly</div><div class="email-body"><h4>TCF Newsletter</h4><p>Updates, new stories, events, movement moments, renewal reminder</p></div></div>
+        </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
   <!-- META DESCRIPTIONS -->
   <section>
     <div class="section-title">Meta Titles &amp; Descriptions — All Phase 1 Pages</div>
-    <div class="meta-table">
-      <table>
+    <table>
         <thead><tr><th>Page · URL</th><th>Title tag (≤60 chars)</th><th>Meta description (140–160 chars)</th></tr></thead>
         <tbody>
           <tr>
@@ -379,15 +389,60 @@
           </tr>
         </tbody>
       </table>
+  </section>
+
+  <section>
+    <div class="section-title">Brand Assets — Logo, Favicon &amp; OG Images <span class="tag tag-high" style="margin-left:4px;">Not yet in repo</span></div>
+    <p style="font-size:12px;color:var(--slate);line-height:1.6;margin-bottom:12px;">
+      No logo file or favicon exists in <code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">site/assets/</code> today, and the JSON-LD below still points at a placeholder path
+      (<code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">/assets/logo.svg</code>). This blocks OG image production, structured data, the browser tab icon, and social profile consistency — treat it as a launch blocker, not a nice-to-have.
+    </p>
+    <div class="grid-2" style="margin-bottom:14px;">
+      <div class="col-stack">
+        <div class="subsection-title">Original logo — required variants</div>
+        <table>
+          <thead><tr><th>Asset</th><th>Format</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>Primary lockup (wordmark)</td><td>SVG</td><td>Header, footer, OG lockup, JSON-LD <code>logo</code>, press kit</td></tr>
+            <tr><td>Icon-only mark</td><td>SVG, square</td><td>Source for favicon + app icons — must read at 16px</td></tr>
+            <tr><td>Reversed / white version</td><td>SVG or PNG</td><td>Dark hero sections, footer</td></tr>
+            <tr><td>Raster export</td><td>PNG, min 512×512</td><td>Fallback for scrapers/email clients that skip SVG</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-stack">
+        <div class="subsection-title">Favicon &amp; app icon set (derive from icon-only mark)</div>
+        <table>
+          <thead><tr><th>File</th><th>Size</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>favicon.ico</code></td><td>16/32/48 multi-size</td><td>Legacy browser tab</td></tr>
+            <tr><td><code>favicon-32x32.png</code></td><td>32×32</td><td>Modern browsers</td></tr>
+            <tr><td><code>apple-touch-icon.png</code></td><td>180×180</td><td>iOS home screen</td></tr>
+            <tr><td><code>android-chrome-512x512.png</code></td><td>512×512</td><td>Android / PWA manifest</td></tr>
+            <tr><td><code>site.webmanifest</code></td><td>—</td><td><code>theme_color</code> #0080B0, <code>background_color</code> #FBFAF7</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+    <div class="code-block">
+<span class="c-comment">&lt;!-- add to BaseLayout.astro; retrofit onto site/index.html in the interim --&gt;</span><br>
+<span class="c-op">&lt;link</span> rel<span class="c-op">=</span><span class="c-val">"icon"</span> href<span class="c-op">=</span><span class="c-val">"/favicon.ico"</span> sizes<span class="c-op">=</span><span class="c-val">"any"</span><span class="c-op">&gt;</span><br>
+<span class="c-op">&lt;link</span> rel<span class="c-op">=</span><span class="c-val">"apple-touch-icon"</span> href<span class="c-op">=</span><span class="c-val">"/apple-touch-icon.png"</span><span class="c-op">&gt;</span><br>
+<span class="c-op">&lt;link</span> rel<span class="c-op">=</span><span class="c-val">"mask-icon"</span> href<span class="c-op">=</span><span class="c-val">"/safari-pinned-tab.svg"</span> color<span class="c-op">=</span><span class="c-val">"#0080B0"</span><span class="c-op">&gt;</span><br>
+<span class="c-op">&lt;link</span> rel<span class="c-op">=</span><span class="c-val">"manifest"</span> href<span class="c-op">=</span><span class="c-val">"/site.webmanifest"</span><span class="c-op">&gt;</span><br>
+<span class="c-op">&lt;meta</span> name<span class="c-op">=</span><span class="c-val">"theme-color"</span> content<span class="c-op">=</span><span class="c-val">"#0080B0"</span><span class="c-op">&gt;</span>
+    </div>
+    <p style="font-size:11.5px;color:var(--slate);margin-top:10px;">
+      <strong style="color:var(--ink);">Dependency:</strong> the 1200×630 OG image brief (dark hero, TCF wordmark top-left, Newsreader headline, teal accent) can't be finalized until the logo above ships — sequence logo delivery before OG image production, not in parallel.
+    </p>
   </section>
 
   <!-- SEO STRUCTURED DATA + KEYWORDS -->
-  <div class="grid-2" style="margin-bottom:26px;">
-
-    <section style="margin-bottom:0;">
-      <div class="section-title">Structured Data — JSON-LD</div>
-      <div class="code-block" style="font-size:10.5px;">
+  <section>
+    <div class="grid-2">
+      <div class="col-stack">
+        <div class="section-title">Structured Data — JSON-LD</div>
+        <div class="code-block">
 <span class="c-comment">// Homepage — Organization (NGO) schema</span><br>
 <span class="c-op">{</span> <span class="c-str">"@type"</span><span class="c-op">:</span> <span class="c-val">"NGO"</span><span class="c-op">,</span><br>
 &nbsp;&nbsp;<span class="c-str">"name"</span><span class="c-op">:</span> <span class="c-val">"The Contentment Foundation"</span><span class="c-op">,</span><br>
@@ -406,12 +461,11 @@
 <span class="c-op">{</span> <span class="c-str">"@type"</span><span class="c-op">:</span> <span class="c-val">"Article"</span><span class="c-op">,</span><br>
 &nbsp;&nbsp;<span class="c-str">"headline"</span><span class="c-op">:</span> <span class="c-val">"[Name]'s Story — [Country]"</span><span class="c-op">,</span><br>
 &nbsp;&nbsp;<span class="c-str">"publisher"</span><span class="c-op">:</span> <span class="c-op">{</span> <span class="c-str">"name"</span><span class="c-op">:</span> <span class="c-val">"The Contentment Foundation"</span> <span class="c-op">}</span> <span class="c-op">}</span>
+        </div>
       </div>
-    </section>
-
-    <section style="margin-bottom:0;">
-      <div class="section-title">Keyword Strategy by Intent</div>
-      <table>
+      <div class="col-stack">
+        <div class="section-title">Keyword Strategy by Intent</div>
+        <table>
         <thead><tr><th>Intent</th><th>Key terms</th><th>Target page</th></tr></thead>
         <tbody>
           <tr><td><span class="tag tag-low">Info</span></td><td>"why teacher wellbeing matters" · "teacher burnout effects on students"</td><td><code>/why</code></td></tr>
@@ -421,9 +475,10 @@
           <tr><td><span class="tag tag-med">Transact</span></td><td>"support teacher wellbeing" · "teacher wellbeing charity"</td><td><code>/give/monthly</code></td></tr>
           <tr><td><span class="tag tag-low">Local</span></td><td>"teacher wellbeing Kenya" · "teacher wellbeing Bhutan" · "Hawaii"</td><td><code>/stories</code></td></tr>
         </tbody>
-      </table>
-    </section>
-  </div>
+        </table>
+      </div>
+    </div>
+  </section>
 
   <!-- AIO / GEO -->
   <section>
@@ -471,10 +526,11 @@
   </section>
 
   <!-- GOOGLE RANKING -->
-  <div class="grid-2" style="margin-bottom:26px;">
-    <section style="margin-bottom:0;">
-      <div class="section-title">Google Search Console — Day 1 Setup</div>
-      <div class="checklist">
+  <section>
+    <div class="grid-2">
+      <div class="col-stack">
+        <div class="section-title">Google Search Console — Day 1 Setup</div>
+        <div class="checklist">
         <div class="check-item"><div class="check-box"></div>Verify via DNS TXT record (Vercel DNS)</div>
         <div class="check-item"><div class="check-box"></div>Submit sitemap.xml</div>
         <div class="check-item"><div class="check-box"></div>Set preferred domain (www or non-www)</div>
@@ -483,10 +539,10 @@
         <div class="check-item"><div class="check-box"></div>Set email alerts for manual actions</div>
         <div class="check-item"><div class="check-box"></div>Connect GA4 property to GSC</div>
         <div class="check-item"><div class="check-box"></div>Review search queries report at day 30</div>
-      </div>
+        </div>
 
-      <div class="section-title" style="margin-top:16px;">E-E-A-T Signals</div>
-      <table>
+        <div class="section-title" style="margin-top:4px;">E-E-A-T Signals</div>
+        <table>
         <thead><tr><th>Signal</th><th>Action</th></tr></thead>
         <tbody>
           <tr><td><strong>Experience</strong></td><td>Named educator stories; school leader testimonials with school name and country</td></tr>
@@ -495,11 +551,10 @@
           <tr><td><strong>Trustworthiness</strong></td><td>501(c)(3) + EIN on /give/monthly; /privacy + /terms live; HTTPS; Charity Navigator</td></tr>
         </tbody>
       </table>
-    </section>
-
-    <section style="margin-bottom:0;">
-      <div class="section-title">Backlink Targets</div>
-      <table style="margin-bottom:12px;">
+      </div>
+      <div class="col-stack">
+        <div class="section-title">Backlink Targets</div>
+        <table>
         <thead><tr><th>Source type</th><th>Target publication</th><th>Approach</th></tr></thead>
         <tbody>
           <tr><td>Education media</td><td>EdSurge · Edutopia · TES</td><td>Guest article or research citation pitch</td></tr>
@@ -519,9 +574,10 @@
           <tr><td>Footer: /why · /stories · /give/monthly · /schools (always visible)</td></tr>
           <tr><td>Anchor text: descriptive always — never "click here" or "learn more"</td></tr>
         </tbody>
-      </table>
-    </section>
-  </div>
+        </table>
+      </div>
+    </div>
+  </section>
 
   <!-- POST-LAUNCH CADENCE -->
   <section>
@@ -566,7 +622,10 @@
   <!-- OPEN ACTIONS -->
   <section>
     <div class="section-title">Open Actions — Growth Team</div>
-    <div class="action-row"><div class="action-num">1</div><div class="action-text"><strong>Create OG images (1200×630 px)</strong> for all Phase 1 pages — dark hero, TCF wordmark, Newsreader headline, teal accent</div><div class="action-owner">Design · before launch</div></div>
+    <div class="action-list">
+    <div class="action-row"><div class="action-num">0a</div><div class="action-text"><strong>Finalize the original TCF logo</strong> — primary lockup, icon-only mark, and reversed/white version, all as SVG</div><div class="action-owner">Design · before launch, blocks #1 &amp; #0b</div></div>
+    <div class="action-row"><div class="action-num">0b</div><div class="action-text"><strong>Generate favicon + app icon set + site.webmanifest</strong> from the finalized icon-only mark</div><div class="action-owner">Design + Engineering · before launch</div></div>
+    <div class="action-row"><div class="action-num">1</div><div class="action-text"><strong>Create OG images (1200×630 px)</strong> for all Phase 1 pages — dark hero, TCF wordmark, Newsreader headline, teal accent</div><div class="action-owner">Design · before launch, depends on #0a</div></div>
     <div class="action-row"><div class="action-num">2</div><div class="action-text"><strong>Write Homeroom FAQ answers</strong> for FAQPage schema — "Is it tax-deductible?" "What is Homeroom?" "How does my $5 help?"</div><div class="action-owner">Copy · before /give/monthly ships</div></div>
     <div class="action-row"><div class="action-num">3</div><div class="action-text"><strong>Register on Charity Navigator + Candid</strong> (GuideStar) — required for donor trust and AI entity recognition</div><div class="action-owner">Ops · before launch</div></div>
     <div class="action-row"><div class="action-num">4</div><div class="action-text"><strong>Claim Google Knowledge Panel</strong> — verify via GSC; ensures TCF appears as a recognised entity in AI Overviews</div><div class="action-owner">Marketing · day 1 post-launch</div></div>
@@ -576,6 +635,7 @@
     <div class="action-row"><div class="action-num">8</div><div class="action-text"><strong>Set up Microsoft Clarity</strong> heatmaps on homepage, /why, /give/monthly on day 1 post-launch</div><div class="action-owner">Engineering · day 1</div></div>
     <div class="action-row"><div class="action-num">9</div><div class="action-text"><strong>Submit sitemap.xml to Google Search Console</strong> and verify property via DNS record in Vercel</div><div class="action-owner">Engineering · day 1</div></div>
     <div class="action-row"><div class="action-num">10</div><div class="action-text"><strong>Identify and pitch 5 backlink targets</strong> from education press (EdSurge, Edutopia, TES) with educator story angle</div><div class="action-owner">Marketing · month 1</div></div>
+    </div>
   </section>
 
   <!-- DOCS -->
@@ -587,6 +647,7 @@
       <div class="doc-card"><h4>Website Architecture</h4><p>Full URL inventory, sitemap structure, campaign page plans</p><code>docs/research/WEBSITE-ARCHITECTURE.md</code></div>
       <div class="doc-card"><h4>PRD</h4><p>Success metrics, feature list, user flows — source for conversion targets</p><code>docs/planning/PRD.md</code></div>
       <div class="doc-card"><h4>Frontend Specification</h4><p>Analytics event implementation, OG tag structure, share button spec</p><code>docs/planning/FRONTEND-SPECIFICATION.md</code></div>
+      <div class="doc-card"><h4>Accessibility Checklist</h4><p>A11y Project-style checklist + WAI-ARIA APG pattern map for every interactive component</p><code>docs/planning/ACCESSIBILITY.md</code></div>
       <div class="doc-card"><h4>Feature Tickets</h4><p>TICKET-080 (analytics) and TICKET-081 (SEO meta) — engineering acceptance criteria</p><code>docs/planning/FEATURE-TICKETS.md</code></div>
     </div>
   </section>
