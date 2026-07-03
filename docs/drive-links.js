@@ -8,13 +8,11 @@
  * Paste the URL below. Leave '' to hide that link until ready.
  */
 window.TCF_DRIVE_LINKS = {
-  folder: 'https://drive.google.com/drive/folders/1J38QYWHZfoLKZl4NGUXOk9rXTHG92lOJ?usp=sharing',
-
-  teamBrief:       'https://docs.google.com/document/d/1zSyJJ8QzLkhxbk9QEWOXvCY2J0i3NWsXOHrriHFu7cg/edit?usp=drive_link',
-  techBrief:       'https://docs.google.com/document/d/1L8IscQLn7TbSmjIlX9Sm8ADMbfZs6HCy6Mcz0vQiE4U/edit?usp=drive_link',
-  growthBrief:     'https://docs.google.com/document/d/13SflYbS0NMYx6jVOmYLDLViPiKm8U8g12dGJWTMqNxY/edit?usp=drive_link',
-  automationBrief: 'https://docs.google.com/document/d/155fUgR5NkMe2q-J8Z_lCPT3XhCpQw-2yKW85yUuGVW0/edit?usp=drive_link',
-  decisions:       'https://docs.google.com/document/d/1osaGMx87Kr_rNggoBeztq2LT0JnRgPpPye-60fKZv0w/edit?usp=drive_link',
+  folder:          '',   // paste Drive folder URL when ready
+  teamBrief:       '',   // paste shareable Google Doc URL when ready
+  techBrief:       '',
+  growthBrief:     '',
+  automationBrief: '',
 };
 
 /* ─── Google Drive SVG icon (official coloured triangle logo) ─────────────── */
@@ -160,10 +158,9 @@ var ARROW_SVG =
     techBrief:       'Technical Brief',
     growthBrief:     'Growth & SEO Brief',
     automationBrief: 'Automation & Integrations Brief',
-    decisions:       'Open Technical Decisions',
   };
 
-  var keys = ['teamBrief', 'techBrief', 'growthBrief', 'automationBrief', 'decisions'];
+  var keys = ['teamBrief', 'techBrief', 'growthBrief', 'automationBrief'];
 
   function esc(s) {
     return String(s)

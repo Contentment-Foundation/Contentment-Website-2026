@@ -78,27 +78,9 @@ Matching `*-BRIEF.md` files in `docs/briefs/` are the markdown source of each br
 
 Live preview (Netlify, interim): https://contentmentweb2.netlify.app/docs
 
-## Google Drive links (optional)
-
-**Markdown stays private.** All `.md` files under `docs/` and `docs/planning/` remain in the GitHub repo only — do not upload them to public Google Drive.
-
-**Optional:** Export an HTML brief as PDF or Google Doc for stakeholders who need Drive access. Paste **Anyone with the link** URLs in **[`drive-links.js`](./drive-links.js)**:
-
-```javascript
-window.TCF_DRIVE_LINKS = {
-  folder: 'https://drive.google.com/drive/folders/…',  // optional
-  teamBrief: 'https://drive.google.com/file/d/…/view?usp=sharing',
-  techBrief: '',
-  growthBrief: '',
-  automationBrief: '',
-};
-```
-
-Leave a key as `''` to hide that link. The web briefs on Netlify remain the primary reading experience.
-
 Production target: Vercel → `contentment.org` — see [research/WEBSITE-ARCHITECTURE.md](./research/WEBSITE-ARCHITECTURE.md) and [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md).
 
-All `.md` files remain in the private GitHub repo — not published to public Drive.
+All `.md` files remain in the private GitHub repo only — do not upload to public Google Drive.
 
 ## Correspondence — `docs/correspondence/`
 
