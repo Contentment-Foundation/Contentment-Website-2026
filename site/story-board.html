@@ -391,7 +391,7 @@
       <h1>Story <span>Board</span></h1>
       <span class="diy-sub">voices pinned from classrooms around the world</span>
     </div>
-    <span class="count" id="countLabel">0 stories</span>
+    <span class="count" id="countLabel" aria-live="polite">0 stories</span>
     <div class="controls">
       <button type="button" class="btn btn-pin" id="btnPin">✦ Pin a story</button>
 
@@ -401,9 +401,9 @@
 
       <div class="tb-group" aria-label="Board view controls">
         <span class="tb-group-label">View</span>
-        <div class="btn-group">
-          <button type="button" class="btn active" id="btnBoard">Board</button>
-          <button type="button" class="btn" id="btnGrid">Grid</button>
+        <div class="btn-group" role="group" aria-label="View mode">
+          <button type="button" class="btn active" id="btnBoard" aria-pressed="true">Board</button>
+          <button type="button" class="btn" id="btnGrid" aria-pressed="false">Grid</button>
         </div>
         <span class="tb-divider view-extra" aria-hidden="true"></span>
         <button type="button" class="btn view-extra" id="btnFit" title="Fit all frames">Fit board</button>
@@ -423,10 +423,10 @@
       <span class="tb-divider" aria-hidden="true"></span>
       <div class="tb-cluster" id="regionFilters"></div>
       <span class="tb-divider" aria-hidden="true"></span>
-      <div class="tb-cluster">
-        <button type="button" class="chip" data-role="all">All voices</button>
-        <button type="button" class="chip" data-role="educator">Educators</button>
-        <button type="button" class="chip" data-role="student">Students</button>
+      <div class="tb-cluster" role="group" aria-label="Filter by voice">
+        <button type="button" class="chip" data-role="all" aria-pressed="true">All voices</button>
+        <button type="button" class="chip" data-role="educator" aria-pressed="false">Educators</button>
+        <button type="button" class="chip" data-role="student" aria-pressed="false">Students</button>
       </div>
       <button type="button" class="btn filter-clear" id="btnClearFilters">Clear filters</button>
     </div>
@@ -441,7 +441,7 @@
   </div>
 </div>
 <div id="modalBg"></div>
-<div id="modal">
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="mBy">
   <button type="button" class="mclose" id="mClose" aria-label="Close">×</button>
   <div class="mmedia-wrap" id="mMediaWrap">
     <img class="mmedia" id="mImg" alt="" />
@@ -453,7 +453,7 @@
     <div class="mq" id="mQ"></div>
     <div class="mtext" id="mText"></div>
     <div class="mby" id="mBy"></div>
-    <button type="button" class="mlisten" id="mListen">
+    <button type="button" class="mlisten" id="mListen" aria-pressed="false">
       <span id="mListenIcon">🔊</span> <span id="mListenLabel">Listen to story</span>
     </button>
     <div class="m-actions">
@@ -671,8 +671,11 @@ function setGridMode(on){
   gridMode=on;
   viewport.classList.toggle("grid-mode",on);
   boardSurface.classList.toggle("grid-layout",on);
-  document.getElementById("btnBoard").classList.toggle("active",!on);
-  document.getElementById("btnGrid").classList.toggle("active",on);
+  const btnBoard=document.getElementById("btnBoard"), btnGrid=document.getElementById("btnGrid");
+  btnBoard.classList.toggle("active",!on);
+  btnGrid.classList.toggle("active",on);
+  btnBoard.setAttribute("aria-pressed",!on);
+  btnGrid.setAttribute("aria-pressed",on);
   document.querySelectorAll(".view-extra").forEach(el=>{
     el.style.display=on?"none":"";
   });
@@ -807,17 +810,24 @@ REGIONS.forEach(r=>{
 document.querySelectorAll("[data-role]").forEach(b=>{
   b.onclick=()=>{
     activeRole=b.dataset.role;
-    document.querySelectorAll("[data-role]").forEach(c=>c.classList.toggle("active",c===b));
+    document.querySelectorAll("[data-role]").forEach(c=>{
+      c.classList.toggle("active",c===b);
+      c.setAttribute("aria-pressed",c===b);
+    });
     renderCards();
   };
 });
 document.querySelector('[data-role="all"]').classList.add("active");
+document.querySelector('[data-role="all"]').setAttribute("aria-pressed","true");
 
 function resetFilters(){
   activeRegion="All"; activeRole="all"; activeSearch="";
   searchInput.value=""; searchBox.classList.remove("has-value");
   rWrap.querySelectorAll(".chip").forEach(c=>c.classList.toggle("active",c.textContent==="All"));
-  document.querySelectorAll("[data-role]").forEach(c=>c.classList.toggle("active",c.dataset.role==="all"));
+  document.querySelectorAll("[data-role]").forEach(c=>{
+    c.classList.toggle("active",c.dataset.role==="all");
+    c.setAttribute("aria-pressed",c.dataset.role==="all");
+  });
   renderCards();
 }
 document.getElementById("btnClearFilters").onclick=resetFilters;
@@ -852,36 +862,40 @@ function resolveCardImage(driveRaw, videoRaw, role){
 }
 
 // Modal
+let modalTrigger=null;
 function openModal(id){
   const s=stories.find(x=>x.id===id); if(!s) return;
-  const wrap=document.getElementById("mMediaWrap");
-  const vid=document.getElementById("mVideo");
+  modalTrigger=document.activeElement;
+  const wrap=document.getElementById(“mMediaWrap”);
+  const vid=document.getElementById(“mVideo”);
   const yt=youtubeId(s.video);
   if(yt){
-    wrap.classList.add("has-video");
-    vid.src="https://www.youtube.com/embed/"+yt+"?rel=0";
-    document.getElementById("mImg").alt="";
+    wrap.classList.add(“has-video”);
+    vid.src=”https://www.youtube.com/embed/”+yt+”?rel=0”;
+    document.getElementById(“mImg”).alt=””;
   }else{
-    wrap.classList.remove("has-video");
-    vid.removeAttribute("src");
-    document.getElementById("mImg").src=s.img;
-    document.getElementById("mImg").alt=s.cap||"";
+    wrap.classList.remove(“has-video”);
+    vid.removeAttribute(“src”);
+    document.getElementById(“mImg”).src=s.img;
+    document.getElementById(“mImg”).alt=s.cap||””;
   }
-  document.getElementById("mRole").textContent=s.role==="student"?"Student voice":"Educator voice";
-  document.getElementById("mPlace").textContent=s.place+" · "+s.region;
-  document.getElementById("mQ").textContent="“"+s.q+"”";
-  document.getElementById("mText").textContent=s.full;
-  document.getElementById("mBy").textContent="— "+s.by;
+  document.getElementById(“mRole”).textContent=s.role===”student”?”Student voice”:”Educator voice”;
+  document.getElementById(“mPlace”).textContent=s.place+” · “+s.region;
+  document.getElementById(“mQ”).textContent=”””+s.q+”””;
+  document.getElementById(“mText”).textContent=s.full;
+  document.getElementById(“mBy”).textContent=”— “+s.by;
   modal.dataset.storyId=s.id;
   resetDeleteConfirm();
-  modal.classList.add("show"); modalBg.classList.add("show");
+  modal.classList.add(“show”); modalBg.classList.add(“show”);
+  setTimeout(()=>{ document.getElementById(“mClose”).focus(); }, 0);
 }
 function closeModal(){
-  modal.classList.remove("show"); modalBg.classList.remove("show");
-  document.getElementById("mVideo").removeAttribute("src");
-  document.getElementById("mMediaWrap").classList.remove("has-video");
+  modal.classList.remove(“show”); modalBg.classList.remove(“show”);
+  document.getElementById(“mVideo”).removeAttribute(“src”);
+  document.getElementById(“mMediaWrap”).classList.remove(“has-video”);
   stopListening();
   resetDeleteConfirm();
+  if(modalTrigger) modalTrigger.focus();
 }
 document.getElementById("mClose").onclick=closeModal;
 modalBg.onclick=closeModal;
@@ -894,6 +908,7 @@ if(!synth){ mListen.style.display="none"; }
 function stopListening(){
   if(synth) synth.cancel();
   mListen.classList.remove("playing");
+  mListen.setAttribute("aria-pressed","false");
   document.getElementById("mListenIcon").textContent="🔊";
   mListenLabel.textContent="Listen to story";
 }
@@ -905,14 +920,33 @@ mListen.onclick=()=>{
   const utter=new SpeechSynthesisUtterance((s.full||s.q)+". By "+s.by+", "+s.place+".");
   utter.onend=stopListening; utter.onerror=stopListening;
   mListen.classList.add("playing");
+  mListen.setAttribute("aria-pressed","true");
   document.getElementById("mListenIcon").textContent="⏸";
   mListenLabel.textContent="Stop";
   synth.speak(utter);
 };
+function getFocusableElements(container){
+  return [...container.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])")];
+}
+
 document.addEventListener("keydown",e=>{
-  if(e.key!=="Escape") return;
-  if(filterPanel.classList.contains("show")) setFilterPanel(false);
-  else closeModal();
+  if(e.key==="Escape"){
+    if(filterPanel.classList.contains("show")) setFilterPanel(false);
+    else if(modal.classList.contains("show")) closeModal();
+    return;
+  }
+  if(e.key==="Tab" && modal.classList.contains("show")){
+    const focusable=getFocusableElements(modal);
+    if(!focusable.length) return e.preventDefault();
+    const first=focusable[0], last=focusable[focusable.length-1];
+    if(e.shiftKey && document.activeElement===first){
+      e.preventDefault();
+      last.focus();
+    }else if(!e.shiftKey && document.activeElement===last){
+      e.preventDefault();
+      first.focus();
+    }
+  }
 });
 
 // Pin a story

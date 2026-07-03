@@ -5,6 +5,15 @@
   publish = "site"
   command = "bash scripts/copy-docs.sh"
 
+# Security headers — interim Netlify config (migrate to Vercel in TICKET-002)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
 # Docs hub + briefs (source: docs/*.html, copied at build)
 [[redirects]]
   from = "/docs"

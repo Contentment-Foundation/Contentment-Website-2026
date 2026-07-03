@@ -167,10 +167,10 @@ Every page moves a visitor one step. No page does all five.
 
 | Need | Document |
 |------|----------|
-| What to say, taglines, CTAs, banned words | `docs/MESSAGING-AND-COPY.md` — wins on any copy conflict |
-| Who we sound like, writing craft | `docs/VOICE-AND-TONE.md` |
-| Citations, DOIs, ready-to-use copy lines | `docs/EVIDENCE-AND-RESEARCH.md` |
-| Sitemap, URLs, campaign pages, `/events` | `docs/WEBSITE-ARCHITECTURE.md` |
+| What to say, taglines, CTAs, banned words | `docs/research/MESSAGING-AND-COPY.md` — wins on any copy conflict |
+| Who we sound like, writing craft | `docs/research/VOICE-AND-TONE.md` |
+| Citations, DOIs, ready-to-use copy lines | `docs/research/EVIDENCE-AND-RESEARCH.md` |
+| Sitemap, URLs, campaign pages, `/events` | `docs/research/WEBSITE-ARCHITECTURE.md` |
 | Open technical decisions | `docs/planning/DECISIONS.md` |
 | Full product requirements | `docs/planning/PRD.md` |
 | Tech stack, data model, env vars | `docs/planning/TECHNICAL-ARCHITECTURE.md` |

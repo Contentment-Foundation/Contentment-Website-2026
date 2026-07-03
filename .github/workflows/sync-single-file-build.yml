@@ -1,0 +1,45 @@
+name: Sync single-file build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'site/index.html'
+      - 'site/assets/**'
+      - '.github/workflows/sync-single-file-build.yml'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check if contentment-home.html needs update
+        id: check
+        run: |
+          # Compare timestamps of site/index.html and contentment-home.html
+          if [ ! -f contentment-home.html ] || [ site/index.html -nt contentment-home.html ]; then
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+          else
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate single-file build with embedded assets
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          # TODO: Implement base64 asset embedding script
+          # For now, copy the index.html and document that images need embedding
+          cp site/index.html contentment-home.html
+          echo "/* TEMPORARY: Images need to be embedded as base64 */" >> contentment-home.html
+          echo "Updated contentment-home.html (awaiting full asset embedding implementation)"
+
+      - name: Commit updated build
+        if: steps.check.outputs.needs_update == 'true'
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Sync single-file build from site/index.html'
+          add: 'contentment-home.html'
+          author_name: 'CI Bot'
+          author_email: 'ci@contentment.org'

@@ -8,19 +8,23 @@
 
 ### Confirmed analytics stack
 
-| Tool | Purpose | Why |
-|------|---------|-----|
-| **Plausible** | Primary traffic + events | Privacy-first; no cookie banner required in most jurisdictions; lightweight (< 1 KB script); GDPR compliant out of the box |
-| **GA4** | Campaign attribution, funnels, audience insights | Required if running Google Ads or needing advanced audience segments |
-| **Microsoft Clarity** | Heatmaps + session recordings | Free; shows where visitors click, scroll, and drop off — invaluable for CRO post-launch |
-| **PostHog** *(if required)* | Product analytics, feature flags, funnels | Open-source alternative to Mixpanel/Heap; self-hostable on GCP; use in Phase 2 if you need funnel cohorts, A/B testing, or feature flag gating without a third-party data arrangement |
+> **Plausible dropped** (paid subscription — not needed given existing tools). Stack confirmed July 2026.
+
+| Tool | Purpose | Cost | Status |
+|------|---------|------|--------|
+| **GA4** | Primary — traffic, sessions, funnels, campaign attribution, conversion events | Free | Existing account |
+| **Microsoft Clarity** | Heatmaps + session recordings — CRO, scroll depth, drop-off | Free | Existing account |
+| **PostHog** | Product analytics, funnel cohorts, feature flags, A/B testing | Free tier (1M events/month) | Add at build |
+| + Anik's suggestions | TBD after engineering input | — | Pending |
+
+> **Cookie consent note:** GA4 sets cookies — a consent banner is required for EU/UK visitors. Implement GA4 with **Consent Mode v2** so analytics fire in a cookieless/modelled state before consent is given. PostHog should be initialised in cookieless mode (`persistence: 'memory'`). See [DECISION-002](../planning/DECISIONS.md).
 
 ### Search presence tools
 
 | Tool | Purpose | When to set up |
 |------|---------|----------------|
 | **Google Search Console** | Indexing, ranking, Core Web Vitals, manual actions | Day 1 post-launch — verify via DNS TXT in Vercel |
-| **Bing Webmaster Tools** | Bing + Copilot indexing, keyword data, SEO insights | Day 1 post-launch — Bing serves Copilot AI search; free, 5-min setup |
+| **Bing Webmaster Tools** | Bing + Copilot AI indexing, keyword data, SEO insights | Day 1 post-launch — existing account; submit sitemap |
 
 > **Why Bing Webmaster Tools matters now:** Microsoft Bing powers Copilot AI answers. Adding TCF's sitemap there ensures contentment.org is indexed for AI-assisted search (Copilot/Bing Chat), not just Google AI Overviews.
 
@@ -28,14 +32,14 @@
 
 | Event | Trigger | Platform |
 |-------|---------|----------|
-| `cta_homeroom_click` | Any Homeroom CTA button click | Plausible + GA4 |
+| `cta_homeroom_click` | Any Homeroom CTA button click | GA4 + PostHog |
 | `homeroom_checkout_start` | Keela redirect fires | GA4 (via URL param) |
-| `cta_school_click` | "Start the conversation" CTA | Plausible + GA4 |
-| `school_form_submit` | School discovery form success | Plausible + GA4 |
-| `newsletter_submit` | Flodesk newsletter form success | Plausible + GA4 |
-| `story_view` | Any /stories/[slug] page load | Plausible |
-| `share_why` | Share button on /why | Plausible + GA4 |
-| `event_rsvp_click` | Event RSVP or "Join for access" | Plausible + GA4 |
+| `cta_school_click` | "Start the conversation" CTA | GA4 + PostHog |
+| `school_form_submit` | School discovery form success | GA4 + PostHog |
+| `newsletter_submit` | Flodesk newsletter form success | GA4 + PostHog |
+| `story_view` | Any /stories/[slug] page load | GA4 + PostHog |
+| `share_why` | Share button on /why | GA4 + PostHog |
+| `event_rsvp_click` | Event RSVP or "Join for access" | GA4 + PostHog |
 
 ### Funnel to monitor (GA4 Explore — Funnel report)
 
@@ -57,7 +61,7 @@ Step 6: Returns from Keela (post-donation — track via UTM on Keela thank-you r
 | `utm_campaign` | `homeroom-launch` · `festival-2026` · `anniversary` · `school-outreach` · `[specific campaign name]` |
 | `utm_content` | `hero-cta` · `footer-cta` · `nav-pill` · `story-card` (for A/B variant labelling) |
 
-### Monthly analytics dashboard (set up in Plausible + GA4)
+### Monthly analytics dashboard (set up in GA4 + PostHog)
 
 | Metric | Target (90 days) | Review cadence |
 |--------|-----------------|----------------|
@@ -411,6 +415,35 @@ Disallow: /api/
 Sitemap: https://contentment.org/sitemap.xml
 ```
 
+### llms.txt (AI model training source attribution)
+
+Create `/public/llms.txt` with clear attribution rules for generative AI crawlers (Claude, ChatGPT, Perplexity, etc.):
+
+```
+# contentment.org — LLM training and data use policy
+# For inquiries about content licensing, contact: hello@contentment.org
+
+User-agent: CCBot
+User-agent: anthropic-ai
+User-agent: gptbot
+Disallow: /api/
+Disallow: /homeroom/
+
+# Permissioned content (educator stories, research summaries) may be used for training
+# Non-permissioned content (internal documents, third-party research) should not be used
+# See contentment.org/terms and contentment.org/privacy for full terms
+
+# Educator stories available for AI training with attribution to TCF + educator name
+Allow: /stories/
+
+# Core pages — use with full URL attribution
+Allow: /
+Allow: /why
+Allow: /impact
+```
+
+Deploy to `contentment.org/llms.txt` (TICKET-081).
+
 ### E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness)
 
 | Signal | Action |
@@ -531,9 +564,9 @@ utm_content=  hero-banner | story-card | countdown-post | speaker-announcement
 
 | Document | Location |
 |----------|----------|
-| Messaging & copy (taglines, CTAs, banned words) | `docs/MESSAGING-AND-COPY.md` |
-| Evidence & research (DOIs for citation strategy) | `docs/EVIDENCE-AND-RESEARCH.md` |
-| Site architecture (full URL inventory) | `docs/WEBSITE-ARCHITECTURE.md` |
+| Messaging & copy (taglines, CTAs, banned words) | `docs/research/MESSAGING-AND-COPY.md` |
+| Evidence & research (DOIs for citation strategy) | `docs/research/EVIDENCE-AND-RESEARCH.md` |
+| Site architecture (full URL inventory) | `docs/research/WEBSITE-ARCHITECTURE.md` |
 | PRD (success metrics, feature list) | `docs/planning/PRD.md` |
 | Frontend spec (integration specs for analytics) | `docs/planning/FRONTEND-SPECIFICATION.md` |
 | Accessibility checklist & ARIA patterns | `docs/planning/ACCESSIBILITY.md` |

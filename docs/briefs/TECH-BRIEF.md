@@ -43,7 +43,7 @@ Browser
 | **Fundraise** | Raisely | Embed or `PUBLIC_RAISELY_CAMPAIGN_URL` link |
 | **Database** | GCP Cloud SQL (PostgreSQL) | Phase 2+ — only if custom forms or member auth need it |
 | **CMS** | Markdown + JSON in repo | Phase 1 · migrate to Sanity at Phase 1.5 when editors need self-service |
-| **Analytics** | Plausible (recommended) | See DECISION-001; GA4 only if paid ads confirmed |
+| **Analytics** | GA4 + Microsoft Clarity + PostHog | See DECISION-001; Plausible dropped (paid); GA4 = primary (existing account) |
 | **Rate limiting** | @upstash/ratelimit + Upstash Redis | 5 req / 15 min / IP on all `/api/*` — DECISION-004 |
 | **Transactional email** | Resend | School inquiry notifications, magic links — DECISION-003 |
 | **Homeroom gate** | Vercel Edge Middleware | Phase 2 — shared password → rotating cookie; magic link if >500 members |
@@ -279,7 +279,9 @@ PUBLIC_SITE_URL=https://contentment.org
 PUBLIC_KEELA_TIER_5_URL=           # Keela $5/mo checkout — from finance
 PUBLIC_KEELA_TIER_25_URL=          # Keela $25/mo checkout
 PUBLIC_KEELA_TIER_100_URL=         # Keela $100/mo checkout
-PUBLIC_PLAUSIBLE_DOMAIN=           # recommended (DECISION-001)
+PUBLIC_GA_ID=                      # GA4 measurement ID — existing account (DECISION-001)
+PUBLIC_POSTHOG_KEY=                # PostHog project API key (DECISION-001)
+PUBLIC_POSTHOG_HOST=               # PostHog host URL
 PUBLIC_RAISELY_CAMPAIGN_URL=       # Fundraise page link
 
 # Server-only (Vercel env — never in repo or browser)
@@ -409,11 +411,11 @@ TICKET-101  DNS cutover + production deploy
 |------|----------|
 | Open technical decisions (analytics, email, rate limit) | `docs/planning/DECISIONS.md` |
 | Full tech stack + data model + CMS rationale | `docs/planning/TECHNICAL-ARCHITECTURE.md` |
-| Site architecture, `/events`, deployment model | `docs/WEBSITE-ARCHITECTURE.md` |
-| Automation, Slack, Zoom, Keela webhooks | `docs/AUTOMATION-BRIEF.md` |
+| Site architecture, `/events`, deployment model | `docs/research/WEBSITE-ARCHITECTURE.md` |
+| Automation, Slack, Zoom, Keela webhooks | `docs/briefs/AUTOMATION-BRIEF.md` |
 | Design tokens, component classes, integration specs | `docs/planning/FRONTEND-SPECIFICATION.md` |
 | Accessibility checklist, ARIA patterns, known gaps | `docs/planning/ACCESSIBILITY.md` |
 | Auth, RLS, error handling, edge cases (15 items) | `docs/planning/SECURITY-AND-ACCESS.md` |
 | All feature tickets with acceptance criteria | `docs/planning/FEATURE-TICKETS.md` |
 | Full PRD — features, flows, success metrics | `docs/planning/PRD.md` |
-| Copy rules (no em dashes, banned words) | `docs/MESSAGING-AND-COPY.md` |
+| Copy rules (no em dashes, banned words) | `docs/research/MESSAGING-AND-COPY.md` |
