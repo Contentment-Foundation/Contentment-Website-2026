@@ -31,16 +31,29 @@
   .chip:hover { background:rgba(255,255,255,.1); }
   .chip.active { background:var(--served); color:#12331e; border-color:var(--served); font-weight:700; }
 
-  #mapWrap { position:relative; background:var(--map-bg); }
+  /* map */
+  #mapWrap { position:relative; background:var(--map-bg); cursor:grab; }
+  #mapWrap:active { cursor:grabbing; }
   svg { display:block; width:100%; height:100%; }
   .country        { fill:var(--country); stroke:var(--country-stroke); stroke-width:.4px; }
   .country.served { fill:var(--served); transition:fill .15s; }
+  .country.served:hover { fill:var(--served-hi); }
   .country.dim    { fill:var(--served-dim); opacity:.4; }
 
-  .legend { position:absolute; left:16px; bottom:14px; display:flex; gap:14px;
+  /* legend + zoom controls */
+  .legend { position:absolute; left:16px; bottom:14px; display:flex; gap:12px;
     background:rgba(0,0,0,.25); padding:7px 12px; border-radius:8px; font-size:11px; }
   .legend i { display:inline-block; width:10px; height:10px; border-radius:3px;
     margin-right:4px; vertical-align:-1px; }
+  .zoom-hint { position:absolute; left:16px; bottom:50px; font-size:10px;
+    color:rgba(255,255,255,.5); transition:opacity .5s; pointer-events:none; }
+  .zoom-hint.hidden { opacity:0; }
+  .zoom-controls { position:absolute; right:14px; bottom:14px; display:flex;
+    flex-direction:column; gap:5px; z-index:25; }
+  .zoom-controls button { width:30px; height:30px; border-radius:7px; border:1px solid rgba(255,255,255,.18);
+    background:rgba(20,20,45,.62); color:#fff; font-size:17px; cursor:pointer;
+    line-height:30px; text-align:center; padding:0; transition:background .12s; }
+  .zoom-controls button:hover { background:rgba(20,20,45,.92); }
 
   #tip { position:absolute; pointer-events:none; z-index:30; background:#fff; color:var(--ink);
     border-radius:8px; padding:7px 11px; font-size:12px; box-shadow:0 8px 24px rgba(0,0,0,.3);
@@ -51,26 +64,29 @@
     background:#ffdd57; color:#4a3b00; padding:10px 16px; border-radius:8px;
     font-size:13px; z-index:60; max-width:80%; }
 
-  /* ─── PENDULUM ANIMATION ─── */
+  /* ─── PENDULUM — faster, bigger swing ─── */
   @keyframes pendulum {
     0%,100% { transform:rotate(var(--rot,0deg)); }
-    50%      { transform:rotate(calc(var(--rot,0deg) + var(--swing,1.8deg))); }
+    50%      { transform:rotate(calc(var(--rot,0deg) + var(--swing,3deg))); }
   }
   @media (prefers-reduced-motion:reduce){ .card-stack { animation:none !important; } }
 
-  /* ─── CARD STACK — the "nailed" unit on the map ─── */
+  /* ─── CARD STACK — pinned on the map ─── */
   .card-stack {
     position:fixed; z-index:20; width:72px;
     transform-origin:50% 0;
-    animation:pendulum var(--sway-dur,4.2s) ease-in-out infinite var(--sway-delay,0s);
+    animation:pendulum var(--sway-dur,2.4s) ease-in-out infinite var(--sway-delay,0s);
     cursor:pointer;
+    /* hidden until user zooms in */
+    opacity:0; pointer-events:none;
+    transition:opacity .3s;
   }
-  /* pause sway on hover so the card "stills" as you reach for it */
+  .card-stack.visible { opacity:1; pointer-events:auto; }
   .card-stack:hover { z-index:28; animation-play-state:paused; }
   .card-stack:focus { outline:none; }
-  .card-stack:focus-visible { outline:2px solid rgba(255,255,255,.7); outline-offset:4px; }
+  .card-stack:focus-visible { outline:2px solid rgba(255,255,255,.7); outline-offset:3px; }
 
-  /* pin dot — shared with expanded modal */
+  /* pin dot — shared with modal */
   .card-stack::after, #popup::after {
     content:""; position:absolute; top:-22px; left:50%; width:11px; height:11px;
     border-radius:50%;
@@ -81,11 +97,11 @@
   /* thread */
   .card-stack::before, #popup::before {
     content:""; position:absolute; top:-12px; left:50%; width:2px; height:12px;
-    background:linear-gradient(to top, rgba(80,60,40,.4), rgba(80,60,40,.05));
+    background:linear-gradient(to top, rgba(80,60,40,.42), rgba(80,60,40,.04));
     transform:translateX(-50%); pointer-events:none; z-index:1;
   }
 
-  /* washi tape — shared */
+  /* washi tape */
   .washi { position:absolute; height:14px; top:-7px; left:50%; transform:translateX(-50%);
     width:48px; z-index:3; pointer-events:none; border-radius:2px; opacity:.92; }
   .t0 { background:rgba(255,190,200,.85); }
@@ -93,12 +109,12 @@
   .t2 { background:rgba(255,220,130,.85); }
   .t3 { background:rgba(200,220,255,.80); }
 
-  /* ─── SMALL MAP CARD ─── */
+  /* ─── SMALL MAP CARD (base) ─── */
   .map-card { position:relative; width:72px; }
   .map-card .frame {
     position:relative; background:var(--card);
-    box-shadow:0 5px 16px rgba(2,78,112,.22), 0 2px 4px rgba(0,0,0,.1);
-    border:1px solid rgba(2,78,112,.08); border-radius:3px; overflow:hidden;
+    box-shadow:0 5px 16px rgba(2,78,112,.2), 0 2px 4px rgba(0,0,0,.1);
+    border:1px solid rgba(2,78,112,.08); border-radius:2px; overflow:hidden;
     transition:transform .24s cubic-bezier(.34,1.22,.64,1), box-shadow .24s;
     transform-origin:50% 30%;
   }
@@ -109,47 +125,59 @@
     margin:0 0 3px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
   .map-card .byline { font-size:6.5px; color:#888; font-weight:700; }
 
-  /* single card — zoom on hover */
-  .card-stack.single:hover > .map-card .frame {
-    transform:scale(1.28) translateY(-6px);
-    box-shadow:0 18px 48px rgba(2,78,112,.3), 0 6px 16px rgba(0,0,0,.18);
+  /* ── CARD STYLE VARIANTS (like Story Board shapes) ── */
+  /* cs-0: Polaroid — white border frame, thick bottom, cream shadow ring */
+  .cs-0 .frame {
+    background:#fff; border-radius:2px;
+    box-shadow:0 5px 16px rgba(2,78,112,.2), 0 2px 4px rgba(0,0,0,.1),
+               0 0 0 3px #fff, 0 0 0 4px #ddd8cc; /* double-border polaroid effect */
   }
 
-  /* double card — stacked deck default */
+  /* cs-1: Notebook — warm cream bg, vivid blue left accent */
+  .cs-1 .frame { background:#FFFEF0; border-radius:0 3px 3px 0;
+    border-left:3px solid #5a8bd6 !important; }
+  .cs-1 .body  { background:#FFFEF0; }
+
+  /* cs-2: Craft paper — warm tan, brownish ink */
+  .cs-2 .frame { background:#F5EDD8; border-color:rgba(150,100,50,.18) !important; border-radius:3px; }
+  .cs-2 .body  { background:#F5EDD8; }
+  .cs-2 .quote { color:#5c3a18; }
+  .cs-2 .byline { color:#8b6035; }
+
+  /* cs-3: Mint — cool pale teal, green byline */
+  .cs-3 .frame { background:#EDF7F4; border-color:rgba(31,175,192,.2) !important; border-radius:4px; }
+  .cs-3 .body  { background:#EDF7F4; }
+  .cs-3 .byline { color:#1a7d6a; }
+
+  /* single card hover: zoom-in effect on the .frame */
+  .card-stack.single:hover > .map-card .frame {
+    transform:scale(1.28) translateY(-6px);
+    box-shadow:0 18px 48px rgba(2,78,112,.3), 0 6px 16px rgba(0,0,0,.18) !important;
+  }
+
+  /* double card: stacked deck */
   .card-stack.double > .map-card {
     position:absolute; top:0; left:0;
     transition:transform .28s cubic-bezier(.34,1.22,.64,1);
     will-change:transform;
   }
-  /* front card: slight tilt left, on top */
   .card-stack.double > .map-card:nth-child(1) { transform:rotate(-3deg); z-index:2; }
-  /* back card: more tilt right, peeking from behind */
-  .card-stack.double > .map-card:nth-child(2) {
-    transform:rotate(6deg) translateX(4px) translateY(3px); z-index:1;
-  }
-  /* hover: fan both cards out so you can see them */
-  .card-stack.double:hover > .map-card:nth-child(1) {
-    transform:rotate(-13deg) translateX(-20px) translateY(-3px);
-  }
-  .card-stack.double:hover > .map-card:nth-child(2) {
-    transform:rotate(11deg) translateX(20px) translateY(-3px);
-  }
-  /* double stack needs a min-height so the stacked cards don't collapse */
-  .card-stack.double { height:82px; } /* photo 52px + body 30px ≈ 82px */
+  .card-stack.double > .map-card:nth-child(2) { transform:rotate(6deg) translateX(4px) translateY(3px); z-index:1; }
+  .card-stack.double:hover > .map-card:nth-child(1) { transform:rotate(-13deg) translateX(-20px) translateY(-3px); }
+  .card-stack.double:hover > .map-card:nth-child(2) { transform:rotate(11deg)  translateX( 20px) translateY(-3px); }
+  .card-stack.double { height:82px; }
 
   /* ─── BACKDROP ─── */
   #backdrop { position:fixed; inset:0; background:rgba(10,10,30,.38); z-index:40;
     opacity:0; pointer-events:none; transition:opacity .2s; }
   #backdrop.show { opacity:1; pointer-events:auto; }
 
-  /* ─── EXPANDED MODAL — same pin-card shape, bigger ─── */
-  #popup { position:fixed; z-index:50;
-    padding-top:28px; /* breathing room for pin + thread */
+  /* ─── EXPANDED MODAL — pin-card shape ─── */
+  #popup { position:fixed; z-index:50; padding-top:28px;
     opacity:0; transform:scale(.88) translateY(14px); pointer-events:none;
     transition:opacity .2s, transform .26s cubic-bezier(.34,1.25,.64,1); }
   #popup.show { opacity:1; transform:scale(1) translateY(0); pointer-events:auto; }
 
-  /* modal pin card body */
   .modal-pin { position:relative; width:272px; max-width:88vw; }
   .modal-pin .frame {
     position:relative; background:var(--card);
@@ -166,11 +194,21 @@
     border-radius:999px; margin-bottom:9px; }
   .modal-pin .badge.educator { background:#e3f1ff; color:#1c6fb8; }
   .modal-pin .badge.student  { background:#eafbe9; color:#2a7d47; }
-  .modal-pin .quote { font-style:italic; font-size:14px; line-height:1.52;
-    color:var(--ink); margin:0 0 12px; }
+  .modal-pin .quote { font-style:italic; font-size:14px; line-height:1.52; color:var(--ink); margin:0 0 12px; }
   .modal-pin .divider { height:1px; background:rgba(2,78,112,.09); margin:0 0 11px; }
   .modal-pin .byname  { font-weight:700; font-size:13px; color:var(--ink); margin:0; }
   .modal-pin .bydetail{ font-size:11.5px; color:#888; margin:3px 0 0; line-height:1.4; }
+
+  /* modal card style variants match the small card */
+  .modal-pin.cs-0 .frame { box-shadow:0 22px 60px rgba(2,78,112,.32), 0 0 0 5px #fff, 0 0 0 7px #ddd8cc; }
+  .modal-pin.cs-1 .frame { background:#FFFEF0; border-left:4px solid #5a8bd6 !important; border-radius:0 3px 3px 0; }
+  .modal-pin.cs-1 .mbody { background:#FFFEF0; }
+  .modal-pin.cs-2 .frame { background:#F5EDD8; border-color:rgba(150,100,50,.18) !important; }
+  .modal-pin.cs-2 .mbody { background:#F5EDD8; }
+  .modal-pin.cs-2 .quote { color:#5c3a18; }
+  .modal-pin.cs-3 .frame { background:#EDF7F4; border-color:rgba(31,175,192,.2) !important; }
+  .modal-pin.cs-3 .mbody { background:#EDF7F4; }
+  .modal-pin.cs-3 .byname { color:#1a5c50; }
 
   .pop-close { position:absolute; top:8px; right:8px; z-index:5;
     width:26px; height:26px; border-radius:50%; border:none;
@@ -181,7 +219,7 @@
   @media (max-width:480px){
     .card-stack, .map-card { width:58px; }
     .map-card .media { height:42px; }
-    .card-stack.double { height:68px; }
+    .card-stack.double { height:66px; }
     .modal-pin { width:min(272px, 90vw); }
     .modal-pin .media { height:160px; }
   }
@@ -197,7 +235,7 @@
   <header>
     <div class="header-label">
       <h1>🌱 Foundation Reach</h1>
-      <p>Hover to preview · click to read their story</p>
+      <p>Zoom into a region · hover to preview · click to read</p>
     </div>
     <div class="filters" id="filters"></div>
   </header>
@@ -206,6 +244,12 @@
     <div class="legend">
       <span><i style="background:#7ec98f"></i>Program active</span>
       <span><i style="background:#6b6ba3"></i>Not yet served</span>
+    </div>
+    <div class="zoom-hint" id="zoomHint">Scroll or pinch to zoom · cards appear when zoomed in</div>
+    <div class="zoom-controls">
+      <button id="btnZoomIn"    aria-label="Zoom in">+</button>
+      <button id="btnZoomOut"   aria-label="Zoom out">−</button>
+      <button id="btnZoomReset" aria-label="Reset zoom" title="Reset view">⌂</button>
     </div>
     <div id="tip"></div>
     <div id="banner"></div>
@@ -220,22 +264,30 @@
 <script>
 
 const REGIONS    = ["All","Americas","Africa","Asia","Europe","Oceania"];
+const CARD_W     = 72;
 const PIN_COLORS = [
   ["#ff8a8a","#e74c3c"], ["#7ec8e8","#3498db"], ["#9be7b8","#4FA98C"],
   ["#ffd07a","#f39c12"], ["#d7b0ff","#9b59b6"], ["#ffb8a0","#d06040"],
   ["#a8e6cf","#2e8b57"], ["#ffd1dc","#c0607a"]
 ];
-const TAPES  = ["t0","t1","t2","t3"];
-const SWAYS  = [
-  {rot:-2.4,swing:1.8,dur:4.2,delay:0  }, {rot: 1.8,swing:2.1,dur:3.8,delay:.55},
-  {rot:-1.3,swing:1.5,dur:4.7,delay:.9 }, {rot: 2.2,swing:1.9,dur:3.5,delay:1.3},
-  {rot:-1.9,swing:2.3,dur:4.9,delay:.2 }, {rot: 1.4,swing:1.6,dur:4.1,delay:.7 },
-  {rot:-2.1,swing:2.0,dur:4.4,delay:1.1}, {rot: 1.7,swing:1.7,dur:3.9,delay:.4 }
+// Each card style maps to its matching washi tape
+const CARD_STYLES = ["cs-0","cs-1","cs-2","cs-3"];
+const STYLE_TAPES = ["t0",  "t1",  "t2",  "t3" ];
+// Faster pendulum: halved duration, doubled+ swing
+const SWAYS = [
+  {rot:-2.4,swing:4.0,dur:2.2,delay:0  }, {rot: 1.8,swing:3.5,dur:2.6,delay:.30},
+  {rot:-1.3,swing:4.5,dur:2.0,delay:.60}, {rot: 2.2,swing:3.8,dur:2.4,delay:.90},
+  {rot:-1.9,swing:4.2,dur:2.1,delay:.45}, {rot: 1.4,swing:3.6,dur:2.7,delay:.75},
+  {rot:-2.1,swing:4.0,dur:2.3,delay:1.0}, {rot: 1.7,swing:3.9,dur:2.5,delay:.20}
 ];
 
+const ZOOM_SHOW_AT = 1.25; // cards appear above this zoom level
+
 let activeRegion = "All";
-const stackData  = []; // { el, svgX, svgY, key }
-let   stackSeq   = 0;
+let currentZoom  = 1;
+let hintGone     = false;
+const stackData  = []; // { el, svgX, svgY, key, styleIdx }
+let stackSeq     = 0;
 
 const W = 960, H = 500;
 const proj    = d3.geoNaturalEarth1().scale(178).translate([W/2, H/2+8]);
@@ -244,6 +296,8 @@ const tip     = document.getElementById("tip");
 const mapWrap = document.getElementById("mapWrap");
 const popup   = document.getElementById("popup");
 const backdrop= document.getElementById("backdrop");
+const mapSvg  = d3.select("#map");
+let mapG; // main <g> — set when drawing
 
 const nameOf   = k => PROGRAM[k].label || k;
 const inRegion = k => activeRegion==="All" || PROGRAM[k].region===activeRegion;
@@ -253,20 +307,46 @@ function showBanner(msg){ const b=document.getElementById("banner"); b.textConte
 if(typeof d3==="undefined"||typeof topojson==="undefined"){ showBanner("Libraries didn't load — internet connection needed."); }
 else if(typeof PROGRAM==="undefined"){ showBanner("program-data.js not found."); }
 
-// ── SVG viewBox → fixed viewport coords ──
-function svgToViewport(sx,sy){
-  const mr    = mapWrap.getBoundingClientRect();
-  const scale = Math.min(mr.width/W, mr.height/H);
-  return [
-    mr.left + (mr.width  - W*scale)/2 + sx*scale,
-    mr.top  + (mr.height - H*scale)/2 + sy*scale
-  ];
+// ── D3 ZOOM ──
+const zoom = d3.zoom()
+  .scaleExtent([1, 10])
+  .translateExtent([[-W*0.6,-H*0.6],[W*1.6,H*1.6]])
+  .on("zoom", event => {
+    if(mapG) mapG.attr("transform", event.transform);
+    currentZoom = event.transform.k;
+    if(!hintGone && currentZoom > 1.05){
+      document.getElementById("zoomHint").classList.add("hidden");
+      hintGone = true;
+    }
+    requestAnimationFrame(repositionStacks);
+  });
+mapSvg.call(zoom);
+
+document.getElementById("btnZoomIn").onclick    = () => mapSvg.transition().duration(300).call(zoom.scaleBy, 1.9);
+document.getElementById("btnZoomOut").onclick   = () => mapSvg.transition().duration(300).call(zoom.scaleBy, 1/1.9);
+document.getElementById("btnZoomReset").onclick = () => mapSvg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+
+// ── Convert SVG viewBox coords → screen viewport coords via current transform ──
+function svgToViewport(sx, sy){
+  const gEl = mapG && mapG.node();
+  if(!gEl) { // fallback before mapG is set
+    const mr = mapWrap.getBoundingClientRect();
+    const sc = Math.min(mr.width/W, mr.height/H);
+    return [mr.left+(mr.width -W*sc)/2+sx*sc, mr.top+(mr.height-H*sc)/2+sy*sc];
+  }
+  const pt  = document.getElementById("map").createSVGPoint();
+  pt.x = sx; pt.y = sy;
+  const sc  = pt.matrixTransform(gEl.getScreenCTM());
+  return [sc.x, sc.y];
 }
+
 function repositionStacks(){
-  stackData.forEach(({el,svgX,svgY})=>{
-    const [cx,cy] = svgToViewport(svgX,svgY);
-    el.style.left  = (cx - 72/2) + "px";
-    el.style.top   = (cy + 22)   + "px"; // +22: pin dot sits at cy
+  const show = currentZoom >= ZOOM_SHOW_AT;
+  stackData.forEach(({el, svgX, svgY, key})=>{
+    const [cx,cy] = svgToViewport(svgX, svgY);
+    el.style.left = (cx - CARD_W/2) + "px";
+    el.style.top  = (cy + 22)       + "px";
+    el.classList.toggle("visible", show && inRegion(key));
   });
 }
 window.addEventListener("resize", ()=>requestAnimationFrame(repositionStacks));
@@ -280,25 +360,25 @@ REGIONS.forEach(r=>{
   b.onclick = ()=>{
     activeRegion = r;
     [...fWrap.children].forEach(c=>c.classList.toggle("active",c===b));
-    applyFilter();
+    repositionStacks(); // re-evaluates visibility
     if(popup.classList.contains("show") && !inRegion(popup.dataset.key)) closeModal();
   };
   fWrap.appendChild(b);
 });
 
-// ── Pick up to 2 stories (prefer educator + student pair) ──
+// ── Pick up to 2 stories (educator + student pair preferred) ──
 function pickStories(k){
-  const all = PROGRAM[k].stories || [];
+  const all = PROGRAM[k].stories||[];
   if(!all.length) return [];
   const edu = all.find(s=>s.role==="educator");
   const stu = all.find(s=>s.role==="student");
-  if(edu && stu) return [edu, stu];
+  if(edu && stu) return [edu,stu];
   return all.slice(0,2);
 }
 
-// ── Small card HTML ──
-function smallCardHtml(s, tapeClass){
-  return `<div class="map-card">` +
+// ── Small card HTML — style class applied to .map-card ──
+function smallCardHtml(s, tapeClass, styleClass){
+  return `<div class="map-card ${styleClass}">` +
     `<span class="washi ${tapeClass}" aria-hidden="true"></span>` +
     `<article class="frame">` +
     `  <div class="media"><img src="${esc(s.img)}" alt="${esc(s.cap||s.by.split(",")[0])}" loading="lazy"/></div>` +
@@ -310,48 +390,52 @@ function smallCardHtml(s, tapeClass){
     `</div>`;
 }
 
-// ── Create a card stack at a map location ──
+// ── Create one card stack at a map position ──
 function createStack(k, svgX, svgY){
   const picks = pickStories(k);
   if(!picks.length) return;
-  const i   = stackSeq++;
-  const sw  = SWAYS[i%SWAYS.length];
-  const pin = PIN_COLORS[i%PIN_COLORS.length];
-  const [cx,cy] = svgToViewport(svgX,svgY);
+  const i      = stackSeq++;
+  const sw     = SWAYS[i%SWAYS.length];
+  const pin    = PIN_COLORS[i%PIN_COLORS.length];
+  const sIdx   = i % 4;
+  const sClass = CARD_STYLES[sIdx];
+  const tape   = STYLE_TAPES[sIdx];
+  const [cx,cy]= svgToViewport(svgX, svgY);
   const isDouble = picks.length === 2;
 
   const el = document.createElement("div");
   el.className = "card-stack " + (isDouble ? "double" : "single");
   el.dataset.key = k;
   el.dataset.stackIdx = i;
+  el.dataset.styleIdx = sIdx;
   el.setAttribute("role","group");
-  el.setAttribute("aria-label","Cards from "+nameOf(k));
+  el.setAttribute("aria-label","Stories from "+nameOf(k));
   el.style.cssText =
-    `left:${cx-95/2}px;top:${cy+22}px;` +
+    `left:${cx-CARD_W/2}px;top:${cy+22}px;` +
     `--rot:${sw.rot}deg;--swing:${sw.swing}deg;` +
     `--sway-dur:${sw.dur}s;--sway-delay:${sw.delay}s;` +
     `--pin:${pin[1]};--pin-hi:${pin[0]}`;
 
-  // Each card in the stack gets its own click handler for its story
   picks.forEach((s,si)=>{
-    const tape = TAPES[(i+si)%TAPES.length];
-    const tmp  = document.createElement("div");
-    tmp.innerHTML = smallCardHtml(s, tape);
+    // Second card in a pair gets the next style so they visually differ
+    const cardStyle = si === 0 ? sClass : CARD_STYLES[(sIdx+1)%4];
+    const cardTape  = si === 0 ? tape   : STYLE_TAPES[(sIdx+1)%4];
+    const tmp = document.createElement("div");
+    tmp.innerHTML = smallCardHtml(s, cardTape, cardStyle);
     const mc = tmp.firstChild;
-    mc.style.cursor = "pointer";
     mc.setAttribute("tabindex","0");
     mc.setAttribute("role","button");
-    mc.setAttribute("aria-label","Meet "+s.by.split(",")[0]+" from "+nameOf(k)+" — click to expand");
-    mc.addEventListener("click",  e=>{ e.stopPropagation(); openModal(k, si, i, pin); });
-    mc.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(k,si,i,pin); } });
+    mc.setAttribute("aria-label","Meet "+s.by.split(",")[0]+" · click to expand");
+    mc.addEventListener("click",  e=>{ e.stopPropagation(); openModal(k,si,i,sIdx,pin); });
+    mc.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(k,si,i,sIdx,pin); } });
     el.appendChild(mc);
   });
 
   document.body.appendChild(el);
-  stackData.push({el, svgX, svgY, key:k});
+  stackData.push({el, svgX, svgY, key, styleIdx:sIdx});
 }
 
-// ── Draw world + create stacks ──
+// ── Draw world map + place stacks ──
 if(typeof d3!=="undefined" && typeof topojson!=="undefined" && typeof PROGRAM!=="undefined"){
   d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world=>{
     const feats = topojson.feature(world,world.objects.countries).features;
@@ -360,8 +444,9 @@ if(typeof d3!=="undefined" && typeof topojson!=="undefined" && typeof PROGRAM!==
                 (PROGRAM[f.properties&&f.properties.name]?f.properties.name:null);
     });
 
-    // Country polygon fills (no click — cards handle that)
-    d3.select("#map").append("g").selectAll("path").data(feats).join("path")
+    // Map <g> — D3 zoom transforms this element
+    mapG = mapSvg.append("g");
+    mapG.selectAll("path").data(feats).join("path")
       .attr("d",     pathGen)
       .attr("class", f=>"country"+(f.__key?" served":""))
       .attr("data-key",f=>f.__key||"")
@@ -378,13 +463,11 @@ if(typeof d3!=="undefined" && typeof topojson!=="undefined" && typeof PROGRAM!==
       createStack(f.__key,sx,sy);
     });
 
-    // City spotlight stacks removed — country centroid cards only (keeps the map clean)
-
-    applyFilter();
+    repositionStacks();
   }).catch(err=>showBanner("Map data failed to load: "+err));
 }
 
-// Hover tooltip (on country polygon area)
+// Hover tooltip
 function quickTip(k,e){
   tip.innerHTML=`<b>${esc(nameOf(k))}</b>`;
   tip.classList.add("show");
@@ -396,20 +479,15 @@ function quickTip(k,e){
 }
 function hideTip(){ tip.classList.remove("show"); }
 
-function applyFilter(){
-  d3.selectAll("path.country").classed("dim",function(){
-    const k=this.dataset.key; return k&&!inRegion(k);
-  });
-  stackData.forEach(({el,key})=>{ el.style.display=inRegion(key)?"":"none"; });
-}
-
 // ── EXPANDED MODAL ──
-function openModal(k, storyIdx, stackIdx, pinColors){
+function openModal(k, storyIdx, stackIdx, styleIdx, pinColors){
   const stories = PROGRAM[k].stories||[];
-  const s = stories[storyIdx] || stories[0];
+  const s       = stories[storyIdx]||stories[0];
   if(!s) return;
-  const pin  = pinColors || PIN_COLORS[stackIdx%PIN_COLORS.length];
-  const tape = TAPES[(stackIdx+storyIdx)%TAPES.length];
+  const pin    = pinColors||PIN_COLORS[stackIdx%PIN_COLORS.length];
+  const sIdx   = styleIdx ?? (stackIdx%4);
+  const sClass = CARD_STYLES[sIdx];
+  const tape   = STYLE_TAPES[sIdx];
   const parts  = s.by.split(",").map(p=>p.trim());
   const name   = parts[0];
   const detail = parts.slice(1).join(", ");
@@ -419,7 +497,7 @@ function openModal(k, storyIdx, stackIdx, pinColors){
   popup.style.setProperty("--pin-hi", pin[0]);
 
   popup.innerHTML =
-    `<div class="modal-pin">` +
+    `<div class="modal-pin ${sClass}">` +
     `  <span class="washi ${tape}" aria-hidden="true"></span>` +
     `  <article class="frame">` +
     `    <button class="pop-close" id="popClose" aria-label="Close">×</button>` +
@@ -439,10 +517,8 @@ function openModal(k, storyIdx, stackIdx, pinColors){
   backdrop.classList.add("show");
   popup.classList.add("show");
 
-  // Center on screen (28px padding-top for pin area)
   const pw = Math.min(272, window.innerWidth*0.88);
-  const ph = 510;
-  const m  = 16;
+  const ph = 510; const m = 16;
   popup.style.left = (window.innerWidth/2  - pw/2) + "px";
   popup.style.top  = Math.max(m, window.innerHeight/2 - ph/2) + "px";
 }
