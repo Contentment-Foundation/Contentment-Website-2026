@@ -1,5 +1,6 @@
 // Shared program + story data for Foundation Reach map and Story Board prototypes.
 // Edit here once — both site/foundation-reach-map.html and site/story-board.html load this file.
+// Deploy: contentmentweb2.netlify.app/foundation-reach-map · /story-board (see netlify.toml)
 
 const PROGRAM = {
   "United States of America":{iso:"840",region:"Americas",since:2016,schools:142,educators:5100,students:180000,

@@ -9,7 +9,10 @@ on a cork-board canvas with a faint world map. Complements the Foundation Reach 
 
 Open **`site/story-board.html`** in a browser while online (map background loads from CDN).
 
-Deployed with `site/` on Netlify: `contentmentweb2.netlify.app/story-board`
+Deployed with `site/` on Netlify:
+
+- https://contentmentweb2.netlify.app/story-board
+- https://contentmentweb2.netlify.app/foundation-reach-map (shared `program-data.js`)
 
 ## Content & media feed
 

@@ -111,5 +111,10 @@ site/docs/                   ← deploy copy only
 
 Homepage prototype and dev notes live outside `docs/`:
 
-- [`../site/index.html`](../site/index.html) — current Phase 1 homepage  
-- [`../README.md`](../README.md) — local preview, deploy, design tokens
+- [`../site/index.html`](../site/index.html) — current Phase 1 homepage (Dave Kebo)
+- [`../site/story-board.html`](../site/story-board.html) — Story Board prototype (Somesh Bhardwaj) → `/story-board`
+- [`../site/foundation-reach-map.html`](../site/foundation-reach-map.html) — Foundation Reach Map (Somesh Bhardwaj) → `/foundation-reach-map`
+- [`../site/program-data.js`](../site/program-data.js) — shared story/country data for both prototypes
+- [`../prototypes/world-map/README.md`](../prototypes/world-map/README.md) — map stack (D3, TopoJSON), deploy URLs, `countries-110m.js`
+- [`../prototypes/story-board/FEED-GUIDE.md`](../prototypes/story-board/FEED-GUIDE.md) — how to add stories and media
+- [`../README.md`](../README.md) — local preview, deploy routes, design tokens

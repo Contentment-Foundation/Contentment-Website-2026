@@ -154,6 +154,16 @@ External review responses and stakeholder communications.
 
 **Now:** [`netlify.toml`](./netlify.toml) publishes `site/` and generates `site/docs/` on each build by copying `docs/*.html`. That folder is **not in git** — edit sources in `docs/` only.
 
+**Prototype routes (Netlify — `netlify.toml`):**
+
+| Path | Page |
+|------|------|
+| `/foundation-reach-map` | Foundation Reach Map (`site/foundation-reach-map.html`) |
+| `/story-board` | Story Board (`site/story-board.html`) |
+| `/story-board-feed-guide` | Story feed guide (`site/story-board-feed-guide.html`) |
+
+Same paths work as `/*.html` directly. Replicate these redirects in `vercel.json` at production cutover (FEAT-101).
+
 **Target:** Astro 4.x static build on Vercel — see [`docs/planning/TECHNICAL-ARCHITECTURE.md`](./docs/planning/TECHNICAL-ARCHITECTURE.md).
 
 ---
@@ -168,7 +178,14 @@ Contentment-Website-2026/
 │   ├── story-board.html           ← Story Board prototype (Somesh Bhardwaj)
 │   ├── foundation-reach-map.html  ← Foundation Reach Map prototype (Somesh Bhardwaj)
 │   ├── story-board-feed-guide.html ← Feed guide (Somesh Bhardwaj)
-│   └── assets/                    ← Images referenced by index.html (~2.8 MB)
+│   ├── program-data.js            ← Shared story/country data (map + Story Board)
+│   └── assets/
+│       ├── …                        ← Homepage images (~2.8 MB)
+│       └── countries-110m.js        ← Bundled world map TopoJSON (Foundation Reach Map)
+│
+├── prototypes/
+│   ├── world-map/README.md          ← Map prototype notes (D3, deploy, integration)
+│   └── story-board/                 ← Story Board dev guide (FEED-GUIDE.md)
 │
 ├── docs/
 │   ├── planning/                  ← CANONICAL — engineering source of truth
@@ -214,6 +231,17 @@ Contentment-Website-2026/
 cd site && python3 -m http.server 8080
 # open http://localhost:8080
 ```
+
+**Somesh prototypes (Story Board + Foundation Reach Map):**
+
+```bash
+cd site && python3 -m http.server 8080
+# http://localhost:8080/story-board
+# http://localhost:8080/foundation-reach-map
+# http://localhost:8080/story-board-feed-guide
+```
+
+Serve from `site/` (recommended). `file://` works for these pages if `program-data.js` and `assets/countries-110m.js` load via `<script>` tags; D3/topojson still load from CDN (internet required once). See [`prototypes/world-map/README.md`](./prototypes/world-map/README.md).
 
 **Homepage + project docs:**
 

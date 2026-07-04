@@ -43,8 +43,13 @@ REPOSITORY LAYOUT
     story-board.html            ← Story Board prototype (team review, not on homepage)
     story-board-feed-guide.html ← content feed guide for stories & media
     program-data.js             ← shared story/country data for map + story board
-    assets/                     ← images referenced by index.html (~2.8 MB)
-    README.txt     ← this file (mirror of ../README.md for local reference)
+    assets/                     ← images + bundled map data
+      (homepage images ~2.8 MB)
+      countries-110m.js         ← world map TopoJSON for Foundation Reach Map
+
+  prototypes/
+    world-map/README.md         ← map prototype: D3, deploy URLs, integration
+    story-board/                ← Story Board dev guide (FEED-GUIDE.md)
 
   contentment-home.html   ← single-file build at repo root (~3.8 MB)
                             All images embedded as base64. Use for email,
@@ -76,6 +81,17 @@ PREVIEW LOCALLY
     python3 -m http.server 8080
 
   Then open http://localhost:8080
+
+  Prototypes (Story Board, Foundation Reach Map, feed guide):
+
+    cd site && python3 -m http.server 8080
+
+    /story-board
+    /foundation-reach-map
+    /story-board-feed-guide
+
+  Serve from site/ (recommended). file:// works if countries-110m.js loads;
+  D3/topojson still need internet (CDN). See prototypes/world-map/README.md.
 
   Project docs — copy from docs/ first, then serve site/:
 
@@ -112,15 +128,10 @@ PAGE SECTIONS (anchor links)
 ASSETS (assets/)
 ----------------
 
-  img01_3b9ca36077.png   Logo (nav + footer)
-  img02_f3c7dabda3.jpg   Hero (desktop)
-  img03_7bbd154b69.jpg   Hero (mobile)
-  img04_62faa64049.jpg   Why section
-  kenya_band.jpg         Kenya principal quote band
-  img05–img08            Community circle photos
-  img09_d4a3165ce3.jpg   Four Pillars background
-  img10_526e7678c7.jpg   Homeroom section
-  img11–img13            "More ways in" door cards
+  Homepage images (img01–img13, kenya_band.jpg, etc.) — see table in ../README.md
+
+  countries-110m.js   World map boundaries for foundation-reach-map.html
+                      (window.WORLD_ATLAS — bundled TopoJSON, not fetched at runtime)
 
 
 DESIGN TOKENS

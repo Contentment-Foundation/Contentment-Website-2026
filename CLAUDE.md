@@ -25,17 +25,25 @@ focused on teacher and student wellbeing. This repo holds the **Phase 1 homepage
 
 ```
 site/                    Phase-1 build (what ships now)
-  index.html             ← PRIMARY editable homepage
-  assets/                images referenced by index.html
+  index.html             ← PRIMARY editable homepage (Dave Kebo)
+  foundation-reach-map.html   ← map prototype (Somesh Bhardwaj)
+  story-board.html            ← Story Board prototype (Somesh Bhardwaj)
+  story-board-feed-guide.html ← feed guide (Somesh Bhardwaj)
+  program-data.js             ← shared stories/countries (map + Story Board)
+  assets/                images + countries-110m.js (map TopoJSON)
   docs/                  GENERATED at build time, gitignored — never edit here
+prototypes/
+  world-map/README.md    map prototype: D3, deploy, integration
+  story-board/           Story Board dev notes (FEED-GUIDE.md)
 contentment-home.html    portable single-file build (regenerate from site/index.html)
 docs/                    planning + content (source of truth for the rebuild)
-  planning/              PRD, TECHNICAL-ARCHITECTURE, FRONTEND-SPEC, ACCESSIBILITY, FEATURE-TICKETS, DECISIONS, SECURITY
+  planning/              PRD, TECHNICAL-ARCHITECTURE, FRONTEND-SPEC, ACCESSIBILITY, FEATURE-TICKETS, DECISIONS, SECURITY, TRACKER
   research/              MESSAGING-AND-COPY, VOICE-AND-TONE, WEBSITE-ARCHITECTURE, EVIDENCE
-  briefs/               stakeholder summaries (.md/.html/.docx) — NOT authoritative specs
+  briefs/               stakeholder summaries (.md/.html) — NOT authoritative specs
+  correspondence/        external review responses (e.g. ANIK-REVIEW-RESPONSE.md)
   index.html, *-BRIEF.html   sources for the /docs/* routes
 scripts/copy-docs.sh     copies docs/*.html → site/docs/ for local preview
-netlify.toml             Netlify build config
+netlify.toml             Netlify build config (+ /foundation-reach-map, /story-board redirects)
 ```
 
 ## Source-of-truth hierarchy
@@ -62,6 +70,8 @@ Assume **no UI/UX changes beyond the approved prototype** unless a ticket says o
 | PR previews | Vercel | `*.vercel.app` |
 
 Netlify publishes `site/` and generates `site/docs/` on each build from `docs/*.html`.
+
+Prototype routes (also in `netlify.toml`): `/foundation-reach-map`, `/story-board`, `/story-board-feed-guide`.
 
 ## Gotchas — read before editing
 
@@ -95,13 +105,11 @@ subtle parallax.
 - Donation/CTA links are `href="#"` — wire to the real Keela URL when available.
 - Newsletter form is `onsubmit="return false"` — no backend yet.
 - Mobile menu button only scrolls to nav; no full drawer.
-- **Interactive world map section (in progress):** a flat D3 + TopoJSON world map with hoverable/
-  clickable served countries and city pins that open a popup (schools, educators, students, impact,
-  and educator/student stories with an image slider). Team review prototype:
-  **`site/foundation-reach-map.html`** (also `/foundation-reach-map` on Netlify). Integration notes
-  in `prototypes/world-map/README.md`. Once approved, embed as a section in `site/index.html` and
-  restyle to site design tokens. Data lives in a `PROGRAM` object + `CITIES` array; map libs load
-  from CDN.
+- **Foundation Reach Map (in progress):** flat D3 + TopoJSON world map with pin cards per served country.
+  Prototype: **`site/foundation-reach-map.html`** → `/foundation-reach-map` on Netlify.
+  Stack: D3 + topojson-client (CDN), `assets/countries-110m.js` (bundled map), `program-data.js` (stories).
+  Notes: [`prototypes/world-map/README.md`](prototypes/world-map/README.md). After approval, embed on homepage and restyle to site tokens.
+- **Story Board (in progress):** **`site/story-board.html`** → `/story-board`. Same `program-data.js`.
 
 ## Standing instructions for AI sessions
 

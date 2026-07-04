@@ -194,8 +194,8 @@ For best results, set **both** `video` and `img`:
    ```bash
    cd site && python3 -m http.server 8080
    ```
-   Open `http://localhost:8080/story-board.html` and `foundation-reach-map.html`.
-7. **Deploy** — push to the repo; Netlify rebuilds automatically.
+   Open http://localhost:8080/story-board and http://localhost:8080/foundation-reach-map (clean URLs match Netlify).
+7. **Deploy** — push to `main`; Netlify rebuilds. Live: `/story-board`, `/foundation-reach-map` on contentmentweb2.netlify.app.
 
 ---
 

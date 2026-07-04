@@ -69,19 +69,21 @@
     0%,100% { transform:rotate(var(--rot,0deg)); }
     50%      { transform:rotate(calc(var(--rot,0deg) + var(--swing,3deg))); }
   }
-  @media (prefers-reduced-motion:reduce){ .card-stack { animation:none !important; } }
+  @media (prefers-reduced-motion:reduce){ .card-stack.visible { animation:none !important; } }
 
   /* ─── CARD STACK — pinned on the map ─── */
   .card-stack {
     position:fixed; z-index:20; width:72px;
     transform-origin:50% 0;
-    animation:pendulum var(--sway-dur,2.4s) ease-in-out infinite var(--sway-delay,0s);
     cursor:pointer;
-    /* hidden until user zooms in */
-    opacity:0; pointer-events:none;
-    transition:opacity .3s;
+    visibility:hidden;
+    pointer-events:none;
   }
-  .card-stack.visible { opacity:1; pointer-events:auto; }
+  .card-stack.visible {
+    visibility:visible;
+    pointer-events:auto;
+    animation:pendulum var(--sway-dur,2.4s) ease-in-out infinite var(--sway-delay,0s);
+  }
   .card-stack:hover { z-index:28; animation-play-state:paused; }
   .card-stack:focus { outline:none; }
   .card-stack:focus-visible { outline:2px solid rgba(255,255,255,.7); outline-offset:3px; }
@@ -245,7 +247,7 @@
       <span><i style="background:#7ec98f"></i>Program active</span>
       <span><i style="background:#6b6ba3"></i>Not yet served</span>
     </div>
-    <div class="zoom-hint" id="zoomHint">Scroll or pinch to zoom · cards appear when zoomed in</div>
+    <div class="zoom-hint hidden" id="zoomHint">Scroll or pinch to zoom · click a card to read</div>
     <div class="zoom-controls">
       <button id="btnZoomIn"    aria-label="Zoom in">+</button>
       <button id="btnZoomOut"   aria-label="Zoom out">−</button>
@@ -261,6 +263,7 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script src="program-data.js"></script>
+<script src="assets/countries-110m.js"></script>
 <script>
 
 const REGIONS    = ["All","Americas","Africa","Asia","Europe","Oceania"];
@@ -281,11 +284,11 @@ const SWAYS = [
   {rot:-2.1,swing:4.0,dur:2.3,delay:1.0}, {rot: 1.7,swing:3.9,dur:2.5,delay:.20}
 ];
 
-const ZOOM_SHOW_AT = 1.25; // cards appear above this zoom level
+const ZOOM_SHOW_AT = 1; // show pin cards at default zoom (was 1.25 — too easy to miss on first load)
 
 let activeRegion = "All";
 let currentZoom  = 1;
-let hintGone     = false;
+let hintGone     = true; // hint hidden — cards visible at default zoom
 const stackData  = []; // { el, svgX, svgY, key, styleIdx }
 let stackSeq     = 0;
 
@@ -306,6 +309,20 @@ function showBanner(msg){ const b=document.getElementById("banner"); b.textConte
 
 if(typeof d3==="undefined"||typeof topojson==="undefined"){ showBanner("Libraries didn't load — internet connection needed."); }
 else if(typeof PROGRAM==="undefined"){ showBanner("program-data.js not found."); }
+else if(typeof WORLD_ATLAS==="undefined"){ showBanner("assets/countries-110m.js not found — keep it next to this HTML in site/assets/."); }
+
+// Build a local ISO → key lookup that handles zero-padded codes.
+// program-data.js stores iso as "036" (Australia) but the world atlas gives
+// numeric id 36, so String(36)="36" never matched "036". Normalise both ways.
+const isoLookup = {};
+if(typeof PROGRAM !== "undefined"){
+  Object.keys(PROGRAM).forEach(k=>{
+    const iso = PROGRAM[k]?.iso;
+    if(!iso) return;
+    isoLookup[iso]                        = k; // "036"
+    isoLookup[String(parseInt(iso, 10))]  = k; // "36"
+  });
+}
 
 // ── D3 ZOOM ──
 const zoom = d3.zoom()
@@ -326,18 +343,17 @@ document.getElementById("btnZoomIn").onclick    = () => mapSvg.transition().dura
 document.getElementById("btnZoomOut").onclick   = () => mapSvg.transition().duration(300).call(zoom.scaleBy, 1/1.9);
 document.getElementById("btnZoomReset").onclick = () => mapSvg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
 
-// ── Convert SVG viewBox coords → screen viewport coords via current transform ──
+// ── Convert SVG viewBox coords → screen pixels (works on file:// — no getScreenCTM) ──
 function svgToViewport(sx, sy){
-  const gEl = mapG && mapG.node();
-  if(!gEl) { // fallback before mapG is set
-    const mr = mapWrap.getBoundingClientRect();
-    const sc = Math.min(mr.width/W, mr.height/H);
-    return [mr.left+(mr.width -W*sc)/2+sx*sc, mr.top+(mr.height-H*sc)/2+sy*sc];
-  }
-  const pt  = document.getElementById("map").createSVGPoint();
-  pt.x = sx; pt.y = sy;
-  const sc  = pt.matrixTransform(gEl.getScreenCTM());
-  return [sc.x, sc.y];
+  const mr = mapWrap.getBoundingClientRect();
+  const base = Math.min(mr.width / W, mr.height / H);
+  const t = d3.zoomTransform(mapSvg.node());
+  const vx = sx * t.k + t.x;
+  const vy = sy * t.k + t.y;
+  return [
+    mr.left + (mr.width  - W * base) / 2 + vx * base,
+    mr.top  + (mr.height - H * base) / 2 + vy * base
+  ];
 }
 
 function repositionStacks(){
@@ -432,45 +448,51 @@ function createStack(k, svgX, svgY){
   });
 
   document.body.appendChild(el);
-  stackData.push({el, svgX, svgY, key, styleIdx:sIdx});
+  stackData.push({el, svgX, svgY, key:k, styleIdx:sIdx});
+}
+
+// Map TopoJSON is loaded via <script src="assets/countries-110m.js"> (not d3.json).
+// Browsers block fetch/XHR from file:// pages to local files — script tags work everywhere.
+
+function drawMap(world){
+  const feats = topojson.feature(world,world.objects.countries).features;
+  feats.forEach(f=>{
+    f.__key = isoLookup[String(f.id)] ||
+              (PROGRAM[f.properties&&f.properties.name]?f.properties.name:null);
+  });
+
+  // Map <g> — D3 zoom transforms this element
+  mapG = mapSvg.append("g");
+  mapG.selectAll("path").data(feats).join("path")
+    .attr("d",     pathGen)
+    .attr("class", f=>"country"+(f.__key?" served":""))
+    .attr("data-key",f=>f.__key||"")
+    .on("mousemove",  (e,f)=>{ if(f.__key&&inRegion(f.__key)) quickTip(f.__key,e); })
+    .on("mouseleave", hideTip);
+
+  // Manual position overrides: move cards off crowded centroids for visual spacing
+  const OVERRIDES = {
+    "India":  [612, 210], // shift northeast toward Bhutan / Himalayan foothills
+    "Russia": [760, 118], // remote eastern Siberia rather than central Russia
+  };
+
+  // Country centroid stacks
+  const used = new Set();
+  feats.forEach(f=>{
+    if(!f.__key||used.has(f.__key)||!PROGRAM[f.__key]?.stories?.length) return;
+    let [sx,sy]=OVERRIDES[f.__key]||pathGen.centroid(f);
+    if(isNaN(sx)||isNaN(sy)) return;
+    used.add(f.__key);
+    createStack(f.__key,sx,sy);
+  });
+
+  repositionStacks();
 }
 
 // ── Draw world map + place stacks ──
-if(typeof d3!=="undefined" && typeof topojson!=="undefined" && typeof PROGRAM!=="undefined"){
-  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world=>{
-    const feats = topojson.feature(world,world.objects.countries).features;
-    feats.forEach(f=>{
-      f.__key = isoToKey[String(f.id)] ||
-                (PROGRAM[f.properties&&f.properties.name]?f.properties.name:null);
-    });
-
-    // Map <g> — D3 zoom transforms this element
-    mapG = mapSvg.append("g");
-    mapG.selectAll("path").data(feats).join("path")
-      .attr("d",     pathGen)
-      .attr("class", f=>"country"+(f.__key?" served":""))
-      .attr("data-key",f=>f.__key||"")
-      .on("mousemove",  (e,f)=>{ if(f.__key&&inRegion(f.__key)) quickTip(f.__key,e); })
-      .on("mouseleave", hideTip);
-
-    // Manual position overrides: move cards off crowded centroids for visual spacing
-    const OVERRIDES = {
-      "India":  [612, 210], // shift northeast toward Bhutan / Himalayan foothills
-      "Russia": [760, 118], // remote eastern Siberia rather than central Russia
-    };
-
-    // Country centroid stacks
-    const used = new Set();
-    feats.forEach(f=>{
-      if(!f.__key||used.has(f.__key)||!PROGRAM[f.__key]?.stories?.length) return;
-      let [sx,sy]=OVERRIDES[f.__key]||pathGen.centroid(f);
-      if(isNaN(sx)||isNaN(sy)) return;
-      used.add(f.__key);
-      createStack(f.__key,sx,sy);
-    });
-
-    repositionStacks();
-  }).catch(err=>showBanner("Map data failed to load: "+err));
+if(typeof d3!=="undefined" && typeof topojson!=="undefined" && typeof PROGRAM!=="undefined" && typeof WORLD_ATLAS!=="undefined"){
+  try { drawMap(WORLD_ATLAS); }
+  catch(err){ showBanner("Map failed to render: "+err); }
 }
 
 // Hover tooltip
