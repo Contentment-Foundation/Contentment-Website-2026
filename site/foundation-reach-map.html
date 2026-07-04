@@ -11,8 +11,8 @@
     --served:#7ec98f; --served-hi:#a5e0b2; --served-dim:#5c8a6a;
     --pin:#8be0a0; --pin-stroke:#ffffff;
     --text:#eef0f8; --muted:#b9bbd6;
-    --card:#ffffff; --ink:#2a2a4a;
-    --green:#4FA98C; --teal:#1FAFC0;
+    --card:#fff; --ink:#2a2a4a;
+    --green:#4FA98C;
   }
   * { box-sizing:border-box; }
   html,body { margin:0; background:var(--bg); color:var(--text);
@@ -29,8 +29,7 @@
   /* header */
   header { padding:12px 22px; border-bottom:1px solid rgba(255,255,255,.08);
     display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
-  .header-label { white-space:nowrap; }
-  .header-label h1 { font-size:16px; margin:0 0 1px; letter-spacing:.3px; }
+  .header-label h1 { font-size:16px; margin:0 0 1px; letter-spacing:.3px; white-space:nowrap; }
   .header-label p  { font-size:11px; color:var(--muted); margin:0; }
   .filters { display:flex; gap:6px; flex-wrap:wrap; margin-left:auto; }
   .chip { border:1px solid rgba(255,255,255,.22); background:transparent; color:var(--text);
@@ -41,22 +40,22 @@
   /* map */
   #mapWrap { position:relative; background:var(--map-bg); overflow:hidden; }
   svg { display:block; width:100%; height:100%; outline:none; }
-  .country { fill:var(--country); stroke:var(--country-stroke); stroke-width:.4px; outline:none; }
-  .country:focus         { outline:none; }
+  .country        { fill:var(--country); stroke:var(--country-stroke); stroke-width:.4px; outline:none; }
+  .country:focus  { outline:none; }
   .country:focus-visible { outline:2px solid rgba(255,255,255,.75); outline-offset:2px; }
-  .country.served        { fill:var(--served); cursor:pointer; transition:fill .15s; }
-  .country.served:hover  { fill:var(--served-hi); }
-  .country.active        { fill:var(--served-hi); stroke:#fff; stroke-width:1px; }
-  .country.dim           { fill:var(--served-dim); opacity:.45; cursor:default; }
-  .pin                   { fill:var(--pin); stroke:var(--pin-stroke); stroke-width:1.4px; cursor:pointer; outline:none; }
-  .pin:focus             { outline:none; }
-  .pin:focus-visible     { outline:2px solid rgba(255,255,255,.75); outline-offset:3px; }
-  .pin-pulse             { fill:var(--pin); opacity:.5; pointer-events:none; }
-  .pin-label             { fill:var(--text); font-size:9px; font-weight:700; pointer-events:none;
+  .country.served { fill:var(--served); cursor:pointer; transition:fill .15s; }
+  .country.served:hover { fill:var(--served-hi); }
+  .country.active { fill:var(--served-hi); stroke:#fff; stroke-width:1px; }
+  .country.dim    { fill:var(--served-dim); opacity:.45; cursor:default; }
+  .pin            { fill:var(--pin); stroke:var(--pin-stroke); stroke-width:1.4px; cursor:pointer; outline:none; }
+  .pin:focus      { outline:none; }
+  .pin:focus-visible { outline:2px solid rgba(255,255,255,.75); outline-offset:3px; }
+  .pin-pulse      { fill:var(--pin); opacity:.5; pointer-events:none; }
+  .pin-label      { fill:var(--text); font-size:9px; font-weight:700; pointer-events:none;
     text-transform:uppercase; letter-spacing:.5px; }
 
   .legend { position:absolute; left:16px; bottom:14px; display:flex; gap:16px;
-    background:rgba(0,0,0,.25); padding:8px 14px; border-radius:8px; font-size:11px; color:var(--text); }
+    background:rgba(0,0,0,.25); padding:8px 14px; border-radius:8px; font-size:11px; }
   .legend i { display:inline-block; width:10px; height:10px; border-radius:3px;
     margin-right:5px; vertical-align:-1px; }
 
@@ -72,53 +71,81 @@
     background:#ffdd57; color:#4a3b00; padding:10px 16px; border-radius:8px; font-size:13px;
     z-index:60; max-width:80%; box-shadow:0 6px 20px rgba(0,0,0,.3); }
 
-  /* --- EDUCATOR SPOTLIGHT POPUP --- */
-  #backdrop { position:fixed; inset:0; background:rgba(10,10,30,.5); z-index:40;
-    opacity:0; pointer-events:none; transition:opacity .18s; }
+  /* ── BACKDROP ── */
+  #backdrop { position:fixed; inset:0; background:rgba(10,10,30,.28); z-index:40;
+    opacity:0; pointer-events:none; transition:opacity .2s; }
   #backdrop.show { opacity:1; pointer-events:auto; }
 
-  #popup { position:fixed; z-index:50; width:320px; max-width:90vw;
-    background:var(--card); color:var(--ink); border-radius:18px;
-    box-shadow:0 28px 64px rgba(0,0,0,.52);
-    opacity:0; transform:scale(.94) translateY(10px); pointer-events:none;
-    transition:opacity .18s, transform .22s cubic-bezier(.34,1.3,.64,1);
-    overflow:hidden; }
+  /* ── HANGING PIN CARD POPUP ── */
+  #popup { position:fixed; z-index:50; padding-top:28px;
+    opacity:0; transform:scale(.9) translateY(12px); pointer-events:none;
+    transition:opacity .2s, transform .24s cubic-bezier(.34,1.25,.64,1); }
   #popup.show { opacity:1; transform:scale(1) translateY(0); pointer-events:auto; }
 
-  .pop-close { position:absolute; top:10px; right:10px; z-index:5;
-    width:28px; height:28px; border-radius:50%; border:none;
-    background:rgba(0,0,0,.42); color:#fff; font-size:16px; line-height:28px;
-    text-align:center; cursor:pointer; transition:background .12s; }
-  .pop-close:hover { background:rgba(0,0,0,.68); }
+  /* close button floats top-right of the card group */
+  .pop-close { position:absolute; top:4px; right:-4px; z-index:10;
+    width:26px; height:26px; border-radius:50%; border:none;
+    background:rgba(20,20,45,.65); color:#fff; font-size:15px;
+    line-height:26px; text-align:center; cursor:pointer; transition:background .12s; }
+  .pop-close:hover { background:rgba(20,20,45,.9); }
 
-  .pop-photo { width:100%; height:210px; object-fit:cover; display:block;
-    background:linear-gradient(135deg,#c8d6e2,#9ab5c8); }
+  /* card group — side by side */
+  .pin-cards { display:flex; gap:16px; align-items:flex-start; }
 
-  .pop-body { padding:18px 20px 24px; }
-
-  .pop-country { font-size:10px; font-weight:700; text-transform:uppercase;
-    letter-spacing:.7px; color:var(--green); margin:0 0 10px; }
-
-  .pop-quote { font-style:italic; font-size:15px; line-height:1.55; color:var(--ink);
-    margin:0 0 16px; position:relative; padding:0 4px; }
-  .pop-quote::before { content:'“'; font-style:normal; font-family:Georgia,serif;
-    font-size:32px; line-height:0; vertical-align:-10px; color:var(--green);
-    margin-right:2px; opacity:.75; }
-  .pop-quote::after  { content:'”'; font-style:normal; font-family:Georgia,serif;
-    font-size:32px; line-height:0; vertical-align:-10px; color:var(--green);
-    margin-left:2px; opacity:.75; }
-
-  .pop-divider { height:1px; background:rgba(2,78,112,.08); margin:0 0 14px; }
-
-  .pop-by   { font-weight:700; font-size:13.5px; color:var(--ink); margin:0 0 2px; }
-  .pop-role { font-size:12px; color:#777; margin:0; line-height:1.4; }
-
-  @media (max-width:540px){
-    #popup { width:calc(100vw - 24px); }
-    .pop-photo { height:170px; }
+  /* ── pin card (ported from story-board) ── */
+  @keyframes pendulum {
+    0%,100% { transform:rotate(var(--rot,0deg)); }
+    50%      { transform:rotate(calc(var(--rot,0deg) + var(--swing,1.8deg))); }
   }
-  @media (prefers-reduced-motion: reduce){
-    #popup, #backdrop { transition:none !important; }
+  @media (prefers-reduced-motion:reduce){ @keyframes pendulum{ 0%,100%,50%{ transform:rotate(0deg); } } }
+
+  .frame-wrap {
+    position:relative; width:210px; transform-origin:50% 0;
+    animation:pendulum var(--sway-dur,4.2s) ease-in-out infinite;
+    animation-delay:var(--sway-delay,0s);
+  }
+  /* pin dot */
+  .frame-wrap::after {
+    content:""; position:absolute; top:-22px; left:50%; width:12px; height:12px; border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, var(--pin-hi,#ff8a8a), var(--pin,#e74c3c));
+    box-shadow:0 2px 4px rgba(2,78,112,.32), inset 0 -2px 0 rgba(0,0,0,.14);
+    transform:translateX(-50%); pointer-events:none; z-index:2;
+  }
+  /* thread */
+  .frame-wrap::before {
+    content:""; position:absolute; top:-14px; left:50%; width:2px; height:14px;
+    background:linear-gradient(to top, rgba(80,60,40,.38), rgba(80,60,40,.1));
+    transform:translateX(-50%); pointer-events:none; z-index:1;
+  }
+  /* washi tape */
+  .washi { position:absolute; height:16px; top:-8px; left:50%; transform:translateX(-50%);
+    width:54px; z-index:3; pointer-events:none; border-radius:2px; opacity:.92; }
+  .t0 { background:rgba(255,190,200,.82); }
+  .t1 { background:rgba(31,175,192,.52); }
+  .t2 { background:rgba(255,220,130,.82); }
+  .t3 { background:rgba(200,220,255,.78); }
+
+  /* card face */
+  .frame { position:relative; width:100%; background:var(--card);
+    box-shadow:0 12px 36px rgba(2,78,112,.22), 0 2px 6px rgba(0,0,0,.1);
+    border:1px solid rgba(2,78,112,.07); border-radius:3px; overflow:hidden; }
+  .frame .media { width:100%; aspect-ratio:4/3; overflow:hidden; background:#d8e4ea; }
+  .frame .media img { width:100%; height:100%; object-fit:cover; display:block; }
+  .frame .body { padding:11px 13px 15px; }
+  .frame .badge { display:inline-block; font-size:9px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.5px; padding:2px 7px; border-radius:999px; margin-bottom:5px; }
+  .frame .badge.educator { background:#e3f1ff; color:#1c6fb8; }
+  .frame .badge.student  { background:#eafbe9; color:#2a7d47; }
+  .frame .loc  { font-size:9.5px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.5px; color:var(--green); margin:0 0 5px; }
+  .frame .quote { font-style:italic; font-size:11.5px; line-height:1.45; color:var(--ink);
+    margin:0 0 8px; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+  .frame .by   { font-size:10.5px; color:#666; font-weight:600; line-height:1.35; }
+
+  /* mobile */
+  @media (max-width:520px){
+    .frame-wrap { width:175px; }
+    .pin-cards  { gap:10px; }
   }
 </style>
 </head>
@@ -155,26 +182,31 @@
 <script src="program-data.js"></script>
 <script>
 
-const REGIONS = ["All","Americas","Africa","Asia","Europe","Oceania"];
+const REGIONS  = ["All","Americas","Africa","Asia","Europe","Oceania"];
+const PIN_COLORS = [
+  ["#ff8a8a","#e74c3c"],["#7ec8e8","#3498db"],["#9be7b8","#4FA98C"],
+  ["#ffd07a","#f39c12"],["#d7b0ff","#9b59b6"],["#ffb8b8","#e67e80"]
+];
+const TAPES = ["t0","t1","t2","t3"];
+
 let activeRegion = "All", selected = null;
 
-const svg       = d3.select("#map");
+const svg      = d3.select("#map");
 const W = 960, H = 500;
-const projection = d3.geoNaturalEarth1().scale(178).translate([W/2, H/2+8]);
-const path       = d3.geoPath(projection);
-const tip        = document.getElementById("tip");
-const mapWrap    = document.getElementById("mapWrap");
-const popup      = document.getElementById("popup");
-const backdrop   = document.getElementById("backdrop");
+const proj     = d3.geoNaturalEarth1().scale(178).translate([W/2, H/2+8]);
+const pathGen  = d3.geoPath(proj);
+const tip      = document.getElementById("tip");
+const mapWrap  = document.getElementById("mapWrap");
+const popup    = document.getElementById("popup");
+const backdrop = document.getElementById("backdrop");
 
 const nameOf   = k => PROGRAM[k].label || k;
 const inRegion = k => activeRegion === "All" || PROGRAM[k].region === activeRegion;
-
-function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function showBanner(msg){ const b=document.getElementById("banner"); b.textContent=msg; b.style.display="block"; }
 
 if(typeof d3==="undefined"||typeof topojson==="undefined"){
-  showBanner("Libraries didn't load — this page needs an internet connection (D3 + TopoJSON load from CDN).");
+  showBanner("Libraries didn't load — this page needs an internet connection.");
 } else if(typeof PROGRAM==="undefined"){
   showBanner("program-data.js didn't load — make sure it's in the same folder as this file.");
 }
@@ -189,6 +221,7 @@ REGIONS.forEach(r => {
     activeRegion = r;
     [...fWrap.children].forEach(c => c.classList.toggle("active", c === b));
     applyFilter();
+    if(selected && !inRegion(selected)) closePopup();
   };
   fWrap.appendChild(b);
 });
@@ -203,37 +236,37 @@ if(typeof d3 !== "undefined" && typeof topojson !== "undefined" && typeof PROGRA
     });
 
     svg.append("g").selectAll("path").data(feats).join("path")
-      .attr("d", path)
-      .attr("class", f => "country" + (f.__key ? " served" : ""))
-      .attr("data-key", f => f.__key || "")
+      .attr("d",         pathGen)
+      .attr("class",     f => "country" + (f.__key ? " served" : ""))
+      .attr("data-key",  f => f.__key || "")
       .attr("tabindex",  f => f.__key ? 0 : null)
       .attr("role",      f => f.__key ? "button" : null)
       .attr("aria-label",f => f.__key ? "Meet an educator from " + nameOf(f.__key) : null)
-      .on("mousemove",  (e,f) => { if(f.__key && inRegion(f.__key)) quickTip(f.__key, e); })
-      .on("mouseleave", hideTip)
-      .on("click",      (e,f) => { if(f.__key && inRegion(f.__key)){ openPopup(f.__key, e); e.stopPropagation(); } })
-      .on("keydown",    (e,f) => { if(f.__key && inRegion(f.__key) && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(f.__key, null); } });
+      .on("mousemove",   (e,f) => { if(f.__key && inRegion(f.__key)) quickTip(f.__key, e); })
+      .on("mouseleave",  hideTip)
+      .on("click",       (e,f) => { if(f.__key && inRegion(f.__key)){ openPopup(f.__key, e); e.stopPropagation(); } })
+      .on("keydown",     (e,f) => { if(f.__key && inRegion(f.__key) && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(f.__key, null); } });
 
-    // City pins
+    // City spotlight pins
     const pins = svg.append("g").selectAll("g").data(CITIES).join("g")
-      .attr("transform", d => `translate(${projection(d.coords)})`);
+      .attr("transform", d => `translate(${proj(d.coords)})`);
     const pulse = pins.append("circle").attr("class","pin-pulse").attr("r",4);
     pulse.append("animate").attr("attributeName","r").attr("values","4;12;4").attr("dur","2.4s").attr("repeatCount","indefinite");
     pulse.append("animate").attr("attributeName","opacity").attr("values",".5;0;.5").attr("dur","2.4s").attr("repeatCount","indefinite");
     pins.append("circle").attr("class","pin").attr("r",4)
       .attr("tabindex",0).attr("role","button")
       .attr("aria-label", d => "Meet an educator from " + nameOf(d.key))
-      .on("mousemove",  (e,d) => { if(inRegion(d.key)) quickTip(d.key, e); })
-      .on("mouseleave", hideTip)
-      .on("click",      (e,d) => { if(inRegion(d.key)){ openPopup(d.key, e); e.stopPropagation(); } })
-      .on("keydown",    (e,d) => { if(inRegion(d.key) && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(d.key, null); } });
+      .on("mousemove",   (e,d) => { if(inRegion(d.key)) quickTip(d.key, e); })
+      .on("mouseleave",  hideTip)
+      .on("click",       (e,d) => { if(inRegion(d.key)){ openPopup(d.key, e); e.stopPropagation(); } })
+      .on("keydown",     (e,d) => { if(inRegion(d.key) && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); openPopup(d.key, null); } });
     pins.append("text").attr("class","pin-label").attr("x",8).attr("y",3).text(d => d.name);
 
     applyFilter();
   }).catch(err => showBanner("Could not load map data from CDN: " + err));
 }
 
-// Hover tooltip — just country + educator first name
+// Hover tooltip — country + first name only
 function quickTip(k, e){
   const s = PROGRAM[k].stories && PROGRAM[k].stories[0];
   const firstName = s ? s.by.split(",")[0].trim() : "an educator";
@@ -244,8 +277,7 @@ function quickTip(k, e){
   let y = e.clientY - r.top  + 14;
   if(x + tip.offsetWidth  > r.width)  x = e.clientX - r.left - tip.offsetWidth  - 14;
   if(y + tip.offsetHeight > r.height) y = e.clientY - r.top  - tip.offsetHeight - 14;
-  tip.style.left = x + "px";
-  tip.style.top  = y + "px";
+  tip.style.left = x + "px"; tip.style.top = y + "px";
 }
 function hideTip(){ tip.classList.remove("show"); }
 
@@ -255,42 +287,74 @@ function applyFilter(){
     .classed("active", function(){ return this.dataset.key === selected; });
 }
 
-// ---------- EDUCATOR SPOTLIGHT POPUP ----------
+// ── HANGING PIN CARD POPUP ──
+function pickStories(k){
+  const all = PROGRAM[k].stories || [];
+  if(!all.length) return [];
+  // Prefer 1 educator + 1 student — feels like a pairing
+  const edu = all.find(s => s.role === "educator");
+  const stu = all.find(s => s.role === "student");
+  if(edu && stu) return [edu, stu];
+  // Fall back to first 2 (or just 1)
+  return all.slice(0, 2);
+}
+
+function cardHtml(s, idx, k){
+  const pin   = PIN_COLORS[idx % PIN_COLORS.length];
+  const tape  = TAPES[idx % TAPES.length];
+  const rot   = (idx === 0 ? -2 : 1.5) + "deg";
+  const swing = (idx === 0 ? 1.8 : 2.2) + "deg";
+  const dur   = (idx === 0 ? 4.2 : 3.8) + "s";
+  const delay = (idx === 0 ? 0   : 0.5) + "s";
+  const parts = s.by.split(",").map(p => p.trim());
+  const name  = parts[0];
+  const detail= parts.slice(1).join(", ");
+  return `<div class="frame-wrap" style="
+      --rot:${rot};--swing:${swing};--sway-dur:${dur};--sway-delay:${delay};
+      --pin:${pin[1]};--pin-hi:${pin[0]}">
+    <span class="washi ${tape}" aria-hidden="true"></span>
+    <article class="frame">
+      <div class="media">
+        <img src="${esc(s.img)}" alt="${esc(s.cap || name)}" loading="lazy" />
+      </div>
+      <div class="body">
+        <div class="loc">${esc(nameOf(k))}</div>
+        <span class="badge ${s.role}">${s.role === "student" ? "Student" : "Educator"}</span>
+        <p class="quote">"${esc(s.q)}"</p>
+        <div class="by">${esc(name)}${detail ? `<br><span style="font-weight:400;color:#888">${esc(detail)}</span>` : ""}</div>
+      </div>
+    </article>
+  </div>`;
+}
+
 function openPopup(k, evt){
   selected = k;
   d3.selectAll("path.country").classed("active", function(){ return this.dataset.key === k; });
 
-  const s = PROGRAM[k].stories && PROGRAM[k].stories[0];
-  if(!s) return;
+  const picks = pickStories(k);
+  if(!picks.length) return;
 
-  // Split "Maria S., Principal, Ohio" → name + role+location detail
-  const parts   = s.by.split(",").map(p => p.trim());
-  const byName   = parts[0];
-  const byDetail = parts.slice(1).join(", ");
-
-  popup.innerHTML = `
-    <button class="pop-close" id="popClose" aria-label="Close">×</button>
-    <img class="pop-photo" src="${esc(s.img)}" alt="${esc(s.cap || byName)}" />
-    <div class="pop-body">
-      <div class="pop-country">${esc(nameOf(k))}</div>
-      <p class="pop-quote">${esc(s.q)}</p>
-      <div class="pop-divider"></div>
-      <div class="pop-by">${esc(byName)}</div>
-      ${byDetail ? `<p class="pop-role">${esc(byDetail)}</p>` : ""}
-    </div>`;
+  popup.innerHTML =
+    `<button class="pop-close" id="popClose" aria-label="Close">×</button>` +
+    `<div class="pin-cards">` +
+    picks.map((s, i) => cardHtml(s, i, k)).join("") +
+    `</div>`;
 
   document.getElementById("popClose").onclick = closePopup;
   backdrop.classList.add("show");
   popup.classList.add("show");
-  positionPopup(evt);
+  positionPopup(evt, picks.length);
 }
 
-function positionPopup(evt){
-  const pw = popup.offsetWidth  || 320;
-  const ph = popup.offsetHeight || 400;
-  const m  = 16;
-  let x = evt ? evt.clientX + 18 : window.innerWidth  / 2 - pw / 2;
-  let y = evt ? evt.clientY - 40 : window.innerHeight / 2 - ph / 2;
+function positionPopup(evt, cardCount){
+  // Width: (210px card + 16px gap) × n − last gap, plus 28px padding-top
+  const cardW  = 210;
+  const gap    = 16;
+  const pw     = cardCount * cardW + (cardCount - 1) * gap;
+  const ph     = 400; // approx incl pin thread above
+  const m      = 18;
+  let x = evt ? evt.clientX + 14 : window.innerWidth  / 2 - pw / 2;
+  let y = evt ? evt.clientY - 60 : window.innerHeight / 2 - ph / 2;
   if(x + pw > window.innerWidth  - m) x = window.innerWidth  - pw - m;
   if(y + ph > window.innerHeight - m) y = window.innerHeight - ph - m;
   if(x < m) x = m;
