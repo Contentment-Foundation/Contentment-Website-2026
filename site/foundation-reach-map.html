@@ -453,11 +453,17 @@ if(typeof d3!=="undefined" && typeof topojson!=="undefined" && typeof PROGRAM!==
       .on("mousemove",  (e,f)=>{ if(f.__key&&inRegion(f.__key)) quickTip(f.__key,e); })
       .on("mouseleave", hideTip);
 
+    // Manual position overrides: move cards off crowded centroids for visual spacing
+    const OVERRIDES = {
+      "India":  [612, 210], // shift northeast toward Bhutan / Himalayan foothills
+      "Russia": [760, 118], // remote eastern Siberia rather than central Russia
+    };
+
     // Country centroid stacks
     const used = new Set();
     feats.forEach(f=>{
       if(!f.__key||used.has(f.__key)||!PROGRAM[f.__key]?.stories?.length) return;
-      const [sx,sy]=pathGen.centroid(f);
+      let [sx,sy]=OVERRIDES[f.__key]||pathGen.centroid(f);
       if(isNaN(sx)||isNaN(sy)) return;
       used.add(f.__key);
       createStack(f.__key,sx,sy);
