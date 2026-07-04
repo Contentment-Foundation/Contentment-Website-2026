@@ -4,12 +4,16 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Foundation Reach — Design Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Newsreader:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#3f3f78; --map-bg:#4a4a8a;
-    --country:#6b6ba3; --country-stroke:#3f3f78;
+    --bg:#383872; --map-bg:#454a82;
+    --country:#6f75a8; --country-stroke:#3a3f72;
     --served:#7ec98f; --served-hi:#a5e0b2; --served-dim:#5c8a6a;
     --text:#eef0f8; --muted:#b9bbd6; --card:#fff; --ink:#2a2a4a; --green:#4FA98C;
+    --marker-yellow:#fff4b8; --line:rgba(2,78,112,.1);
   }
   *, *::before, *::after { box-sizing:border-box; }
   html,body { margin:0; background:var(--bg); color:var(--text); overflow:hidden; height:100%;
@@ -25,11 +29,14 @@
     display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
   .header-label h1 { font-size:16px; margin:0 0 1px; }
   .header-label p  { font-size:11px; color:var(--muted); margin:0; }
-  .filters { display:flex; gap:6px; flex-wrap:wrap; margin-left:auto; }
+  .header-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-left:auto; }
+  .filters { display:flex; gap:6px; flex-wrap:wrap; }
   .chip { border:1px solid rgba(255,255,255,.22); background:transparent; color:var(--text);
     padding:4px 13px; border-radius:999px; font-size:12px; cursor:pointer; transition:.14s; }
   .chip:hover { background:rgba(255,255,255,.1); }
   .chip.active { background:var(--served); color:#12331e; border-color:var(--served); font-weight:700; }
+  .help-btn { font-weight:600; white-space:nowrap; }
+  .help-btn[aria-expanded="true"] { background:rgba(255,255,255,.14); border-color:rgba(255,255,255,.35); }
 
   /* map */
   #mapWrap { position:relative; background:var(--map-bg); cursor:grab; }
@@ -42,18 +49,43 @@
 
   /* legend + zoom controls */
   .legend { position:absolute; left:16px; bottom:14px; display:flex; gap:12px;
-    background:rgba(0,0,0,.25); padding:7px 12px; border-radius:8px; font-size:11px; }
+    background:rgba(0,0,0,.16); padding:7px 12px; border-radius:8px; font-size:11px; }
   .legend i { display:inline-block; width:10px; height:10px; border-radius:3px;
     margin-right:4px; vertical-align:-1px; }
-  .zoom-hint { position:absolute; left:16px; bottom:50px; font-size:10px;
-    color:rgba(255,255,255,.5); transition:opacity .5s; pointer-events:none; }
-  .zoom-hint.hidden { opacity:0; }
-  .zoom-controls { position:absolute; right:14px; bottom:14px; display:flex;
-    flex-direction:column; gap:5px; z-index:25; }
-  .zoom-controls button { width:30px; height:30px; border-radius:7px; border:1px solid rgba(255,255,255,.18);
-    background:rgba(20,20,45,.62); color:#fff; font-size:17px; cursor:pointer;
-    line-height:30px; text-align:center; padding:0; transition:background .12s; }
-  .zoom-controls button:hover { background:rgba(20,20,45,.92); }
+
+  /* how-to modal */
+  #helpBackdrop { position:fixed; inset:0; background:rgba(10,10,30,.45); z-index:45;
+    opacity:0; pointer-events:none; transition:opacity .2s; }
+  #helpBackdrop.show { opacity:1; pointer-events:auto; }
+  #helpPanel {
+    position:fixed; z-index:46; left:50%; top:50%;
+    transform:translate(-50%,-46%) scale(.96); opacity:0; pointer-events:none;
+    transition:opacity .2s, transform .22s cubic-bezier(.34,1.2,.64,1);
+    max-width:360px; width:min(360px, 92vw);
+    background:#fff; color:var(--ink); border-radius:12px;
+    padding:18px 20px 16px; box-shadow:0 24px 64px rgba(0,0,0,.35);
+  }
+  #helpPanel.show { opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+  #helpPanel h2 { margin:0 0 10px; font-size:15px; color:var(--ink); }
+  #helpPanel ol { margin:0 0 14px; padding-left:18px; font-size:13px; line-height:1.5; }
+  #helpPanel li { margin-bottom:6px; }
+  #helpPanel li b { color:#2a7d47; }
+  .help-close {
+    border:none; background:var(--green); color:#fff; font-size:12px; font-weight:700;
+    padding:7px 14px; border-radius:999px; cursor:pointer; transition:filter .12s;
+  }
+  .help-close:hover { filter:brightness(1.08); }
+
+  .zoom-controls { position:absolute; right:14px; top:14px; display:flex;
+    flex-direction:column; gap:6px; z-index:25; }
+  .zoom-controls button {
+    display:flex; align-items:center; gap:8px; min-width:118px; height:auto;
+    padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,.22);
+    background:rgba(12,12,36,.52); color:#fff; font-size:12px; font-weight:600;
+    cursor:pointer; transition:background .12s, border-color .12s; backdrop-filter:blur(4px);
+  }
+  .zoom-controls button:hover { background:rgba(20,20,50,.72); border-color:rgba(255,255,255,.35); }
+  .zoom-controls .zoom-icon { width:18px; font-size:17px; line-height:1; text-align:center; flex-shrink:0; }
 
   #tip { position:absolute; pointer-events:none; z-index:30; background:#fff; color:var(--ink);
     border-radius:8px; padding:7px 11px; font-size:12px; box-shadow:0 8px 24px rgba(0,0,0,.3);
@@ -120,6 +152,10 @@
     transition:transform .24s cubic-bezier(.34,1.22,.64,1), box-shadow .24s;
     transform-origin:50% 30%;
   }
+  /* torn + ticket use clip-path — don't clip with overflow:hidden */
+  .map-card .frame.shape-torn,
+  .map-card .frame.shape-ticket,
+  .map-card .frame.shape-tag { overflow:visible; border-radius:0; }
   .map-card .media { height:52px; overflow:hidden; background:#d0dde6; }
   .map-card .media img { width:100%; height:100%; object-fit:cover; display:block; }
   .map-card .body { padding:5px 5px 6px; }
@@ -127,29 +163,109 @@
     margin:0 0 3px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
   .map-card .byline { font-size:6.5px; color:#888; font-weight:700; }
 
-  /* ── CARD STYLE VARIANTS (like Story Board shapes) ── */
-  /* cs-0: Polaroid — white border frame, thick bottom, cream shadow ring */
-  .cs-0 .frame {
-    background:#fff; border-radius:2px;
-    box-shadow:0 5px 16px rgba(2,78,112,.2), 0 2px 4px rgba(0,0,0,.1),
-               0 0 0 3px #fff, 0 0 0 4px #ddd8cc; /* double-border polaroid effect */
+  /* ── Story Board shapes (same classes as story-board.html) ── */
+  .map-card .frame.shape-polaroid,
+  .modal-pin .frame.shape-polaroid { border-radius:3px; padding:4px 4px 6px; border:1px solid #e0e4ea; background:#fff; }
+  .map-card .frame.shape-polaroid .media,
+  .modal-pin .frame.shape-polaroid .media { border-radius:1px; }
+  .map-card .frame.shape-polaroid .body,
+  .modal-pin .frame.shape-polaroid .mbody { padding-top:4px; }
+
+  .map-card .frame.shape-rounded,
+  .modal-pin .frame.shape-rounded { border-radius:10px; border-color:rgba(2,78,112,.1); }
+
+  .map-card .frame.shape-torn,
+  .modal-pin .frame.shape-torn {
+    border:none; background:#fffef6;
+    box-shadow:none;
+    filter:drop-shadow(0 4px 12px rgba(2,78,112,.16));
+    /* stronger ragged edge — readable at pin-card size (72px wide) */
+    clip-path:polygon(
+      0% 10%, 7% 2%, 14% 11%, 21% 4%, 28% 12%, 35% 3%, 42% 10%, 50% 5%, 58% 12%, 65% 3%, 72% 10%, 79% 4%, 86% 11%, 93% 5%, 100% 10%,
+      100% 90%, 93% 98%, 86% 89%, 79% 96%, 72% 88%, 65% 97%, 58% 90%, 50% 95%, 42% 88%, 35% 97%, 28% 90%, 21% 96%, 14% 89%, 7% 95%, 0% 90%
+    );
   }
+  .modal-pin .frame.shape-torn {
+    clip-path:polygon(0% 3%,4% 0%,9% 4%,15% 1%,21% 4%,28% 0%,35% 3%,42% 0%,49% 4%,56% 1%,63% 4%,70% 0%,77% 3%,84% 1%,91% 4%,97% 0%,100% 4%,
+      100% 96%,96% 100%,89% 97%,82% 100%,75% 96%,68% 100%,61% 97%,54% 100%,47% 96%,40% 100%,33% 97%,26% 100%,19% 96%,12% 100%,5% 97%,0% 100%);
+    filter:drop-shadow(0 6px 22px rgba(2,78,112,.12));
+  }
+  .map-card .frame.shape-torn .media,
+  .modal-pin .frame.shape-torn .media { border-bottom:1px dashed rgba(2,78,112,.14); }
+  .map-card .frame.shape-torn .body { background:#fffef6; }
 
-  /* cs-1: Notebook — warm cream bg, vivid blue left accent */
-  .cs-1 .frame { background:#FFFEF0; border-radius:0 3px 3px 0;
-    border-left:3px solid #5a8bd6 !important; }
-  .cs-1 .body  { background:#FFFEF0; }
+  .map-card .frame.shape-ticket,
+  .modal-pin .frame.shape-ticket { border:1px dashed rgba(2,78,112,.28); border-radius:2px;
+    background:linear-gradient(180deg,#fffef2,#fff);
+    box-shadow:0 5px 14px rgba(2,78,112,.1), inset 0 0 0 2px #fffef2;
+    clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px); }
+  .map-card .frame.shape-ticket .ticket-stamp { position:absolute; top:4px; right:4px; width:18px; height:18px;
+    border:1px solid rgba(31,175,192,.45); border-radius:50%; opacity:.55; pointer-events:none;
+    font-size:4px; font-weight:800; color:rgba(2,78,112,.45); display:flex; align-items:center;
+    justify-content:center; text-transform:uppercase; transform:rotate(12deg); }
+  .modal-pin .frame.shape-ticket .ticket-stamp { top:10px; right:10px; width:42px; height:42px; border-width:2px; font-size:7px; }
+  .map-card .frame.shape-ticket .body,
+  .modal-pin .frame.shape-ticket .mbody { border-top:1px dotted rgba(2,78,112,.2); }
 
-  /* cs-2: Craft paper — warm tan, brownish ink */
-  .cs-2 .frame { background:#F5EDD8; border-color:rgba(150,100,50,.18) !important; border-radius:3px; }
-  .cs-2 .body  { background:#F5EDD8; }
-  .cs-2 .quote { color:#5c3a18; }
-  .cs-2 .byline { color:#8b6035; }
+  .map-card .frame.shape-postcard,
+  .modal-pin .frame.shape-postcard { border:1px solid #c5d5de; background:#fff;
+    box-shadow:2px 3px 0 rgba(2,78,112,.07); border-radius:2px; }
+  .map-card .frame.shape-postcard::before,
+  .modal-pin .frame.shape-postcard::before { content:""; position:absolute; left:0; top:0; bottom:0; width:7px; z-index:1;
+    background:repeating-linear-gradient(180deg,#e74c3c 0,#e74c3c 4px,#fff 4px,#fff 6px,#3b82c4 6px,#3b82c4 10px,#fff 10px,#fff 12px); opacity:.75; }
+  .map-card .frame.shape-postcard .media,
+  .modal-pin .frame.shape-postcard .media { margin-left:7px; width:calc(100% - 7px); }
+  .map-card .frame.shape-postcard .body,
+  .modal-pin .frame.shape-postcard .mbody { margin-left:7px; padding-left:5px; }
 
-  /* cs-3: Mint — cool pale teal, green byline */
-  .cs-3 .frame { background:#EDF7F4; border-color:rgba(31,175,192,.2) !important; border-radius:4px; }
-  .cs-3 .body  { background:#EDF7F4; }
-  .cs-3 .byline { color:#1a7d6a; }
+  .map-card .frame.shape-tag,
+  .modal-pin .frame.shape-tag { border:none; background:#f4faf7;
+    clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
+    box-shadow:0 5px 14px rgba(2,78,112,.11), inset 0 0 0 1px rgba(79,169,140,.35); }
+  .map-card .frame.shape-tag .tag-hole { position:absolute; top:4px; right:4px; width:5px; height:5px;
+    border:1px solid rgba(2,78,112,.25); border-radius:50%; background:#fff; }
+  .modal-pin .frame.shape-tag .tag-hole { top:10px; right:10px; width:10px; height:10px; border-width:2px; }
+
+  .map-card .frame.shape-circle,
+  .modal-pin .frame.shape-circle { border-radius:8px; }
+  .map-card .frame.shape-circle .media,
+  .modal-pin .frame.shape-circle .media {
+    aspect-ratio:1; height:auto; border-radius:50%; overflow:hidden; margin-left:auto; margin-right:auto;
+  }
+  .map-card .frame.shape-circle .media { width:52px; margin-top:4px; }
+  .modal-pin .frame.shape-circle .media { width:min(calc(100% - 48px), 224px); margin-top:12px; }
+  .map-card .frame.shape-circle .media img,
+  .modal-pin .frame.shape-circle .media img { width:100%; height:100%; object-fit:cover; }
+
+  .map-card .frame.shape-arch,
+  .modal-pin .frame.shape-arch { border-radius:12px 12px 4px 4px; }
+  .map-card .frame.shape-arch .media,
+  .modal-pin .frame.shape-arch .media { border-radius:10px 10px 0 0; }
+
+  .map-card .frame.shape-notebook,
+  .modal-pin .frame.shape-notebook { border:none; border-left:2px solid rgba(255,120,100,.45);
+    background:linear-gradient(90deg,#fff8f5 14px,#fff 14px);
+    box-shadow:0 5px 14px rgba(2,78,112,.1);
+    background-image:
+      radial-gradient(circle at 7px 12px, #fff 2px, rgba(2,78,112,.15) 2.5px, transparent 3px),
+      radial-gradient(circle at 7px 28px, #fff 2px, rgba(2,78,112,.15) 2.5px, transparent 3px),
+      linear-gradient(90deg,#fff8f5 14px,#fff 14px); }
+  .modal-pin .frame.shape-notebook { border-left-width:3px;
+    background-image:
+      radial-gradient(circle at 14px 24px, #fff 3px, rgba(2,78,112,.15) 3.5px, transparent 4px),
+      radial-gradient(circle at 14px 54px, #fff 3px, rgba(2,78,112,.15) 3.5px, transparent 4px),
+      radial-gradient(circle at 14px 84px, #fff 3px, rgba(2,78,112,.15) 3.5px, transparent 4px),
+      linear-gradient(90deg,#fff8f5 28px,#fff 28px); }
+
+  .map-card .frame.shape-sticky,
+  .modal-pin .frame.shape-sticky { border:none; background:var(--marker-yellow);
+    box-shadow:1px 2px 0 rgba(2,78,112,.08), 0 5px 14px rgba(2,78,112,.1); }
+  .map-card .frame.shape-sticky .media,
+  .modal-pin .frame.shape-sticky .media { display:none; }
+  .map-card .frame.shape-sticky .body { padding:8px 6px 10px; min-height:44px; }
+  .map-card .frame.shape-sticky .quote { font-family:Caveat,cursive; font-style:normal; font-size:9px; font-weight:600; line-height:1.25; }
+  .modal-pin .frame.shape-sticky .mbody { padding:16px 14px 18px; min-height:120px; }
+  .modal-pin .frame.shape-sticky .quote { font-family:Caveat,cursive; font-style:normal; font-size:17px; font-weight:600; line-height:1.3; }
 
   /* single card hover: zoom-in effect on the .frame */
   .card-stack.single:hover > .map-card .frame {
@@ -201,17 +317,6 @@
   .modal-pin .byname  { font-weight:700; font-size:13px; color:var(--ink); margin:0; }
   .modal-pin .bydetail{ font-size:11.5px; color:#888; margin:3px 0 0; line-height:1.4; }
 
-  /* modal card style variants match the small card */
-  .modal-pin.cs-0 .frame { box-shadow:0 22px 60px rgba(2,78,112,.32), 0 0 0 5px #fff, 0 0 0 7px #ddd8cc; }
-  .modal-pin.cs-1 .frame { background:#FFFEF0; border-left:4px solid #5a8bd6 !important; border-radius:0 3px 3px 0; }
-  .modal-pin.cs-1 .mbody { background:#FFFEF0; }
-  .modal-pin.cs-2 .frame { background:#F5EDD8; border-color:rgba(150,100,50,.18) !important; }
-  .modal-pin.cs-2 .mbody { background:#F5EDD8; }
-  .modal-pin.cs-2 .quote { color:#5c3a18; }
-  .modal-pin.cs-3 .frame { background:#EDF7F4; border-color:rgba(31,175,192,.2) !important; }
-  .modal-pin.cs-3 .mbody { background:#EDF7F4; }
-  .modal-pin.cs-3 .byname { color:#1a5c50; }
-
   .pop-close { position:absolute; top:8px; right:8px; z-index:5;
     width:26px; height:26px; border-radius:50%; border:none;
     background:rgba(20,20,45,.52); color:#fff; font-size:15px;
@@ -221,9 +326,13 @@
   @media (max-width:480px){
     .card-stack, .map-card { width:58px; }
     .map-card .media { height:42px; }
+    .map-card .frame.shape-circle .media { width:44px; height:auto; }
     .card-stack.double { height:66px; }
     .modal-pin { width:min(272px, 90vw); }
     .modal-pin .media { height:160px; }
+    .modal-pin .frame.shape-circle .media { width:calc(100% - 32px); height:auto; }
+    .zoom-controls { right:14px; top:auto; bottom:56px; }
+    .zoom-controls button { min-width:104px; padding:7px 10px; font-size:11px; }
   }
 </style>
 </head>
@@ -237,9 +346,12 @@
   <header>
     <div class="header-label">
       <h1>🌱 Foundation Reach</h1>
-      <p>Zoom into a region · hover to preview · click to read</p>
+      <p>Partner stories pinned where programs are active</p>
     </div>
-    <div class="filters" id="filters"></div>
+    <div class="header-actions">
+      <button type="button" class="chip help-btn" id="btnHowTo" aria-expanded="false" aria-controls="helpPanel">How to use</button>
+      <div class="filters" id="filters"></div>
+    </div>
   </header>
   <div id="mapWrap">
     <svg id="map" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid meet"></svg>
@@ -247,11 +359,10 @@
       <span><i style="background:#7ec98f"></i>Program active</span>
       <span><i style="background:#6b6ba3"></i>Not yet served</span>
     </div>
-    <div class="zoom-hint hidden" id="zoomHint">Scroll or pinch to zoom · click a card to read</div>
-    <div class="zoom-controls">
-      <button id="btnZoomIn"    aria-label="Zoom in">+</button>
-      <button id="btnZoomOut"   aria-label="Zoom out">−</button>
-      <button id="btnZoomReset" aria-label="Reset zoom" title="Reset view">⌂</button>
+    <div class="zoom-controls" aria-label="Map zoom">
+      <button id="btnZoomIn" type="button"><span class="zoom-icon" aria-hidden="true">+</span> Zoom in</button>
+      <button id="btnZoomOut" type="button"><span class="zoom-icon" aria-hidden="true">−</span> Zoom out</button>
+      <button id="btnZoomReset" type="button" title="Reset view"><span class="zoom-icon" aria-hidden="true">⌂</span> Reset</button>
     </div>
     <div id="tip"></div>
     <div id="banner"></div>
@@ -259,6 +370,18 @@
 </div>
 <div id="backdrop"></div>
 <div id="popup"></div>
+<div id="helpBackdrop"></div>
+<div id="helpPanel" role="dialog" aria-labelledby="helpTitle" aria-modal="true">
+  <h2 id="helpTitle">How to use this map</h2>
+  <ol>
+    <li><b>Pan</b> — click and drag the map with your mouse</li>
+    <li><b>Zoom</b> — mouse scroll wheel (up = in, down = out), pinch on trackpad, or the + / − buttons</li>
+    <li><b>Filter</b> — pick a region with the chips above</li>
+    <li><b>Preview</b> — hover a green country to see its name</li>
+    <li><b>Read</b> — click a pinned story card; hover a two-card stack to spread them</li>
+  </ol>
+  <button type="button" class="help-close" id="dismissHelp">Got it</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
@@ -273,9 +396,6 @@ const PIN_COLORS = [
   ["#ffd07a","#f39c12"], ["#d7b0ff","#9b59b6"], ["#ffb8a0","#d06040"],
   ["#a8e6cf","#2e8b57"], ["#ffd1dc","#c0607a"]
 ];
-// Each card style maps to its matching washi tape
-const CARD_STYLES = ["cs-0","cs-1","cs-2","cs-3"];
-const STYLE_TAPES = ["t0",  "t1",  "t2",  "t3" ];
 // Faster pendulum: halved duration, doubled+ swing
 const SWAYS = [
   {rot:-2.4,swing:4.0,dur:2.2,delay:0  }, {rot: 1.8,swing:3.5,dur:2.6,delay:.30},
@@ -288,8 +408,7 @@ const ZOOM_SHOW_AT = 1; // show pin cards at default zoom (was 1.25 — too easy
 
 let activeRegion = "All";
 let currentZoom  = 1;
-let hintGone     = true; // hint hidden — cards visible at default zoom
-const stackData  = []; // { el, svgX, svgY, key, styleIdx }
+const stackData  = []; // { el, svgX, svgY, key }
 let stackSeq     = 0;
 
 const W = 960, H = 500;
@@ -324,24 +443,39 @@ if(typeof PROGRAM !== "undefined"){
   });
 }
 
-// ── D3 ZOOM ──
+const mapWrapSel = d3.select("#mapWrap");
+
+// ── D3 ZOOM (wheel + drag on full map area, not just the SVG box) ──
 const zoom = d3.zoom()
   .scaleExtent([1, 10])
   .translateExtent([[-W*0.6,-H*0.6],[W*1.6,H*1.6]])
   .on("zoom", event => {
     if(mapG) mapG.attr("transform", event.transform);
     currentZoom = event.transform.k;
-    if(!hintGone && currentZoom > 1.05){
-      document.getElementById("zoomHint").classList.add("hidden");
-      hintGone = true;
-    }
     requestAnimationFrame(repositionStacks);
   });
-mapSvg.call(zoom);
+mapWrapSel.call(zoom);
 
-document.getElementById("btnZoomIn").onclick    = () => mapSvg.transition().duration(300).call(zoom.scaleBy, 1.9);
-document.getElementById("btnZoomOut").onclick   = () => mapSvg.transition().duration(300).call(zoom.scaleBy, 1/1.9);
-document.getElementById("btnZoomReset").onclick = () => mapSvg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+document.getElementById("btnZoomIn").onclick    = () => mapWrapSel.transition().duration(300).call(zoom.scaleBy, 1.9);
+document.getElementById("btnZoomOut").onclick   = () => mapWrapSel.transition().duration(300).call(zoom.scaleBy, 1/1.9);
+document.getElementById("btnZoomReset").onclick = () => mapWrapSel.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+
+const helpBackdrop = document.getElementById("helpBackdrop");
+const helpPanel    = document.getElementById("helpPanel");
+const btnHowTo     = document.getElementById("btnHowTo");
+function openHelp(){
+  helpBackdrop.classList.add("show");
+  helpPanel.classList.add("show");
+  btnHowTo.setAttribute("aria-expanded","true");
+}
+function closeHelp(){
+  helpBackdrop.classList.remove("show");
+  helpPanel.classList.remove("show");
+  btnHowTo.setAttribute("aria-expanded","false");
+}
+btnHowTo.onclick = openHelp;
+document.getElementById("dismissHelp").onclick = closeHelp;
+helpBackdrop.onclick = closeHelp;
 
 // ── Convert SVG viewBox coords → screen pixels (works on file:// — no getScreenCTM) ──
 function svgToViewport(sx, sy){
@@ -383,39 +517,58 @@ REGIONS.forEach(r=>{
 });
 
 // ── Pick up to 2 stories (educator + student pair preferred) ──
-function pickStories(k){
+function pickStoryEntries(k){
   const all = PROGRAM[k].stories||[];
   if(!all.length) return [];
-  const edu = all.find(s=>s.role==="educator");
-  const stu = all.find(s=>s.role==="student");
-  if(edu && stu) return [edu,stu];
-  return all.slice(0,2);
+  const eduIdx = all.findIndex(s=>s.role==="educator");
+  const stuIdx = all.findIndex(s=>s.role==="student");
+  if(eduIdx>=0 && stuIdx>=0) return [{s:all[eduIdx], idx:eduIdx}, {s:all[stuIdx], idx:stuIdx}];
+  return all.slice(0,2).map((s,i)=>({s, idx:i}));
 }
 
-// ── Small card HTML — style class applied to .map-card ──
-function smallCardHtml(s, tapeClass, styleClass){
-  return `<div class="map-card ${styleClass}">` +
-    `<span class="washi ${tapeClass}" aria-hidden="true"></span>` +
-    `<article class="frame">` +
-    `  <div class="media"><img src="${esc(s.img)}" alt="${esc(s.cap||s.by.split(",")[0])}" loading="lazy"/></div>` +
-    `  <div class="body">` +
-    `    <p class="quote">"${esc(s.q)}"</p>` +
-    `    <div class="byline">${esc(s.by.split(",")[0])}</div>` +
-    `  </div>` +
+// Put visually distinct shapes (torn, ticket, etc.) on top in double stacks
+const SHAPE_STACK_PRIORITY = {
+  "shape-torn":5, "shape-ticket":4, "shape-sticky":3, "shape-tag":2, "shape-arch":1
+};
+function orderStackEntries(k, entries){
+  if(entries.length < 2) return entries;
+  return [...entries].sort((a,b)=>{
+    const pa = SHAPE_STACK_PRIORITY[getStoryMeta(k,a.idx).shape]||0;
+    const pb = SHAPE_STACK_PRIORITY[getStoryMeta(k,b.idx).shape]||0;
+    return pb - pa;
+  });
+}
+
+function cardExtras(shape){
+  if(shape==="shape-ticket") return '<span class="ticket-stamp" aria-hidden="true">voice</span>';
+  if(shape==="shape-tag") return '<span class="tag-hole" aria-hidden="true"></span>';
+  return "";
+}
+
+// ── Small card HTML — same shape classes as Story Board ──
+function smallCardHtml(s, meta){
+  const shape = meta.shape;
+  const mediaHtml = shape==="shape-sticky" ? "" :
+    `<div class="media"><img src="${esc(s.img)}" alt="${esc(s.cap||s.by.split(",")[0])}" loading="lazy"/></div>`;
+  return `<div class="map-card">` +
+    `<span class="washi ${meta.tape}" aria-hidden="true"></span>` +
+    `<article class="frame ${shape}">` + cardExtras(shape) + mediaHtml +
+    `<div class="body">` +
+    `  <p class="quote">"${esc(s.q)}"</p>` +
+    `  <div class="byline">${esc(s.by.split(",")[0])}</div>` +
+    `</div>` +
     `</article>` +
     `</div>`;
 }
 
 // ── Create one card stack at a map position ──
 function createStack(k, svgX, svgY){
-  const picks = pickStories(k);
+  const picks = orderStackEntries(k, pickStoryEntries(k));
   if(!picks.length) return;
   const i      = stackSeq++;
   const sw     = SWAYS[i%SWAYS.length];
-  const pin    = PIN_COLORS[i%PIN_COLORS.length];
-  const sIdx   = i % 4;
-  const sClass = CARD_STYLES[sIdx];
-  const tape   = STYLE_TAPES[sIdx];
+  const firstMeta = getStoryMeta(k, picks[0].idx);
+  const pin    = PIN_COLORS[firstMeta.globalIdx % PIN_COLORS.length];
   const [cx,cy]= svgToViewport(svgX, svgY);
   const isDouble = picks.length === 2;
 
@@ -423,7 +576,6 @@ function createStack(k, svgX, svgY){
   el.className = "card-stack " + (isDouble ? "double" : "single");
   el.dataset.key = k;
   el.dataset.stackIdx = i;
-  el.dataset.styleIdx = sIdx;
   el.setAttribute("role","group");
   el.setAttribute("aria-label","Stories from "+nameOf(k));
   el.style.cssText =
@@ -432,23 +584,21 @@ function createStack(k, svgX, svgY){
     `--sway-dur:${sw.dur}s;--sway-delay:${sw.delay}s;` +
     `--pin:${pin[1]};--pin-hi:${pin[0]}`;
 
-  picks.forEach((s,si)=>{
-    // Second card in a pair gets the next style so they visually differ
-    const cardStyle = si === 0 ? sClass : CARD_STYLES[(sIdx+1)%4];
-    const cardTape  = si === 0 ? tape   : STYLE_TAPES[(sIdx+1)%4];
+  picks.forEach(({s, idx})=>{
+    const meta = getStoryMeta(k, idx);
     const tmp = document.createElement("div");
-    tmp.innerHTML = smallCardHtml(s, cardTape, cardStyle);
+    tmp.innerHTML = smallCardHtml(s, meta);
     const mc = tmp.firstChild;
     mc.setAttribute("tabindex","0");
     mc.setAttribute("role","button");
     mc.setAttribute("aria-label","Meet "+s.by.split(",")[0]+" · click to expand");
-    mc.addEventListener("click",  e=>{ e.stopPropagation(); openModal(k,si,i,sIdx,pin); });
-    mc.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(k,si,i,sIdx,pin); } });
+    mc.addEventListener("click",  e=>{ e.stopPropagation(); openModal(k, idx, pin); });
+    mc.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(k, idx, pin); } });
     el.appendChild(mc);
   });
 
   document.body.appendChild(el);
-  stackData.push({el, svgX, svgY, key:k, styleIdx:sIdx});
+  stackData.push({el, svgX, svgY, key:k});
 }
 
 // Map TopoJSON is loaded via <script src="assets/countries-110m.js"> (not d3.json).
@@ -508,28 +658,29 @@ function quickTip(k,e){
 function hideTip(){ tip.classList.remove("show"); }
 
 // ── EXPANDED MODAL ──
-function openModal(k, storyIdx, stackIdx, styleIdx, pinColors){
+function openModal(k, storyIdx, pinColors){
   const stories = PROGRAM[k].stories||[];
   const s       = stories[storyIdx]||stories[0];
   if(!s) return;
-  const pin    = pinColors||PIN_COLORS[stackIdx%PIN_COLORS.length];
-  const sIdx   = styleIdx ?? (stackIdx%4);
-  const sClass = CARD_STYLES[sIdx];
-  const tape   = STYLE_TAPES[sIdx];
+  const meta   = getStoryMeta(k, storyIdx);
+  const pin    = pinColors||PIN_COLORS[meta.globalIdx % PIN_COLORS.length];
+  const shape  = meta.shape;
   const parts  = s.by.split(",").map(p=>p.trim());
   const name   = parts[0];
   const detail = parts.slice(1).join(", ");
+  const mediaHtml = shape==="shape-sticky" ? "" :
+    `<div class="media"><img src="${esc(s.img)}" alt="${esc(s.cap||name)}"/></div>`;
 
   popup.dataset.key = k;
   popup.style.setProperty("--pin",    pin[1]);
   popup.style.setProperty("--pin-hi", pin[0]);
 
   popup.innerHTML =
-    `<div class="modal-pin ${sClass}">` +
-    `  <span class="washi ${tape}" aria-hidden="true"></span>` +
-    `  <article class="frame">` +
+    `<div class="modal-pin">` +
+    `  <span class="washi ${meta.tape}" aria-hidden="true"></span>` +
+    `  <article class="frame ${shape}">` + cardExtras(shape) +
     `    <button class="pop-close" id="popClose" aria-label="Close">×</button>` +
-    `    <div class="media"><img src="${esc(s.img)}" alt="${esc(s.cap||name)}"/></div>` +
+    mediaHtml +
     `    <div class="mbody">` +
     `      <div class="loc">${esc(nameOf(k))}</div>` +
     `      <span class="badge ${s.role}">${s.role==="student"?"Student":"Educator"}</span>` +
@@ -556,7 +707,11 @@ function closeModal(){
   backdrop.classList.remove("show");
 }
 backdrop.onclick = closeModal;
-document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+document.addEventListener("keydown", e=>{
+  if(e.key!=="Escape") return;
+  if(helpPanel.classList.contains("show")) closeHelp();
+  else if(popup.classList.contains("show")) closeModal();
+});
 
 </script>
 </body>

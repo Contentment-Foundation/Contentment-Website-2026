@@ -181,7 +181,11 @@
 
   /* circle photo */
   .frame.shape-circle { border-radius:14px; }
-  .frame.shape-circle .media { border-radius:50%; margin:12px auto 0; width:calc(100% - 24px); aspect-ratio:1; }
+  .frame.shape-circle .media {
+    border-radius:50%; margin:12px auto 0; width:calc(100% - 24px); aspect-ratio:1;
+    height:auto; overflow:hidden;
+  }
+  .frame.shape-circle .media img { width:100%; height:100%; object-fit:cover; display:block; }
 
   /* arch top */
   .frame.shape-arch { border-radius:20px 20px 8px 8px; }
@@ -543,10 +547,6 @@
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script src="program-data.js"></script>
 <script>
-const SHAPES=[
-  "shape-sticky","shape-polaroid","shape-torn","shape-ticket","shape-postcard","shape-tag",
-  "shape-rounded","shape-notebook","shape-circle","shape-arch"
-];
 const PIN_COLORS=[
   ["#ff8a8a","#e74c3c"],["#7ec8e8","#3498db"],["#9be7b8","#4FA98C"],
   ["#ffd07a","#f39c12"],["#d7b0ff","#9b59b6"],["#ffb8b8","#e67e80"]
@@ -573,13 +573,13 @@ function buildStories(){
   let n=0;
   Object.keys(PROGRAM).forEach(k=>{
     const place=nameOf(k), region=PROGRAM[k].region;
-    (PROGRAM[k].stories||[]).forEach(s=>{
+    (PROGRAM[k].stories||[]).forEach((s, si)=>{
       out.push({
         id:n, place, region, role:s.role||"educator", q:s.q, text:s.text, full:s.full,
         by:s.by, img:s.img, cap:s.cap, video:s.video||null,
         hasVideo:!!s.video||(n%VIDEO_EVERY===3),
-        shape:SHAPES[n%SHAPES.length],
-        tape:"t"+(n%4),
+        shape:getStoryMeta(k, si).shape,
+        tape:getStoryMeta(k, si).tape,
         pin:PIN_COLORS[n%PIN_COLORS.length],
         sticker:n%3===0?STICKERS[n%STICKERS.length]:null,
         rot:((hash(n)%7)-3)+"deg",
