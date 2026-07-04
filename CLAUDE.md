@@ -108,6 +108,7 @@ subtle parallax.
 - **Foundation Reach Map (in progress):** flat D3 + TopoJSON world map with pin cards per served country.
   Prototype: **`site/foundation-reach-map.html`** → `/foundation-reach-map` on Netlify.
   Stack: D3 + topojson-client (CDN), `assets/countries-110m.js` (bundled map), `program-data.js` (stories).
+  Desktop: hanging pendulum pin cards (hover to preview, click to open modal). Mobile (`pointer:coarse`): 18 px balloon pins that scale with zoom (√zoom factor); crowded pins show a bottom-sheet picker so the user can choose which country to open.
   Notes: [`prototypes/world-map/README.md`](prototypes/world-map/README.md). After approval, embed on homepage and restyle to site tokens.
 - **Story Board (in progress):** **`site/story-board.html`** → `/story-board`. Same `program-data.js`.
 

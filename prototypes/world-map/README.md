@@ -54,8 +54,9 @@ Why D3 + TopoJSON for a prototype: full visual control (custom pin cards, colors
 
 - **Map:** flat D3 `geoNaturalEarth1` projection; served countries highlighted green.
 - **Country matching:** ISO numeric code via `isoLookup` (handles zero-padded codes like `036` → Australia), with name fallback.
-- **Pin cards:** up to two stories per country (educator + student preferred); hanging cards with pendulum animation; visible at default zoom.
-- **Interactions:** region filter chips, hover tooltip, click card → expanded modal, pan/zoom (scroll or +/- buttons).
+- **Pin cards (desktop):** up to two stories per country (educator + student preferred); hanging cards with pendulum animation; visible at default zoom. Hover zooms the card, click opens an expanded modal.
+- **Balloon pins (mobile / `pointer:coarse`):** one 18 px colour balloon per country, tail tip anchored to the country centroid. Balloons scale proportionally with map zoom (√zoom factor). Tapping a balloon opens the story modal. When two or more pins are within 44 px of each other a bottom-sheet picker slides up listing the nearby countries so the user can choose exactly which story to open.
+- **Interactions:** region filter chips, hover tooltip, click/tap → modal, pan/zoom (scroll, pinch, or +/- buttons).
 - **Data:** edit `site/program-data.js` once — Story Board and this map both read it.
 
 Manual card position overrides (crowding): `India`, `Russia` — see `OVERRIDES` in `foundation-reach-map.html`.

@@ -331,6 +331,72 @@
     .modal-pin { width:min(272px, 90vw); }
     .modal-pin .media { height:160px; }
     .modal-pin .frame.shape-circle .media { width:calc(100% - 32px); height:auto; }
+  }
+
+  /* ─── MOBILE BALLOON PINS ─── */
+  .map-balloon {
+    position:fixed; z-index:22; width:18px;
+    cursor:pointer; pointer-events:auto;
+    -webkit-tap-highlight-color:transparent;
+    transform:scale(var(--zoom-scale,1));
+    transform-origin:50% 100%; /* scale from tail tip — stays anchored to country */
+  }
+  /* tap feedback multiplies on top of the current zoom scale */
+  .map-balloon:active { transform:scale(calc(var(--zoom-scale,1) * 0.82)); transition:transform .1s; }
+  .balloon-circle {
+    width:18px; height:18px; border-radius:50%;
+    background:var(--pin,#e74c3c);
+    border:1.5px solid rgba(255,255,255,.70);
+    box-shadow:0 2px 6px rgba(0,0,0,.28), 0 1px 2px rgba(0,0,0,.15);
+    overflow:hidden;
+  }
+  .balloon-circle img { width:100%; height:100%; object-fit:cover; display:block; }
+  .balloon-tail {
+    width:0; height:0;
+    border-left:4px solid transparent;
+    border-right:4px solid transparent;
+    border-top:5px solid var(--pin,#e74c3c);
+    margin:-1px auto 0;
+  }
+  .balloon-count {
+    position:absolute; top:-2px; right:-3px;
+    min-width:10px; height:10px;
+    background:#fff; color:#333;
+    font-size:7px; font-weight:800; border-radius:5px;
+    display:flex; align-items:center; justify-content:center;
+    padding:0 2px; box-shadow:0 1px 3px rgba(0,0,0,.22); line-height:1;
+  }
+
+  /* ─── OVERLAP PICKER — bottom sheet shown when pins are crowded ─── */
+  #pinPicker {
+    position:fixed; bottom:0; left:0; right:0; z-index:62;
+    background:#fff; border-radius:14px 14px 0 0;
+    box-shadow:0 -6px 32px rgba(0,0,0,.22);
+    padding:10px 0 env(safe-area-inset-bottom,16px);
+    transform:translateY(100%);
+    transition:transform .28s cubic-bezier(.34,1.1,.64,1);
+    max-height:55vh; overflow-y:auto;
+  }
+  #pinPicker.show { transform:translateY(0); }
+  .picker-handle {
+    width:36px; height:4px; background:rgba(0,0,0,.15);
+    border-radius:2px; margin:0 auto 10px;
+  }
+  .picker-item {
+    display:flex; align-items:center; gap:12px;
+    padding:12px 20px; border-bottom:1px solid rgba(0,0,0,.06);
+    cursor:pointer; -webkit-tap-highlight-color:transparent;
+    background:transparent; border-left:none; border-right:none; border-top:none;
+    width:100%; text-align:left;
+  }
+  .picker-item:active { background:rgba(0,0,0,.05); }
+  .picker-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .picker-name { font-size:14px; font-weight:700; color:#2a2a4a; margin:0; }
+  .picker-by   { font-size:11px; color:#888; margin:2px 0 0; }
+
+  /* On touch/pointer-coarse devices: hide desktop hanging stacks, move zoom buttons */
+  @media (pointer:coarse) {
+    .card-stack { display:none !important; }
     .zoom-controls { right:14px; top:auto; bottom:56px; }
     .zoom-controls button { min-width:104px; padding:7px 10px; font-size:11px; }
   }
@@ -370,6 +436,10 @@
 </div>
 <div id="backdrop"></div>
 <div id="popup"></div>
+<div id="pinPicker" role="dialog" aria-label="Choose a story" aria-modal="true">
+  <div class="picker-handle" aria-hidden="true"></div>
+  <div id="pickerList"></div>
+</div>
 <div id="helpBackdrop"></div>
 <div id="helpPanel" role="dialog" aria-labelledby="helpTitle" aria-modal="true">
   <h2 id="helpTitle">How to use this map</h2>
@@ -408,8 +478,10 @@ const ZOOM_SHOW_AT = 1; // show pin cards at default zoom (was 1.25 — too easy
 
 let activeRegion = "All";
 let currentZoom  = 1;
-const stackData  = []; // { el, svgX, svgY, key }
-let stackSeq     = 0;
+const stackData   = []; // { el, svgX, svgY, key } — desktop hanging cards
+const balloonData = []; // { el, svgX, svgY, key } — mobile balloon pins
+let stackSeq      = 0;
+const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
 const W = 960, H = 500;
 const proj    = d3.geoNaturalEarth1().scale(178).translate([W/2, H/2+8]);
@@ -453,6 +525,7 @@ const zoom = d3.zoom()
     if(mapG) mapG.attr("transform", event.transform);
     currentZoom = event.transform.k;
     requestAnimationFrame(repositionStacks);
+    if(isTouchDevice) requestAnimationFrame(repositionBalloons);
   });
 mapWrapSel.call(zoom);
 
@@ -477,11 +550,24 @@ btnHowTo.onclick = openHelp;
 document.getElementById("dismissHelp").onclick = closeHelp;
 helpBackdrop.onclick = closeHelp;
 
+// Adapt instructions for touch devices
+if(isTouchDevice){
+  const hdrP = document.querySelector(".header-label p");
+  if(hdrP) hdrP.textContent = "Tap a pin to read a story · filter by region · pinch to zoom";
+  const ol = document.querySelector("#helpPanel ol");
+  if(ol) ol.innerHTML =
+    "<li><b>Tap</b> a balloon pin to open that country&#39;s story</li>" +
+    "<li><b>Pinch</b> to zoom in on a region; spread to zoom out</li>" +
+    "<li><b>Drag</b> to pan around the map</li>" +
+    "<li><b>Filter</b> — pick a region with the chips above</li>" +
+    "<li>A <b>2 badge</b> means two stories are available — tap the educator story</li>";
+}
+
 // ── Convert SVG viewBox coords → screen pixels (works on file:// — no getScreenCTM) ──
 function svgToViewport(sx, sy){
   const mr = mapWrap.getBoundingClientRect();
   const base = Math.min(mr.width / W, mr.height / H);
-  const t = d3.zoomTransform(mapSvg.node());
+  const t = d3.zoomTransform(mapWrap); // zoom is applied to mapWrap, not the SVG
   const vx = sx * t.k + t.x;
   const vy = sy * t.k + t.y;
   return [
@@ -499,7 +585,22 @@ function repositionStacks(){
     el.classList.toggle("visible", show && inRegion(key));
   });
 }
-window.addEventListener("resize", ()=>requestAnimationFrame(repositionStacks));
+function repositionBalloons(){
+  // Grow balloons proportionally with zoom so they stay legible relative to the map.
+  // sqrt(zoom) gives natural scaling: 1× at zoom 1, 2× at zoom 4, 3× at zoom 9.
+  const scale = Math.pow(currentZoom, 0.5).toFixed(3);
+  balloonData.forEach(({el, svgX, svgY, k})=>{
+    const [cx, cy] = svgToViewport(svgX, svgY);
+    el.style.left       = (cx - 9) + "px";
+    el.style.top        = (cy - 23) + "px";
+    el.style.setProperty("--zoom-scale", scale);
+    el.style.visibility = inRegion(k) ? "visible" : "hidden";
+  });
+}
+window.addEventListener("resize", ()=>{
+  requestAnimationFrame(repositionStacks);
+  requestAnimationFrame(repositionBalloons);
+});
 
 // ── Region filter chips ──
 const fWrap = document.getElementById("filters");
@@ -510,11 +611,36 @@ REGIONS.forEach(r=>{
   b.onclick = ()=>{
     activeRegion = r;
     [...fWrap.children].forEach(c=>c.classList.toggle("active",c===b));
-    repositionStacks(); // re-evaluates visibility
+    repositionStacks();
+    repositionBalloons();
     if(popup.classList.contains("show") && !inRegion(popup.dataset.key)) closeModal();
   };
   fWrap.appendChild(b);
 });
+
+// ── Story visual metadata: shape + tape + global sequential index ──
+const SHAPE_LIST = [
+  "shape-polaroid","shape-torn","shape-ticket","shape-sticky","shape-tag",
+  "shape-postcard","shape-notebook","shape-arch","shape-rounded","shape-circle"
+];
+const TAPE_LIST = ["t0","t1","t2","t3"];
+// Pre-compute a stable global index per (program-key, story-index) pair.
+// This ensures consistent colors/shapes across every call to getStoryMeta.
+const _storyGidx = {};
+{
+  let g = 0;
+  Object.keys(PROGRAM||{}).forEach(k=>{
+    (PROGRAM[k]?.stories||[]).forEach((_,i)=>{ _storyGidx[k+"::"+i] = g++; });
+  });
+}
+function getStoryMeta(k, storyIdx){
+  const gIdx = _storyGidx[k+"::"+storyIdx] ?? 0;
+  return {
+    shape:     SHAPE_LIST[gIdx % SHAPE_LIST.length],
+    tape:      TAPE_LIST[gIdx % TAPE_LIST.length],
+    globalIdx: gIdx
+  };
+}
 
 // ── Pick up to 2 stories (educator + student pair preferred) ──
 function pickStoryEntries(k){
@@ -569,6 +695,10 @@ function createStack(k, svgX, svgY){
   const sw     = SWAYS[i%SWAYS.length];
   const firstMeta = getStoryMeta(k, picks[0].idx);
   const pin    = PIN_COLORS[firstMeta.globalIdx % PIN_COLORS.length];
+
+  // ── Mobile: create balloon pin instead of hanging card stack ──
+  if(isTouchDevice){ createBalloon(k, svgX, svgY, picks, pin); return; }
+
   const [cx,cy]= svgToViewport(svgX, svgY);
   const isDouble = picks.length === 2;
 
@@ -599,6 +729,35 @@ function createStack(k, svgX, svgY){
 
   document.body.appendChild(el);
   stackData.push({el, svgX, svgY, key:k});
+}
+
+// ── Mobile balloon pin — always visible, tap opens modal ──
+function createBalloon(k, svgX, svgY, picks, pin){
+  const s        = picks[0].s;
+  const isDouble = picks.length === 2;
+  const [cx, cy] = svgToViewport(svgX, svgY);
+
+  const el = document.createElement("div");
+  el.className   = "map-balloon";
+  el.dataset.key = k;
+  el.setAttribute("role","button");
+  el.setAttribute("tabindex","0");
+  el.setAttribute("aria-label","Stories from "+nameOf(k)+(isDouble?" (2 stories)":""));
+  // position:fixed element — balloon-count is absolute inside it
+  el.style.cssText = `--pin:${pin[1]};left:${cx-9}px;top:${cy-23}px;position:fixed;`;
+
+  el.innerHTML =
+    `<div class="balloon-circle">` +
+    `  <img src="${esc(s.img)}" alt="${esc(nameOf(k))}" loading="lazy"/>` +
+    `</div>` +
+    `<div class="balloon-tail"></div>` +
+    (isDouble ? `<div class="balloon-count" aria-hidden="true">2</div>` : "");
+
+  el.addEventListener("click",  ()=>showPickerOrOpen({k, svgX, svgY, picks, pin}));
+  el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); showPickerOrOpen({k, svgX, svgY, picks, pin}); } });
+
+  document.body.appendChild(el);
+  balloonData.push({el, svgX, svgY, k, picks, pin});
 }
 
 // Map TopoJSON is loaded via <script src="assets/countries-110m.js"> (not d3.json).
@@ -637,6 +796,7 @@ function drawMap(world){
   });
 
   repositionStacks();
+  repositionBalloons();
 }
 
 // ── Draw world map + place stacks ──
@@ -706,11 +866,56 @@ function closeModal(){
   popup.classList.remove("show");
   backdrop.classList.remove("show");
 }
-backdrop.onclick = closeModal;
+
+// ── Overlap picker: shown when multiple pins are within tap range ──
+const OVERLAP_PX = 44; // screen-pixel radius; pins closer than this trigger the picker
+
+function showPickerOrOpen(entry){
+  const [cx, cy] = svgToViewport(entry.svgX, entry.svgY);
+  const nearby = balloonData.filter(b=>{
+    if(b.k === entry.k || b.el.style.visibility === "hidden") return false;
+    const [bx, by] = svgToViewport(b.svgX, b.svgY);
+    return Math.hypot(bx - cx, by - cy) <= OVERLAP_PX;
+  });
+  if(nearby.length === 0){
+    openModal(entry.k, entry.picks[0].idx, entry.pin);
+  } else {
+    showPicker([entry, ...nearby]);
+  }
+}
+
+function showPicker(entries){
+  const list = document.getElementById("pickerList");
+  list.innerHTML = "";
+  entries.forEach(e=>{
+    const s   = e.picks[0].s;
+    const btn = document.createElement("button");
+    btn.className = "picker-item";
+    btn.innerHTML =
+      `<div class="picker-dot" style="background:${e.pin[1]}"></div>` +
+      `<div><p class="picker-name">${esc(nameOf(e.k))}</p>` +
+      `<p class="picker-by">${esc(s.by.split(",")[0])}</p></div>`;
+    btn.addEventListener("click", ()=>{ closePicker(); openModal(e.k, e.picks[0].idx, e.pin); });
+    list.appendChild(btn);
+  });
+  backdrop.classList.add("show");
+  document.getElementById("pinPicker").classList.add("show");
+}
+
+function closePicker(){
+  document.getElementById("pinPicker").classList.remove("show");
+  backdrop.classList.remove("show");
+}
+
+backdrop.onclick = ()=>{
+  if(document.getElementById("pinPicker").classList.contains("show")) closePicker();
+  else closeModal();
+};
 document.addEventListener("keydown", e=>{
   if(e.key!=="Escape") return;
   if(helpPanel.classList.contains("show")) closeHelp();
   else if(popup.classList.contains("show")) closeModal();
+  else if(document.getElementById("pinPicker").classList.contains("show")) closePicker();
 });
 
 </script>
