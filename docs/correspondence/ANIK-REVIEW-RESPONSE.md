@@ -54,11 +54,9 @@ A few things you flagged that weren't in any brief or checklist:
 5. **`rel="noopener"` on Drive and social links** — not in the security checklist; added to SECURITY-AND-ACCESS §8 (DOC-004). Drive docs are already set to view-only / Anyone with the link — will reconfirm at launch.
 6. **`vercel.json`** — spec is written, not committed. Lands with the Vercel scaffold (OPS-002).
 
-**One open question — happy to talk it through**
+**Astro vs. static partials — resolved (5 Jul 2026)**
 
-The briefs recommend Astro 4.x ([TICKET-002](../planning/FEATURE-TICKETS.md)). Your suggestion — static + shared partials build step — is actually the Phase 1 interim approach already documented in TECH-BRIEF (`_partials/` + inject script). The reasons we went with Astro for the full build: image optimisation at build time, `sitemap.xml` auto-generation via `@astrojs/sitemap`, shared layouts without a bespoke script to maintain, and a cleaner home for the API routes. Either way, the serverless functions approach stays the same regardless of build tool.
-
-If there's a specific concern about Astro — team complexity, deploy overhead — happy to revisit. What's your preference?
+Anik confirmed: for a multi-page site with shared partials, a framework like Astro makes sense — the framework choice matters less than how the output is served, and in our case that's static/SSG, everything prerenders to HTML at build time, no server in the request path. Serverless stays scoped to `/api` routes for secrets and form handling. That's exactly the `astro.config.mjs` spec in [TECHNICAL-ARCHITECTURE §8](../planning/TECHNICAL-ARCHITECTURE.md) (`output: 'static'`, Vercel static adapter). Astro 4.x stands as the build tool for TICKET-002.
 
 **Analytics**
 
@@ -68,7 +66,7 @@ One knock-on: GA4 sets cookies, so a cookie consent banner is now required for E
 
 **Suggested next steps**
 
-- **Anik** — preference on Astro vs static partials build?
+- **Anik** ✅ — confirmed Astro (static/SSG output) 5 Jul 2026, closing the last open fork.
 - **Somesh** ✅ — all items resolved and committed (3 Jul 2026): brief doc links fixed, local dev instructions clarified, `llms.txt` and favicon added to plan, `rel="noopener"` added to security checklist, security headers added to `netlify.toml`, `vercel.json` committed, CI workflow live for single-file sync, Story Board a11y gaps closed.
 - **Team** — sign off DECISION-002 (cookie consent banner / GA4 Consent Mode v2 approach).
 - **Dave** — continue homepage finalization; URLs wired once Keela links confirmed by finance.
@@ -86,7 +84,7 @@ Full status on all 15 points: what is fixed, what is not yet fixed, why, and wha
 | # | Issue raised | Status | Fixed? | Why / Dependency |
 |---|-------------|--------|--------|-----------------|
 | 1 | `index.html` / `contentment-home.html` drift — add CI to sync | Resolved | ✅ Fixed | GitHub Actions workflow `.github/workflows/sync-single-file-build.yml` live — watches `site/index.html` and auto-regenerates `contentment-home.html` on push (OPS-003 ✅) |
-| 2 | Stay static, no Astro — partials build step + serverless; rate limiting, CSRF, input validation | Partially open | Serverless + rate limit + CSRF + validation ✅ documented; Astro vs static = open decision | Rate limiting: [DECISION-004](../planning/DECISIONS.md), [TECHNICAL-ARCHITECTURE §10](../planning/TECHNICAL-ARCHITECTURE.md); CSRF + validation: [SECURITY-AND-ACCESS §7](../planning/SECURITY-AND-ACCESS.md); Astro decision pending Anik input |
+| 2 | Stay static, no Astro — partials build step + serverless; rate limiting, CSRF, input validation | Resolved | ✅ Fixed | Serverless + rate limit + CSRF + validation ✅ documented ([DECISION-004](../planning/DECISIONS.md), [TECHNICAL-ARCHITECTURE §10](../planning/TECHNICAL-ARCHITECTURE.md), [SECURITY-AND-ACCESS §7](../planning/SECURITY-AND-ACCESS.md)). Astro vs static: Anik confirmed 5 Jul 2026 that Astro is fine as long as output stays static/SSG with serverless scoped to `/api` — matches `astro.config.mjs` (`output: 'static'`) already spec'd |
 | 3 | Split inline CSS/JS from `index.html` | Planned | Not yet — Dave's prototype | [TICKET-001](../planning/FEATURE-TICKETS.md) at migration |
 | 4 | No browser API keys — use embeds or serverless functions | Already covered in briefs | ✅ Documented | [TECH-BRIEF](../briefs/TECH-BRIEF.md) Integration Specs, [SECURITY-AND-ACCESS §8](../planning/SECURITY-AND-ACCESS.md) |
 | 5 | Dead `href="#"` links across the page | Dave's WIP — tracked | Not yet | Blocked on Keela URLs from finance ([TICKET-060](../planning/FEATURE-TICKETS.md)); doors/footer in [TICKET-004](../planning/FEATURE-TICKETS.md) |

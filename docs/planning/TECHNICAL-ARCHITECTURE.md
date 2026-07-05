@@ -676,3 +676,4 @@ Run in sequence. `hello@contentment.org` email must not be interrupted during cu
 | 2026-06 | Committed to CMS path: markdown-in-repo (Phase 1) → Sanity (Phase 1.5); added rationale. Added /impact vs /about/impact content boundary definition to routing section. |
 | 2026-06 | Added: Astro config spec (§8), vercel.json with CSP (§9), rate limiting with @upstash/ratelimit (§10), GitHub Actions CI/CD pipeline (§11), DNS cutover runbook (§12), updated performance and observability sections. DECISIONS.md created for 6 open choices. |
 | 2026-06 | §6 env vars consolidated: Upstash, Resend, Slack, Zoom, Keela webhook, Google Workspace — single canonical table. Recommendations recorded in DECISIONS 001–004. |
+| 2026-07 | Astro vs. static-partials fork closed — Anik confirmed static/SSG output with serverless scoped to `/api` (5 Jul 2026), matching the §8 `astro.config.mjs` spec already in this doc. Astro 4.x is confirmed for TICKET-002. |
