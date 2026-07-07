@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contentment Tracker Board</title>
+    <?!= include('Styles'); ?>
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Contentment Tracker Board</h1>
+      <div id="userEmail" class="user"></div>
+    </header>
+
+    <section class="feed" id="activityFeed"></section>
+
+    <section class="toolbar">
+      <button id="refreshBtn">Refresh</button>
+      <button id="exportCsvBtn">Export CSV</button>
+      <input id="searchInput" placeholder="Search issues..." />
+      <select id="filterOwner">
+        <option value="">All owners</option>
+      </select>
+      <select id="filterPhase">
+        <option value="">All phases</option>
+      </select>
+      <label class="inline">
+        <input type="checkbox" id="myItemsOnly" />
+        My items
+      </label>
+      <input id="newIssueTitle" placeholder="New issue title..." />
+      <select id="newIssueStatus">
+        <option>Open</option>
+        <option>In Progress</option>
+        <option>Blocked</option>
+        <option>Pending</option>
+        <option>Done</option>
+      </select>
+      <button id="addIssueBtn">Add Issue</button>
+      <input id="weeklyEmail" placeholder="Weekly summary email..." />
+      <button id="saveWeeklyEmailBtn">Save Email</button>
+      <button id="installWeeklyBtn">Install Weekly</button>
+      <button id="sendWeeklyNowBtn">Send Weekly Now</button>
+    </section>
+
+    <section class="board" id="board"></section>
+
+    <aside class="panel">
+      <h3>Decisions</h3>
+      <div class="decision-toolbar">
+        <input id="decisionTopic" placeholder="New decision topic..." />
+        <button id="addDecisionBtn">Add Decision</button>
+      </div>
+      <div id="decisions" class="decision-list"></div>
+      <hr />
+      <h3>Issue Details</h3>
+      <div id="issueMeta">Select a card to view comments.</div>
+      <div id="issueEditor" class="issue-editor"></div>
+      <div id="comments"></div>
+      <textarea id="commentText" placeholder="Write a comment..."></textarea>
+      <button id="addCommentBtn">Add Comment</button>
+      <hr />
+      <h3>Decision Detail</h3>
+      <div id="decisionMeta">Select a decision to edit notes.</div>
+      <textarea id="decisionNotes" placeholder="Decision notes..."></textarea>
+      <button id="saveDecisionNotesBtn">Save Decision Notes</button>
+    </aside>
+
+    <?!= include('App'); ?>
+  </body>
+ </html>

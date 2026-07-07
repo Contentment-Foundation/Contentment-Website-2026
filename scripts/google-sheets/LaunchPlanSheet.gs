@@ -90,16 +90,29 @@ function removeDailyRefreshTrigger() {
 function loadData_() {
   if (CONFIG.JSON_URL) {
     try {
-      const res = UrlFetchApp.fetch(CONFIG.JSON_URL, { muteHttpExceptions: true });
+      const normalizedUrl = normalizeJsonUrl_(CONFIG.JSON_URL);
+      const res = UrlFetchApp.fetch(normalizedUrl, { muteHttpExceptions: true });
       if (res.getResponseCode() === 200) {
         return JSON.parse(res.getContentText());
       }
-      Logger.log('JSON_URL fetch failed: ' + res.getResponseCode() + ' — using embedded data');
+      Logger.log('JSON_URL fetch failed: ' + res.getResponseCode() + ' (' + normalizedUrl + ') — using embedded data');
     } catch (e) {
       Logger.log('JSON_URL error: ' + e + ' — using embedded data');
     }
   }
   return JSON.parse(EMBEDDED_JSON);
+}
+
+function normalizeJsonUrl_(url) {
+  // Accept normal GitHub blob URLs and convert to raw URL automatically.
+  // Example:
+  // https://github.com/org/repo/blob/main/path/file.json
+  // -> https://raw.githubusercontent.com/org/repo/main/path/file.json
+  const blobMatch = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
+  if (blobMatch) {
+    return 'https://raw.githubusercontent.com/' + blobMatch[1] + '/' + blobMatch[2] + '/' + blobMatch[3] + '/' + blobMatch[4];
+  }
+  return url;
 }
 
 function getOrCreateSpreadsheet_() {
@@ -151,11 +164,18 @@ function writeMetaTab_(ss, meta) {
     ['Source repo file', 'docs/planning/launch-plan-data.json'],
     ['Apps Script', 'scripts/google-sheets/LaunchPlanSheet.gs'],
   ];
-  sheet.getRange(1, 1, lines.length, 2).setValues(lines);
+  const rows = lines.map(padRowToTwoCols_);
+  sheet.getRange(1, 1, rows.length, 2).setValues(rows);
   sheet.getRange(1, 1, 1, 2).merge().setFontSize(16).setFontWeight('bold').setBackground(COLORS.header).setFontColor(COLORS.headerFont);
   sheet.setColumnWidth(1, 160);
   sheet.setColumnWidth(2, 520);
   sheet.setFrozenRows(1);
+}
+
+function padRowToTwoCols_(row) {
+  if (!row || !row.length) return ['', ''];
+  if (row.length === 1) return [row[0], ''];
+  return [row[0], row[1]];
 }
 
 function formatDataTab_(sheet, numCols, tabKey) {

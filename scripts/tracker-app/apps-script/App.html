@@ -1,0 +1,362 @@
+<script>
+  let state = { issues: [], comments: [], decisions: [], activity: [], userEmail: "", statuses: [] };
+  let selectedIssueId = null;
+  let selectedDecisionId = null;
+  let draggedIssueId = null;
+  const columnOrder = ["Open", "In Progress", "Blocked", "Pending", "Done"];
+
+  function callServer(fn, ...args) {
+    return new Promise((resolve, reject) => {
+      google.script.run
+        .withSuccessHandler(resolve)
+        .withFailureHandler((err) => reject(err && err.message ? err.message : String(err)))
+        [fn](...args);
+    });
+  }
+
+  async function refresh() {
+    state = await callServer("getBoardData");
+    document.getElementById("userEmail").textContent = state.userEmail;
+    hydrateFilterOptions();
+    renderActivityFeed();
+    renderBoard();
+    renderDecisions();
+    renderPanel();
+    renderDecisionDrawer();
+  }
+
+  function filteredIssues() {
+    const q = document.getElementById("searchInput").value.trim().toLowerCase();
+    const owner = document.getElementById("filterOwner").value;
+    const phase = document.getElementById("filterPhase").value;
+    const mine = document.getElementById("myItemsOnly").checked;
+    return state.issues.filter((i) => {
+      if (q) {
+        const hay = `${i.id || ""} ${i.title || ""} ${i.blocker || ""}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      if (owner && (i.owner || "") !== owner) return false;
+      if (phase && String(i.phase || "") !== phase) return false;
+      if (mine && (i.owner || "") !== state.userEmail) return false;
+      return true;
+    });
+  }
+
+  function hydrateFilterOptions() {
+    const owners = [...new Set(state.issues.map((i) => i.owner).filter(Boolean))].sort();
+    const phases = [...new Set(state.issues.map((i) => String(i.phase || "")).filter(Boolean))].sort();
+    const ownerSel = document.getElementById("filterOwner");
+    const phaseSel = document.getElementById("filterPhase");
+    ownerSel.innerHTML = '<option value="">All owners</option>' + owners.map((o) => `<option>${escapeHtml(o)}</option>`).join("");
+    phaseSel.innerHTML = '<option value="">All phases</option>' + phases.map((p) => `<option>${escapeHtml(p)}</option>`).join("");
+  }
+
+  function renderActivityFeed() {
+    const el = document.getElementById("activityFeed");
+    const events = (state.activity || []).slice(0, 12);
+    el.innerHTML = events.length
+      ? events
+          .map(
+            (e) =>
+              `<div class="event">${escapeHtml(e.actor_email || "unknown")} • ${escapeHtml(
+                e.action || "update"
+              )} • ${escapeHtml(e.entity_id || "")}</div>`
+          )
+          .join("")
+      : '<div class="event">No activity yet</div>';
+  }
+
+  function renderBoard() {
+    const board = document.getElementById("board");
+    board.innerHTML = "";
+    const issues = filteredIssues();
+
+    columnOrder.forEach((status) => {
+      const col = document.createElement("div");
+      col.className = "col";
+      col.dataset.status = status;
+      col.innerHTML = `<h3>${status}</h3><div class="cards"></div>`;
+      const cardsEl = col.querySelector(".cards");
+      col.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        col.classList.add("drop-target");
+      });
+      col.addEventListener("dragleave", () => col.classList.remove("drop-target"));
+      col.addEventListener("drop", async (e) => {
+        e.preventDefault();
+        col.classList.remove("drop-target");
+        if (!draggedIssueId) return;
+        await callServer("updateIssueStatus", draggedIssueId, status);
+        draggedIssueId = null;
+        await refresh();
+      });
+
+      issues
+        .filter((i) => (i.status || "Open") === status)
+        .forEach((issue) => {
+          const ownerOptions = [state.userEmail, ...(state.owners || [])]
+            .filter((v, i, arr) => v && arr.indexOf(v) === i)
+            .sort();
+          const priorityOptions = state.priorities || ["Must", "Should", "Nice", "High", "Medium", "Low"];
+          const priorityClass = String(issue.priority || "")
+            .toLowerCase()
+            .replace(/\s+/g, "");
+          const card = document.createElement("div");
+          card.className = "card";
+          card.draggable = true;
+          card.innerHTML = `
+            <div class="id">${issue.id || ""}</div>
+            <div class="title">${issue.title || "(untitled)"}</div>
+            <div class="meta">${issue.owner || "Unassigned"} • ${issue.priority || ""} • Phase ${issue.phase || ""}</div>
+            <span class="chip ${priorityClass}">${issue.priority || "—"}</span>
+            <div class="assignee-row">
+              <select data-owner-id="${issue.id}">
+                <option value="">Unassigned</option>
+                ${ownerOptions
+                  .map(
+                    (o) => `<option value="${escapeHtml(o)}" ${o === (issue.owner || "") ? "selected" : ""}>${escapeHtml(o)}</option>`
+                  )
+                  .join("")}
+              </select>
+            </div>
+            <div class="assignee-row">
+              <select data-priority-id="${issue.id}">
+                ${priorityOptions
+                  .map(
+                    (p) => `<option value="${escapeHtml(p)}" ${p === (issue.priority || "") ? "selected" : ""}>Priority: ${escapeHtml(p)}</option>`
+                  )
+                  .join("")}
+              </select>
+            </div>
+            <div class="status-row">
+              <select data-id="${issue.id}">
+                ${state.statuses.map((s) => `<option ${s === issue.status ? "selected" : ""}>${s}</option>`).join("")}
+              </select>
+            </div>
+          `;
+          card.addEventListener("click", (e) => {
+            if (e.target.tagName !== "SELECT" && e.target.tagName !== "OPTION") {
+              selectedIssueId = issue.id;
+              renderPanel();
+            }
+          });
+          card.addEventListener("dragstart", () => {
+            draggedIssueId = issue.id;
+            card.classList.add("dragging");
+          });
+          card.addEventListener("dragend", () => card.classList.remove("dragging"));
+          const sel = card.querySelector("select[data-id]");
+          sel.addEventListener("change", async (e) => {
+            await callServer("updateIssueStatus", issue.id, e.target.value);
+            await refresh();
+          });
+          const ownerSel = card.querySelector("select[data-owner-id]");
+          ownerSel.addEventListener("change", async (e) => {
+            await callServer("updateIssueField", issue.id, "owner", e.target.value);
+            await refresh();
+          });
+          const prioritySel = card.querySelector("select[data-priority-id]");
+          prioritySel.addEventListener("change", async (e) => {
+            await callServer("updateIssueField", issue.id, "priority", e.target.value);
+            await refresh();
+          });
+          cardsEl.appendChild(card);
+        });
+
+      board.appendChild(col);
+    });
+  }
+
+  function renderDecisions() {
+    const el = document.getElementById("decisions");
+    const list = (state.decisions || []).slice().sort((a, b) => String(a.decision_id || "").localeCompare(String(b.decision_id || "")));
+    el.innerHTML = list
+      .map(
+        (d) => `
+        <div class="decision">
+          <div class="decision-top" data-decision-id="${escapeHtml(d.decision_id || "")}">
+            <div class="topic">${escapeHtml(d.decision_id || "")}: ${escapeHtml(d.topic || "")}</div>
+            <select data-decision-id="${escapeHtml(d.decision_id || "")}">
+              ${(state.decisionStatuses || ["Open", "Recommended", "Resolved"]).map((s) => `<option ${s === d.status ? "selected" : ""}>${s}</option>`).join("")}
+            </select>
+          </div>
+          <div class="meta">${escapeHtml(d.owner || "Unassigned")} • ${escapeHtml(d.impact || "")}</div>
+        </div>
+      `
+      )
+      .join("");
+    el.querySelectorAll("select[data-decision-id]").forEach((sel) => {
+      sel.addEventListener("change", async (e) => {
+        const id = e.target.getAttribute("data-decision-id");
+        const existing = (state.decisions || []).find((d) => d.decision_id === id);
+        if (!existing) return;
+        await callServer("upsertDecision", {
+          decision_id: id,
+          topic: existing.topic,
+          owner: existing.owner,
+          impact: existing.impact,
+          notes: existing.notes,
+          status: e.target.value,
+        });
+        await refresh();
+      });
+    });
+    el.querySelectorAll(".decision-top[data-decision-id]").forEach((node) => {
+      node.addEventListener("click", () => {
+        selectedDecisionId = node.getAttribute("data-decision-id");
+        renderDecisionDrawer();
+      });
+    });
+  }
+
+  function renderPanel() {
+    const meta = document.getElementById("issueMeta");
+    const commentsEl = document.getElementById("comments");
+    commentsEl.innerHTML = "";
+
+    if (!selectedIssueId) {
+      meta.textContent = "Select a card to view comments.";
+      document.getElementById("issueEditor").innerHTML = "";
+      return;
+    }
+    const issue = state.issues.find((i) => i.id === selectedIssueId);
+    if (!issue) {
+      meta.textContent = "Issue not found.";
+      return;
+    }
+    meta.innerHTML = `<strong>${issue.title}</strong><br>${issue.id} • ${issue.status} • ${issue.owner || "Unassigned"}`;
+    document.getElementById("issueEditor").innerHTML = `
+      <div><strong>Blocker:</strong> ${escapeHtml(issue.blocker || "—")}</div>
+      <div><strong>Depends on:</strong> ${escapeHtml(issue.depends_on || "—")}</div>
+      <div><strong>Updated by:</strong> ${escapeHtml(issue.updated_by || "—")} • ${escapeHtml(issue.updated_at || "")}</div>
+    `;
+    state.comments
+      .filter((c) => c.issue_id === selectedIssueId)
+      .forEach((c) => {
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `<div class="by">${c.author_email || "unknown"} • ${c.created_at || ""}</div><div>${escapeHtml(c.comment_text || "")}</div>`;
+        commentsEl.appendChild(div);
+      });
+  }
+
+  function renderDecisionDrawer() {
+    const meta = document.getElementById("decisionMeta");
+    const notesEl = document.getElementById("decisionNotes");
+    if (!selectedDecisionId) {
+      meta.textContent = "Select a decision to edit notes.";
+      notesEl.value = "";
+      return;
+    }
+    const d = (state.decisions || []).find((x) => x.decision_id === selectedDecisionId);
+    if (!d) {
+      meta.textContent = "Decision not found.";
+      notesEl.value = "";
+      return;
+    }
+    meta.innerHTML = `<strong>${escapeHtml(d.decision_id || "")}</strong> • ${escapeHtml(d.topic || "")}<br>${escapeHtml(d.status || "")} • ${escapeHtml(d.owner || "Unassigned")}`;
+    notesEl.value = d.notes || "";
+  }
+
+  function escapeHtml(text) {
+    return String(text)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
+  }
+
+  async function addIssue() {
+    const titleEl = document.getElementById("newIssueTitle");
+    const statusEl = document.getElementById("newIssueStatus");
+    const title = titleEl.value.trim();
+    if (!title) return;
+    await callServer("upsertIssue", { title, status: statusEl.value, owner: state.userEmail });
+    titleEl.value = "";
+    await refresh();
+  }
+
+  async function addDecision() {
+    const topicEl = document.getElementById("decisionTopic");
+    const topic = topicEl.value.trim();
+    if (!topic) return;
+    await callServer("upsertDecision", {
+      topic,
+      owner: state.userEmail,
+      impact: "Medium",
+      status: "Open",
+      notes: "",
+    });
+    topicEl.value = "";
+    await refresh();
+  }
+
+  async function saveDecisionNotes() {
+    if (!selectedDecisionId) {
+      alert("Select a decision first.");
+      return;
+    }
+    const notes = document.getElementById("decisionNotes").value;
+    await callServer("updateDecisionNotes", selectedDecisionId, notes);
+    await refresh();
+  }
+
+  async function exportCsv() {
+    const csv = await callServer("getTrackerCsv");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `tracker-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function saveWeeklyEmail() {
+    const email = document.getElementById("weeklyEmail").value.trim();
+    if (!email) return alert("Enter an email first.");
+    await callServer("setWeeklySummaryRecipient", email);
+    alert("Weekly summary email saved.");
+  }
+
+  async function installWeekly() {
+    await callServer("installWeeklySummaryTrigger");
+    alert("Weekly summary trigger installed (Monday 9am script timezone).");
+  }
+
+  async function sendWeeklyNow() {
+    const email = document.getElementById("weeklyEmail").value.trim();
+    if (!email) return alert("Set email first.");
+    await callServer("sendWeeklySummaryEmail", email);
+    alert("Weekly summary sent.");
+    await refresh();
+  }
+
+  async function addComment() {
+    if (!selectedIssueId) {
+      alert("Select an issue first.");
+      return;
+    }
+    const textEl = document.getElementById("commentText");
+    const text = textEl.value.trim();
+    if (!text) return;
+    await callServer("addComment", selectedIssueId, text);
+    textEl.value = "";
+    await refresh();
+  }
+
+  document.getElementById("refreshBtn").addEventListener("click", refresh);
+  document.getElementById("addIssueBtn").addEventListener("click", addIssue);
+  document.getElementById("addDecisionBtn").addEventListener("click", addDecision);
+  document.getElementById("addCommentBtn").addEventListener("click", addComment);
+  document.getElementById("saveDecisionNotesBtn").addEventListener("click", saveDecisionNotes);
+  document.getElementById("exportCsvBtn").addEventListener("click", exportCsv);
+  document.getElementById("saveWeeklyEmailBtn").addEventListener("click", saveWeeklyEmail);
+  document.getElementById("installWeeklyBtn").addEventListener("click", installWeekly);
+  document.getElementById("sendWeeklyNowBtn").addEventListener("click", sendWeeklyNow);
+  document.getElementById("searchInput").addEventListener("input", renderBoard);
+  document.getElementById("filterOwner").addEventListener("change", renderBoard);
+  document.getElementById("filterPhase").addEventListener("change", renderBoard);
+  document.getElementById("myItemsOnly").addEventListener("change", renderBoard);
+
+  refresh();
+</script>
