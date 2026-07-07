@@ -2,3 +2,10 @@
 
 # Netlify build copies docs/*.html here — source of truth is docs/
 site/docs/
+
+# Python bytecode cache (scripts/tracker-app/python)
+__pycache__/
+*.pyc
+
+# Local virtualenv
+.venv/

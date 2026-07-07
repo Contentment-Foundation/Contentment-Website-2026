@@ -2,6 +2,8 @@ const TRACKER_CONFIG = {
   SPREADSHEET_ID: '18_WjO7OrCNUrcciBpjqEA90dzbhvKEeEzgC2B4fRGJk',
   WEEKLY_SUMMARY_DAY: ScriptApp.WeekDay.MONDAY,
   WEEKLY_SUMMARY_HOUR: 9,
+  EMAIL_DOMAIN: 'contentment.org',
+  TEAM_MEMBERS: ['somesh', 'kristina', 'nav', 'dave', 'woei', 'cika', 'lorna', 'pamila', 'anik'],
   SHEETS: {
     ISSUES: 'issues',
     COMMENTS: 'comments',
@@ -14,13 +16,19 @@ const TRACKER_CONFIG = {
 const ISSUE_HEADERS = [
   'id',
   'title',
+  'description',
   'type',
   'phase',
   'priority',
   'status',
   'owner',
+  'start_date',
+  'due_date',
+  'timeline_note',
   'depends_on',
   'blocker',
+  'attachments',
+  'context',
   'source_ticket',
   'updated_by',
   'updated_at',
@@ -57,11 +65,17 @@ const ACTIVITY_HEADERS = [
 ];
 
 function doGet() {
+  var email = getCurrentUser_();
+  if (!isAuthorizedUser_(email)) {
+    return HtmlService.createHtmlOutput(
+      '<p>Access restricted to ' + TRACKER_CONFIG.EMAIL_DOMAIN + ' accounts. Signed in as: ' + (email || 'unknown') + '</p>'
+    );
+  }
   ensureSchema_();
   return HtmlService.createTemplateFromFile('Index')
     .evaluate()
     .setTitle('Contentment Tracker Board')
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT);
 }
 
 function include(filename) {
@@ -70,6 +84,27 @@ function include(filename) {
 
 function getCurrentUser_() {
   return Session.getActiveUser().getEmail() || 'unknown@user';
+}
+
+function isAuthorizedUser_(email) {
+  return !!email && email.toLowerCase().indexOf('@' + TRACKER_CONFIG.EMAIL_DOMAIN.toLowerCase()) !== -1;
+}
+
+function assertAuthorized_() {
+  var email = getCurrentUser_();
+  if (!isAuthorizedUser_(email)) {
+    throw new Error('Not authorized: this tracker is restricted to ' + TRACKER_CONFIG.EMAIL_DOMAIN + ' accounts.');
+  }
+}
+
+function withLock_(fn) {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    return fn();
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function nowIso_() {
@@ -86,7 +121,8 @@ function ensureHeader_(sheet, headers) {
     return row[i] === h;
   });
   if (!same) {
-    sheet.clear();
+    // Only fix the header row itself — never clear the sheet, or a stray
+    // manual edit to row 1 would wipe every existing issue/comment/decision.
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   }
 }
@@ -121,6 +157,22 @@ function rowObjects_(sheet) {
   });
 }
 
+function nextIssueId_(rows, type) {
+  var prefix = (type || 'FEAT').toUpperCase();
+  var re = new RegExp('^' + prefix + '-(\\d+)$');
+  var maxNum = 0;
+  rows.forEach(function (r) {
+    var id = String(r.id || '').toUpperCase();
+    var m = id.match(re);
+    if (m) {
+      var n = parseInt(m[1], 10);
+      if (!isNaN(n) && n > maxNum) maxNum = n;
+    }
+  });
+  var next = maxNum + 1;
+  return prefix + '-' + String(next).padStart(3, '0');
+}
+
 function logActivity_(entityType, entityId, action, oldValue, newValue) {
   const ss = openSheet_();
   const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.ACTIVITY);
@@ -137,6 +189,7 @@ function logActivity_(entityType, entityId, action, oldValue, newValue) {
 }
 
 function getBoardData() {
+  assertAuthorized_();
   ensureSchema_();
   const ss = openSheet_();
   const issues = rowObjects_(ss.getSheetByName(TRACKER_CONFIG.SHEETS.ISSUES));
@@ -162,149 +215,177 @@ function getBoardData() {
     decisions: decisions,
     activity: activity,
     owners: Object.keys(owners).sort(),
+    teamMembers: TRACKER_CONFIG.TEAM_MEMBERS,
     statuses: ['Open', 'In Progress', 'Blocked', 'Pending', 'Done', 'Scheduled', 'Paused'],
     priorities: ['Must', 'Should', 'Nice', 'Critical', 'High', 'Medium', 'Low'],
     decisionStatuses: ['Open', 'Recommended', 'Resolved'],
+    weeklyRecipient: PropertiesService.getScriptProperties().getProperty('WEEKLY_SUMMARY_RECIPIENT') || '',
   };
 }
 
 function updateIssueStatus(issueId, newStatus) {
-  ensureSchema_();
-  const ss = openSheet_();
-  const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.ISSUES);
-  const rows = rowObjects_(sh);
-  const issue = rows.find(function (r) {
-    return r.id === issueId;
-  });
-  if (!issue) throw new Error('Issue not found: ' + issueId);
+  assertAuthorized_();
+  return withLock_(function () {
+    ensureSchema_();
+    const ss = openSheet_();
+    const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.ISSUES);
+    const rows = rowObjects_(sh);
+    const issue = rows.find(function (r) {
+      return r.id === issueId;
+    });
+    if (!issue) throw new Error('Issue not found: ' + issueId);
 
-  const old = issue.status || '';
-  sh.getRange(issue._row, ISSUE_HEADERS.indexOf('status') + 1).setValue(newStatus);
-  sh.getRange(issue._row, ISSUE_HEADERS.indexOf('updated_by') + 1).setValue(getCurrentUser_());
-  sh.getRange(issue._row, ISSUE_HEADERS.indexOf('updated_at') + 1).setValue(nowIso_());
-  logActivity_('issue', issueId, 'status_change', old, newStatus);
-  return { ok: true };
+    const old = issue.status || '';
+    sh.getRange(issue._row, ISSUE_HEADERS.indexOf('status') + 1).setValue(newStatus);
+    sh.getRange(issue._row, ISSUE_HEADERS.indexOf('updated_by') + 1).setValue(getCurrentUser_());
+    sh.getRange(issue._row, ISSUE_HEADERS.indexOf('updated_at') + 1).setValue(nowIso_());
+    logActivity_('issue', issueId, 'status_change', old, newStatus);
+    return { ok: true };
+  });
 }
 
 function addComment(issueId, text) {
   if (!text || !String(text).trim()) throw new Error('Comment cannot be empty');
-  ensureSchema_();
-  const ss = openSheet_();
-  const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.COMMENTS);
-  const commentId = Utilities.getUuid();
-  sh.appendRow([commentId, issueId, String(text).trim(), getCurrentUser_(), nowIso_()]);
-  logActivity_('comment', commentId, 'create', '', String(text).trim());
-  return { ok: true, comment_id: commentId };
+  assertAuthorized_();
+  return withLock_(function () {
+    ensureSchema_();
+    const ss = openSheet_();
+    const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.COMMENTS);
+    const commentId = Utilities.getUuid();
+    sh.appendRow([commentId, issueId, String(text).trim(), getCurrentUser_(), nowIso_()]);
+    logActivity_('comment', commentId, 'create', '', String(text).trim());
+    return { ok: true, comment_id: commentId };
+  });
 }
 
 function upsertIssue(payload) {
-  ensureSchema_();
-  const ss = openSheet_();
-  const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.ISSUES);
-  const rows = rowObjects_(sh);
-  const id = payload.id || Utilities.getUuid();
-  const existing = rows.find(function (r) {
-    return r.id === id;
+  assertAuthorized_();
+  return withLock_(function () {
+    ensureSchema_();
+    const ss = openSheet_();
+    const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.ISSUES);
+    const rows = rowObjects_(sh);
+    const type = payload.type || 'FEAT';
+    const id = payload.id || nextIssueId_(rows, type);
+    const existing = rows.find(function (r) {
+      return r.id === id;
+    });
+
+    const normalized = {
+      id: id,
+      title: payload.title || '',
+      description: payload.description || '',
+      type: type,
+      phase: payload.phase || '1',
+      priority: payload.priority || 'Must',
+      status: payload.status || 'Open',
+      owner: normalizeOwnerInput_(payload.owner || ''),
+      start_date: payload.start_date || '',
+      due_date: payload.due_date || '',
+      timeline_note: payload.timeline_note || '',
+      depends_on: payload.depends_on || '',
+      blocker: payload.blocker || '',
+      attachments: payload.attachments || '',
+      context: payload.context || '',
+      source_ticket: payload.source_ticket || '',
+      updated_by: getCurrentUser_(),
+      updated_at: nowIso_(),
+    };
+
+    const values = ISSUE_HEADERS.map(function (h) {
+      return normalized[h];
+    });
+
+    if (existing) {
+      sh.getRange(existing._row, 1, 1, ISSUE_HEADERS.length).setValues([values]);
+      logActivity_('issue', id, 'update', '', JSON.stringify(normalized));
+    } else {
+      sh.appendRow(values);
+      logActivity_('issue', id, 'create', '', JSON.stringify(normalized));
+    }
+    return { ok: true, id: id };
   });
-
-  const normalized = {
-    id: id,
-    title: payload.title || '',
-    type: payload.type || 'FEAT',
-    phase: payload.phase || '1',
-    priority: payload.priority || 'Must',
-    status: payload.status || 'Open',
-    owner: payload.owner || '',
-    depends_on: payload.depends_on || '',
-    blocker: payload.blocker || '',
-    source_ticket: payload.source_ticket || '',
-    updated_by: getCurrentUser_(),
-    updated_at: nowIso_(),
-  };
-
-  const values = ISSUE_HEADERS.map(function (h) {
-    return normalized[h];
-  });
-
-  if (existing) {
-    sh.getRange(existing._row, 1, 1, ISSUE_HEADERS.length).setValues([values]);
-    logActivity_('issue', id, 'update', '', JSON.stringify(normalized));
-  } else {
-    sh.appendRow(values);
-    logActivity_('issue', id, 'create', '', JSON.stringify(normalized));
-  }
-  return { ok: true, id: id };
 }
 
 function upsertDecision(payload) {
-  ensureSchema_();
-  const ss = openSheet_();
-  const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.DECISIONS);
-  const rows = rowObjects_(sh);
-  const id = payload.decision_id || payload.id || Utilities.getUuid();
-  const existing = rows.find(function (r) {
-    return r.decision_id === id;
-  });
+  assertAuthorized_();
+  return withLock_(function () {
+    ensureSchema_();
+    const ss = openSheet_();
+    const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.DECISIONS);
+    const rows = rowObjects_(sh);
+    const id = payload.decision_id || payload.id || Utilities.getUuid();
+    const existing = rows.find(function (r) {
+      return r.decision_id === id;
+    });
 
-  const normalized = {
-    decision_id: id,
-    topic: payload.topic || '',
-    status: payload.status || 'Open',
-    owner: payload.owner || '',
-    impact: payload.impact || '',
-    notes: payload.notes || '',
-    updated_by: getCurrentUser_(),
-    updated_at: nowIso_(),
-  };
-  const values = DECISION_HEADERS.map(function (h) {
-    return normalized[h];
-  });
+    const normalized = {
+      decision_id: id,
+      topic: payload.topic || '',
+      status: payload.status || 'Open',
+      owner: payload.owner || '',
+      impact: payload.impact || '',
+      notes: payload.notes || '',
+      updated_by: getCurrentUser_(),
+      updated_at: nowIso_(),
+    };
+    const values = DECISION_HEADERS.map(function (h) {
+      return normalized[h];
+    });
 
-  if (existing) {
-    sh.getRange(existing._row, 1, 1, DECISION_HEADERS.length).setValues([values]);
-    logActivity_('decision', id, 'update', '', JSON.stringify(normalized));
-  } else {
-    sh.appendRow(values);
-    logActivity_('decision', id, 'create', '', JSON.stringify(normalized));
-  }
-  return { ok: true, decision_id: id };
+    if (existing) {
+      sh.getRange(existing._row, 1, 1, DECISION_HEADERS.length).setValues([values]);
+      logActivity_('decision', id, 'update', '', JSON.stringify(normalized));
+    } else {
+      sh.appendRow(values);
+      logActivity_('decision', id, 'create', '', JSON.stringify(normalized));
+    }
+    return { ok: true, decision_id: id };
+  });
 }
 
 function updateIssueField(issueId, field, value) {
   if (ISSUE_HEADERS.indexOf(field) === -1) throw new Error('Invalid field: ' + field);
   if (field === 'id') throw new Error('Cannot edit id');
-  ensureSchema_();
-  const ss = openSheet_();
-  const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.ISSUES);
-  const rows = rowObjects_(sh);
-  const issue = rows.find(function (r) {
-    return r.id === issueId;
+  assertAuthorized_();
+  return withLock_(function () {
+    ensureSchema_();
+    const ss = openSheet_();
+    const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.ISSUES);
+    const rows = rowObjects_(sh);
+    const issue = rows.find(function (r) {
+      return r.id === issueId;
+    });
+    if (!issue) throw new Error('Issue not found: ' + issueId);
+    const col = ISSUE_HEADERS.indexOf(field) + 1;
+    const old = issue[field] || '';
+    const finalValue = field === 'owner' ? normalizeOwnerInput_(value) : value;
+    sh.getRange(issue._row, col).setValue(finalValue);
+    sh.getRange(issue._row, ISSUE_HEADERS.indexOf('updated_by') + 1).setValue(getCurrentUser_());
+    sh.getRange(issue._row, ISSUE_HEADERS.indexOf('updated_at') + 1).setValue(nowIso_());
+    logActivity_('issue', issueId, 'field_change:' + field, old, String(finalValue || ''));
+    return { ok: true };
   });
-  if (!issue) throw new Error('Issue not found: ' + issueId);
-  const col = ISSUE_HEADERS.indexOf(field) + 1;
-  const old = issue[field] || '';
-  sh.getRange(issue._row, col).setValue(value);
-  sh.getRange(issue._row, ISSUE_HEADERS.indexOf('updated_by') + 1).setValue(getCurrentUser_());
-  sh.getRange(issue._row, ISSUE_HEADERS.indexOf('updated_at') + 1).setValue(nowIso_());
-  logActivity_('issue', issueId, 'field_change:' + field, old, String(value || ''));
-  return { ok: true };
 }
 
 function updateDecisionNotes(decisionId, notes) {
-  ensureSchema_();
-  const ss = openSheet_();
-  const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.DECISIONS);
-  const rows = rowObjects_(sh);
-  const decision = rows.find(function (r) {
-    return r.decision_id === decisionId;
+  assertAuthorized_();
+  return withLock_(function () {
+    ensureSchema_();
+    const ss = openSheet_();
+    const sh = ss.getSheetByName(TRACKER_CONFIG.SHEETS.DECISIONS);
+    const rows = rowObjects_(sh);
+    const decision = rows.find(function (r) {
+      return r.decision_id === decisionId;
+    });
+    if (!decision) throw new Error('Decision not found: ' + decisionId);
+    const old = decision.notes || '';
+    sh.getRange(decision._row, DECISION_HEADERS.indexOf('notes') + 1).setValue(notes || '');
+    sh.getRange(decision._row, DECISION_HEADERS.indexOf('updated_by') + 1).setValue(getCurrentUser_());
+    sh.getRange(decision._row, DECISION_HEADERS.indexOf('updated_at') + 1).setValue(nowIso_());
+    logActivity_('decision', decisionId, 'notes_update', old, notes || '');
+    return { ok: true };
   });
-  if (!decision) throw new Error('Decision not found: ' + decisionId);
-  const old = decision.notes || '';
-  sh.getRange(decision._row, DECISION_HEADERS.indexOf('notes') + 1).setValue(notes || '');
-  sh.getRange(decision._row, DECISION_HEADERS.indexOf('updated_by') + 1).setValue(getCurrentUser_());
-  sh.getRange(decision._row, DECISION_HEADERS.indexOf('updated_at') + 1).setValue(nowIso_());
-  logActivity_('decision', decisionId, 'notes_update', old, notes || '');
-  return { ok: true };
 }
 
 function csvEscape_(value) {
@@ -314,6 +395,7 @@ function csvEscape_(value) {
 }
 
 function getTrackerCsv() {
+  assertAuthorized_();
   ensureSchema_();
   const ss = openSheet_();
   const issues = ss.getSheetByName(TRACKER_CONFIG.SHEETS.ISSUES).getDataRange().getValues();
@@ -331,13 +413,28 @@ function getTrackerCsv() {
   return parts.join('\n');
 }
 
-function setWeeklySummaryRecipient(email) {
-  if (!email || String(email).indexOf('@') < 0) throw new Error('Valid email required');
-  PropertiesService.getScriptProperties().setProperty('WEEKLY_SUMMARY_RECIPIENT', String(email).trim());
-  return { ok: true };
+function parseEmails_(input) {
+  return String(input || '')
+    .split(/[,\n; ]+/)
+    .map(function (s) { return s.trim().toLowerCase(); })
+    .filter(Boolean);
+}
+
+function setWeeklySummaryRecipient(emailsInput) {
+  assertAuthorized_();
+  const emails = parseEmails_(emailsInput).map(function (e) {
+    return normalizeOwnerInput_(e);
+  });
+  if (!emails.length || emails.some(function (e) { return e.indexOf('@') < 0; })) {
+    throw new Error('Provide one or more valid emails (comma-separated)');
+  }
+  const unique = Array.from(new Set(emails));
+  PropertiesService.getScriptProperties().setProperty('WEEKLY_SUMMARY_RECIPIENT', unique.join(','));
+  return { ok: true, recipients: unique };
 }
 
 function installWeeklySummaryTrigger() {
+  assertAuthorized_();
   removeWeeklySummaryTrigger();
   ScriptApp.newTrigger('weeklySummaryCron')
     .timeBased()
@@ -348,6 +445,7 @@ function installWeeklySummaryTrigger() {
 }
 
 function removeWeeklySummaryTrigger() {
+  assertAuthorized_();
   ScriptApp.getProjectTriggers().forEach(function (trigger) {
     if (trigger.getHandlerFunction() === 'weeklySummaryCron') {
       ScriptApp.deleteTrigger(trigger);
@@ -357,12 +455,13 @@ function removeWeeklySummaryTrigger() {
 }
 
 function weeklySummaryCron() {
-  const recipient = PropertiesService.getScriptProperties().getProperty('WEEKLY_SUMMARY_RECIPIENT');
-  if (!recipient) return { ok: false, reason: 'No recipient configured' };
-  return sendWeeklySummaryEmail(recipient);
+  const recipients = PropertiesService.getScriptProperties().getProperty('WEEKLY_SUMMARY_RECIPIENT');
+  if (!recipients) return { ok: false, reason: 'No recipient configured' };
+  return sendWeeklySummaryEmail(recipients);
 }
 
 function sendWeeklySummaryEmail(recipient) {
+  assertAuthorized_();
   ensureSchema_();
   const ss = openSheet_();
   const issues = rowObjects_(ss.getSheetByName(TRACKER_CONFIG.SHEETS.ISSUES));
@@ -419,4 +518,13 @@ function sendWeeklySummaryEmail(recipient) {
   });
   logActivity_('system', 'weekly_summary', 'email_sent', '', recipient);
   return { ok: true };
+}
+
+function normalizeOwnerInput_(value) {
+  var v = String(value || '').trim();
+  if (!v) return '';
+  if (v.indexOf('@') >= 0) return v.toLowerCase();
+  // allow known team names, convert to email
+  var lowered = v.toLowerCase();
+  return lowered + '@' + TRACKER_CONFIG.EMAIL_DOMAIN;
 }

@@ -18,15 +18,24 @@ Spreadsheet ID in use:
 - Add issue
 - Update issue status
 - Assignee dropdown editing on cards
+  - Team defaults: somesh, kristina, nav, dave, woei, cika, lorna, pamila, anik
+  - Selecting a name auto-saves as `<name>@contentment.org`
 - Priority color chips on cards
 - Search + owner/phase filters + "My items" view
 - Per-issue comments
 - Comment attribution via user email (`Session.getActiveUser().getEmail()`)
 - Decision panel with inline status editing
 - Decision detail drawer with editable notes
+- Ticket popup window with full detail editing:
+  - subject/title, description, start/due dates, timeline note
+  - assignee, dependency, blocker, status, priority, source ticket
+  - context and additional files/links
+  - comment history preview
 - Top activity feed (latest audit events)
 - CSV export from board toolbar
-- Weekly summary email (manual + scheduled trigger)
+- Weekly summary email (manual + scheduled trigger, supports multiple recipients comma-separated)
+- Auto-refresh every 30 seconds for near real-time sheet/webapp sync
+- Collapsible horizontal timeline at top (tickets grouped by phase)
 - Activity logging on create/update/comment
 - Sync tickets + decisions from repo JSON
 
@@ -112,6 +121,8 @@ It does **not** erase comments/activity.
    - click **Save Email**
    - click **Install Weekly**
    - use **Send Weekly Now** once to verify
+
+You can provide multiple recipient emails separated by commas.
 
 ---
 

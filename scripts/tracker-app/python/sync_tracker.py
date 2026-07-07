@@ -25,13 +25,19 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 ISSUE_HEADERS = [
     "id",
     "title",
+    "description",
     "type",
     "phase",
     "priority",
     "status",
     "owner",
+    "start_date",
+    "due_date",
+    "timeline_note",
     "depends_on",
     "blocker",
+    "attachments",
+    "context",
     "source_ticket",
     "updated_by",
     "updated_at",
@@ -65,10 +71,40 @@ def auth_client() -> gspread.Client:
 
 
 def ensure_sheet(ss: gspread.Spreadsheet, title: str, headers: List[str]) -> gspread.Worksheet:
+    ws = None
+    normalized_target = title.strip().lower()
+
+    # First try exact lookup.
     try:
         ws = ss.worksheet(title)
     except gspread.WorksheetNotFound:
-        ws = ss.add_worksheet(title=title, rows=2000, cols=max(20, len(headers)))
+        ws = None
+
+    # Fallback: match existing sheets by case/whitespace-insensitive title.
+    if ws is None:
+        for candidate in ss.worksheets():
+            if candidate.title.strip().lower() == normalized_target:
+                ws = candidate
+                break
+
+    # Last resort: create the sheet.
+    if ws is None:
+        try:
+            ws = ss.add_worksheet(title=title, rows=2000, cols=max(20, len(headers)))
+        except gspread.exceptions.APIError as exc:
+            # Race/metadata caching edge case: if API says sheet already exists,
+            # re-fetch worksheet list and resolve by normalized title.
+            if "already exists" in str(exc):
+                ss = ss.client.open_by_key(ss.id)
+                for candidate in ss.worksheets():
+                    if candidate.title.strip().lower() == normalized_target:
+                        ws = candidate
+                        break
+                if ws is None:
+                    raise
+            else:
+                raise
+
     current = ws.row_values(1)
     if current != headers:
         ws.clear()
@@ -83,13 +119,19 @@ def normalize_ticket(ticket_row: List[str]) -> Dict[str, str]:
     return {
         "id": issue_id,
         "title": ticket_row[1],
+        "description": "",
         "type": issue_id.split("-")[0] if "-" in issue_id else "FEAT",
         "phase": ticket_row[2],
         "priority": ticket_row[3],
         "status": ticket_row[4],
         "owner": ticket_row[5],
+        "start_date": "",
+        "due_date": "",
+        "timeline_note": "",
         "depends_on": ticket_row[6],
         "blocker": ticket_row[7],
+        "attachments": "",
+        "context": "",
         "source_ticket": issue_id,
         "updated_by": "sync-bot@contentment.org",
         "updated_at": now_iso(),

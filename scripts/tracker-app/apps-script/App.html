@@ -1,7 +1,8 @@
 <script>
-  let state = { issues: [], comments: [], decisions: [], activity: [], userEmail: "", statuses: [] };
+  let state = { issues: [], comments: [], decisions: [], activity: [], userEmail: "", statuses: [], teamMembers: [] };
   let selectedIssueId = null;
   let selectedDecisionId = null;
+  let lastIssueId = null;
   let draggedIssueId = null;
   const columnOrder = ["Open", "In Progress", "Blocked", "Pending", "Done"];
 
@@ -17,8 +18,10 @@
   async function refresh() {
     state = await callServer("getBoardData");
     document.getElementById("userEmail").textContent = state.userEmail;
+    document.getElementById("weeklyEmail").value = state.weeklyRecipient || "";
     hydrateFilterOptions();
     renderActivityFeed();
+    renderTimeline();
     renderBoard();
     renderDecisions();
     renderPanel();
@@ -66,10 +69,116 @@
       : '<div class="event">No activity yet</div>';
   }
 
+  function renderTimeline() {
+    const el = document.getElementById("timeline");
+    const rangeStart = new Date("2026-08-03T00:00:00");
+    const rangeEnd = new Date("2026-08-14T00:00:00");
+    const dayMs = 24 * 60 * 60 * 1000;
+    const days = [];
+    for (let d = new Date(rangeStart); d <= rangeEnd; d = new Date(d.getTime() + dayMs)) {
+      const iso = d.toISOString().slice(0, 10);
+      days.push({ iso, label: d.toLocaleDateString(undefined, { month: "short", day: "numeric" }), tickets: [] });
+    }
+
+    function dayIndexFromDate(value) {
+      if (!value) return -1;
+      const parsed = new Date(value);
+      if (isNaN(parsed.getTime())) return -1;
+      const iso = parsed.toISOString().slice(0, 10);
+      return days.findIndex((x) => x.iso === iso);
+    }
+
+    const noDateIssues = [];
+    (state.issues || []).forEach((issue) => {
+      let idx = dayIndexFromDate(issue.start_date);
+      if (idx < 0) {
+        noDateIssues.push(issue);
+      } else {
+        if (idx >= days.length) idx = days.length - 1;
+        days[idx].tickets.push(issue);
+      }
+    });
+    noDateIssues
+      .slice()
+      .sort((a, b) => String(a.id || "").localeCompare(String(b.id || "")))
+      .forEach((issue, i, arr) => {
+        const idx = Math.min(days.length - 1, Math.floor((i * days.length) / Math.max(1, arr.length)));
+        days[idx].tickets.push(issue);
+      });
+
+    el.innerHTML = days
+      .map((day) => {
+        const chips = day.tickets
+          .slice()
+          .sort((a, b) => String(a.id || "").localeCompare(String(b.id || "")))
+          .map((i) => `<span class="t-chip" title="${escapeHtml(i.title || "")}">${escapeHtml(i.id || "—")} • ${escapeHtml(i.status || "")}</span>`)
+          .join("");
+        return `<div class="t-phase"><h4>${escapeHtml(day.label)} (${escapeHtml(day.iso)})</h4>${chips || '<span class="t-chip">No tickets</span>'}</div>`;
+      })
+      .join("");
+  }
+
   function renderBoard() {
     const board = document.getElementById("board");
     board.innerHTML = "";
     const issues = filteredIssues();
+
+    // Decisions column first (left-most)
+    {
+      const dCol = document.createElement("div");
+      dCol.className = "col";
+      dCol.innerHTML = `<h3>Decisions</h3><div class="cards"></div>`;
+      const dCards = dCol.querySelector(".cards");
+      (state.decisions || []).forEach((d) => {
+        const card = document.createElement("div");
+        card.className = "decision-card";
+        card.innerHTML = `
+          <div class="id">${d.decision_id || ""}</div>
+          <div class="title">${escapeHtml(d.topic || "(no topic)")}</div>
+          <div class="meta">${escapeHtml(d.owner || "Unassigned")} • ${escapeHtml(d.impact || "")}</div>
+          <div class="status-row">
+            <select data-decision-id="${escapeHtml(d.decision_id || "")}">
+              ${(state.decisionStatuses || ["Open", "Recommended", "Resolved"])
+                .map((s) => `<option ${s === d.status ? "selected" : ""}>${s}</option>`)
+                .join("")}
+            </select>
+          </div>
+          <div class="status-row">
+            <button class="btn-sleek secondary" data-open-decision-id="${escapeHtml(d.decision_id || "")}">Details</button>
+          </div>
+        `;
+        card.addEventListener("click", (e) => {
+          if (e.target.tagName !== "SELECT" && e.target.tagName !== "OPTION") {
+            selectedDecisionId = d.decision_id;
+            selectedIssueId = null;
+            renderPanel();
+            renderDecisionDrawer();
+          }
+        });
+        const statusSel = card.querySelector("select[data-decision-id]");
+        statusSel.addEventListener("change", async (e) => {
+          await callServer("upsertDecision", {
+            decision_id: d.decision_id,
+            topic: d.topic,
+            owner: d.owner,
+            impact: d.impact,
+            notes: d.notes,
+            status: e.target.value,
+          });
+          await refresh();
+        });
+        const dBtn = card.querySelector("button[data-open-decision-id]");
+        dBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          selectedDecisionId = d.decision_id;
+          selectedIssueId = null;
+          renderPanel();
+          renderDecisionDrawer();
+        });
+        dCards.appendChild(card);
+      });
+      board.appendChild(dCol);
+    }
 
     columnOrder.forEach((status) => {
       const col = document.createElement("div");
@@ -94,9 +203,12 @@
       issues
         .filter((i) => (i.status || "Open") === status)
         .forEach((issue) => {
-          const ownerOptions = [state.userEmail, ...(state.owners || [])]
-            .filter((v, i, arr) => v && arr.indexOf(v) === i)
-            .sort();
+          const ownerOptions = (state.teamMembers || []).slice();
+          const currentOwnerName = String(issue.owner || "").split("@")[0];
+          if (currentOwnerName && ownerOptions.indexOf(currentOwnerName) === -1) {
+            ownerOptions.push(currentOwnerName);
+          }
+          ownerOptions.sort();
           const priorityOptions = state.priorities || ["Must", "Should", "Nice", "High", "Medium", "Low"];
           const priorityClass = String(issue.priority || "")
             .toLowerCase()
@@ -105,16 +217,19 @@
           card.className = "card";
           card.draggable = true;
           card.innerHTML = `
-            <div class="id">${issue.id || ""}</div>
-            <div class="title">${issue.title || "(untitled)"}</div>
-            <div class="meta">${issue.owner || "Unassigned"} • ${issue.priority || ""} • Phase ${issue.phase || ""}</div>
-            <span class="chip ${priorityClass}">${issue.priority || "—"}</span>
+            <div class="id">${escapeHtml(issue.id || "")}</div>
+            <div class="title">${escapeHtml(issue.title || "(untitled)")}</div>
+            <div class="meta">${escapeHtml(issue.owner || "Unassigned")} • ${escapeHtml(issue.priority || "")} • Phase ${escapeHtml(String(issue.phase || ""))}</div>
+            <span class="chip ${priorityClass}">${escapeHtml(issue.priority || "—")}</span>
             <div class="assignee-row">
               <select data-owner-id="${issue.id}">
                 <option value="">Unassigned</option>
                 ${ownerOptions
                   .map(
-                    (o) => `<option value="${escapeHtml(o)}" ${o === (issue.owner || "") ? "selected" : ""}>${escapeHtml(o)}</option>`
+                    (o) => {
+                      const ownerEmail = o.includes("@") ? o : `${o.toLowerCase()}@contentment.org`;
+                      return `<option value="${escapeHtml(o)}" ${ownerEmail === (issue.owner || "") || o === (issue.owner || "") ? "selected" : ""}>${escapeHtml(o)}</option>`;
+                    }
                   )
                   .join("")}
               </select>
@@ -133,11 +248,22 @@
                 ${state.statuses.map((s) => `<option ${s === issue.status ? "selected" : ""}>${s}</option>`).join("")}
               </select>
             </div>
+            <div class="status-row">
+              <button class="btn-sleek secondary" data-open-ticket-id="${issue.id}">Details</button>
+            </div>
           `;
           card.addEventListener("click", (e) => {
             if (e.target.tagName !== "SELECT" && e.target.tagName !== "OPTION") {
               selectedIssueId = issue.id;
+              lastIssueId = issue.id;
+              selectedDecisionId = null;
               renderPanel();
+              renderDecisionDrawer();
+            }
+          });
+          card.addEventListener("dblclick", (e) => {
+            if (e.target.tagName !== "SELECT" && e.target.tagName !== "OPTION" && e.target.tagName !== "BUTTON") {
+              openTicketModal(issue.id);
             }
           });
           card.addEventListener("dragstart", () => {
@@ -160,6 +286,12 @@
             await callServer("updateIssueField", issue.id, "priority", e.target.value);
             await refresh();
           });
+          const detailsBtn = card.querySelector("button[data-open-ticket-id]");
+          detailsBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            lastIssueId = issue.id;
+            openTicketModal(issue.id);
+          });
           cardsEl.appendChild(card);
         });
 
@@ -169,6 +301,7 @@
 
   function renderDecisions() {
     const el = document.getElementById("decisions");
+    if (!el) return;
     const list = (state.decisions || []).slice().sort((a, b) => String(a.decision_id || "").localeCompare(String(b.decision_id || "")));
     el.innerHTML = list
       .map(
@@ -215,7 +348,14 @@
     commentsEl.innerHTML = "";
 
     if (!selectedIssueId) {
-      meta.textContent = "Select a card to view comments.";
+      if (selectedDecisionId) {
+        const d = (state.decisions || []).find((x) => x.decision_id === selectedDecisionId);
+        meta.innerHTML = d
+          ? `<strong>${escapeHtml(d.topic || "")}</strong><br>${escapeHtml(d.decision_id || "")} • ${escapeHtml(d.status || "")} • ${escapeHtml(d.owner || "Unassigned")}`
+          : "Decision selected.";
+      } else {
+        meta.textContent = "Select a card to view details.";
+      }
       document.getElementById("issueEditor").innerHTML = "";
       return;
     }
@@ -224,7 +364,7 @@
       meta.textContent = "Issue not found.";
       return;
     }
-    meta.innerHTML = `<strong>${issue.title}</strong><br>${issue.id} • ${issue.status} • ${issue.owner || "Unassigned"}`;
+    meta.innerHTML = `<strong>${escapeHtml(issue.title || "")}</strong><br>${escapeHtml(issue.id || "")} • ${escapeHtml(issue.status || "")} • ${escapeHtml(issue.owner || "Unassigned")}`;
     document.getElementById("issueEditor").innerHTML = `
       <div><strong>Blocker:</strong> ${escapeHtml(issue.blocker || "—")}</div>
       <div><strong>Depends on:</strong> ${escapeHtml(issue.depends_on || "—")}</div>
@@ -238,6 +378,91 @@
         div.innerHTML = `<div class="by">${c.author_email || "unknown"} • ${c.created_at || ""}</div><div>${escapeHtml(c.comment_text || "")}</div>`;
         commentsEl.appendChild(div);
       });
+  }
+
+  function openTicketModal(issueId) {
+    const targetId = issueId || selectedIssueId || lastIssueId;
+    if (!targetId) {
+      alert("Select an issue first.");
+      return;
+    }
+    const modalEl = document.getElementById("ticketModal");
+    const commentsEl = document.getElementById("m_comments");
+    if (!modalEl || !commentsEl) {
+      alert("Ticket modal elements are missing. Please re-paste latest Index.html and redeploy web app.");
+      return;
+    }
+    const issue = state.issues.find((i) => i.id === targetId);
+    if (!issue) return;
+    selectedIssueId = issue.id;
+    lastIssueId = issue.id;
+    const comments = state.comments
+      .filter((c) => c.issue_id === targetId)
+      .map((c) => `${c.author_email || "unknown"} (${c.created_at || ""})\n${c.comment_text || ""}`)
+      .join("\n\n");
+
+    const fields = [
+      "id",
+      "title",
+      "description",
+      "status",
+      "priority",
+      "owner",
+      "phase",
+      "start_date",
+      "due_date",
+      "timeline_note",
+      "depends_on",
+      "blocker",
+      "source_ticket",
+      "context",
+      "attachments",
+    ];
+    fields.forEach((f) => {
+      const el = document.getElementById(`m_${f}`);
+      if (el) el.value = issue[f] || "";
+    });
+    commentsEl.value = comments || "No comments yet.";
+    modalEl.classList.remove("hidden");
+    modalEl.style.display = "flex"; // fallback if class-based CSS is stale
+    modalEl.setAttribute("aria-hidden", "false");
+  }
+
+  function closeTicketModal() {
+    const modalEl = document.getElementById("ticketModal");
+    if (modalEl) {
+      modalEl.classList.add("hidden");
+      modalEl.style.display = "none";
+      modalEl.setAttribute("aria-hidden", "true");
+    }
+  }
+
+  async function saveTicketModal() {
+    if (!document.getElementById("m_id")) {
+      alert("Ticket modal form is missing. Please redeploy latest web app.");
+      return;
+    }
+    const payload = {
+      id: document.getElementById("m_id").value.trim(),
+      title: document.getElementById("m_title").value.trim(),
+      description: document.getElementById("m_description").value,
+      status: document.getElementById("m_status").value.trim(),
+      priority: document.getElementById("m_priority").value.trim(),
+      owner: document.getElementById("m_owner").value.trim(),
+      phase: document.getElementById("m_phase").value.trim(),
+      start_date: document.getElementById("m_start_date").value,
+      due_date: document.getElementById("m_due_date").value,
+      timeline_note: document.getElementById("m_timeline_note").value,
+      depends_on: document.getElementById("m_depends_on").value,
+      blocker: document.getElementById("m_blocker").value,
+      source_ticket: document.getElementById("m_source_ticket").value,
+      context: document.getElementById("m_context").value,
+      attachments: document.getElementById("m_attachments").value,
+    };
+    if (!payload.id) return alert("Ticket ID is missing.");
+    await callServer("upsertIssue", payload);
+    closeTicketModal();
+    await refresh();
   }
 
   function renderDecisionDrawer() {
@@ -314,8 +539,9 @@
   async function saveWeeklyEmail() {
     const email = document.getElementById("weeklyEmail").value.trim();
     if (!email) return alert("Enter an email first.");
-    await callServer("setWeeklySummaryRecipient", email);
-    alert("Weekly summary email saved.");
+    const result = await callServer("setWeeklySummaryRecipient", email);
+    alert("Weekly summary recipients saved: " + (result.recipients || []).join(", "));
+    await refresh();
   }
 
   async function installWeekly() {
@@ -357,6 +583,25 @@
   document.getElementById("filterOwner").addEventListener("change", renderBoard);
   document.getElementById("filterPhase").addEventListener("change", renderBoard);
   document.getElementById("myItemsOnly").addEventListener("change", renderBoard);
+  document.getElementById("openTicketModalBtn").addEventListener("click", openTicketModal);
+  document.getElementById("closeTicketModalBtn").addEventListener("click", closeTicketModal);
+  document.getElementById("saveTicketModalBtn").addEventListener("click", saveTicketModal);
+  document.getElementById("ticketModal").addEventListener("click", (e) => {
+    if (e.target.id === "ticketModal") closeTicketModal();
+  });
 
   refresh();
+  setInterval(refresh, 30000);
+
+  // Delegate click so card selection is reliable even after re-renders.
+  document.addEventListener("click", (e) => {
+    const card = e.target.closest(".card");
+    if (!card) return;
+    if (e.target.tagName === "SELECT" || e.target.tagName === "OPTION") return;
+    const idNode = card.querySelector(".id");
+    if (idNode && idNode.textContent) {
+      selectedIssueId = idNode.textContent.trim();
+      renderPanel();
+    }
+  });
 </script>
