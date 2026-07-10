@@ -90,7 +90,11 @@ function installDailyRefreshTrigger() {
     .atHour(9)
     .inTimezone(CONFIG.TIMEZONE)
     .create();
-  SpreadsheetApp.getUi().alert('Daily refresh installed (9:00 ' + CONFIG.TIMEZONE + ').');
+  try {
+    SpreadsheetApp.getUi().alert('Daily refresh installed (9:00 ' + CONFIG.TIMEZONE + ').');
+  } catch (e) {
+    Logger.log('Daily refresh trigger installed (9:00 ' + CONFIG.TIMEZONE + ').');
+  }
 }
 
 function removeDailyRefreshTrigger() {
