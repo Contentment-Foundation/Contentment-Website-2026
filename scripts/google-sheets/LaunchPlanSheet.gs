@@ -15,7 +15,7 @@
  */
 
 const CONFIG = {
-  SPREADSHEET_ID: '', // leave blank to create new; paste ID to update existing
+  SPREADSHEET_ID: '1P9Cp56k7BCzx0tKjisKFH3IeGoN0YIDW_m_icmbXHFY',
   SHEET_TITLE: 'contentment.org — Launch Plan',
   TIMEZONE: 'America/Los_Angeles',
   JSON_URL: 'https://raw.githubusercontent.com/Contentment-Foundation/Contentment-Website-2026/main/docs/planning/launch-plan-data.json',
