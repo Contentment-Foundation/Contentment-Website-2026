@@ -8,16 +8,17 @@
  * 4. Copy the spreadsheet ID from the URL into CONFIG.SPREADSHEET_ID so future runs update the same file
  * 5. Optional: run installDailyRefreshTrigger to keep the Reference tab current automatically
  *
- * REFRESH: after changing docs/planning/launch-plan-data.json, run
- * scripts/google-sheets/build-sheet-script.py to regenerate the embedded JSON below, re-paste
- * this file into Apps Script, then run createOrRefreshLaunchPlan again (or use the menu
- * "Launch Plan → Refresh from source").
+ * REFRESH: just push changes to docs/planning/launch-plan-data.json on GitHub.
+ * The daily trigger (or a manual "Refresh from source" run) will fetch the latest
+ * JSON automatically — no need to re-paste this script.
+ * The EMBEDDED_JSON below is a fallback only (used if GitHub is unreachable).
  */
 
 const CONFIG = {
   SPREADSHEET_ID: '', // leave blank to create new; paste ID to update existing
   SHEET_TITLE: 'contentment.org — Launch Plan',
   TIMEZONE: 'America/Los_Angeles',
+  JSON_URL: 'https://raw.githubusercontent.com/Contentment-Foundation/Contentment-Website-2026/main/docs/planning/launch-plan-data.json',
 };
 
 // Embedded fallback — updated from docs/planning/launch-plan-data.json
@@ -106,6 +107,17 @@ function removeDailyRefreshTrigger() {
 }
 
 function loadData_() {
+  try {
+    const response = UrlFetchApp.fetch(CONFIG.JSON_URL, { muteHttpExceptions: true });
+    if (response.getResponseCode() === 200) {
+      const data = JSON.parse(response.getContentText());
+      Logger.log('Loaded JSON from GitHub (' + CONFIG.JSON_URL + ')');
+      return data;
+    }
+    Logger.log('GitHub fetch returned ' + response.getResponseCode() + ' — falling back to embedded JSON');
+  } catch (e) {
+    Logger.log('GitHub fetch failed: ' + e + ' — falling back to embedded JSON');
+  }
   return JSON.parse(EMBEDDED_JSON);
 }
 
