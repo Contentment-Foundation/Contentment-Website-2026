@@ -1,7 +1,7 @@
 # Security & Access Document — contentment.org
 
 > **Status:** Draft  
-> **Last updated:** June 2026  
+> **Last updated:** 14 July 2026  
 > **Contact:** somesh@contentment.org  
 > **Audience:** Founders, PMs, and engineers — plain English
 
@@ -11,9 +11,9 @@ Related: [Technical Architecture](./TECHNICAL-ARCHITECTURE.md) · [PRD](./PRD.md
 
 ## 1. Security posture (plain English)
 
-contentment.org is a **public marketing website**. It does not store credit cards, does not run a custom login system in Phase 1, and does not hold sensitive educator data on our servers.
+contentment.org is the **public website of The Contentment Foundation**, a 501(c)(3) nonprofit. It does not store payment card data, does not run a custom login system in Phase 1, and does not hold sensitive educator data on our servers.
 
-**Money** goes through Keela. **Newsletter and most marketing lists** live in **Flodesk**. **Forms** may use Flodesk, Keela, Raisely, or a custom Vercel API (optionally backed by GCP). **Our job** is to not leak secrets, not collect data we do not need, and to gate member-only pages simply when we add them.
+**Donations and payment processing** go through Keela hosted checkout (TCF never sees card numbers). **Newsletter and email lists** live in **Flodesk**. **Forms** may use Flodesk, Keela, Raisely, or a custom Vercel API (optionally backed by GCP). **Our job** is to not leak secrets, not collect data we do not need, and to gate member-only pages simply when we add them.
 
 ---
 
@@ -28,7 +28,7 @@ contentment.org is a **public marketing website**. It does not store credit card
 | Newsletter | Email only — no password |
 | School form | Name + email + message — no account |
 
-**Why:** A nonprofit marketing site does not need a GCP database for launch if Flodesk, Keela, and Raisely hold the data.
+**Why:** A nonprofit organization website does not need a GCP database for launch if Flodesk, Keela, and Raisely hold the data.
 
 ### Phase 2 — Homeroom member area (`/homeroom`)
 
@@ -91,10 +91,62 @@ If we add GCP Cloud SQL for custom forms or member auth, these rules apply. **Ph
 | Newsletter email + first name | **Flodesk** | Per Flodesk policy |
 | School inquiry | Flodesk / Keela / Raisely / **GCP** (if custom API) | Per workflow |
 | Donation details | Keela only | Keela retention policy |
-| Analytics | GA4 / Plausible | Anonymized IP if using Plausible |
+| Analytics | GA4 + Microsoft Clarity + PostHog (cookieless) | Per provider policy; see §5.1 |
 | Homeroom gate password attempts | Host logs | 30 days |
 
 Publish `/privacy` before launch covering these flows.
+
+### 5.1 Cookie consent & regulatory compliance
+
+**Decision:** [DECISION-002](./DECISIONS.md) — signed off by **Somesh Bhardwaj**, 14 July 2026.
+
+| Region | Regulation | How contentment.org complies |
+|--------|------------|------------------------------|
+| **European Union** | GDPR + ePrivacy Directive | **Osano** consent management platform (CMP); no non-essential cookies before opt-in; **GA4 Consent Mode v2** (cookieless/modelled analytics pre-consent) |
+| **United Kingdom** | UK GDPR + PECR | Same as EU — Osano geo-targets UK visitors with consent banner |
+| **United States (California)** | CCPA / CPRA | Privacy policy discloses analytics vendors and data categories; **Cookie Preferences** link in footer (Osano) |
+| **Rest of world** | Best practice | Privacy policy + cookie preferences; minimal data collection |
+
+**Tools & cookie behaviour:**
+
+| Tool | Cookies? | Consent required? | Disclose in `/privacy` |
+|------|----------|-------------------|------------------------|
+| **Osano CMP** | Sets consent-state cookie | N/A — manages consent | Yes — CMP provider, purpose, [Osano privacy policy](https://www.osano.com/legal/privacy-policy) |
+| **GA4** | Yes (`_ga`, `_gid`) after consent | Yes (EU/UK) | Yes — Google Analytics, retention, [Google privacy policy](https://policies.google.com/privacy) |
+| **Microsoft Clarity** | First-party session only | No banner — disclose only | Yes — heatmaps/session replay, no personal data sold |
+| **PostHog** | No — `persistence: 'memory'` | No | Yes — cookieless event analytics |
+
+**Site UI requirements (FEAT-071, FEAT-080):**
+
+1. **Osano Free Plan** script in `BaseLayout` — loads **before** GA4 gtag; 1 domain, up to 5,000 monthly visitors (sufficient for launch).
+2. **Footer** on every page: link to `/privacy`, **Cookie Preferences** (Osano re-open), Terms.
+3. **`/privacy` page** must include:
+   - Regulatory compliance table (above)
+   - Per-tool disclosures with links to vendor privacy policies
+   - Optional **Osano partner badge** / CMP attribution (Osano provides embeddable badge for privacy page)
+   - Last updated date
+4. **GA4 Consent Mode v2** default: analytics storage denied until Osano fires consent grant.
+5. **PostHog** init: `posthog.init(key, { persistence: 'memory', ... })` — no PostHog cookies.
+
+**Pre-launch check:** Verify banner appears for EU/UK test IP (or Osano preview mode); verify GA4 DebugView shows consent states; verify PostHog does not set cookies in browser devtools.
+
+### 5.2 How compliance content reaches production
+
+Planning docs (`SECURITY-AND-ACCESS.md` §5.1, `DECISIONS.md`) define **what** must appear on the live site. They are **not** served to visitors — they are the engineering and legal spec.
+
+| Step | What happens | Owner | Ticket / timing |
+|------|--------------|-------|-----------------|
+| 1 | Engineering drafts `/privacy` page structure from §5.1 (regulatory table, per-tool disclosures, cookie section) | Sam (Somesh) | FEAT-071 — Aug 18–19 review sprint |
+| 2 | Legal provides and approves final prose (organization-specific language, contact details) | Legal / Ops | D-08 — before go-live |
+| 3 | Astro page built at `src/pages/privacy.astro` — shared layout, `.band` + `.wrap` + `.body` typography per FRONTEND-SPEC | Sam | FEAT-071 |
+| 4 | Legal copy stored in repo: inline in `.astro` **or** `src/content/legal/privacy.md` imported at build time (Markdown → static HTML) | Sam | FEAT-071 |
+| 5 | Same pattern for `/terms` at `src/pages/terms.astro` | Sam | FEAT-071 |
+| 6 | Footer on every page: **Privacy Policy** · **Terms** · **Cookie Preferences** (Osano re-open) | Sam | FEAT-004 |
+| 7 | Osano CMP script + GA4 Consent Mode v2 wired in `BaseLayout` before analytics scripts | Sam | FEAT-080 |
+| 8 | Optional Osano partner badge / CMP attribution embedded on `/privacy` | Sam | FEAT-071 |
+| 9 | `vercel build` → static HTML → deploy on merge to `main` → live at `https://contentment.org/privacy` | CI/CD | FEAT-101 |
+
+**Visitor-facing URL:** `https://contentment.org/privacy` (and `/terms`) — standard Astro static routes on Vercel, same as every other page. No separate CMS or PDF for launch; legal updates go through a repo PR + redeploy until Sanity migration (Phase 1.5) if editors need self-service.
 
 ---
 

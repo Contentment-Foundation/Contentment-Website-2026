@@ -68,7 +68,7 @@ One knock-on: GA4 sets cookies, so a cookie consent banner is now required for E
 
 - **Anik** ✅ — confirmed Astro (static/SSG output) 5 Jul 2026, closing the last open fork.
 - **Somesh** ✅ — all items resolved and committed (3 Jul 2026): brief doc links fixed, local dev instructions clarified, `llms.txt` and favicon added to plan, `rel="noopener"` added to security checklist, security headers added to `netlify.toml`, `vercel.json` committed, CI workflow live for single-file sync, Story Board a11y gaps closed.
-- **Team** — sign off DECISION-002 (cookie consent banner / GA4 Consent Mode v2 approach).
+- **Team** ✅ — DECISION-002 signed off by **Somesh Bhardwaj**, 14 Jul 2026: Osano Free Plan + GA4 Consent Mode v2 + cookieless PostHog. DECISION-003 signed off: SendGrid (existing paid plan).
 - **Dave** — continue homepage finalization; URLs wired once Keela links confirmed by finance.
 
 Your list mostly confirms the briefs, surfaces doc hygiene I should have caught, and gives us one clean fork to resolve on the build tool. Appreciate you taking the time.

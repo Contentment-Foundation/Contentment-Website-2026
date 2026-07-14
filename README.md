@@ -324,7 +324,10 @@ cd site && python3 -m http.server 8080
 | **Google Search Console** | Google indexing, Core Web Vitals, manual actions |
 
 > Plausible dropped (paid subscription). See [DECISIONS.md](./docs/planning/DECISIONS.md) DECISION-001.  
-> GA4 sets cookies — cookie consent banner required. See DECISION-002.
+> Cookie consent: **Osano Free** + GA4 Consent Mode v2 + cookieless PostHog — signed off **Somesh Bhardwaj**, 14 Jul 2026. See DECISION-002.  
+> Transactional email: **SendGrid** (existing paid plan) — signed off **Somesh Bhardwaj**, 14 Jul 2026. See DECISION-003.  
+> Observability: **Hybrid** (Slack + Sentry + Vercel logs + PostHog) — DECISION-006. PostHog **Cloud** — DECISION-007.  
+> **Privacy on production:** Planning MD = spec only; live page at `/privacy` via Astro — SECURITY-AND-ACCESS §5.2.
 
 ---
 

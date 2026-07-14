@@ -11,7 +11,7 @@ Related: [PRD](./PRD.md) · [Frontend Spec](./FRONTEND-SPECIFICATION.md) · [Sec
 
 ## 1. Architecture overview
 
-contentment.org is a **static-first marketing site** deployed on **Vercel**, with **third-party services** for payments, email, and forms. **No database is required for Phase 1 MVP** — Flodesk, Keela, Raisely, and similar tools hold subscriber and lead data.
+contentment.org is a **static-first nonprofit organization website** deployed on **Vercel**, with **third-party services** for donations, email, and forms. **No database is required for Phase 1 MVP** — Flodesk, Keela, Raisely, and similar tools hold subscriber and lead data.
 
 ```mermaid
 flowchart TB
@@ -326,8 +326,9 @@ Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../brie
 | `PUBLIC_KEELA_TIER_25_URL` | 1 | Yes | Keela hosted checkout — $25/month tier |
 | `PUBLIC_KEELA_TIER_100_URL` | 1 | Yes | Keela hosted checkout — $100/month tier |
 | `PUBLIC_GA_ID` | 1 | Yes | Google Analytics 4 measurement ID (existing account — primary analytics) |
+| `PUBLIC_OSANO_CUSTOMER_ID` | 1 | Yes | Osano CMP customer ID — cookie consent banner (DECISION-002; Free Plan) |
 | `PUBLIC_POSTHOG_KEY` | 1 | Yes | PostHog project API key — product analytics + funnels (cookieless mode) |
-| `PUBLIC_POSTHOG_HOST` | 1 | Yes | PostHog host — `https://app.posthog.com` or self-hosted GCP endpoint |
+| `PUBLIC_POSTHOG_HOST` | 1 | Yes | PostHog Cloud host — `https://app.posthog.com` (DECISION-007) |
 | `PUBLIC_RAISELY_CAMPAIGN_URL` | 1.5 | If fundraise page | Raisely peer-to-peer campaign link |
 
 ### 6.2 Core integrations (server-only)
@@ -346,13 +347,15 @@ Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../brie
 
 Used by `@upstash/ratelimit` on all `/api/*` routes (5 req / 15 min / IP). Same Redis instance for Keela webhook deduplication (see [SECURITY-AND-ACCESS](./SECURITY-AND-ACCESS.md) §8).
 
-### 6.4 Transactional email — Resend (server-only)
+### 6.4 Transactional email — SendGrid (server-only)
 
 | Variable | Phase | Required | Description |
 |----------|-------|----------|-------------|
-| `RESEND_API_KEY` | 1+ | Yes | Resend API key — school inquiry notifications, magic-link emails (Phase 2) |
+| `SENDGRID_API_KEY` | 1+ | Yes | SendGrid API key — school inquiry notifications, magic-link emails (Phase 2). Reuse existing TCF paid SendGrid account. |
 
-Requires verified sending domain (`contentment.org`). See DECISION-003.
+Requires verified sending domain (`contentment.org`). Alternatives (Resend, AWS SES) documented in DECISION-003 if SendGrid is unavailable.
+
+**Legacy note:** Earlier drafts referenced `RESEND_API_KEY`; do not use unless DECISION-003 is reopened.
 
 ### 6.5 Slack webhooks (server-only)
 
@@ -397,7 +400,7 @@ Requires verified sending domain (`contentment.org`). See DECISION-003.
 |----------|-------|----------|-------------|
 | `HOMEROOM_GATE_PASSWORD` | 2 | If gated hub | Shared password for edge middleware — rotate via Vercel env |
 | `GCP_CLOUD_SQL_CONNECTION` | 2+ | If custom DB | Cloud SQL connection string — Vercel → PostgreSQL |
-| `SENTRY_DSN` | 1.5 | Optional | Error monitoring — see DECISION-006 |
+| `SENTRY_DSN` | 1 | Yes | Error monitoring — Sentry hybrid stack (DECISION-006) |
 
 ### 6.10 Example `.env.example` (key names only)
 
@@ -408,6 +411,7 @@ PUBLIC_KEELA_TIER_5_URL=
 PUBLIC_KEELA_TIER_25_URL=
 PUBLIC_KEELA_TIER_100_URL=
 PUBLIC_GA_ID=
+PUBLIC_OSANO_CUSTOMER_ID=
 PUBLIC_POSTHOG_KEY=
 PUBLIC_POSTHOG_HOST=
 PUBLIC_RAISELY_CAMPAIGN_URL=
@@ -416,7 +420,7 @@ PUBLIC_RAISELY_CAMPAIGN_URL=
 FLODESK_API_KEY=
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
-RESEND_API_KEY=
+SENDGRID_API_KEY=
 
 # Server — Slack
 SLACK_WEBHOOK_PARTNERSHIPS=
@@ -644,13 +648,17 @@ Run in sequence. `hello@contentment.org` email must not be interrupted during cu
 
 ## 14. Observability
 
+Per [DECISION-006](./DECISIONS.md) — hybrid stack, signed off Somesh Bhardwaj, 14 Jul 2026.
+
 | Signal | Tool | Action |
 |--------|------|--------|
 | Uptime | UptimeRobot | Monitor https://contentment.org every 5 min; alert to `#errors` |
-| API errors | Slack `#errors` (AUTOMATION-BRIEF A6) | Every Vercel fn catch block must POST to this webhook |
-| Error tracking | Sentry (Phase 1.5) | `SENTRY_DSN` env var; `@sentry/astro` — skip Phase 1 |
-| Analytics | Plausible (primary) | See DECISIONS.md #001 |
-| Form failures | Vercel function logs + Slack `#errors` | Alert if >5% error rate in 15 min window |
+| Real-time API alerts | Slack `#errors` (`SLACK_WEBHOOK_ERRORS`) | Every Vercel fn catch block POSTs here — AUTOMATION-BRIEF A6 |
+| Error tracking | **Sentry** (`SENTRY_DSN`, `@sentry/astro`) | Stack traces, release grouping, alert rules — Phase 1 from launch |
+| Infrastructure logs | **Vercel function logs** | Raw logs in Vercel dashboard; first stop for request-level debugging |
+| Product / event context | **PostHog Cloud** (DECISION-007) | Funnel diagnostics, custom events — supplements error triage |
+| Analytics | GA4 + Clarity + PostHog | See DECISION-001 |
+| Form failures | Vercel logs + Slack `#errors` + Sentry | Alert if >5% error rate in 15 min window |
 
 ---
 

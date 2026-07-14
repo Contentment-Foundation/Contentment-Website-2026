@@ -99,7 +99,8 @@ Every page moves a visitor one step. No page does all five.
 | Forms | Flodesk / Keela / Raisely / custom Vercel API | Flexible per form |
 | Database | GCP Cloud SQL | Phase 2+ only if needed |
 | CMS | Markdown in repo → Sanity at Phase 1.5 | Migrate when editors need self-service |
-| Analytics | Plausible (recommended) | GA4 only if paid ads; see `planning/DECISIONS.md` |
+| Analytics | GA4 + Clarity + PostHog + Osano CMP | DECISION-001/002; see `planning/DECISIONS.md` |
+| Transactional email | SendGrid (existing paid plan) | DECISION-003 — Somesh Bhardwaj, 14 Jul 2026 |
 
 ### Deployment
 

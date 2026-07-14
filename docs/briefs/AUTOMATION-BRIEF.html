@@ -504,7 +504,7 @@
         <div class="env-row"><span class="env-key">GCP_SERVICE_ACCOUNT_JSON</span><span class="env-comment">=   # (already in TECHNICAL-ARCHITECTURE.md)</span></div>
       </div>
       <div class="env-group">
-        <div class="env-group-label">Upstash + Resend (DECISIONS 003–004)</div>
+        <div class="env-group-label">Upstash + SendGrid (DECISIONS 003–004)</div>
         <div class="env-row"><span class="env-key">UPSTASH_REDIS_REST_URL</span><span class="env-comment">=     # rate limit + webhook dedup</span></div>
         <div class="env-row"><span class="env-key">UPSTASH_REDIS_REST_TOKEN</span><span class="env-comment">=   # server-only</span></div>
         <div class="env-row"><span class="env-key">RESEND_API_KEY</span><span class="env-comment">=            # transactional email</span></div>
@@ -580,7 +580,7 @@
     <div class="section-title">Full Detail — Where to Look</div>
     <div class="docs-grid">
       <div class="doc-card"><h4>Technical Architecture</h4><p>Canonical env vars §6, CI/CD, vercel.json, Vercel fn patterns, GCP schema</p><code>docs/planning/TECHNICAL-ARCHITECTURE.md</code></div>
-      <div class="doc-card"><h4>Open Decisions</h4><p>Plausible, Resend, Upstash — recommended choices (001–004)</p><code>docs/planning/DECISIONS.md</code></div>
+      <div class="doc-card"><h4>Technical Decisions</h4><p>GA4 + Osano, SendGrid, Upstash — sign-off status in DECISIONS.md</p><code>docs/planning/DECISIONS.md</code></div>
       <div class="doc-card"><h4>Website Architecture</h4><p>Sitemap, /events Phase 1.5, Netlify interim + Vercel production</p><code>docs/WEBSITE-ARCHITECTURE.md</code></div>
       <div class="doc-card"><h4>Tech Brief</h4><p>API specs for /api/newsletter, /api/school-inquiry, Flodesk options A/B</p><code>docs/TECH-BRIEF.md</code></div>
       <div class="doc-card"><h4>Growth Brief</h4><p>Flodesk email sequences, UTM taxonomy, user journey maps</p><code>docs/GROWTH-BRIEF.md</code></div>

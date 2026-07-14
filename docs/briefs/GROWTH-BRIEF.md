@@ -14,10 +14,16 @@
 |------|---------|------|--------|
 | **GA4** | Primary — traffic, sessions, funnels, campaign attribution, conversion events | Free | Existing account |
 | **Microsoft Clarity** | Heatmaps + session recordings — CRO, scroll depth, drop-off | Free | Existing account |
-| **PostHog** | Product analytics, funnel cohorts, feature flags, A/B testing | Free tier (1M events/month) | Add at build |
+| **PostHog** | Product analytics, funnel cohorts, feature flags, A/B testing | Free tier (1M events/month) · **PostHog Cloud** (DECISION-007) | Add at build |
 | + Anik's suggestions | TBD after engineering input | — | Pending |
 
-> **Cookie consent note:** GA4 sets cookies — a consent banner is required for EU/UK visitors. Implement GA4 with **Consent Mode v2** so analytics fire in a cookieless/modelled state before consent is given. PostHog should be initialised in cookieless mode (`persistence: 'memory'`). See [DECISION-002](../planning/DECISIONS.md).
+> **Cookie consent (DECISION-002 — signed off Somesh Bhardwaj, 14 Jul 2026):** GA4 sets cookies — a consent banner is required for EU/UK visitors. Use **Osano Free Plan** ($0/month — 1 domain, up to 5,000 monthly visitors) as the consent management platform. Implement GA4 with **Consent Mode v2** so analytics fire in a cookieless/modelled state before consent is given. PostHog must be initialised in cookieless mode (`persistence: 'memory'`). Footer must include **Cookie Preferences** (Osano). Full regulatory compliance table (EU/UK/US) in [SECURITY-AND-ACCESS §5.1](../planning/SECURITY-AND-ACCESS.md).
+
+> **Observability (DECISION-006 — signed off Somesh Bhardwaj, 14 Jul 2026):** Hybrid stack — Slack `#errors` for real-time alerts, **Sentry** for error tracking, **Vercel function logs** for infra debugging, **PostHog Cloud** for product/event context during triage.
+
+> **Transactional email (DECISION-003 — signed off Somesh Bhardwaj, 14 Jul 2026):** Use **SendGrid** (existing TCF paid plan) for server-triggered emails. Resend, AWS SES, and Nodemailer documented as alternatives in [DECISIONS.md](../planning/DECISIONS.md).
+
+> **Privacy on production:** Compliance requirements are specced in planning docs; the live page ships as Astro static routes at `contentment.org/privacy` — see [SECURITY-AND-ACCESS §5.2](../planning/SECURITY-AND-ACCESS.md).
 
 ### Search presence tools
 

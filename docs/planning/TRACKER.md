@@ -1,6 +1,6 @@
 # Project Tracker — contentment.org
 
-> **Last updated:** 3 July 2026 · Somesh Bhardwaj  
+> **Last updated:** 14 July 2026 · Somesh Bhardwaj  
 > **Spec detail** (acceptance criteria): [FEATURE-TICKETS.md](./FEATURE-TICKETS.md) · **Decisions**: [DECISIONS.md](./DECISIONS.md)
 
 ---
@@ -26,7 +26,7 @@
 | ID | Title | Cat | Phase | Priority | Status | Raised by | Owner | Opened | Closed | Depends on | Blocker / Note |
 |----|-------|-----|-------|----------|--------|-----------|-------|--------|--------|------------|----------------|
 | FEAT-001 | Extract shared layout (CSS tokens, nav, footer) | FEAT | 1 | Must | 🔵 Open | Somesh | Engineering | Jun 2026 | — | — | — |
-| FEAT-002 | Multi-page routing scaffold (Astro) | FEAT | 1 | Must | ⏸️ Pending | Somesh | Engineering | Jun 2026 | — | FEAT-001 | Astro vs static partials — awaiting Anik input |
+| FEAT-002 | Multi-page routing scaffold (Astro) | FEAT | 1 | Must | 🔵 Open | Somesh | Engineering | Jun 2026 | — | FEAT-001 | Astro 4.x confirmed — Anik Ghosh, 5 Jul 2026 |
 | FEAT-003 | Mobile navigation drawer | FEAT | 1 | Must | 🔵 Open | Somesh | Engineering | Jun 2026 | — | FEAT-001 | — |
 | FEAT-004 | Wire all nav and footer links | FEAT | 1 | Must | 🔵 Open | Somesh | Engineering | Jun 2026 | — | FEAT-002 | Social URLs needed from comms |
 | FEAT-010 | Migrate homepage to `/` route | FEAT | 1 | Must | 🟡 In Progress | Somesh | Dave Kebo | Jun 2026 | — | FEAT-001, FEAT-002 | — |
@@ -42,8 +42,8 @@
 | FEAT-051 | Build `/give/monthly` conversion page | FEAT | 1 | Must | 🟠 Blocked | Somesh | Engineering | Jun 2026 | — | FEAT-050, FEAT-060 | Blocked on Keela URLs + tier amount decision |
 | FEAT-060 | Keela donation integration — wire all CTAs | FEAT | 1 | Must | 🟠 Blocked | Somesh | Engineering | Jun 2026 | — | — | Waiting on finance for live Keela checkout URLs |
 | FEAT-070 | Newsletter integration (Flodesk embed or API) | FEAT | 1 | Must | 🔵 Open | Somesh | Engineering | Jun 2026 | — | FEAT-010, credentials | — |
-| FEAT-071 | `/privacy` and `/terms` pages | FEAT | 1 | Must | 🔵 Open | Somesh | Engineering | Jun 2026 | — | FEAT-002, legal copy | Waiting on legal copy + cookie banner decision |
-| FEAT-080 | Analytics setup (GA4 + PostHog + Clarity) | FEAT | 1 | Must | ⏸️ Pending | Somesh | Engineering | Jun 2026 | — | FEAT-002 | PostHog cloud vs self-hosted GCP — pending decision |
+| FEAT-071 | `/privacy` and `/terms` pages | FEAT | 1 | Must | 🔵 Open | Somesh | Engineering | Jun 2026 | — | FEAT-002, legal copy | Waiting on legal copy; cookie approach resolved (DECISION-002, Somesh) |
+| FEAT-080 | Analytics setup (GA4 + PostHog Cloud + Clarity + Osano + Sentry) | FEAT | 1 | Must | 🔵 Open | Somesh | Engineering | Jun 2026 | — | FEAT-002 | All analytics decisions resolved (001, 002, 006, 007) |
 | FEAT-081 | SEO baseline (meta, OG, sitemap, robots, `llms.txt`, favicon) | FEAT | 1 | Should | 🔵 Open | Somesh | Engineering | Jun 2026 | — | FEAT-002 | — |
 | FEAT-090 | Events & Experiences page | FEAT | 1.5 | Should | 📅 Scheduled | Somesh | Engineering | Jun 2026 | — | FEAT-002, event calendar | — |
 | FEAT-091 | Homeroom gated member hub (`/homeroom`) | FEAT | 2 | Nice | 📅 Scheduled | Somesh | Engineering | Jun 2026 | — | FEAT-060, FEAT-092 | — |
@@ -66,6 +66,8 @@
 | DOC-008 | Update GROWTH-BRIEF §1 analytics stack | DOC | 1 | Must | ✅ Done | Anik Ghosh | Somesh | Jul 2026 | 3 Jul 2026 | DOC-006 | — |
 | DOC-009 | Update TECH-BRIEF + TECHNICAL-ARCHITECTURE env vars (remove Plausible, add GA4/PostHog) | DOC | 1 | Must | ✅ Done | Anik Ghosh | Somesh | Jul 2026 | 3 Jul 2026 | DOC-006 | — |
 | DOC-010 | Write ANIK-REVIEW-RESPONSE.md with hyperlinks + issue tracker | DOC | 1 | Must | ✅ Done | Somesh | Somesh | Jul 2026 | 3 Jul 2026 | — | — |
+| DOC-012 | Sign off DECISION-002 (Osano + Consent Mode v2) + DECISION-003 (SendGrid) | DOC | 1 | Must | ✅ Done | Somesh | Somesh Bhardwaj | Jul 2026 | 14 Jul 2026 | — | Cookie + email decisions; compliance §5.1 in SECURITY-AND-ACCESS |
+| DOC-013 | Sign off DECISION-004–007 (Upstash, Astro Image, hybrid observability, PostHog Cloud) | DOC | 1 | Must | ✅ Done | Somesh | Somesh Bhardwaj | Jul 2026 | 14 Jul 2026 | DOC-012 | §5.2 production path for /privacy added |
 | DOC-011 | ACCESSIBILITY.md — WCAG 2.1 AA target, ARIA map, known gaps | DOC | 1 | Must | ✅ Done | Somesh | Somesh | Jun 2026 | Jun 2026 | — | — |
 | — | Plausible analytics integration | — | — | — | 🚫 Cancelled | Somesh | — | Jun 2026 | 3 Jul 2026 | — | Paid tool; GA4 + PostHog cover same needs at no cost |
 | — | Supabase (replaced by GCP Cloud SQL) | — | — | — | 🚫 Cancelled | Somesh | — | Jun 2026 | Jun 2026 | — | Standardised on GCP stack |
@@ -76,10 +78,14 @@
 
 | Decision | Options | Waiting on | Gates |
 |----------|---------|------------|-------|
-| Astro vs static partials build | Astro 4.x (current plan) vs flat HTML + `_partials/` inject script | Anik Ghosh | FEAT-002 and all downstream Phase 1 tickets |
 | Homeroom tier amounts | $5 / $25 / $100 vs $25 / $50 / $100 | Finance / Leadership | FEAT-051 copy, FEAT-060 URL wiring |
-| PostHog hosting | Cloud (faster to ship) vs self-hosted on GCP (no third-party data) | Somesh / team | FEAT-080 |
-| Cookie consent tool | Osano free tier vs custom `<dialog>` | Team | FEAT-071, FEAT-080 |
+| Keela checkout URLs | Live hosted links per tier | Finance | FEAT-060, FEAT-051 |
+| Legal copy — Privacy + Terms | Final text | Legal / Ops | FEAT-071 |
+| `/give` routing | Gateway page vs redirect to Homeroom | Product / Kristina | FEAT-050 |
+| School inquiry form destination | Flodesk vs Keela vs custom API | Partnerships + Eng | FEAT-041 |
+| About Us scope v1 | Single page vs 5 sub-pages | Content / Kristina | FEAT-093 |
+
+> All engineering decisions (DECISION-001–007) resolved. See [DECISIONS.md](./DECISIONS.md).
 
 ---
 
@@ -106,8 +112,8 @@ FEAT-001 → FEAT-002* → FEAT-003
                      → FEAT-050 → FEAT-060 (blocked: finance URLs)
                                 → FEAT-051 (blocked: FEAT-060 + tier decision)
                      → FEAT-070
-                     → FEAT-071 (needs legal copy + cookie decision)
-                     → FEAT-080* (pending PostHog hosting decision)
+                     → FEAT-071 (needs legal copy; cookie decision ✅ DECISION-002)
+                     → FEAT-080 (analytics — all decisions resolved)
                      → FEAT-081
 
 OPS-001  ← no dependency — ship now
@@ -117,7 +123,7 @@ QA-001   ← must close before FEAT-100
 
 FEAT-100 (all must-haves + QA-001) → FEAT-101 (DNS cutover)
 
-* = pending decision
+* = external blocker or product decision (engineering decisions 001–007 resolved)
 ```
 
 ---
@@ -143,3 +149,4 @@ FEAT-100 (all must-haves + QA-001) → FEAT-101 (DNS cutover)
 | 3 Jul 2026 | Initial tracker. All FEAT tickets from FEATURE-TICKETS.md ported. OPS + DOC tickets added from Anik review. Done and cancelled rows added. |
 | 3 Jul 2026 | OPS-001, OPS-002, OPS-003, QA-001, DOC-001, DOC-002, DOC-003 all marked ✅ Done — all Somesh-owned items from Anik's review resolved and committed. |
 | 3 Jul 2026 | DOC-004, DOC-005 marked ✅ Done — `rel="noopener"` added to SECURITY-AND-ACCESS §8; local dev instructions clarified in TECH-BRIEF. All DOC tickets from Anik's review now closed. |
+| 14 Jul 2026 | DECISION-004–007 signed off by Somesh Bhardwaj (Upstash, Astro Image, hybrid observability, PostHog Cloud). SECURITY-AND-ACCESS §5.2 added (production path for /privacy). DOC-013 ✅ Done. |

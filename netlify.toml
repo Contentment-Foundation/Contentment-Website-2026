@@ -40,6 +40,16 @@
   to = "/docs/automation-brief/index.html"
   status = 200
 
+[[redirects]]
+  from = "/docs/dev-timeline"
+  to = "/docs/dev-timeline/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/docs/dev-timeline/classic"
+  to = "/docs/dev-timeline/classic/index.html"
+  status = 200
+
 # Foundation Reach map — team design prototype (not on homepage yet)
 [[redirects]]
   from = "/foundation-reach-map"

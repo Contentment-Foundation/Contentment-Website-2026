@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contentment.org — Development Sprint Timeline · Aug 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=Varela+Round&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal:   #1FAFC0;
+      --ocean:  #0080B0;
+      --deep:   #024E70;
+      --deep2:  #02374f;
+      --green:  #4FA98C;
+      --slate:  #3C3B43;
+      --ink:    #23252b;
+      --paper:  #FBFAF7;
+      --paper2: #F2F0EA;
+      --mist:   #E8F1F2;
+      --line:   rgba(2,78,112,.12);
+      --shadow: 0 18px 50px -20px rgba(2,55,79,.22);
+      --display: 'Newsreader', Georgia, serif;
+      --body:    'Inter', system-ui, sans-serif;
+
+      /* Phase / work-stream colors — matched to Kristina's source sheet (exact hex extracted from the sheet) */
+      --c-design: #34BFD1;
+      --c-dev:    #027C9D;
+      --c-media:  #338062;
+      --c-review: #6573B7;
+      --c-launch: #EAA340;
+      --c-foundation: #0D94C3;
+      --c-concept: #4EBFA2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--body); font-size: 13px; line-height: 1.45; color: var(--ink); background: var(--paper); }
+
+    @media print {
+      body { font-size: 11.5px; background: #fff; }
+      .no-print { display: none; }
+      section, table { break-inside: avoid; }
+      @page { margin: 14mm 12mm; size: A4 landscape; }
+    }
+
+    .wrap { max-width: 1560px; margin: 0 auto; padding: 0 20px; }
+
+    .doc-nav { background: var(--deep2); padding: 10px 0; font-size: 12px; }
+    .doc-nav .wrap { display: flex; gap: 20px; }
+    .doc-nav a { color: rgba(255,255,255,.65); text-decoration: none; }
+    .doc-nav a:hover { color: var(--teal); }
+
+    .page-header { background: linear-gradient(165deg, var(--deep) 0%, var(--deep2) 100%); color: #fff; padding: 22px 0 16px; }
+    .page-header .wrap { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+    .wordmark { font-family: 'Varela Round', sans-serif; font-size: 13px; color: rgba(255,255,255,.55); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
+    .page-header h1 { font-family: var(--display); font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 500; line-height: 1.2; color: #fff; }
+    .page-header h1 span { color: var(--teal); }
+    .page-header .lead { max-width: 56ch; font-size: 13.5px; color: rgba(255,255,255,.72); margin-top: 10px; line-height: 1.6; }
+    .meta { font-size: 11.5px; color: rgba(255,255,255,.5); text-align: right; line-height: 1.7; flex-shrink: 0; }
+    .meta strong { color: rgba(255,255,255,.8); font-weight: 600; }
+
+    /* Quick nav pills */
+    .quicknav { background: var(--paper2); border-bottom: 1px solid var(--line); padding: 7px 0; }
+    .quicknav .wrap { display: flex; gap: 8px; flex-wrap: wrap; }
+    .quicknav a { font-size: 11.5px; font-weight: 600; color: var(--deep); background: #fff; border: 1px solid var(--line); padding: 5px 12px; border-radius: 99px; text-decoration: none; }
+    .quicknav a:hover { border-color: var(--teal); color: var(--ocean); }
+
+    .main { padding: 16px 0 28px; }
+    section { margin-bottom: 16px; }
+    .section-title { font-family: var(--body); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--ocean); margin-bottom: 7px; display: flex; align-items: center; gap: 8px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+    .section-sub { font-size: 11.5px; color: var(--slate); margin: -3px 0 8px; max-width: 76ch; }
+
+    /* ── LEGEND ── */
+    .legend { display: flex; flex-wrap: wrap; gap: 10px 14px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; box-shadow: var(--shadow); margin-bottom: 10px; }
+    .legend-group { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .legend-group + .legend-group { padding-left: 18px; border-left: 1px solid var(--line); }
+    .legend-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--slate); margin-right: 2px; }
+    .swatch { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink); }
+    .swatch::before { content: ''; width: 11px; height: 11px; border-radius: 3px; background: var(--sw); flex-shrink: 0; }
+    .sw-design { --sw: var(--c-design); } .sw-dev { --sw: var(--c-dev); } .sw-media { --sw: var(--c-media); }
+    .sw-review { --sw: var(--c-review); } .sw-launch { --sw: var(--c-launch); }
+    .sw-foundation { --sw: var(--c-foundation); } .sw-concept { --sw: var(--c-concept); } .sw-availability { --sw: var(--slate); }
+
+    .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+    .tag-done     { background: #d1fae5; color: #065f46; }
+    .tag-progress { background: #dbeafe; color: #1e40af; }
+    .tag-upcoming { background: var(--paper2); color: var(--slate); }
+    .tag-blocked  { background: #fde8e8; color: #b91c1c; }
+    .tag-decision { background: #fef3c7; color: #92400e; }
+    .tag-signoff  { background: #fce7f3; color: #9d174d; }
+    .tag-approved { background: #cffafe; color: #0e7490; }
+    .tag-phase1   { background: #dcf5df; color: #1a6b34; }
+    .tag-phase15  { background: #1a6b34; color: #fff; }
+    .tag-phase2   { background: #fef3c7; color: #92400e; }
+    .tag-phase3   { background: #e2e8f0; color: #475569; }
+    button.tag { border: none; font-family: inherit; cursor: pointer; }
+    button.tag[aria-pressed="true"] { outline: 2px solid var(--ink); outline-offset: 1px; }
+    tr.status-dimmed { opacity: .2; }
+    tr.status-dimmed .fill, tr.status-dimmed .phase-cell { filter: saturate(.4); }
+
+    /* ── ROLE KEY ── */
+    .rolekey { background: var(--paper2); border-bottom: 1px solid var(--line); padding: 6px 0; }
+    .rolekey .wrap { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; }
+    .rolekey .rolekey-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--slate); }
+    .rolekey .who { font-size: 11.5px; color: var(--ink); }
+    .rolekey .who b { color: var(--deep); }
+
+    /* ── MASTER GANTT (mirrors Kristina's sheet: Phase · Task · Owner · Status · Dates · weeks · Notes) ── */
+    .gantt-scroll { overflow-x: auto; border-radius: 12px; box-shadow: var(--shadow); }
+    table.mastergantt { width: 100%; min-width: 1180px; border-collapse: collapse; background: #fff; font-size: 11.5px; }
+    table.mastergantt thead tr { background: var(--deep); color: #fff; }
+    table.mastergantt th { padding: 5px 6px; text-align: left; font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; vertical-align: bottom; position: sticky; top: 0; z-index: 6; background: var(--deep); box-shadow: 0 1px 0 rgba(255,255,255,.08); }
+    table.mastergantt th.wk { text-align: center; min-width: 62px; }
+    table.mastergantt th.wk span { display: block; font-size: 9px; font-weight: 500; text-transform: none; color: rgba(255,255,255,.6); }
+    table.mastergantt td { padding: 3px 6px; border-bottom: 1px solid var(--line); vertical-align: middle; color: var(--slate); }
+    table.mastergantt tbody tr:last-child td { border-bottom: none; }
+    table.mastergantt td.phase-cell { color: #fff; font-weight: 700; font-size: 11px; text-align: center; padding: 6px; }
+    table.mastergantt td.phase-cell.pc-dark { color: var(--ink); }
+    table.mastergantt td.phase-cell.collapsible { cursor: pointer; user-select: none; }
+    table.mastergantt td.phase-cell.collapsible:hover { filter: brightness(1.08); }
+    .phase-chevron { display: inline-block; margin-left: 3px; font-size: 9px; transition: transform .15s; }
+    table.mastergantt td.phase-cell.collapsed .phase-chevron { transform: rotate(-90deg); }
+    .gantt-controls { display: flex; gap: 8px; margin-bottom: 8px; }
+    .gantt-controls button { font-size: 11px; font-weight: 600; color: var(--deep); background: #fff; border: 1px solid var(--line); padding: 5px 12px; border-radius: 99px; cursor: pointer; }
+    .gantt-controls button:hover { border-color: var(--teal); color: var(--ocean); }
+    table.mastergantt td.task-cell strong { display: block; color: var(--ink); font-size: 12px; font-weight: 600; }
+    table.mastergantt td.notes-cell { font-size: 10.5px; white-space: nowrap; }
+    table.mastergantt td.wk { padding: 2px; height: 20px; }
+    table.mastergantt td.wk.fill { border-radius: 6px; position: relative; }
+    .wk-design { background: var(--c-design); } .wk-dev { background: var(--c-dev); } .wk-media { background: var(--c-media); }
+    .wk-review { background: var(--c-review); } .wk-launch { background: var(--c-launch); }
+    .wk-foundation { background: var(--c-foundation); } .wk-concept { background: var(--c-concept); }
+
+    .milestone-mark { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: #fff; color: var(--ink); font-size: 10.5px; box-shadow: 0 1px 4px rgba(0,0,0,.3); white-space: nowrap; }
+    .off-mark { display: flex; align-items: center; justify-content: center; height: 22px; border-radius: 6px; background: #fde8e8; color: #b91c1c; font-size: 9.5px; font-weight: 700; }
+
+    /* ── DETAIL TABLES ── */
+    table.detail { width: 100%; border-collapse: collapse; font-size: 12.5px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+    table.detail thead tr { background: var(--paper2); }
+    table.detail th { padding: 5px 10px; text-align: left; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--deep); border-bottom: 2px solid var(--line); }
+    table.detail tbody tr { border-bottom: 1px solid var(--line); }
+    table.detail tbody tr:last-child { border-bottom: none; }
+    table.detail td { padding: 5px 10px; color: var(--slate); vertical-align: top; font-size: 11.5px; }
+    table.detail td strong { color: var(--ink); }
+    table.detail td.id { font-family: 'Courier New', monospace; font-size: 11px; color: var(--ocean); white-space: nowrap; }
+
+    /* Phase block wrapper — now a native <details> for guaranteed no-JS-required collapsing */
+    .phase-block { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px 14px; box-shadow: var(--shadow); margin-bottom: 10px; }
+    .phase-block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; cursor: pointer; list-style: none; }
+    .phase-block-head::-webkit-details-marker { display: none; }
+    .phase-block-head h3 { font-family: var(--display); font-size: 1.15rem; font-weight: 500; color: var(--deep); }
+    .phase-dates { font-size: 11.5px; font-weight: 700; color: #fff; padding: 3px 10px; border-radius: 99px; }
+    .phase-block-note { font-size: 11.5px; color: var(--slate); margin-bottom: 8px; line-height: 1.4; }
+    .pd-design { background: var(--c-design); color: var(--ink); } .pd-dev { background: var(--c-dev); } .pd-media { background: var(--c-media); }
+    .pd-review { background: var(--c-review); } .pd-launch { background: var(--c-launch); color: var(--ink); }
+
+    /* Collapsible section blocks (Team, Today, Decisions, Blockers, Phase 2 pipeline) */
+    .section-block { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px 12px; box-shadow: var(--shadow); margin-bottom: 10px; }
+    .section-block > summary.section-title { cursor: pointer; list-style: none; margin-bottom: 0; }
+    .section-block > summary.section-title::-webkit-details-marker { display: none; }
+    .section-block[open] > summary.section-title { margin-bottom: 12px; }
+    .section-block .section-sub { margin-top: 10px; }
+
+    details > summary { list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    .chev { display: inline-block; margin-right: 7px; font-size: 10px; color: var(--ocean); transition: transform .15s; }
+    details:not([open]) .chev { transform: rotate(-90deg); }
+
+    .section-controls { display: flex; gap: 8px; margin-bottom: 10px; }
+    .section-controls button { font-size: 11px; font-weight: 600; color: var(--deep); background: #fff; border: 1px solid var(--line); padding: 5px 12px; border-radius: 99px; cursor: pointer; }
+    .section-controls button:hover { border-color: var(--teal); color: var(--ocean); }
+
+    .callout { background: var(--mist); border-left: 4px solid var(--teal); border-radius: 0 10px 10px 0; padding: 8px 14px; font-size: 11.5px; color: var(--slate); line-height: 1.45; }
+    .callout strong { color: var(--ink); }
+
+    .page-footer { background: var(--deep2); color: rgba(255,255,255,.45); font-size: 11px; text-align: center; padding: 16px 32px; line-height: 1.7; }
+    .page-footer strong { color: rgba(255,255,255,.7); }
+
+    .print-btn { position: fixed; bottom: 28px; right: 28px; background: var(--ocean); color: #fff; border: none; border-radius: 999px; padding: 12px 22px; font-family: var(--body); font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 24px rgba(0,128,176,.35); transition: transform .15s, box-shadow .15s; }
+    .print-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,128,176,.45); }
+
+    @media (max-width: 760px) {
+      .wrap { padding: 0 16px; }
+      .page-header .wrap { flex-direction: column; align-items: flex-start; }
+      .meta { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="doc-nav no-print">
+  <div class="wrap">
+    <a href="../../">← Project docs</a>
+    <a href="../../../">Homepage</a>
+    <a href="../" style="margin-left:auto;color:#fff;background:rgba(255,255,255,.1);padding:4px 12px;border-radius:99px;font-weight:600;font-size:11.5px;">← Back to Sprint Journey (primary)</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="wrap">
+    <div>
+      <div class="wordmark">The Contentment Foundation</div>
+      <h1>Development Sprint<br><span>Visual Timeline · Aug 3–28, 2026</span></h1>
+      <p class="lead">A transparency board: the engineering + media breakdown behind Kristina's redesign Gantt — what's already done, what's in flight, what's planned, and what's still waiting on a decision or sign-off, day by day.</p>
+    </div>
+    <div class="meta">
+      <strong>Prepared by</strong><br>
+      Somesh Bhardwaj · somesh@contentment.org<br>
+      Sr. System Admin · Full Stack AI Engineer<br><br>
+      <strong>As of 14 Jul 2026</strong><br>
+      Source: Kristina's Gantt · <code>launch-plan-data.json</code> · <code>TRACKER.md</code>
+    </div>
+  </div>
+</header>
+
+<div class="rolekey no-print">
+  <div class="wrap">
+    <span class="rolekey-label">Who's who</span>
+    <span class="who"><b>Sam</b> — Somesh Bhardwaj · Back-end Developer, builds the site from scratch, owns almost every tech ticket on this page</span>
+    <span class="who"><b>K</b> — Kristina · Project Manager &amp; UI/UX Lead, runs the project + content co-lead</span>
+    <span class="who"><b>Nav</b> — CEO, vision + final approval</span>
+    <span class="who"><b>WJ</b> — Woei Jing · Marcoms Lead, content + messaging, site map</span>
+    <span class="who"><b>Dave</b> — CSO, UI/UX Lead on the site</span>
+    <span class="who"><b>Veron</b> — Graphic Designer, design features</span>
+    <span class="who"><b>Anik</b> — Development Advisor, dev guidance</span>
+    <span class="who"><b>Jeff</b> — UI/UX Advisor, reviews UI/UX at each gate</span>
+    <a href="#team" style="font-size:11px;font-weight:600;color:var(--ocean);">Full team table ↓</a>
+  </div>
+</div>
+
+<nav class="quicknav no-print">
+  <div class="wrap">
+    <a href="#team">Team</a>
+    <a href="#today">Where we stand today</a>
+    <a href="#gantt">Master timeline</a>
+    <a href="#handoff">Aug 3 · Handoff</a>
+    <a href="#sprint">Aug 3–14 · Dev + Media</a>
+    <a href="#review">Aug 10–14 · Review</a>
+    <a href="#fixes">Aug 17–21 · Fixes &amp; approval</a>
+    <a href="#launch">Aug 24–28 · Launch</a>
+    <a href="#decisions">Open decisions</a>
+    <a href="#blockers">External blockers</a>
+    <a href="#phase2">Phase 1.5 / 2 / 3 pipeline</a>
+  </div>
+</nav>
+
+<main class="main">
+<div class="wrap">
+
+  <div class="section-controls no-print">
+    <button type="button" onclick="setAllSections(true)">Expand all sections</button>
+    <button type="button" onclick="setAllSections(false)">Collapse all sections</button>
+  </div>
+
+  <!-- TEAM -->
+  <section id="team">
+    <details class="section-block" open>
+    <summary class="section-title"><span class="chev">▾</span>Team</summary>
+    <table class="detail">
+      <thead><tr><th>Name</th><th>Role</th><th>On the website</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Kristina</strong></td><td>Project Manager &amp; UI/UX Lead</td><td>Runs the project; content co-lead</td></tr>
+        <tr><td><strong>Nav</strong></td><td>CEO</td><td>Vision + final approval</td></tr>
+        <tr><td><strong>Woei Jing (WJ)</strong></td><td>Marcoms Lead</td><td>Content + messaging; site map</td></tr>
+        <tr><td><strong>Dave</strong></td><td>CSO</td><td>UI/UX Lead</td></tr>
+        <tr><td><strong>Veron</strong></td><td>Graphic Designer</td><td>Design features</td></tr>
+        <tr><td><strong>Sam</strong> (Somesh Bhardwaj)</td><td>Back-end Developer</td><td>Builds the site from scratch</td></tr>
+        <tr><td><strong>Anik</strong></td><td>Development Advisor</td><td>Dev guidance / advisory</td></tr>
+        <tr><td><strong>Jeff</strong></td><td>UI/UX Advisor</td><td>Reviews UI/UX at each gate</td></tr>
+      </tbody>
+    </table>
+    </details>
+  </section>
+
+  <!-- WHERE WE STAND TODAY -->
+  <section id="today">
+    <details class="section-block" open>
+    <summary class="section-title"><span class="chev">▾</span>Where we stand today · 14 Jul 2026</summary>
+    <p class="section-sub">The Aug 3–28 build hasn't started — this is the design/prep runway feeding into it. The UI/UX review is the one item actively in motion right now.</p>
+    <table class="detail">
+      <thead><tr><th>Item</th><th>Owner</th><th>Status</th><th>Date / target</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Team kickoff meeting</strong></td><td>All</td><td><span class="tag tag-done">✓ Done</span></td><td>Aligned on plan, roles, timeline</td></tr>
+        <tr><td><strong>Site map</strong> — built</td><td>WJ</td><td><span class="tag tag-done">✓ Done</span></td><td>—</td></tr>
+        <tr><td><strong>Site map review &amp; sign-off</strong></td><td>Nav, WJ, K</td><td><span class="tag tag-done">✓ Done</span></td><td>IA confirmed before UI/UX sprint</td></tr>
+        <tr><td><strong>Content Copy &amp; Messaging</strong></td><td>WJ / K</td><td><span class="tag tag-done">✓ Done</span></td><td>—</td></tr>
+        <tr><td><strong>Mood Board</strong></td><td>Veron</td><td><span class="tag tag-done">✓ Done</span></td><td>—</td></tr>
+        <tr><td><strong>WJ-Nav-K Messaging Meeting</strong></td><td>K</td><td><span class="tag tag-done">✓ Done</span></td><td>—</td></tr>
+        <tr><td><strong>Copy-UIUX Meeting</strong></td><td>K with WJ/Dave/Sam</td><td><span class="tag tag-done">✓ Done</span></td><td>—</td></tr>
+        <tr><td><strong>V1 UI/UX; Homepage</strong></td><td>Dave (with K/Sam)</td><td><span class="tag tag-done">✓ Done</span></td><td>Built in parallel with Wix feasibility testing</td></tr>
+        <tr><td><strong>Design &amp; V1 Homepage Meeting</strong></td><td>K, Veron, WJ, Dave, Sam</td><td><span class="tag tag-done">✓ Done</span></td><td>Jun 22–26</td></tr>
+        <tr><td><strong>Design Homepage</strong> — graphics, imagery, icons</td><td>Veron</td><td><span class="tag tag-done">✓ Done</span></td><td>After Veron's OOO</td></tr>
+        <tr><td><strong>UIUX: Homepage V2</strong></td><td>Dave</td><td><span class="tag tag-done">✓ Done</span></td><td>—</td></tr>
+        <tr><td><strong>UIUX: Remaining Pages</strong></td><td>Dave</td><td><span class="tag tag-done">✓ Done</span></td><td>—</td></tr>
+        <tr><td><strong>Feedback: Homepage</strong></td><td>K, WJ, Nav</td><td><span class="tag tag-progress">● In progress</span></td><td>Jun 28</td></tr>
+        <tr><td><strong>Copy: Finalize</strong></td><td>K, WJ, Nav</td><td><span class="tag tag-progress">● In progress</span></td><td>Jun 28</td></tr>
+        <tr><td><strong>Astro vs. static-partials</strong> build decision</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>—</td></tr>
+        <tr><td><strong>Analytics stack</strong> — GA4 + PostHog + Clarity</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>—</td></tr>
+        <tr><td><strong>Cookie consent</strong> (DECISION-002) — Osano Free + GA4 Consent Mode v2</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
+        <tr><td><strong>Transactional email</strong> (DECISION-003) — SendGrid, existing paid plan</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
+        <tr><td><strong>Rate limiting</strong> (DECISION-004) — Upstash Redis</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
+        <tr><td><strong>Image optimization</strong> (DECISION-005) — Astro &lt;Image /&gt;</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
+        <tr><td><strong>Observability</strong> (DECISION-006) — Slack + Sentry + Vercel + PostHog</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
+        <tr><td><strong>PostHog hosting</strong> (DECISION-007) — PostHog Cloud</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
+        <tr><td><strong>Security headers + <code>vercel.json</code></strong> (OPS-001, OPS-002)</td><td>Sam</td><td><span class="tag tag-done">✓ Done</span></td><td>Committed</td></tr>
+        <tr><td><strong>CI auto-regen of single-file build</strong> (OPS-003)</td><td>Sam</td><td><span class="tag tag-done">✓ Done</span></td><td>Shipped</td></tr>
+        <tr><td><strong>Story Board a11y fixes</strong> (QA-001)</td><td>Sam</td><td><span class="tag tag-done">✓ Done</span></td><td>Closed</td></tr>
+        <tr><td><strong>11 doc-correction tickets</strong> from engineering review</td><td>Sam</td><td><span class="tag tag-done">✓ Done</span></td><td>All closed</td></tr>
+        <tr><td><strong>Content &amp; feedback lock</strong></td><td>All</td><td><span class="tag tag-progress">● In progress</span></td><td>Due today — Jul 14</td></tr>
+        <tr><td><strong>Homepage migration + copy audit</strong></td><td>Dave</td><td><span class="tag tag-progress">● In progress</span></td><td>—</td></tr>
+        <tr><td>Team feedback meeting</td><td>All</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Jul 15</td></tr>
+        <tr><td>UI/UX all pages v2</td><td>Dave</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Jul 16–21</td></tr>
+        <tr><td>Remaining pages design</td><td>Veron</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Jul 22–24</td></tr>
+        <tr><td>Final UI/UX + UIUX–Dev handoff meeting</td><td>All</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Aug 3</td></tr>
+        <tr><td><strong>Stories content / photos</strong></td><td>Comms/Programs</td><td><span class="tag tag-blocked">⚠ Waiting on external input</span></td><td>Needed by Aug 10</td></tr>
+        <tr><td><strong>Homeroom tier amounts</strong></td><td>Leadership/Finance</td><td><span class="tag tag-blocked">⚠ Waiting on external input</span></td><td>Needed by Aug 7</td></tr>
+        <tr><td><strong>Live Keela checkout URLs</strong></td><td>Finance</td><td><span class="tag tag-blocked">⚠ Waiting on external input</span></td><td>Needed by Aug 21</td></tr>
+        <tr><td><strong>Legal copy</strong> — Privacy/Terms</td><td>Legal/Ops</td><td><span class="tag tag-blocked">⚠ Waiting on external input</span></td><td>Needed by Aug 17</td></tr>
+        <tr><td><strong>Social media URLs</strong></td><td>Comms</td><td><span class="tag tag-blocked">⚠ Waiting on external input</span></td><td>Needed by Aug 5</td></tr>
+      </tbody>
+    </table>
+    </details>
+  </section>
+
+  <!-- MASTER TIMELINE -->
+  <section id="gantt">
+    <div class="section-title">Master Timeline · Jun 22 – Aug 28</div>
+    <p class="section-sub">Same shape as Kristina's Gantt — Phase, Task, Owner, Status, Dates, weeks, Notes — extended all the way back to kickoff so everyone (Sam, K, Nav, WJ, Dave, Veron) is reading the same board. Completed historical phases (Availability, Kickoff, Foundation, Concept + UI/UX Sprint) start collapsed — click to expand. Full ticket-level detail for the Aug phases is in the sections below.</p>
+
+    <div class="legend">
+      <div class="legend-group">
+        <span class="legend-label">Phase</span>
+        <span class="swatch sw-availability">Availability</span>
+        <span class="swatch sw-launch">Kickoff / Launch</span>
+        <span class="swatch sw-foundation">1. Foundation</span>
+        <span class="swatch sw-concept">2. Concept + UI/UX Sprint</span>
+        <span class="swatch sw-design">3. UI/UX Sprint</span>
+        <span class="swatch sw-dev">4. Development Sprint</span>
+        <span class="swatch sw-media">5. Media</span>
+        <span class="swatch sw-review">6. Final Review</span>
+      </div>
+      <div class="legend-group">
+        <span class="legend-label">Status — click to filter</span>
+        <button type="button" class="tag tag-done" aria-pressed="false" onclick="toggleStatusFilter('done', this)">✓ Done</button>
+        <button type="button" class="tag tag-progress" aria-pressed="false" onclick="toggleStatusFilter('progress', this)">● In progress</button>
+        <button type="button" class="tag tag-upcoming" aria-pressed="false" onclick="toggleStatusFilter('upcoming', this)">○ Upcoming</button>
+        <button type="button" class="tag tag-blocked" aria-pressed="false" onclick="toggleStatusFilter('blocked', this)">⚠ Blocked</button>
+        <button type="button" class="tag tag-decision" aria-pressed="false" onclick="toggleStatusFilter('decision', this)">⏸ Pending decision</button>
+        <button type="button" class="tag tag-signoff" aria-pressed="false" onclick="toggleStatusFilter('signoff', this)">✎ Pending sign-off</button>
+        <button type="button" class="tag tag-approved" aria-pressed="false" onclick="toggleStatusFilter('approved', this)">✔ Approved</button>
+      </div>
+    </div>
+
+    <div class="gantt-controls no-print">
+      <button type="button" onclick="setAllGanttPhases(true)">Collapse all phases</button>
+      <button type="button" onclick="setAllGanttPhases(false)">Expand all phases</button>
+      <button type="button" onclick="clearStatusFilter()">Clear status filter</button>
+    </div>
+
+    <div class="gantt-scroll">
+      <table class="mastergantt">
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Task</th>
+            <th>Owner</th>
+            <th>Status</th>
+            <th>Dates</th>
+            <th class="wk">Jun 22–26</th>
+            <th class="wk">Jun 29–Jul 3</th>
+            <th class="wk">Jul 6–10</th>
+            <th class="wk">Jul 13–17</th>
+            <th class="wk">Jul 20–24</th>
+            <th class="wk">Jul 27–31</th>
+            <th class="wk">Aug 3–7</th>
+            <th class="wk">Aug 10–14</th>
+            <th class="wk">Aug 17–21</th>
+            <th class="wk">Aug 24–28</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- AVAILABILITY (collapsed by default) -->
+          <tr data-status="none">
+            <td class="phase-cell collapsible collapsed" style="background:var(--slate);" rowspan="1" data-phase-id="pav" data-rowspan="2" onclick="toggleGanttPhase(this)">Availability <span class="phase-chevron" style="transform:rotate(-90deg);">▾</span></td>
+            <td class="task-cell"><strong>Veron (designer)</strong></td>
+            <td>—</td><td>—</td><td>—</td>
+            <td class="wk" colspan="10"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="pav" data-status="none" style="display:none;">
+            <td class="task-cell"><strong>Kristina (PM)</strong></td>
+            <td>—</td><td>—</td><td>—</td>
+            <td class="wk"></td>
+            <td class="wk"><span class="off-mark">OFF</span></td>
+            <td class="wk"><span class="off-mark">OFF</span></td>
+            <td class="wk" colspan="7"></td>
+            <td class="notes-cell">Flies to EST on June 23, can pop in during OOO.</td>
+          </tr>
+
+          <!-- KICKOFF -->
+          <tr data-status="done">
+            <td class="phase-cell pc-dark" style="background:linear-gradient(180deg,#EAA340,#EDBA60);">Kickoff</td>
+            <td class="task-cell"><strong>Team kickoff meeting</strong></td>
+            <td>All</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk" colspan="10"></td>
+            <td class="notes-cell">Align on plan, roles, timeline.</td>
+          </tr>
+
+          <!-- 1. FOUNDATION (collapsed by default) -->
+          <tr data-status="done">
+            <td class="phase-cell collapsible collapsed pc-dark" rowspan="1" style="background:var(--c-foundation);" data-phase-id="pf" data-rowspan="4" onclick="toggleGanttPhase(this)">1. Foundation <span class="phase-chevron" style="transform:rotate(-90deg);">▾</span></td>
+            <td class="task-cell"><strong>✓ Site map</strong></td>
+            <td>WJ</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk" colspan="10"></td>
+            <td class="notes-cell">Built. Ready for review.</td>
+          </tr>
+          <tr data-phase="pf" data-status="done" style="display:none;">
+            <td class="task-cell"><strong>Site map review &amp; sign-off</strong></td>
+            <td>Nav, WJ, K</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk" colspan="10"></td>
+            <td class="notes-cell">Confirm IA before UI/UX sprint.</td>
+          </tr>
+          <tr data-phase="pf" data-status="done" style="display:none;">
+            <td class="task-cell"><strong>Content Copy &amp; Messaging</strong></td>
+            <td>WJ / K</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk" colspan="10"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="pf" data-status="done" style="display:none;">
+            <td class="task-cell"><strong>Mood Board</strong></td>
+            <td>Veron</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk" colspan="10"></td>
+            <td class="notes-cell"></td>
+          </tr>
+
+          <!-- 2. CONCEPT + UI/UX SPRINT (collapsed by default) -->
+          <tr data-status="done">
+            <td class="phase-cell collapsible collapsed pc-dark" rowspan="1" style="background:var(--c-concept);" data-phase-id="pc" data-rowspan="6" onclick="toggleGanttPhase(this)">2. Concept + UI/UX Sprint <span class="phase-chevron" style="transform:rotate(-90deg);">▾</span></td>
+            <td class="task-cell"><strong>WJ-Nav-K Messaging Meeting</strong></td>
+            <td>K</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk" colspan="10"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="pc" data-status="done" style="display:none;">
+            <td class="task-cell"><strong>Copy-UIUX Meeting</strong></td>
+            <td>K with WJ/Dave/Sam</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk" colspan="10"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="pc" data-status="done" style="display:none;">
+            <td class="task-cell"><strong>V1 UI/UX; Homepage</strong></td>
+            <td>Dave (with K/Sam)</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk" colspan="10"></td>
+            <td class="notes-cell">In parallel with testing to make sure we can build it on Wix.</td>
+          </tr>
+          <tr data-phase="pc" data-status="done" style="display:none;">
+            <td class="task-cell"><strong>Design &amp; V1 Homepage Meeting</strong></td>
+            <td>K, Veron, WJ, Dave, Sam</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk fill wk-concept"></td>
+            <td class="wk" colspan="9"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="pc" data-status="progress" style="display:none;">
+            <td class="task-cell"><strong>Feedback: Homepage</strong></td>
+            <td>K, WJ, Nav</td>
+            <td><span class="tag tag-progress">● In progress</span></td>
+            <td>Jun 28</td>
+            <td class="wk"></td>
+            <td class="wk fill wk-concept"></td>
+            <td class="wk" colspan="8"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="pc" data-status="progress" style="display:none;">
+            <td class="task-cell"><strong>Copy: Finalize</strong></td>
+            <td>K, WJ, Nav</td>
+            <td><span class="tag tag-progress">● In progress</span></td>
+            <td>Jun 28</td>
+            <td class="wk"></td>
+            <td class="wk fill wk-concept"></td>
+            <td class="wk" colspan="8"></td>
+            <td class="notes-cell"></td>
+          </tr>
+
+          <!-- 3. UI/UX SPRINT (open — active phase) -->
+          <tr data-status="done">
+            <td class="phase-cell collapsible pc-dark" style="background:var(--c-design);" rowspan="10" data-phase-id="p3" data-rowspan="10" onclick="toggleGanttPhase(this)">3. UI/UX<br>Sprint <span class="phase-chevron">▾</span></td>
+            <td class="task-cell"><strong>Design Homepage</strong></td>
+            <td>Veron</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk fill wk-design" colspan="2"></td>
+            <td class="wk" colspan="8"></td>
+            <td class="notes-cell">Graphics, imagery, icons. After Veron's OOO.</td>
+          </tr>
+          <tr data-phase="p3" data-status="done">
+            <td class="task-cell"><strong>UIUX: Homepage V2</strong></td>
+            <td>Dave</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk"></td>
+            <td class="wk fill wk-design"></td>
+            <td class="wk" colspan="8"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p3" data-status="done">
+            <td class="task-cell"><strong>UIUX: Remaining Pages</strong></td>
+            <td>Dave</td>
+            <td><span class="tag tag-done">✓ Done</span></td>
+            <td>—</td>
+            <td class="wk" colspan="2"></td>
+            <td class="wk fill wk-design"></td>
+            <td class="wk" colspan="7"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p3" data-status="upcoming">
+            <td class="task-cell"><strong>Meeting: Design</strong></td>
+            <td>K/Dave/V/WJ</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Jul 6</td>
+            <td class="wk" colspan="2"></td>
+            <td class="wk fill wk-design"><span class="milestone-mark">📐</span></td>
+            <td class="wk" colspan="7"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p3" data-status="progress">
+            <td class="task-cell"><strong>Review: Lock down content &amp; Feedback</strong></td>
+            <td>—</td>
+            <td><span class="tag tag-progress">● In progress</span></td>
+            <td>Due Jul 14</td>
+            <td class="wk" colspan="2"></td>
+            <td class="wk fill wk-design" colspan="2"></td>
+            <td class="wk" colspan="6"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p3" data-status="upcoming">
+            <td class="task-cell"><strong>Meeting: Feedback</strong></td>
+            <td>All</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Jul 15</td>
+            <td class="wk" colspan="3"></td>
+            <td class="wk fill wk-design"><span class="milestone-mark">🤝</span></td>
+            <td class="wk" colspan="6"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p3" data-status="upcoming">
+            <td class="task-cell"><strong>UIUX: All Pages V2</strong></td>
+            <td>Dave</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Jul 16–21</td>
+            <td class="wk" colspan="3"></td>
+            <td class="wk fill wk-design" colspan="2"></td>
+            <td class="wk" colspan="5"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p3" data-status="upcoming">
+            <td class="task-cell"><strong>Design: Remaining Pages</strong></td>
+            <td>Veron</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Jul 22–24</td>
+            <td class="wk" colspan="4"></td>
+            <td class="wk fill wk-design"></td>
+            <td class="wk" colspan="5"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p3" data-status="upcoming">
+            <td class="task-cell"><strong>Final UIUX</strong></td>
+            <td>Dave</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>—</td>
+            <td class="wk" colspan="5"></td>
+            <td class="wk fill wk-design"></td>
+            <td class="wk" colspan="4"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p3" data-status="upcoming">
+            <td class="task-cell"><strong>Meeting: UIUX–Development</strong></td>
+            <td>All</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Aug 3</td>
+            <td class="wk" colspan="6"></td>
+            <td class="wk fill wk-design"><span class="milestone-mark">🤝</span></td>
+            <td class="wk" colspan="3"></td>
+            <td class="notes-cell"></td>
+          </tr>
+
+          <!-- 4. DEVELOPMENT SPRINT -->
+          <tr data-status="upcoming">
+            <td class="phase-cell" style="background:var(--c-dev);">4. Development<br>Sprint</td>
+            <td class="task-cell"><strong>Development</strong><br><span style="font-size:10px;color:var(--slate);">FEAT-001…093 — full list in Aug 3–14 section below</span></td>
+            <td>Sam</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Aug 3–14</td>
+            <td class="wk" colspan="6"></td>
+            <td class="wk fill wk-dev" colspan="2"></td>
+            <td class="wk" colspan="2"></td>
+            <td class="notes-cell"></td>
+          </tr>
+
+          <!-- 5. MEDIA -->
+          <tr data-status="upcoming">
+            <td class="phase-cell" style="background:var(--c-media);">5. Media</td>
+            <td class="task-cell"><strong>Media: Video for Homepage</strong></td>
+            <td>Dave</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Aug 3–14</td>
+            <td class="wk" colspan="6"></td>
+            <td class="wk fill wk-media" colspan="2"></td>
+            <td class="wk" colspan="2"></td>
+            <td class="notes-cell"></td>
+          </tr>
+
+          <!-- 6. FINAL REVIEW -->
+          <tr data-status="upcoming">
+            <td class="phase-cell" style="background:var(--c-review);">6. Final<br>Review</td>
+            <td class="task-cell"><strong>Final Review Meeting</strong></td>
+            <td>All</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Aug 14</td>
+            <td class="wk" colspan="7"></td>
+            <td class="wk fill wk-review"><span class="milestone-mark">🔷 VC</span></td>
+            <td class="wk" colspan="2"></td>
+            <td class="notes-cell"></td>
+          </tr>
+
+          <!-- 7. LAUNCH -->
+          <tr data-status="upcoming">
+            <td class="phase-cell collapsible pc-dark" style="background:linear-gradient(180deg,#EAA340,#EDBA60);" rowspan="5" data-phase-id="p7" data-rowspan="5" onclick="toggleGanttPhase(this)">7. Launch <span class="phase-chevron">▾</span></td>
+            <td class="task-cell"><strong>Fixes &amp; polish</strong></td>
+            <td>Sam</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Aug 17–21</td>
+            <td class="wk" colspan="8"></td>
+            <td class="wk fill wk-launch"></td>
+            <td class="wk"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p7" data-status="upcoming">
+            <td class="task-cell"><strong>Analytics</strong></td>
+            <td>WJ, K, Sam</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Aug 17–21</td>
+            <td class="wk" colspan="8"></td>
+            <td class="wk fill wk-launch"></td>
+            <td class="wk"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p7" data-status="signoff">
+            <td class="task-cell"><strong>Final approval</strong></td>
+            <td>Nav, K, WJ</td>
+            <td><span class="tag tag-signoff">✎ Pending sign-off</span></td>
+            <td>Aug 17–21</td>
+            <td class="wk" colspan="8"></td>
+            <td class="wk fill wk-launch"></td>
+            <td class="wk"></td>
+            <td class="notes-cell"></td>
+          </tr>
+          <tr data-phase="p7" data-status="upcoming">
+            <td class="task-cell"><strong>Launch prep &amp; checks</strong></td>
+            <td>Sam, K</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Aug 17–21</td>
+            <td class="wk" colspan="8"></td>
+            <td class="wk fill wk-launch"></td>
+            <td class="wk"></td>
+            <td class="notes-cell">Analytics, links, mobile, contrast.</td>
+          </tr>
+          <tr data-phase="p7" data-status="upcoming">
+            <td class="task-cell"><strong>GO LIVE</strong></td>
+            <td>All</td>
+            <td><span class="tag tag-upcoming">○ Upcoming</span></td>
+            <td>Aug 24–28</td>
+            <td class="wk" colspan="9"></td>
+            <td class="wk fill wk-launch"><span class="milestone-mark">★</span></td>
+            <td class="notes-cell">Website live.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- AUG 3 HANDOFF -->
+  <section id="handoff">
+    <details class="phase-block" open>
+      <summary class="phase-block-head">
+        <h3><span class="chev">▾</span>Aug 3 — Design Handoff &amp; Sprint Kickoff</h3>
+        <span class="phase-dates pd-design">1 day</span>
+      </summary>
+      <p class="phase-block-note">Everything downstream depends on this landing clean: designs locked before a single line of Astro gets written.</p>
+      <table class="detail">
+        <thead><tr><th>Task</th><th>Owner</th><th>Status</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><strong>All page designs handed off</strong> — Dave (all pages v2) + Veron (remaining pages)</td><td>Dave, Veron → Sam</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Design freeze — no mid-sprint redesigns (high risk if missed)</td></tr>
+          <tr><td><strong>UIUX–Development kickoff meeting</strong></td><td>All</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Confirms scope for both sprint weeks before Sam starts building</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </section>
+
+  <!-- AUG 3-14 DEV + MEDIA -->
+  <section id="sprint">
+    <details class="phase-block" open>
+      <summary class="phase-block-head">
+        <h3><span class="chev">▾</span>Aug 3–14 — Development Sprint</h3>
+        <span class="phase-dates pd-dev">2 weeks · Sam-led</span>
+      </summary>
+      <p class="phase-block-note">Merges Dave + Veron's HTML drafts into the multi-page Astro build. Week 1 ships the foundation and highest-traffic pages; week 2 ships the remaining content pages.</p>
+      <div class="section-title" style="margin-top:4px;">Week 1 · Aug 3–7 — Foundation, Homepage, Why, Give</div>
+      <table class="detail" style="margin-bottom:16px;">
+        <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td class="id">FEAT-001</td><td>Extract shared layout — CSS tokens, nav, footer</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>No dependency — can start day one</td></tr>
+          <tr><td class="id">FEAT-002</td><td>Multi-page routing scaffold (Astro)</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Astro 4.x confirmed — no longer blocked</td></tr>
+          <tr><td class="id">FEAT-003</td><td>Mobile navigation drawer</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>—</td></tr>
+          <tr><td class="id">FEAT-010</td><td>Migrate homepage to <code>/</code></td><td><span class="tag tag-progress">● In progress</span></td><td>Dave's Netlify draft — copy audit already underway</td></tr>
+          <tr><td class="id">FEAT-004</td><td>Wire all nav and footer links</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Needs social URLs from Comms by Aug 5</td></tr>
+          <tr><td class="id">FEAT-020</td><td>Build <code>/why</code> page</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Video embed slots (CEO + 3 teacher clips) — URLs land later</td></tr>
+          <tr><td class="id">FEAT-050 / 051</td><td>Build <code>/give</code> gateway + <code>/give/monthly</code> Homeroom page</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Homeroom tier decision (D-01) + Keela URLs (D-02) needed first</td></tr>
+        </tbody>
+      </table>
+      <div class="section-title">Week 2 · Aug 10–14 — Stories, Schools, Events, About Us</div>
+      <table class="detail">
+        <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td class="id">FEAT-030</td><td>Stories data model + JSON (min. 3 stories)</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Waiting on Comms/Programs for photos + permissions — needed by Aug 10</td></tr>
+          <tr><td class="id">FEAT-031</td><td>Build <code>/stories</code> index — region-scroll, no map in v1</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Depends on FEAT-030</td></tr>
+          <tr><td class="id">FEAT-040 / 041</td><td>Build <code>/schools</code> — ripple diagram, comparison table, discovery form</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Form destination decision (D-04) still open</td></tr>
+          <tr><td class="id">FEAT-090</td><td>Events &amp; Experiences page — filter chips, access badges</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Some event dates still TBC (Events team)</td></tr>
+          <tr><td class="id">FEAT-032</td><td>Individual story pages <code>/stories/[slug]</code></td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>After index ships</td></tr>
+          <tr><td class="id">FEAT-093</td><td>About Us — v1 single page</td><td><span class="tag tag-decision">⏸ Pending decision</span></td><td>Single page vs. 5 sub-pages (D-05) — may fast-follow past Aug 14</td></tr>
+        </tbody>
+      </table>
+    </details>
+    <details class="phase-block" open>
+      <summary class="phase-block-head">
+        <h3><span class="chev">▾</span>Aug 3–14 — Media (parallel track)</h3>
+        <span class="phase-dates pd-media">2 weeks · Dave</span>
+      </summary>
+      <p class="phase-block-note">Runs alongside the dev sprint so homepage video is ready for the Aug 14 review, not bolted on afterward.</p>
+      <table class="detail">
+        <thead><tr><th>Task</th><th>Owner</th><th>Status</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Homepage video production</strong></td><td>Dave</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Target: ready to embed before the Aug 14 final review meeting</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </section>
+
+  <!-- AUG 10-14 REVIEW -->
+  <section id="review">
+    <details class="phase-block" open>
+      <summary class="phase-block-head">
+        <h3><span class="chev">▾</span>Aug 10–14 — Final Review Window → Aug 14 Review Meeting</h3>
+        <span class="phase-dates pd-review">Review + VC call</span>
+      </summary>
+      <p class="phase-block-note">Runs concurrently with dev sprint week 2, so week-2 pages are reviewed as they land rather than after the fact. Closes with a stakeholder video call on Aug 14 — the go/no-go for the fixes sprint.</p>
+      <table class="detail">
+        <thead><tr><th>Review item</th><th>Owner</th><th>Status</th><th>Sign-off needed</th></tr></thead>
+        <tbody>
+          <tr><td>Full site walkthrough — all built pages</td><td>All (VC)</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Go/no-go read for Aug 17–21 fixes sprint</td></tr>
+          <tr><td>Design fidelity check vs. locked designs</td><td>Dave, Veron</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Confirms build matches Aug 3 handoff</td></tr>
+          <tr><td>Content accuracy pass</td><td>Comms / Programs</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>—</td></tr>
+          <tr><td>Homepage video integration</td><td>Dave, Sam</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>If media track lands on schedule</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </section>
+
+  <!-- AUG 17-21 FIXES -->
+  <section id="fixes">
+    <details class="phase-block" open>
+      <summary class="phase-block-head">
+        <h3><span class="chev">▾</span>Aug 17–21 — Fixes, Polish, Analytics &amp; Final Approval</h3>
+        <span class="phase-dates pd-launch">1 week</span>
+      </summary>
+      <p class="phase-block-note">Everything that can't be finished until real content and real accounts exist lands here — and this is the week the Nav + WJ sign-off gate sits.</p>
+      <table class="detail">
+        <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td class="id">FEAT-100</td><td>Bug fixes from Aug 14 review, cross-browser + mobile polish</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Scope depends on review findings</td></tr>
+          <tr><td class="id">FEAT-071</td><td>Privacy + Terms pages</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Legal copy (D-08) needed by Aug 17 — critical path to launch</td></tr>
+          <tr><td class="id">FEAT-080</td><td>Analytics — GA4 + Clarity + PostHog Cloud + Osano + Sentry</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>All decisions resolved — wire in review sprint</td></tr>
+          <tr><td class="id">FEAT-081</td><td>SEO baseline — meta, OG, sitemap, favicon</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>—</td></tr>
+          <tr><td>—</td><td>Cookie consent banner (Osano)</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>DECISION-002 signed off — wire in review sprint; needs Privacy copy</td></tr>
+          <tr><td>—</td><td><strong>Final approval — Nav + WJ review and sign off</strong></td><td><span class="tag tag-signoff">✎ Pending sign-off</span></td><td>Unlocks DNS cutover — nothing ships without this</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </section>
+
+  <!-- AUG 24-28 LAUNCH -->
+  <section id="launch">
+    <details class="phase-block" open>
+      <summary class="phase-block-head">
+        <h3><span class="chev">▾</span>Aug 24–28 — Launch</h3>
+        <span class="phase-dates pd-launch">Go-live window</span>
+      </summary>
+      <p class="phase-block-note">A window, not a fixed date — <strong>we go live as soon as it's genuinely ready</strong>, gated on Finance's Keela URLs and the Aug 21 approval.</p>
+      <table class="detail">
+        <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td class="id">FEAT-060</td><td>Keela donation integration — wire all CTAs</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Waiting on Finance for live checkout URLs — critical path</td></tr>
+          <tr><td class="id">FEAT-070</td><td>Newsletter live (Flodesk)</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Needs Flodesk credentials</td></tr>
+          <tr><td class="id">FEAT-100</td><td>Lighthouse ≥85 QA pass</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>—</td></tr>
+          <tr><td class="id">FEAT-101</td><td>Production deploy + DNS cutover to contentment.org</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Requires Aug 21 sign-off + QA pass</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </section>
+
+  <!-- OPEN DECISIONS -->
+  <section id="decisions">
+    <details class="section-block" open>
+    <summary class="section-title"><span class="chev">▾</span>Open Decisions Blocking Sign-off</summary>
+    <p class="section-sub">Critical and high-priority items only — full list in <code>DECISIONS.md</code>.</p>
+    <table class="detail">
+      <thead><tr><th>ID</th><th>Decision</th><th>Options</th><th>Owner</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="id">D-01</td><td>Homeroom tier amounts</td><td>$5/$25/$100 vs $25/$50/$100</td><td>Leadership / Finance</td><td><span class="tag tag-decision">⏸ Open · Critical</span></td></tr>
+        <tr><td class="id">D-02</td><td>Keela checkout URLs</td><td>Live hosted links per tier</td><td>Finance</td><td><span class="tag tag-decision">⏸ Open · Critical</span></td></tr>
+        <tr><td class="id">D-08</td><td>Legal copy — Privacy + Terms</td><td>Final text</td><td>Legal / Ops</td><td><span class="tag tag-decision">⏸ Open · Critical</span></td></tr>
+        <tr><td class="id">D-03</td><td><code>/give</code> routing</td><td>Gateway page vs. redirect to Homeroom</td><td>Product / Kristina</td><td><span class="tag tag-decision">⏸ Open · High</span></td></tr>
+        <tr><td class="id">D-04</td><td>School inquiry form destination</td><td>Flodesk vs Keela vs custom API</td><td>Partnerships + Eng</td><td><span class="tag tag-decision">⏸ Open · High</span></td></tr>
+        <tr><td class="id">D-05</td><td>About Us scope v1</td><td>Single page vs 5 sub-pages</td><td>Content / Kristina</td><td><span class="tag tag-decision">⏸ Open · High</span></td></tr>
+      </tbody>
+    </table>
+    </details>
+  </section>
+
+  <!-- EXTERNAL BLOCKERS -->
+  <section id="blockers">
+    <details class="section-block" open>
+    <summary class="section-title"><span class="chev">▾</span>External Blockers — Not in Engineering's Control</summary>
+    <table class="detail">
+      <thead><tr><th>Blocker</th><th>Waiting on</th><th>Needed by</th><th>Impact if delayed</th></tr></thead>
+      <tbody>
+        <tr><td>Design handoff — all pages</td><td>Dave + Veron</td><td>Aug 3</td><td>Dev cannot start without locked designs</td></tr>
+        <tr><td>Live Keela checkout URLs</td><td>Finance</td><td>Aug 21</td><td>Cannot launch live donations</td></tr>
+        <tr><td>Homeroom tier amounts</td><td>Leadership / Finance</td><td>Aug 7</td><td>Copy + Keela product mismatch</td></tr>
+        <tr><td>Story photos + permissions</td><td>Comms / Programs</td><td>Aug 10</td><td>Stories ships with draft copy only</td></tr>
+        <tr><td>Legal copy — Privacy, Terms</td><td>Legal / Ops</td><td>Aug 17</td><td>Cannot go public — Aug 24 go-live at risk</td></tr>
+        <tr><td>Social media URLs</td><td>Comms</td><td>Aug 5</td><td>Footer placeholders remain</td></tr>
+        <tr><td>Event calendar 2026 dates</td><td>Events team</td><td>Aug 13</td><td>"TBC" labels stay on event cards</td></tr>
+        <tr><td>Nav + WJ final approval</td><td>Nav, WJ</td><td>Aug 21</td><td>DNS cutover cannot proceed without sign-off</td></tr>
+      </tbody>
+    </table>
+    </details>
+  </section>
+
+  <div class="callout">
+    <strong>Reading this board:</strong> phase colors show which work stream a task belongs to; the badge shows where it stands right now. Nothing in the Aug 3–28 window has started yet — "Upcoming" is the default, not a red flag. "Blocked" and "Pending decision" mark the handful of things actually at risk of slipping the Aug 24–28 window; everything else is simply queued behind the Aug 3 design handoff.
+  </div>
+
+</div>
+</main>
+
+<footer class="page-footer">
+  <strong>The Contentment Foundation</strong> · Development Sprint Timeline · Aug 2026<br>
+  Prepared by Somesh Bhardwaj · somesh@contentment.org<br>
+  Source of truth: <code>docs/planning/launch-plan-data.json</code> and <code>docs/planning/TRACKER.md</code> — this page is a read-only visualization, not a separate tracker.
+</footer>
+
+<button class="print-btn no-print" onclick="window.print()">Save as PDF</button>
+
+<script>
+  function toggleGanttPhase(cell) {
+    var phase = cell.dataset.phaseId;
+    var table = cell.closest('table');
+    var rows = table.querySelectorAll('tr[data-phase="' + phase + '"]');
+    var collapsed = cell.classList.toggle('collapsed');
+    rows.forEach(function (r) { r.style.display = collapsed ? 'none' : ''; });
+    cell.rowSpan = collapsed ? 1 : parseInt(cell.dataset.rowspan, 10);
+  }
+  function setAllGanttPhases(collapse) {
+    document.querySelectorAll('table.mastergantt td.phase-cell.collapsible').forEach(function (cell) {
+      if (cell.classList.contains('collapsed') !== collapse) toggleGanttPhase(cell);
+    });
+  }
+
+  function setAllSections(expand) {
+    document.querySelectorAll('details.section-block, details.phase-block').forEach(function (d) {
+      d.open = expand;
+    });
+  }
+
+  var activeStatusFilters = new Set();
+  function toggleStatusFilter(status, btn) {
+    if (activeStatusFilters.has(status)) {
+      activeStatusFilters.delete(status);
+      btn.setAttribute('aria-pressed', 'false');
+    } else {
+      activeStatusFilters.add(status);
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    applyStatusFilter();
+  }
+  function clearStatusFilter() {
+    activeStatusFilters.clear();
+    document.querySelectorAll('.legend button[aria-pressed]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+    applyStatusFilter();
+  }
+  function applyStatusFilter() {
+    var rows = document.querySelectorAll('table.mastergantt tbody tr');
+    rows.forEach(function (r) {
+      var s = r.dataset.status;
+      if (activeStatusFilters.size === 0 || !s || s === 'none' || activeStatusFilters.has(s)) {
+        r.classList.remove('status-dimmed');
+      } else {
+        r.classList.add('status-dimmed');
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

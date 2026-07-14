@@ -212,10 +212,10 @@
         <table>
           <thead><tr><th>Tool</th><th>Purpose</th><th>Why</th></tr></thead>
           <tbody>
-            <tr><td><strong>Plausible</strong> (primary)</td><td>Traffic + events</td><td>Privacy-first; GDPR compliant; no cookie banner needed; &lt;1 KB script</td></tr>
-            <tr><td><strong>GA4</strong> (secondary)</td><td>Funnels, audiences, paid</td><td>Required if running Google Ads; advanced segment support</td></tr>
-            <tr><td><strong>Microsoft Clarity</strong></td><td>Heatmaps + recordings</td><td>Free; shows exactly where visitors click, scroll, and drop off</td></tr>
-            <tr><td><strong>PostHog</strong> <em>(Phase 2)</em></td><td>Product analytics, A/B, feature flags</td><td>Open-source; self-hostable on GCP; use when funnel cohorts or feature gating needed</td></tr>
+            <tr><td><strong>GA4</strong> (primary)</td><td>Traffic + events + funnels</td><td>Existing account; GA4 Consent Mode v2 via Osano (DECISION-002, Somesh Bhardwaj)</td></tr>
+            <tr><td><strong>Osano</strong> (CMP)</td><td>Cookie consent banner</td><td>Free Plan — 1 domain, 5K visitors/mo; EU/UK GDPR + PECR</td></tr>
+            <tr><td><strong>Microsoft Clarity</strong></td><td>Heatmaps + recordings</td><td>Free; disclose in privacy policy — no separate banner</td></tr>
+            <tr><td><strong>PostHog</strong></td><td>Product analytics, A/B, feature flags</td><td>PostHog Cloud (<code>app.posthog.com</code>); cookieless mode</td></tr>
             <tr><td><strong>Google Search Console</strong></td><td>Indexing + Core Web Vitals</td><td>Day 1 — verify via Vercel DNS; GSC is the canonical signal for Google ranking</td></tr>
             <tr><td><strong>Bing Webmaster Tools</strong></td><td>Bing + Copilot AI indexing</td><td>Day 1 — powers Microsoft Copilot AI answers; submit sitemap; 5-min setup</td></tr>
           </tbody>

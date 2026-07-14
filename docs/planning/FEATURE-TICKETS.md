@@ -342,11 +342,16 @@ Connect homepage newsletter form and build `/updates` standalone page. Integrate
 | **Dependencies** | TICKET-002, legal copy |
 
 **Description:**  
-Simple text pages at `/privacy` and `/terms` using `.band` + `.wrap` + `.body` typography. No special components. Link from footer.
+Simple text pages at `/privacy` and `/terms` using `.band` + `.wrap` + `.body` typography. No special components. Link from footer. Privacy page must document cookie/consent compliance per [SECURITY-AND-ACCESS](./SECURITY-AND-ACCESS.md) §5.1 and [DECISION-002](./DECISIONS.md). **Production path:** Astro static routes (`src/pages/privacy.astro`, `src/pages/terms.astro`) — see SECURITY-AND-ACCESS §5.2; planning MD files are spec only, not served publicly.
 
 **Acceptance criteria:**
-- [ ] Pages readable and linked from footer
+- [ ] Live at `https://contentment.org/privacy` and `/terms` after deploy (static Astro routes)
+- [ ] Linked from footer on every page
 - [ ] Cover newsletter, analytics, Keela, form data per Security doc
+- [ ] Cookie & privacy compliance section: EU/UK/US regulatory table (GDPR, PECR, CCPA) per SECURITY-AND-ACCESS §5.1
+- [ ] Per-tool disclosures: Osano CMP, GA4, Microsoft Clarity, PostHog (cookieless), SendGrid (transactional email)
+- [ ] Footer includes **Cookie Preferences** link (Osano re-open)
+- [ ] Osano partner badge or CMP attribution on `/privacy` if available from Osano dashboard
 - [ ] Legal team sign-off on copy
 
 ---
@@ -361,13 +366,16 @@ Simple text pages at `/privacy` and `/terms` using `.band` + `.wrap` + `.body` t
 | **Dependencies** | TICKET-002 |
 
 **Description:**  
-Add Plausible or GA4 script to layout. Implement conversion events per Frontend Spec §6.4. Document UTM convention for campaigns.
+Add GA4, Microsoft Clarity, and PostHog Cloud (DECISION-007, cookieless) to layout. Wire Osano CMP (Free Plan) with GA4 Consent Mode v2 per [DECISION-002](./DECISIONS.md). Implement conversion events per Frontend Spec §6.4 and [GROWTH-BRIEF](../briefs/GROWTH-BRIEF.md) §1. Wire Sentry per [DECISION-006](./DECISIONS.md). Document UTM convention for campaigns.
 
 **Acceptance criteria:**
+- [ ] Osano CMP script loads before GA4; consent banner shown to EU/UK visitors
+- [ ] GA4 Consent Mode v2: cookieless/modelled analytics before consent; full cookies after opt-in
+- [ ] PostHog Cloud (`app.posthog.com`) init with `persistence: 'memory'`
+- [ ] Sentry (`@sentry/astro`) initialised with `SENTRY_DSN` (DECISION-006)
 - [ ] Pageviews recording on staging
 - [ ] `cta_homeroom_click` fires on button click
 - [ ] `newsletter_submit` fires on success
-- [ ] Cookie consent if required
 
 ---
 

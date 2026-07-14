@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>contentment.org — Sprint Journey · Aug 2026 (v2)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=Varela+Round&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #1FAFC0;
+      --ocean: #0080B0;
+      --deep: #024E70;
+      --deep2: #02374f;
+      --green: #4FA98C;
+      --slate: #3C3B43;
+      --ink: #23252b;
+      --paper: #FBFAF7;
+      --paper2: #F2F0EA;
+      --mist: #E8F1F2;
+      --line: rgba(2,78,112,.1);
+      --line2: rgba(2,78,112,.18);
+      --display: 'Newsreader', Georgia, serif;
+      --body: 'Inter', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+      --c-avail: #6B6A72;
+      --c-kick: #EAA340;
+      --c-found: #0D94C3;
+      --c-concept: #4EBFA2;
+      --c-design: #34BFD1;
+      --c-dev: #027C9D;
+      --c-media: #338062;
+      --c-review: #6573B7;
+      --c-launch: #EAA340;
+
+      --s-done: #1a6b34;
+      --s-prog: #1e40af;
+      --s-up: #6B6A72;
+      --s-block: #b91c1c;
+      --s-dec: #92400e;
+      --s-sign: #9d174d;
+      --s-ok: #0e7490;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--body);
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 8% -10%, rgba(31,175,192,.08), transparent 55%),
+        radial-gradient(900px 500px at 100% 20%, rgba(0,128,176,.06), transparent 50%),
+        var(--paper);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+    @media print {
+      body { background: #fff; font-size: 11px; }
+      .no-print { display: none !important; }
+      details { open: true; }
+      details > :not(summary) { display: block !important; }
+      .chapter, .risk-card, .pulse { break-inside: avoid; }
+      @page { margin: 12mm; size: A4; }
+    }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    .doc-nav { background: var(--deep2); padding: 10px 0; font-size: 12px; }
+    .doc-nav .wrap { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+    .doc-nav a { color: rgba(255,255,255,.65); text-decoration: none; }
+    .doc-nav a:hover { color: var(--teal); }
+    .doc-nav .v-toggle {
+      margin-left: auto;
+      color: #fff;
+      background: rgba(255,255,255,.1);
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-weight: 600;
+      font-size: 11.5px;
+    }
+    .doc-nav .v-toggle:hover { background: rgba(31,175,192,.35); color: #fff; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 48px 0 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark {
+      font-family: 'Varela Round', sans-serif;
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ocean);
+      margin-bottom: 14px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.4fr .7fr;
+      gap: 32px;
+      align-items: end;
+    }
+    @media (max-width: 820px) { .hero-grid { grid-template-columns: 1fr; } }
+    .hero h1 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4.2vw, 2.85rem);
+      font-weight: 500;
+      line-height: 1.12;
+      color: var(--deep);
+      letter-spacing: -.02em;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--ocean);
+      font-weight: 400;
+    }
+    .hero-lead {
+      margin-top: 14px;
+      max-width: 48ch;
+      font-size: 14.5px;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+    .hero-meta {
+      font-size: 12px;
+      color: var(--slate);
+      line-height: 1.7;
+      text-align: right;
+    }
+    @media (max-width: 820px) { .hero-meta { text-align: left; } }
+    .hero-meta strong { color: var(--deep); font-weight: 600; display: block; }
+
+    /* ── JOURNEY RIBBON ── */
+    .ribbon-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(251,250,247,.97);
+      border-bottom: 1px solid var(--line);
+      padding: 18px 0 14px;
+      /* no backdrop-filter — it clips hover cards in WebKit */
+    }
+    .ribbon-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+      gap: 12px;
+    }
+    .ribbon-label span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ocean);
+    }
+    .ribbon-label .pin-note {
+      font-size: 11.5px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--slate);
+    }
+    .ribbon-label .pin-note b { color: var(--deep); }
+
+    .ribbon {
+      position: relative;
+      height: 28px;
+      border-radius: 8px;
+      overflow: visible;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 2px;
+      background: var(--paper2);
+      padding: 2px;
+      margin-top: 10px;
+    }
+    .ribbon-seg {
+      border-radius: 5px;
+      position: relative;
+      min-width: 0;
+      background: #e6e4de;
+      cursor: pointer;
+      transition: transform .15s, filter .15s, box-shadow .15s;
+      outline: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .ribbon-seg.has-work { background: color-mix(in srgb, var(--seg) 55%, #e6e4de); }
+    .ribbon-seg:hover,
+    .ribbon-seg:focus-visible,
+    .ribbon-seg.is-open {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+      box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--seg);
+      z-index: 5;
+    }
+    .ribbon-seg .tip {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--deep2);
+      opacity: .55;
+      white-space: nowrap;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .ribbon-seg:hover .tip,
+    .ribbon-seg:focus-visible .tip,
+    .ribbon-seg.is-open .tip { opacity: .9; }
+
+    /* Hover card */
+    .r-pop {
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      width: min(300px, 72vw);
+      background: #fff;
+      border: 1px solid var(--line2);
+      border-radius: 12px;
+      box-shadow: 0 18px 40px -16px rgba(2,55,79,.35), 0 0 0 1px rgba(2,78,112,.04);
+      padding: 12px 14px 13px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .15s, transform .15s, visibility .15s;
+      z-index: 60;
+      text-align: left;
+    }
+    .ribbon-seg:hover .r-pop,
+    .ribbon-seg:focus-visible .r-pop,
+    .ribbon-seg.is-open .r-pop {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+    /* Edge alignment so cards don't clip */
+    .ribbon-seg:nth-child(1) .r-pop,
+    .ribbon-seg:nth-child(2) .r-pop { left: 0; transform: translateX(0) translateY(4px); }
+    .ribbon-seg:nth-child(1):hover .r-pop,
+    .ribbon-seg:nth-child(1):focus-visible .r-pop,
+    .ribbon-seg:nth-child(1).is-open .r-pop,
+    .ribbon-seg:nth-child(2):hover .r-pop,
+    .ribbon-seg:nth-child(2):focus-visible .r-pop,
+    .ribbon-seg:nth-child(2).is-open .r-pop { transform: translateX(0) translateY(0); }
+    .ribbon-seg:nth-child(9) .r-pop,
+    .ribbon-seg:nth-child(10) .r-pop { left: auto; right: 0; transform: translateX(0) translateY(4px); }
+    .ribbon-seg:nth-child(9):hover .r-pop,
+    .ribbon-seg:nth-child(9):focus-visible .r-pop,
+    .ribbon-seg:nth-child(9).is-open .r-pop,
+    .ribbon-seg:nth-child(10):hover .r-pop,
+    .ribbon-seg:nth-child(10):focus-visible .r-pop,
+    .ribbon-seg:nth-child(10).is-open .r-pop { transform: translateX(0) translateY(0); }
+
+    .r-pop::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border-left: 1px solid var(--line2);
+      border-top: 1px solid var(--line2);
+    }
+    .ribbon-seg:nth-child(1) .r-pop::before,
+    .ribbon-seg:nth-child(2) .r-pop::before { left: 18px; transform: translateX(0) rotate(45deg); }
+    .ribbon-seg:nth-child(9) .r-pop::before,
+    .ribbon-seg:nth-child(10) .r-pop::before { left: auto; right: 18px; transform: translateX(0) rotate(45deg); }
+
+    .r-pop .rp-phase {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--seg);
+      margin-bottom: 4px;
+    }
+    .r-pop .rp-phase::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 2px;
+      background: var(--seg);
+      flex-shrink: 0;
+    }
+    .r-pop .rp-dates {
+      font-family: var(--display);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--deep);
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+    .r-pop .rp-lead {
+      font-size: 12px;
+      color: var(--slate);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .r-pop ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin: 0;
+      padding: 8px 0 0;
+      border-top: 1px solid var(--line);
+    }
+    .r-pop li {
+      font-size: 12px;
+      color: var(--ink);
+      line-height: 1.35;
+      padding-left: 12px;
+      position: relative;
+    }
+    .r-pop li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--seg);
+      opacity: .7;
+    }
+    .r-pop li .muted { color: var(--slate); font-weight: 400; }
+    .r-pop li b { font-weight: 600; }
+    .r-pop .rp-foot {
+      margin-top: 9px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--ocean);
+    }
+    .r-pop .rp-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+      margin-left: 6px;
+      vertical-align: middle;
+      background: var(--paper2);
+      color: var(--slate);
+    }
+    .r-pop .rp-badge.now { background: #dbeafe; color: var(--s-prog); }
+    .r-pop .rp-badge.done { background: #d1fae5; color: var(--s-done); }
+    .r-pop .rp-badge.risk { background: #fde8e8; color: var(--s-block); }
+
+    .today-pin {
+      position: absolute;
+      top: -6px;
+      bottom: -6px;
+      width: 2px;
+      background: var(--deep);
+      left: calc(30% + 1.2%); /* ~Jul 14 in Jun22–Aug28 window (≈ week 4 of 10, mid-week) */
+      z-index: 2;
+      pointer-events: none;
+    }
+    .today-pin::before {
+      content: 'Today';
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--deep);
+      white-space: nowrap;
+    }
+    .today-pin::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--deep);
+      box-shadow: 0 0 0 3px rgba(2,78,112,.15);
+    }
+
+    .phase-lane {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 2px;
+      margin-top: 6px;
+      height: 6px;
+    }
+    .phase-lane i {
+      display: block;
+      height: 100%;
+      border-radius: 3px;
+      background: transparent;
+    }
+    .phase-lane i.on { background: var(--pc); opacity: .85; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ribbon-seg, .r-pop { transition: none; }
+    }
+    @media (hover: none) {
+      /* Touch: tap to pin open via .is-open (JS) */
+      .ribbon-seg:hover .r-pop { opacity: 0; visibility: hidden; }
+      .ribbon-seg.is-open .r-pop {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+
+    /* ── PULSE ── */
+    .pulse-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 28px 0 8px;
+    }
+    @media (max-width: 700px) { .pulse-row { grid-template-columns: repeat(2, 1fr); } }
+    .pulse {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pulse::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+    }
+    .pulse .n {
+      font-family: var(--display);
+      font-size: 1.85rem;
+      font-weight: 500;
+      color: var(--deep);
+      line-height: 1;
+    }
+    .pulse .l {
+      margin-top: 4px;
+      font-size: 11.5px;
+      color: var(--slate);
+      font-weight: 500;
+    }
+
+    /* ── FILTER BAR ── */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin: 20px 0 8px;
+    }
+    .filters .flabel {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-right: 4px;
+    }
+    .chip {
+      appearance: none;
+      border: 1px solid var(--line2);
+      background: #fff;
+      color: var(--slate);
+      font: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .chip:hover { border-color: var(--teal); color: var(--ocean); }
+    .chip[aria-pressed="true"] {
+      background: var(--deep);
+      border-color: var(--deep);
+      color: #fff;
+    }
+    .chip.ghost { background: transparent; }
+
+    /* ── WHO ── */
+    .who-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0 28px;
+      align-items: center;
+    }
+    .who-row .flabel {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-right: 2px;
+    }
+    .avatar {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--slate);
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 4px 10px 4px 4px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+      font-family: inherit;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .avatar i {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--mist);
+      color: var(--deep);
+      font-size: 9px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-style: normal;
+    }
+    .avatar b { color: var(--ink); font-weight: 600; }
+    .avatar:hover,
+    .avatar[aria-pressed="true"] {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--teal) 25%, transparent);
+    }
+
+    /* ── RISK STRIP ── */
+    .risk-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .risk-head h2 {
+      font-family: var(--display);
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--deep);
+    }
+    .risk-head p { font-size: 12.5px; color: var(--slate); max-width: 42ch; }
+    .risk-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+    @media (max-width: 760px) { .risk-grid { grid-template-columns: 1fr; } }
+    .risk-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .risk-card h3 {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ocean);
+      margin-bottom: 12px;
+    }
+    .risk-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+      font-size: 12.5px;
+    }
+    .risk-item:first-of-type { border-top: none; padding-top: 0; }
+    .risk-item .id, .risk-item .did {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--ocean);
+      padding-top: 2px;
+    }
+    .risk-item strong { display: block; color: var(--ink); font-weight: 600; font-size: 13px; }
+    .risk-item .sub { color: var(--slate); font-size: 11.5px; margin-top: 2px; }
+    .due {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--s-block);
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+    .due.ok { color: var(--s-dec); }
+
+    /* ── MINI BOARDS: decisions / pages / deferred ── */
+    .mini-board {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    .mini-board.full { margin-bottom: 20px; }
+    .mini-board > summary,
+    .mini-board .mb-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+      cursor: default;
+      list-style: none;
+      margin-bottom: 4px;
+    }
+    .mini-board > summary { cursor: pointer; }
+    .mini-board > summary::-webkit-details-marker { display: none; }
+    .mini-board h3 {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ocean);
+    }
+    .mini-board .mb-sub {
+      font-size: 12px;
+      color: var(--slate);
+    }
+    .mini-board .mb-count {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--slate);
+      background: var(--paper2);
+      padding: 2px 9px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .mini-board[open] > summary,
+    .mini-board .mb-head { margin-bottom: 10px; }
+
+    .pri {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      padding: 2px 8px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .pri-critical { background: #fde8e8; color: var(--s-block); }
+    .pri-high { background: #ffedd5; color: #9a3412; }
+    .pri-medium { background: #dbeafe; color: #1e40af; }
+    .pri-low { background: var(--paper2); color: var(--slate); }
+
+    .dstat {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .dstat.open { background: #fef3c7; color: var(--s-dec); }
+    .dstat.resolved { background: #d1fae5; color: var(--s-done); }
+    .dstat.rec { background: #dbeafe; color: var(--s-prog); }
+
+    .decision-row {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 10px 2px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12.5px;
+    }
+    .decision-row:last-child { border-bottom: none; }
+    .decision-row .did { font-family: var(--mono); font-size: 10.5px; color: var(--ocean); padding-top: 2px; }
+    .decision-row .dbody strong { display: block; font-size: 13px; color: var(--ink); font-weight: 600; line-height: 1.35; }
+    .decision-row .dbody .opts { font-size: 11.5px; color: var(--slate); margin-top: 2px; }
+    .decision-row .dbody .downer { font-size: 11px; color: var(--slate); margin-top: 2px; }
+    .decision-row .dside { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    @media (max-width: 640px) {
+      .decision-row { grid-template-columns: 30px 1fr; }
+      .decision-row .dside { grid-column: 2; flex-direction: row; align-items: center; margin-top: 4px; }
+    }
+
+    .page-row {
+      display: grid;
+      grid-template-columns: 1fr 84px 110px 96px;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 2px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12.5px;
+    }
+    .page-row:last-child { border-bottom: none; }
+    .page-row .pname strong { display: block; color: var(--ink); font-weight: 600; font-size: 13px; }
+    .page-row .pname .proute { font-family: var(--mono); font-size: 10.5px; color: var(--ocean); }
+    .page-row .pphase { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; text-align: center; color: #fff; white-space: nowrap; }
+    .pp-1 { background: var(--c-dev); }
+    .pp-15 { background: var(--c-review); }
+    .pp-2 { background: var(--c-launch); color: var(--ink); }
+    .pp-tbd { background: var(--slate); }
+    .page-row .powner { font-size: 12px; color: var(--slate); }
+    .page-row .pstat { font-size: 10.5px; font-weight: 700; text-align: right; }
+    .page-row .pstat.live { color: var(--s-prog); }
+    .page-row .pstat.wait { color: var(--s-up); }
+    .page-row .pstat.pause { color: var(--slate); }
+    .page-row .pstat.dec { color: var(--s-dec); }
+    @media (max-width: 700px) {
+      .page-row { grid-template-columns: 1fr auto; }
+      .page-row .powner, .page-row .pstat { grid-column: 2; text-align: right; }
+    }
+
+    .defer-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 11px 2px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12.5px;
+    }
+    .defer-item:last-child { border-bottom: none; }
+    .defer-item strong { color: var(--ink); font-weight: 600; font-size: 13px; }
+    .defer-item .droute { font-family: var(--mono); font-size: 10.5px; color: var(--ocean); margin-left: 7px; }
+    .defer-item .dreason { font-size: 12px; color: var(--slate); margin-top: 3px; line-height: 1.4; }
+    .defer-item .dphase { font-size: 10px; font-weight: 700; color: #fff; padding: 3px 10px; border-radius: 99px; white-space: nowrap; background: var(--c-launch); align-self: start; }
+
+    /* ── SPINE ── */
+    .spine {
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 48px;
+    }
+    .spine::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--c-design), var(--c-dev), var(--c-review), var(--c-launch));
+      border-radius: 2px;
+      opacity: .35;
+    }
+
+    .chapter {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .chapter > .node {
+      position: absolute;
+      left: -28px;
+      top: 18px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--pc, var(--teal));
+      box-shadow: 0 0 0 4px var(--paper);
+      z-index: 1;
+    }
+    .chapter[data-status-group="done"] > .node {
+      background: var(--pc);
+      border-color: var(--pc);
+    }
+
+    .chapter > details {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .chapter > details[open] {
+      border-color: color-mix(in srgb, var(--pc) 35%, var(--line));
+      box-shadow: 0 12px 36px -18px rgba(2,55,79,.2);
+    }
+    .chapter > details > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    .chapter > details > summary::-webkit-details-marker { display: none; }
+    .chapter > details > summary:focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: -2px;
+    }
+
+    .ch-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .ch-kicker {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--pc, var(--ocean));
+    }
+    .ch-name {
+      font-family: var(--display);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--deep);
+      line-height: 1.25;
+    }
+    .ch-note {
+      font-size: 12.5px;
+      color: var(--slate);
+      max-width: 62ch;
+      margin-top: 2px;
+    }
+    .ch-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .ch-dates {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--deep);
+      background: var(--paper2);
+      padding: 4px 10px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .ch-counts {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .dot {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--paper2);
+      color: var(--slate);
+    }
+    .dot.done { background: #d1fae5; color: var(--s-done); }
+    .dot.prog { background: #dbeafe; color: var(--s-prog); }
+    .dot.block { background: #fde8e8; color: var(--s-block); }
+    .dot.dec { background: #fef3c7; color: var(--s-dec); }
+    .dot.sign { background: #fce7f3; color: var(--s-sign); }
+    .chev {
+      display: inline-block;
+      margin-left: 8px;
+      font-size: 11px;
+      color: var(--ocean);
+      transition: transform .15s;
+      vertical-align: middle;
+    }
+    details:not([open]) .chev { transform: rotate(-90deg); }
+
+    .ch-body {
+      padding: 0 18px 18px;
+      border-top: 1px solid var(--line);
+    }
+    .week-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ocean);
+      margin: 16px 0 8px;
+    }
+
+    /* Task rows — not tables */
+    .tasks { display: flex; flex-direction: column; }
+    .task {
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1.4fr) minmax(70px, .55fr) minmax(90px, .45fr);
+      gap: 12px;
+      align-items: start;
+      padding: 11px 4px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .task:last-child { border-bottom: none; }
+    .task .mark {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      background: var(--sc, var(--s-up));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--sc, var(--s-up)) 18%, transparent);
+    }
+    .task .main strong {
+      display: block;
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 13.5px;
+      line-height: 1.35;
+    }
+    .task .main .tid {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--ocean);
+      margin-right: 6px;
+    }
+    .task .main .note {
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--slate);
+      line-height: 1.45;
+    }
+    .task .owner {
+      font-size: 12px;
+      color: var(--slate);
+      padding-top: 2px;
+    }
+    .task .st {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--sc, var(--s-up));
+      padding-top: 2px;
+      text-align: right;
+    }
+    @media (max-width: 700px) {
+      .task {
+        grid-template-columns: 14px 1fr;
+        gap: 8px 10px;
+      }
+      .task .owner, .task .st {
+        grid-column: 2;
+        text-align: left;
+        padding-top: 0;
+      }
+      .task .st { margin-top: -4px; }
+    }
+
+    /* Mini duration bar inside chapter */
+    .dur {
+      display: flex;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--paper2);
+      margin: 14px 0 4px;
+      overflow: hidden;
+    }
+    .dur span {
+      display: block;
+      height: 100%;
+      background: var(--pc);
+      opacity: .7;
+      border-radius: 2px;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      background: var(--deep2);
+      color: rgba(255,255,255,.45);
+      font-size: 11.5px;
+      text-align: center;
+      padding: 20px 24px;
+      line-height: 1.7;
+    }
+    .page-footer strong { color: rgba(255,255,255,.75); }
+
+    .print-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--ocean);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 20px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,128,176,.35);
+      z-index: 50;
+    }
+    .print-btn:hover { filter: brightness(1.06); }
+
+    .reading {
+      font-size: 12.5px;
+      color: var(--slate);
+      background: var(--mist);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 8px 0 40px;
+      line-height: 1.55;
+      max-width: 72ch;
+    }
+    .reading strong { color: var(--ink); }
+
+    .hidden-by-filter { display: none !important; }
+
+    .ctrl {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .ctrl button {
+      font: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--deep);
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 5px 12px;
+      border-radius: 99px;
+      cursor: pointer;
+    }
+    .ctrl button:hover { border-color: var(--teal); color: var(--ocean); }
+
+    /* ── VIEW SWITCH ── */
+    .view-switch {
+      display: inline-flex;
+      background: var(--paper2);
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      padding: 3px;
+      gap: 2px;
+      margin-bottom: 16px;
+    }
+    .view-switch button {
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--slate);
+      background: transparent;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 99px;
+      cursor: pointer;
+    }
+    .view-switch button[aria-pressed="true"] {
+      background: var(--deep);
+      color: #fff;
+    }
+    .view-switch button:hover:not([aria-pressed="true"]) { color: var(--ocean); }
+
+    .dept-filters { margin-top: 4px; margin-bottom: 18px; }
+    .dept-filters .chip[data-dept] { border-left: 3px solid var(--dc, var(--line2)); }
+
+    /* ── DEPARTMENT BOARD ── */
+    #dept-board { display: none; margin-bottom: 40px; }
+    body.view-dept #spine { display: none; }
+    body.view-dept #dept-board { display: block; }
+    body.view-dept .ctrl-spine { display: none; }
+    body.view-timeline #dept-board { display: none; }
+
+    .dept-intro {
+      font-size: 13px;
+      color: var(--slate);
+      margin: -4px 0 16px;
+      max-width: 62ch;
+    }
+    .dept-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 760px) { .dept-grid { grid-template-columns: 1fr; } }
+
+    .dept-lane {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 120px;
+    }
+    .dept-lane.dimmed { opacity: .35; }
+    .dept-lane-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      border-left: 4px solid var(--dc);
+      background: color-mix(in srgb, var(--dc) 6%, #fff);
+    }
+    .dept-lane-head h3 {
+      font-family: var(--display);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--deep);
+      line-height: 1.2;
+    }
+    .dept-lane-head .who {
+      font-size: 11.5px;
+      color: var(--slate);
+      margin-top: 2px;
+    }
+    .dept-lane-head .count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--deep);
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 3px 9px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .dept-lane-body {
+      padding: 4px 8px 10px;
+      flex: 1;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .dept-lane .task {
+      grid-template-columns: 14px 1fr auto;
+      gap: 8px 10px;
+      padding: 9px 6px;
+      font-size: 12.5px;
+    }
+    .dept-lane .task .owner { display: none; }
+    .dept-lane .task .st { text-align: right; font-size: 10.5px; }
+    .dept-lane .task .main strong { font-size: 12.5px; }
+    .dept-empty {
+      padding: 18px 10px;
+      font-size: 12.5px;
+      color: var(--slate);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="doc-nav no-print">
+  <div class="wrap">
+    <a href="../">← Project docs</a>
+    <a href="../../">Homepage</a>
+    <a class="v-toggle" href="classic/">Classic Gantt view</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="wordmark">The Contentment Foundation</div>
+    <div class="hero-grid">
+      <div>
+        <h1>Sprint journey<br><em>Aug 3–28, 2026</em></h1>
+        <p class="hero-lead">One path from design handoff to go-live. Scan the ribbon, open a chapter for tickets. Blockers and decisions sit up top so risk is never buried in a grid.</p>
+      </div>
+      <div class="hero-meta">
+        <strong>Prepared by</strong>
+        Somesh Bhardwaj · somesh@contentment.org<br>
+        Sr. System Admin · Full Stack AI Engineer<br><br>
+        <strong>As of 14 Jul 2026</strong>
+        Kristina’s Gantt · launch-plan-data.json · TRACKER.md
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Sticky journey ribbon -->
+<div class="ribbon-wrap no-print">
+  <div class="wrap">
+    <div class="ribbon-label">
+      <span>Jun 22 → Aug 28</span>
+      <span class="pin-note">Hover a week for detail · You are here · <b>14 Jul</b> — design runway; build starts Aug 3</span>
+    </div>
+    <div class="ribbon" role="list" aria-label="Sprint weeks — hover or focus for detail">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-concept)" role="listitem" aria-describedby="rp-w1" data-jump="#spine">
+        <span class="tip">6/22</span>
+        <div class="r-pop" id="rp-w1">
+          <div class="rp-phase">Concept + UI/UX</div>
+          <div class="rp-dates">Jun 22–26 <span class="rp-badge done">Done</span></div>
+          <p class="rp-lead">Kickoff week — messaging aligned, V1 homepage meeting.</p>
+          <ul>
+            <li><b>Design &amp; V1 Homepage Meeting</b> <span class="muted">· K, Veron, WJ, Dave, Sam</span></li>
+            <li><b>Site map + content copy</b> already locked from Foundation</li>
+            <li>Veron available · Kristina flies EST Jun 23</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to “Where we stand”</div>
+        </div>
+      </button>
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w2" data-jump="#spine">
+        <span class="tip">6/29</span>
+        <div class="r-pop" id="rp-w2">
+          <div class="rp-phase">UI/UX Sprint</div>
+          <div class="rp-dates">Jun 29 – Jul 3 <span class="rp-badge done">Mostly done</span></div>
+          <p class="rp-lead">Homepage design + V2 UI/UX; feedback &amp; copy finalize start.</p>
+          <ul>
+            <li><b>Design Homepage</b> — graphics, imagery, icons · Veron</li>
+            <li><b>UIUX: Homepage V2</b> · Dave</li>
+            <li><b>Feedback + Copy finalize</b> open from Jun 28 · K, WJ, Nav</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to “Where we stand”</div>
+        </div>
+      </button>
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w3" data-jump="#spine">
+        <span class="tip">7/6</span>
+        <div class="r-pop" id="rp-w3">
+          <div class="rp-phase">UI/UX Sprint</div>
+          <div class="rp-dates">Jul 6–10 <span class="rp-badge done">Done</span></div>
+          <p class="rp-lead">Remaining pages UI/UX; design meeting.</p>
+          <ul>
+            <li><b>UIUX: Remaining Pages</b> · Dave</li>
+            <li><b>Meeting: Design</b> · Jul 6 · K / Dave / Veron / WJ</li>
+            <li>Content &amp; feedback lock still in flight</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to “Where we stand”</div>
+        </div>
+      </button>
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w4" data-jump="#spine">
+        <span class="tip">7/13</span>
+        <div class="r-pop" id="rp-w4">
+          <div class="rp-phase">UI/UX Sprint · Current</div>
+          <div class="rp-dates">Jul 13–17 <span class="rp-badge now">You are here</span></div>
+          <p class="rp-lead">Content lock due Jul 14; team feedback meeting Jul 15; all-pages v2 starts.</p>
+          <ul>
+            <li><b>Content &amp; feedback lock</b> — due today · All</li>
+            <li><b>Meeting: Feedback</b> · Jul 15</li>
+            <li><b>UIUX: All Pages V2</b> begins Jul 16 · Dave</li>
+            <li>Tech decisions 002–007 signed off this week</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to “Where we stand”</div>
+        </div>
+      </button>
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w5" data-jump="#spine">
+        <span class="tip">7/20</span>
+        <div class="r-pop" id="rp-w5">
+          <div class="rp-phase">UI/UX Sprint</div>
+          <div class="rp-dates">Jul 20–24</div>
+          <p class="rp-lead">All-pages v2 wraps; Veron designs remaining pages.</p>
+          <ul>
+            <li><b>UIUX: All Pages V2</b> continues through Jul 21 · Dave</li>
+            <li><b>Design: Remaining Pages</b> · Jul 22–24 · Veron</li>
+            <li>Social URLs needed by Aug 5 — start chasing Comms</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to “Where we stand”</div>
+        </div>
+      </button>
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w6" data-jump="#spine">
+        <span class="tip">7/27</span>
+        <div class="r-pop" id="rp-w6">
+          <div class="rp-phase">UI/UX Sprint → Handoff</div>
+          <div class="rp-dates">Jul 27–31</div>
+          <p class="rp-lead">Final UI/UX polish before Aug 3 design → dev handoff.</p>
+          <ul>
+            <li><b>Final UIUX</b> · Dave</li>
+            <li>Prep locked designs for Aug 3 meeting</li>
+            <li class="muted">Homeroom tiers needed by Aug 7 — escalate if quiet</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to handoff chapter</div>
+        </div>
+      </button>
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-dev)" role="listitem" aria-describedby="rp-w7" data-jump="#ch-dev">
+        <span class="tip">8/3</span>
+        <div class="r-pop" id="rp-w7">
+          <div class="rp-phase">Dev Sprint · Week 1 + Media</div>
+          <div class="rp-dates">Aug 3–7</div>
+          <p class="rp-lead">Handoff day, then foundation + Homepage / Why / Give.</p>
+          <ul>
+            <li><b>Aug 3</b> — design handoff + UIUX–Dev kickoff</li>
+            <li><b>FEAT-001…004, 010, 020</b> — layout, routing, nav, homepage, /why</li>
+            <li><b>FEAT-050/051</b> /give <span class="rp-badge risk">Blocked</span> on D-01 + D-02</li>
+            <li>Parallel: homepage video · Dave · Social URLs due Aug 5</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to Development sprint</div>
+        </div>
+      </button>
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-review)" role="listitem" aria-describedby="rp-w8" data-jump="#ch-review">
+        <span class="tip">8/10</span>
+        <div class="r-pop" id="rp-w8">
+          <div class="rp-phase">Dev Week 2 + Final Review</div>
+          <div class="rp-dates">Aug 10–14</div>
+          <p class="rp-lead">Stories / Schools / Events / About; stakeholder VC Aug 14.</p>
+          <ul>
+            <li><b>FEAT-030</b> stories JSON <span class="rp-badge risk">Blocked</span> — photos by Aug 10</li>
+            <li><b>FEAT-031, 040/041, 090, 032, 093</b> — content pages</li>
+            <li><b>Aug 14 VC</b> — go/no-go for fixes sprint</li>
+            <li>Homepage video should be embed-ready</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to Final review</div>
+        </div>
+      </button>
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-launch)" role="listitem" aria-describedby="rp-w9" data-jump="#ch-fixes">
+        <span class="tip">8/17</span>
+        <div class="r-pop" id="rp-w9">
+          <div class="rp-phase">Fixes · Polish · Approval</div>
+          <div class="rp-dates">Aug 17–21</div>
+          <p class="rp-lead">Bugs from review, analytics, legal pages, Nav+WJ sign-off.</p>
+          <ul>
+            <li><b>FEAT-100</b> bug fixes + mobile polish</li>
+            <li><b>FEAT-071</b> Privacy/Terms <span class="rp-badge risk">Needs D-08 by Aug 17</span></li>
+            <li><b>FEAT-080/081</b> analytics + SEO · Osano banner</li>
+            <li><b>Final approval</b> Nav + WJ — unlocks DNS</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to Fixes &amp; approval</div>
+        </div>
+      </button>
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-launch)" role="listitem" aria-describedby="rp-w10" data-jump="#ch-launch">
+        <span class="tip">8/24</span>
+        <div class="r-pop" id="rp-w10">
+          <div class="rp-phase">Launch window</div>
+          <div class="rp-dates">Aug 24–28</div>
+          <p class="rp-lead">Go live as soon as ready — gated on Keela URLs + Aug 21 approval.</p>
+          <ul>
+            <li><b>FEAT-060</b> Keela CTAs <span class="rp-badge risk">Blocked · Finance by Aug 21</span></li>
+            <li><b>FEAT-070</b> Flodesk newsletter live</li>
+            <li><b>FEAT-100</b> Lighthouse ≥85</li>
+            <li><b>FEAT-101</b> deploy + DNS → contentment.org</li>
+          </ul>
+          <div class="rp-foot">↓ Jump to Launch</div>
+        </div>
+      </button>
+      <div class="today-pin" aria-hidden="true"></div>
+    </div>
+    <div class="phase-lane" aria-hidden="true">
+      <i class="on" style="--pc:var(--c-concept)"></i>
+      <i class="on" style="--pc:var(--c-design)"></i>
+      <i class="on" style="--pc:var(--c-design)"></i>
+      <i class="on" style="--pc:var(--c-design)"></i>
+      <i class="on" style="--pc:var(--c-design)"></i>
+      <i class="on" style="--pc:var(--c-design)"></i>
+      <i class="on" style="--pc:var(--c-dev)"></i>
+      <i class="on" style="--pc:var(--c-review)"></i>
+      <i class="on" style="--pc:var(--c-launch)"></i>
+      <i class="on" style="--pc:var(--c-launch)"></i>
+    </div>
+  </div>
+</div>
+
+<main class="wrap" style="padding-top:8px;padding-bottom:48px;">
+
+  <!-- Pulse -->
+  <div class="pulse-row">
+    <div class="pulse" style="--accent:var(--s-done)">
+      <div class="n">24</div>
+      <div class="l">Done / resolved</div>
+    </div>
+    <div class="pulse" style="--accent:var(--s-prog)">
+      <div class="n">5</div>
+      <div class="l">In progress right now</div>
+    </div>
+    <div class="pulse" style="--accent:var(--s-block)">
+      <div class="n">9</div>
+      <div class="l">External blockers</div>
+    </div>
+    <div class="pulse" style="--accent:var(--s-dec)">
+      <div class="n">10<span style="font-size:.9rem;color:var(--slate);font-weight:500;"> +9 eng</span></div>
+      <div class="l">Open decisions (product-facing)</div>
+    </div>
+  </div>
+
+  <!-- Who -->
+  <div class="who-row" id="who-row">
+    <span class="flabel">Team · click to filter</span>
+    <button type="button" class="avatar" data-dept="pm" title="Project Manager & UI/UX Lead"><i>K</i><b>Kristina</b> · PM</button>
+    <button type="button" class="avatar" data-dept="leadership" title="CEO"><i>N</i><b>Nav</b> · CEO</button>
+    <button type="button" class="avatar" data-dept="content" title="Marcoms Lead"><i>WJ</i><b>Woei Jing</b></button>
+    <button type="button" class="avatar" data-dept="design" title="CSO / UIUX"><i>D</i><b>Dave</b> · UI/UX</button>
+    <button type="button" class="avatar" data-dept="design" title="Graphic Designer"><i>V</i><b>Veron</b></button>
+    <button type="button" class="avatar" data-dept="eng" title="Back-end Developer"><i>S</i><b>Sam</b> · Build</button>
+    <button type="button" class="avatar" data-dept="eng" title="Dev Advisor"><i>A</i><b>Anik</b></button>
+    <button type="button" class="avatar" data-dept="design" title="UI/UX Advisor"><i>J</i><b>Jeff</b></button>
+  </div>
+
+  <!-- Risk first -->
+  <div class="risk-head" id="risk">
+    <h2>What can slip the window</h2>
+    <p>Everything else is queued. These ten product decisions and nine blockers are the only items that can move Aug 24–28. Nine more engineering decisions exist — eight already resolved, one (newsletter integration) still open — see below.</p>
+  </div>
+  <div class="risk-grid">
+    <div class="risk-card">
+      <h3>Open decisions — product &amp; content</h3>
+      <div class="decision-row">
+        <span class="did">D-01</span>
+        <div class="dbody"><strong>Homeroom tier amounts</strong><div class="opts">$5/$25/$100 vs $25/$50/$100</div><div class="downer">Leadership / Finance · blocks all donation CTAs</div></div>
+        <div class="dside"><span class="pri pri-critical">Critical</span></div>
+      </div>
+      <div class="decision-row">
+        <span class="did">D-02</span>
+        <div class="dbody"><strong>Keela checkout URLs</strong><div class="opts">Live hosted links per tier</div><div class="downer">Finance · blocks entire conversion path</div></div>
+        <div class="dside"><span class="pri pri-critical">Critical</span></div>
+      </div>
+      <div class="decision-row">
+        <span class="did">D-08</span>
+        <div class="dbody"><strong>Legal copy — Privacy + Terms</strong><div class="opts">Final text</div><div class="downer">Legal / Ops · blocks launch Aug 24–28</div></div>
+        <div class="dside"><span class="pri pri-critical">Critical</span></div>
+      </div>
+      <div class="decision-row">
+        <span class="did">D-03</span>
+        <div class="dbody"><strong>/give routing</strong><div class="opts">Gateway page vs redirect to Homeroom</div><div class="downer">Product / Kristina · blocks sprint scope</div></div>
+        <div class="dside"><span class="pri pri-high">High</span></div>
+      </div>
+      <div class="decision-row">
+        <span class="did">D-04</span>
+        <div class="dbody"><strong>School inquiry form destination</strong><div class="opts">Flodesk vs Keela vs custom API</div><div class="downer">Partnerships + Eng · blocks Schools backend</div></div>
+        <div class="dside"><span class="pri pri-high">High</span></div>
+      </div>
+      <div class="decision-row">
+        <span class="did">D-05</span>
+        <div class="dbody"><strong>About Us scope v1</strong><div class="opts">Single page vs 5 sub-pages</div><div class="downer">Content / Kristina · blocks build estimate</div></div>
+        <div class="dside"><span class="pri pri-high">High</span></div>
+      </div>
+      <div class="decision-row">
+        <span class="did">D-06</span>
+        <div class="dbody"><strong>Event calendar 2026</strong><div class="opts">Confirmed dates and venues</div><div class="downer">Events team · blocks Events page cards</div></div>
+        <div class="dside"><span class="pri pri-medium">Medium</span></div>
+      </div>
+      <div class="decision-row">
+        <span class="did">D-07</span>
+        <div class="dbody"><strong>Social media URLs</strong><div class="opts">LinkedIn, Instagram, YouTube</div><div class="downer">Comms · blocks footer links</div></div>
+        <div class="dside"><span class="pri pri-medium">Medium</span></div>
+      </div>
+      <div class="decision-row">
+        <span class="did">D-09</span>
+        <div class="dbody"><strong>EIN for Homeroom FAQ</strong><div class="opts">Legal copy on giving page</div><div class="downer">Finance · blocks /give completeness</div></div>
+        <div class="dside"><span class="pri pri-medium">Medium</span></div>
+      </div>
+      <div class="decision-row">
+        <span class="did">D-10</span>
+        <div class="dbody"><strong>Annual report format</strong><div class="opts">Embedded vs PDF vs both</div><div class="downer">Leadership · blocks Stories transparency section</div></div>
+        <div class="dside"><span class="pri pri-low">Low</span></div>
+      </div>
+    </div>
+    <div class="risk-card">
+      <h3>External blockers</h3>
+      <div class="risk-item">
+        <span class="id">→</span>
+        <div><strong>Design handoff — all pages</strong><div class="sub">Dave + Veron</div></div>
+        <span class="due">Aug 3</span>
+      </div>
+      <div class="risk-item">
+        <span class="id">→</span>
+        <div><strong>Social media URLs</strong><div class="sub">Comms</div></div>
+        <span class="due">Aug 5</span>
+      </div>
+      <div class="risk-item">
+        <span class="id">→</span>
+        <div><strong>Homeroom tier amounts</strong><div class="sub">Leadership / Finance</div></div>
+        <span class="due">Aug 7</span>
+      </div>
+      <div class="risk-item">
+        <span class="id">→</span>
+        <div><strong>Story photos + permissions</strong><div class="sub">Comms / Programs</div></div>
+        <span class="due">Aug 10</span>
+      </div>
+      <div class="risk-item">
+        <span class="id">→</span>
+        <div><strong>Event calendar 2026 dates</strong><div class="sub">Events team</div></div>
+        <span class="due">Aug 13</span>
+      </div>
+      <div class="risk-item">
+        <span class="id">→</span>
+        <div><strong>About Us copy / design</strong><div class="sub">Content + Veron · fast-follow, doesn't block go-live</div></div>
+        <span class="due ok">Aug 14</span>
+      </div>
+      <div class="risk-item">
+        <span class="id">→</span>
+        <div><strong>Legal copy — Privacy, Terms</strong><div class="sub">Legal / Ops</div></div>
+        <span class="due">Aug 17</span>
+      </div>
+      <div class="risk-item">
+        <span class="id">→</span>
+        <div><strong>Live Keela checkout URLs</strong><div class="sub">Finance</div></div>
+        <span class="due">Aug 21</span>
+      </div>
+      <div class="risk-item">
+        <span class="id">→</span>
+        <div><strong>Nav + WJ final approval</strong><div class="sub">Nav, WJ</div></div>
+        <span class="due">Aug 21</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Engineering decisions — mostly resolved, kept for completeness -->
+  <details class="mini-board full">
+    <summary>
+      <div><h3>Engineering decisions</h3><div class="mb-sub">D-11 → D-19 · infra &amp; tooling choices, mostly already handled</div></div>
+      <span class="mb-count">8 resolved · 1 open</span>
+    </summary>
+    <div class="decision-row">
+      <span class="did">D-11</span>
+      <div class="dbody"><strong>Astro 4.x build</strong><div class="opts">Astro vs static partials</div><div class="downer">Engineering</div></div>
+      <div class="dside"><span class="dstat resolved">Resolved</span></div>
+    </div>
+    <div class="decision-row">
+      <span class="did">D-12</span>
+      <div class="dbody"><strong>Analytics stack</strong><div class="opts">GA4 + Clarity + PostHog</div><div class="downer">Engineering</div></div>
+      <div class="dside"><span class="dstat resolved">Resolved</span></div>
+    </div>
+    <div class="decision-row">
+      <span class="did">D-13</span>
+      <div class="dbody"><strong>Cookie consent</strong><div class="opts">Osano Free + GA4 Consent Mode v2 + cookieless PostHog</div><div class="downer">Somesh Bhardwaj</div></div>
+      <div class="dside"><span class="dstat resolved">Resolved</span></div>
+    </div>
+    <div class="decision-row">
+      <span class="did">D-14</span>
+      <div class="dbody"><strong>Transactional email</strong><div class="opts">SendGrid (existing paid plan)</div><div class="downer">Somesh Bhardwaj</div></div>
+      <div class="dside"><span class="dstat resolved">Resolved</span></div>
+    </div>
+    <div class="decision-row">
+      <span class="did">D-15</span>
+      <div class="dbody"><strong>Rate limiting</strong><div class="opts">Upstash Redis (@upstash/ratelimit)</div><div class="downer">Somesh Bhardwaj</div></div>
+      <div class="dside"><span class="dstat resolved">Resolved</span></div>
+    </div>
+    <div class="decision-row">
+      <span class="did">D-16</span>
+      <div class="dbody"><strong>PostHog hosting</strong><div class="opts">PostHog Cloud (app.posthog.com)</div><div class="downer">Somesh Bhardwaj</div></div>
+      <div class="dside"><span class="dstat resolved">Resolved</span></div>
+    </div>
+    <div class="decision-row">
+      <span class="did">D-17</span>
+      <div class="dbody"><strong>Image optimization</strong><div class="opts">Astro Image component</div><div class="downer">Somesh Bhardwaj</div></div>
+      <div class="dside"><span class="dstat resolved">Resolved</span></div>
+    </div>
+    <div class="decision-row">
+      <span class="did">D-18</span>
+      <div class="dbody"><strong>Observability</strong><div class="opts">Hybrid: Slack + Sentry + Vercel logs + PostHog</div><div class="downer">Somesh Bhardwaj</div></div>
+      <div class="dside"><span class="dstat resolved">Resolved</span></div>
+    </div>
+    <div class="decision-row">
+      <span class="did">D-19</span>
+      <div class="dbody"><strong>Newsletter integration</strong><div class="opts">Flodesk embed vs custom API</div><div class="downer">Engineering · blocks newsletter ticket</div></div>
+      <div class="dside"><span class="pri pri-medium">Medium</span><span class="dstat open">Open</span></div>
+    </div>
+  </details>
+
+  <!-- Pages at a glance -->
+  <details class="mini-board full" open>
+    <summary>
+      <div><h3>Pages at a glance</h3><div class="mb-sub">Every route in scope — owner, phase, and build status, in one place</div></div>
+      <span class="mb-count">18 routes</span>
+    </summary>
+    <div class="page-row">
+      <div class="pname"><strong>Homepage</strong><span class="proute">/</span></div>
+      <span class="pphase pp-1">Phase 1</span>
+      <span class="powner">Dave</span>
+      <span class="pstat live">In progress</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Why Teacher Wellbeing</strong><span class="proute">/why</span></div>
+      <span class="pphase pp-1">Phase 1</span>
+      <span class="powner">Dave</span>
+      <span class="pstat wait">Draft</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Stories</strong><span class="proute">/stories</span></div>
+      <span class="pphase pp-1">Phase 1</span>
+      <span class="powner">Dave</span>
+      <span class="pstat wait">Draft · no map v1</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>For Schools</strong><span class="proute">/schools</span></div>
+      <span class="pphase pp-1">Phase 1</span>
+      <span class="powner">Dave / Veron</span>
+      <span class="pstat wait">Draft · pricing TBD</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Events &amp; Experiences</strong><span class="proute">/events</span></div>
+      <span class="pphase pp-15">Phase 1.5</span>
+      <span class="powner">Dave / Veron</span>
+      <span class="pstat wait">Draft · dates TBC</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Get Involved (Homeroom)</strong><span class="proute">/give, /give/monthly</span></div>
+      <span class="pphase pp-1">Phase 1</span>
+      <span class="powner">Dave</span>
+      <span class="pstat dec">Draft · routing pending</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>About Us</strong><span class="proute">/about</span></div>
+      <span class="pphase pp-tbd">1 or 2</span>
+      <span class="powner">Veron</span>
+      <span class="pstat dec">Being drafted</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Privacy Policy</strong><span class="proute">/privacy</span></div>
+      <span class="pphase pp-1">Phase 1</span>
+      <span class="powner">Sam</span>
+      <span class="pstat wait">Needs legal copy</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Terms of Use</strong><span class="proute">/terms</span></div>
+      <span class="pphase pp-1">Phase 1</span>
+      <span class="powner">Sam</span>
+      <span class="pstat wait">Needs legal copy</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Newsletter signup</strong><span class="proute">/updates</span></div>
+      <span class="pphase pp-1">Phase 1</span>
+      <span class="powner">Sam</span>
+      <span class="pstat wait">Not started</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>404 page</strong><span class="proute">/404</span></div>
+      <span class="pphase pp-1">Phase 1</span>
+      <span class="powner">Sam</span>
+      <span class="pstat wait">Not started</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Individual story</strong><span class="proute">/stories/[slug]</span></div>
+      <span class="pphase pp-15">Phase 1.5</span>
+      <span class="powner">Sam</span>
+      <span class="pstat wait">After index ships</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Press &amp; Media</strong><span class="proute">/press</span></div>
+      <span class="pphase pp-2">Phase 2</span>
+      <span class="powner">—</span>
+      <span class="pstat pause">Deferred</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Impact</strong><span class="proute">/impact</span></div>
+      <span class="pphase pp-2">Phase 2</span>
+      <span class="powner">—</span>
+      <span class="pstat pause">Deferred</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Homeroom member hub</strong><span class="proute">/homeroom</span></div>
+      <span class="pphase pp-2">Phase 2</span>
+      <span class="powner">—</span>
+      <span class="pstat pause">Deferred · password-gated</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Festival campaign</strong><span class="proute">/festival/2026</span></div>
+      <span class="pphase pp-2">Phase 2</span>
+      <span class="powner">—</span>
+      <span class="pstat pause">Deferred</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Story Board prototype</strong><span class="proute">/story-board</span></div>
+      <span class="pphase pp-2">Phase 2</span>
+      <span class="powner">Sam</span>
+      <span class="pstat pause">Paused</span>
+    </div>
+    <div class="page-row">
+      <div class="pname"><strong>Foundation Reach Map</strong><span class="proute">/foundation-reach-map</span></div>
+      <span class="pphase pp-2">Phase 2</span>
+      <span class="powner">Sam</span>
+      <span class="pstat pause">Paused</span>
+    </div>
+  </details>
+
+  <p class="reading"><strong>How to read this:</strong> Switch between timeline and department views. Closed history starts collapsed. “Pages at a glance” and “What’s deferred” (bottom of the timeline) cover scope questions the ticket list doesn’t. Status and department filters work across the timeline and department views. “Upcoming” in August is normal — nothing in that window has started yet.</p>
+
+  <div class="view-switch no-print" role="group" aria-label="Board view">
+    <button type="button" aria-pressed="true" data-view="timeline" onclick="setView('timeline', this)">Timeline</button>
+    <button type="button" aria-pressed="false" data-view="dept" onclick="setView('dept', this)">By department</button>
+  </div>
+
+  <div class="filters no-print" id="status-filters">
+    <span class="flabel">Status</span>
+    <button type="button" class="chip" data-filter="all" aria-pressed="true" onclick="setStatusFilter('all', this)">All</button>
+    <button type="button" class="chip" data-filter="progress" aria-pressed="false" onclick="setStatusFilter('progress', this)">In progress</button>
+    <button type="button" class="chip" data-filter="blocked" aria-pressed="false" onclick="setStatusFilter('blocked', this)">Blocked</button>
+    <button type="button" class="chip" data-filter="decision" aria-pressed="false" onclick="setStatusFilter('decision', this)">Pending decision</button>
+    <button type="button" class="chip" data-filter="signoff" aria-pressed="false" onclick="setStatusFilter('signoff', this)">Pending sign-off</button>
+    <button type="button" class="chip" data-filter="upcoming" aria-pressed="false" onclick="setStatusFilter('upcoming', this)">Upcoming</button>
+    <button type="button" class="chip" data-filter="done" aria-pressed="false" onclick="setStatusFilter('done', this)">Done</button>
+  </div>
+
+  <div class="filters dept-filters no-print" id="dept-filters">
+    <span class="flabel">Dept</span>
+    <button type="button" class="chip" data-dept="all" aria-pressed="true" onclick="setDeptFilter('all', this)">All</button>
+    <button type="button" class="chip" data-dept="eng" style="--dc:var(--c-dev)" aria-pressed="false" onclick="setDeptFilter('eng', this)">Engineering</button>
+    <button type="button" class="chip" data-dept="design" style="--dc:var(--c-design)" aria-pressed="false" onclick="setDeptFilter('design', this)">Design / UI·UX</button>
+    <button type="button" class="chip" data-dept="content" style="--dc:var(--c-concept)" aria-pressed="false" onclick="setDeptFilter('content', this)">Content</button>
+    <button type="button" class="chip" data-dept="pm" style="--dc:var(--c-kick)" aria-pressed="false" onclick="setDeptFilter('pm', this)">Project</button>
+    <button type="button" class="chip" data-dept="leadership" style="--dc:var(--c-found)" aria-pressed="false" onclick="setDeptFilter('leadership', this)">Leadership</button>
+    <button type="button" class="chip" data-dept="media" style="--dc:var(--c-media)" aria-pressed="false" onclick="setDeptFilter('media', this)">Media</button>
+    <button type="button" class="chip" data-dept="external" style="--dc:var(--s-block)" aria-pressed="false" onclick="setDeptFilter('external', this)">External</button>
+    <button type="button" class="chip" data-dept="shared" style="--dc:var(--slate)" aria-pressed="false" onclick="setDeptFilter('shared', this)">All-hands</button>
+  </div>
+
+  <div class="ctrl ctrl-spine no-print">
+    <button type="button" onclick="setAll(true)">Expand all</button>
+    <button type="button" onclick="setAll(false)">Collapse all</button>
+  </div>
+
+  <!-- DEPARTMENT BOARD -->
+  <section id="dept-board" aria-label="Work by department">
+    <p class="dept-intro">Same tickets as the timeline, regrouped by who owns the work. Open items float to the top of each lane.</p>
+    <div class="dept-grid" id="dept-grid"></div>
+  </section>
+
+  <!-- SPINE -->
+  <div class="spine" id="spine">
+
+    <!-- TODAY / PREP -->
+    <article class="chapter" style="--pc:var(--c-design)" data-status-group="progress">
+      <div class="node"></div>
+      <details open>
+        <summary>
+          <div class="ch-title">
+            <span class="ch-kicker">Now · Design runway</span>
+            <span class="ch-name">Where we stand · 14 Jul 2026 <span class="chev">▾</span></span>
+            <span class="ch-note">Aug 3–28 hasn’t started. UI/UX review and content lock are the only items in motion.</span>
+          </div>
+          <div class="ch-meta">
+            <span class="ch-dates">Through Aug 3</span>
+            <div class="ch-counts">
+              <span class="dot done">12 done</span>
+              <span class="dot prog">5 live</span>
+              <span class="dot block">5 waiting</span>
+            </div>
+          </div>
+        </summary>
+        <div class="ch-body">
+          <div class="dur"><span style="width:72%"></span></div>
+          <div class="week-label">Completed</div>
+          <div class="tasks">
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Team kickoff meeting</strong><div class="note">Aligned on plan, roles, timeline</div></div><div class="owner">All</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Site map</strong><div class="note">Built by WJ</div></div><div class="owner">WJ</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Site map review &amp; sign-off</strong><div class="note">IA confirmed before UI/UX sprint</div></div><div class="owner">Nav, WJ, K</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Content Copy &amp; Messaging</strong></div><div class="owner">WJ / K</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Mood Board</strong></div><div class="owner">Veron</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>WJ–Nav–K Messaging Meeting</strong></div><div class="owner">K</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Copy–UIUX Meeting</strong></div><div class="owner">K · WJ/Dave/Sam</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>V1 UI/UX · Homepage</strong><div class="note">Built in parallel with Wix feasibility testing</div></div><div class="owner">Dave · K/Sam</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Design &amp; V1 Homepage Meeting</strong><div class="note">Jun 22–26</div></div><div class="owner">K, Veron, WJ, Dave, Sam</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Design Homepage</strong><div class="note">Graphics, imagery, icons — after Veron’s OOO</div></div><div class="owner">Veron</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>UIUX: Homepage V2</strong></div><div class="owner">Dave</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>UIUX: Remaining Pages</strong></div><div class="owner">Dave</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-ok)"></span><div class="main"><strong>Astro vs static-partials</strong><div class="note">Build decision resolved</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-ok)">Resolved</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-ok)"></span><div class="main"><strong>Analytics stack</strong><div class="note">GA4 + PostHog + Clarity</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-ok)">Resolved</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-ok)"></span><div class="main"><strong>Cookie consent · DECISION-002</strong><div class="note">Osano Free + GA4 Consent Mode v2 · signed off 14 Jul</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-ok)">Resolved</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-ok)"></span><div class="main"><strong>Transactional email · DECISION-003</strong><div class="note">SendGrid, existing paid plan · signed off 14 Jul</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-ok)">Resolved</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-ok)"></span><div class="main"><strong>Rate limiting · DECISION-004</strong><div class="note">Upstash Redis · signed off 14 Jul</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-ok)">Resolved</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-ok)"></span><div class="main"><strong>Image optimization · DECISION-005</strong><div class="note">Astro &lt;Image /&gt; · signed off 14 Jul</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-ok)">Resolved</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-ok)"></span><div class="main"><strong>Observability · DECISION-006</strong><div class="note">Slack + Sentry + Vercel + PostHog · signed off 14 Jul</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-ok)">Resolved</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-ok)"></span><div class="main"><strong>PostHog hosting · DECISION-007</strong><div class="note">PostHog Cloud · signed off 14 Jul</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-ok)">Resolved</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Security headers + vercel.json</strong><div class="note">OPS-001, OPS-002 · committed</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>CI auto-regen of single-file build</strong><div class="note">OPS-003 · shipped</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>Story Board a11y fixes</strong><div class="note">QA-001 · closed</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong>11 doc-correction tickets</strong><div class="note">From engineering review · all closed</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
+          </div>
+          <div class="week-label">In motion</div>
+          <div class="tasks">
+            <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong>Feedback: Homepage</strong><div class="note">Since Jun 28</div></div><div class="owner">K, WJ, Nav</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
+            <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong>Copy: Finalize</strong><div class="note">Since Jun 28</div></div><div class="owner">K, WJ, Nav</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
+            <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong>Content &amp; feedback lock</strong><div class="note">Due today — Jul 14</div></div><div class="owner">All</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
+            <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong>Homepage migration + copy audit</strong></div><div class="owner">Dave</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
+          </div>
+          <div class="week-label">Next · through handoff</div>
+          <div class="tasks">
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>Team feedback meeting</strong><div class="note">Jul 15</div></div><div class="owner">All</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>UI/UX all pages v2</strong><div class="note">Jul 16–21</div></div><div class="owner">Dave</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>Remaining pages design</strong><div class="note">Jul 22–24</div></div><div class="owner">Veron</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>Final UI/UX + UIUX–Dev handoff</strong><div class="note">Aug 3</div></div><div class="owner">All</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="blocked"><span class="mark" style="--sc:var(--s-block)"></span><div class="main"><strong>Stories content / photos</strong><div class="note">Needed by Aug 10</div></div><div class="owner">Comms/Programs</div><div class="st" style="--sc:var(--s-block)">Waiting</div></div>
+            <div class="task" data-status="blocked"><span class="mark" style="--sc:var(--s-block)"></span><div class="main"><strong>Homeroom tier amounts</strong><div class="note">Needed by Aug 7</div></div><div class="owner">Leadership/Finance</div><div class="st" style="--sc:var(--s-block)">Waiting</div></div>
+            <div class="task" data-status="blocked"><span class="mark" style="--sc:var(--s-block)"></span><div class="main"><strong>Live Keela checkout URLs</strong><div class="note">Needed by Aug 21</div></div><div class="owner">Finance</div><div class="st" style="--sc:var(--s-block)">Waiting</div></div>
+            <div class="task" data-status="blocked"><span class="mark" style="--sc:var(--s-block)"></span><div class="main"><strong>Legal copy — Privacy/Terms</strong><div class="note">Needed by Aug 17</div></div><div class="owner">Legal/Ops</div><div class="st" style="--sc:var(--s-block)">Waiting</div></div>
+            <div class="task" data-status="blocked"><span class="mark" style="--sc:var(--s-block)"></span><div class="main"><strong>Social media URLs</strong><div class="note">Needed by Aug 5</div></div><div class="owner">Comms</div><div class="st" style="--sc:var(--s-block)">Waiting</div></div>
+          </div>
+        </div>
+      </details>
+    </article>
+
+    <!-- HANDOFF -->
+    <article class="chapter" style="--pc:var(--c-design)" data-status-group="upcoming">
+      <div class="node"></div>
+      <details open>
+        <summary>
+          <div class="ch-title">
+            <span class="ch-kicker">Day 0</span>
+            <span class="ch-name">Aug 3 — Design handoff <span class="chev">▾</span></span>
+            <span class="ch-note">Everything downstream depends on this landing clean. Designs locked before Astro starts.</span>
+          </div>
+          <div class="ch-meta">
+            <span class="ch-dates">1 day</span>
+            <div class="ch-counts"><span class="dot">2 tasks</span></div>
+          </div>
+        </summary>
+        <div class="ch-body">
+          <div class="tasks">
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>All page designs handed off</strong><div class="note">Dave (all pages v2) + Veron (remaining) → Sam. Design freeze — no mid-sprint redesigns.</div></div><div class="owner">Dave, Veron → Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>UIUX–Development kickoff meeting</strong><div class="note">Confirms scope for both sprint weeks before Sam builds</div></div><div class="owner">All</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+          </div>
+        </div>
+      </details>
+    </article>
+
+    <!-- DEV SPRINT -->
+    <article class="chapter" id="ch-dev" style="--pc:var(--c-dev)" data-status-group="upcoming">
+      <div class="node"></div>
+      <details open>
+        <summary>
+          <div class="ch-title">
+            <span class="ch-kicker">Build</span>
+            <span class="ch-name">Aug 3–14 — Development sprint <span class="chev">▾</span></span>
+            <span class="ch-note">Merge Dave + Veron’s drafts into multi-page Astro. Week 1 = foundation + traffic pages; week 2 = remaining content.</span>
+          </div>
+          <div class="ch-meta">
+            <span class="ch-dates">2 weeks · Sam</span>
+            <div class="ch-counts">
+              <span class="dot prog">1 live</span>
+              <span class="dot block">2 blocked</span>
+              <span class="dot dec">1 decision</span>
+            </div>
+          </div>
+        </summary>
+        <div class="ch-body">
+          <div class="dur"><span style="width:40%;margin-left:0"></span></div>
+          <div class="week-label">Week 1 · Aug 3–7 — Foundation, Homepage, Why, Give</div>
+          <div class="tasks">
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-001</span>Extract shared layout</strong><div class="note">CSS tokens, nav, footer — no dependency, day one</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-002</span>Multi-page routing scaffold</strong><div class="note">Astro 4.x confirmed — no longer blocked</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-003</span>Mobile navigation drawer</strong></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong><span class="tid">FEAT-010</span>Migrate homepage to /</strong><div class="note">Dave’s Netlify draft — copy audit underway</div></div><div class="owner">Sam / Dave</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-004</span>Wire all nav and footer links</strong><div class="note">Needs social URLs from Comms by Aug 5</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-020</span>Build /why page</strong><div class="note">Video embed slots (CEO + 3 teacher clips) — URLs land later</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="blocked"><span class="mark" style="--sc:var(--s-block)"></span><div class="main"><strong><span class="tid">FEAT-050 / 051</span>Build /give + /give/monthly</strong><div class="note">Homeroom tier (D-01) + Keela URLs (D-02) needed first</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-block)">Blocked</div></div>
+          </div>
+          <div class="week-label">Week 2 · Aug 10–14 — Stories, Schools, Events, About</div>
+          <div class="tasks">
+            <div class="task" data-status="blocked"><span class="mark" style="--sc:var(--s-block)"></span><div class="main"><strong><span class="tid">FEAT-030</span>Stories data model + JSON</strong><div class="note">Min. 3 stories — waiting on Comms/Programs photos + permissions by Aug 10</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-block)">Blocked</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-031</span>Build /stories index</strong><div class="note">Region-scroll, no map in v1 — depends on FEAT-030</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-040 / 041</span>Build /schools</strong><div class="note">Ripple diagram, comparison table, discovery form — form destination (D-04) still open</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-090</span>Events &amp; Experiences</strong><div class="note">Filter chips, access badges — some dates still TBC</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-032</span>Individual story pages</strong><div class="note">/stories/[slug] — after index ships</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="decision"><span class="mark" style="--sc:var(--s-dec)"></span><div class="main"><strong><span class="tid">FEAT-093</span>About Us — v1 single page</strong><div class="note">Single vs 5 sub-pages (D-05) — may fast-follow past Aug 14</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-dec)">Pending decision</div></div>
+          </div>
+        </div>
+      </details>
+    </article>
+
+    <!-- MEDIA -->
+    <article class="chapter" style="--pc:var(--c-media)" data-status-group="upcoming">
+      <div class="node"></div>
+      <details>
+        <summary>
+          <div class="ch-title">
+            <span class="ch-kicker">Parallel track</span>
+            <span class="ch-name">Aug 3–14 — Media <span class="chev">▾</span></span>
+            <span class="ch-note">Runs alongside the dev sprint so homepage video is ready for the Aug 14 review.</span>
+          </div>
+          <div class="ch-meta">
+            <span class="ch-dates">2 weeks · Dave</span>
+            <div class="ch-counts"><span class="dot">1 task</span></div>
+          </div>
+        </summary>
+        <div class="ch-body">
+          <div class="tasks">
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>Homepage video production</strong><div class="note">Target: ready to embed before the Aug 14 final review meeting</div></div><div class="owner">Dave</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+          </div>
+        </div>
+      </details>
+    </article>
+
+    <!-- REVIEW -->
+    <article class="chapter" id="ch-review" style="--pc:var(--c-review)" data-status-group="upcoming">
+      <div class="node"></div>
+      <details open>
+        <summary>
+          <div class="ch-title">
+            <span class="ch-kicker">Gate</span>
+            <span class="ch-name">Aug 10–14 — Final review <span class="chev">▾</span></span>
+            <span class="ch-note">Concurrent with week 2. Closes with stakeholder VC on Aug 14 — go/no-go for the fixes sprint.</span>
+          </div>
+          <div class="ch-meta">
+            <span class="ch-dates">Review + VC</span>
+            <div class="ch-counts"><span class="dot">4 items</span></div>
+          </div>
+        </summary>
+        <div class="ch-body">
+          <div class="tasks">
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>Full site walkthrough</strong><div class="note">All built pages — go/no-go for Aug 17–21 fixes</div></div><div class="owner">All (VC)</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>Design fidelity check</strong><div class="note">Confirms build matches Aug 3 handoff</div></div><div class="owner">Dave, Veron</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>Content accuracy pass</strong></div><div class="owner">Comms / Programs</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>Homepage video integration</strong><div class="note">If media track lands on schedule</div></div><div class="owner">Dave, Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+          </div>
+        </div>
+      </details>
+    </article>
+
+    <!-- FIXES -->
+    <article class="chapter" id="ch-fixes" style="--pc:var(--c-launch)" data-status-group="upcoming">
+      <div class="node"></div>
+      <details open>
+        <summary>
+          <div class="ch-title">
+            <span class="ch-kicker">Polish</span>
+            <span class="ch-name">Aug 17–21 — Fixes &amp; approval <span class="chev">▾</span></span>
+            <span class="ch-note">Real content, real accounts, and the Nav + WJ sign-off gate.</span>
+          </div>
+          <div class="ch-meta">
+            <span class="ch-dates">1 week</span>
+            <div class="ch-counts">
+              <span class="dot block">1 blocked</span>
+              <span class="dot sign">1 sign-off</span>
+            </div>
+          </div>
+        </summary>
+        <div class="ch-body">
+          <div class="tasks">
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-100</span>Bug fixes + polish</strong><div class="note">From Aug 14 review — cross-browser + mobile</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="blocked"><span class="mark" style="--sc:var(--s-block)"></span><div class="main"><strong><span class="tid">FEAT-071</span>Privacy + Terms pages</strong><div class="note">Legal copy (D-08) needed by Aug 17 — critical path</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-block)">Blocked</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-080</span>Analytics stack</strong><div class="note">GA4 + Clarity + PostHog Cloud + Osano + Sentry — decisions resolved</div></div><div class="owner">Sam · WJ, K</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-081</span>SEO baseline</strong><div class="note">Meta, OG, sitemap, favicon</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong>Cookie consent banner</strong><div class="note">Osano — DECISION-002 signed off; needs Privacy copy</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="signoff"><span class="mark" style="--sc:var(--s-sign)"></span><div class="main"><strong>Final approval — Nav + WJ</strong><div class="note">Unlocks DNS cutover — nothing ships without this</div></div><div class="owner">Nav, WJ, K</div><div class="st" style="--sc:var(--s-sign)">Pending sign-off</div></div>
+          </div>
+        </div>
+      </details>
+    </article>
+
+    <!-- LAUNCH -->
+    <article class="chapter" id="ch-launch" style="--pc:var(--c-launch)" data-status-group="upcoming">
+      <div class="node"></div>
+      <details open>
+        <summary>
+          <div class="ch-title">
+            <span class="ch-kicker">Go live</span>
+            <span class="ch-name">Aug 24–28 — Launch window <span class="chev">▾</span></span>
+            <span class="ch-note">A window, not a fixed date — live as soon as it’s ready, gated on Keela URLs and Aug 21 approval.</span>
+          </div>
+          <div class="ch-meta">
+            <span class="ch-dates">Go-live</span>
+            <div class="ch-counts"><span class="dot block">1 blocked</span></div>
+          </div>
+        </summary>
+        <div class="ch-body">
+          <div class="tasks">
+            <div class="task" data-status="blocked"><span class="mark" style="--sc:var(--s-block)"></span><div class="main"><strong><span class="tid">FEAT-060</span>Keela donation integration</strong><div class="note">Wire all CTAs — waiting on Finance for live checkout URLs</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-block)">Blocked</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-070</span>Newsletter live</strong><div class="note">Flodesk — needs credentials</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-100</span>Lighthouse ≥85 QA pass</strong></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+            <div class="task" data-status="upcoming"><span class="mark" style="--sc:var(--s-up)"></span><div class="main"><strong><span class="tid">FEAT-101</span>Production deploy + DNS cutover</strong><div class="note">contentment.org — requires Aug 21 sign-off + QA pass</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-up)">Upcoming</div></div>
+          </div>
+        </div>
+      </details>
+    </article>
+
+    <!-- PHASE 2 / DEFERRED -->
+    <article class="chapter" id="ch-deferred" style="--pc:var(--slate)" data-status-group="none">
+      <div class="node"></div>
+      <details>
+        <summary>
+          <div class="ch-title">
+            <span class="ch-kicker">Out of scope for Aug 24–28</span>
+            <span class="ch-name">What's deferred to Phase 2 <span class="chev">▾</span></span>
+            <span class="ch-note">Nine items intentionally not in this launch — paused, gated, or waiting on content that doesn't exist yet. Nothing here blocks go-live.</span>
+          </div>
+          <div class="ch-meta">
+            <span class="ch-dates">Phase 2+</span>
+            <div class="ch-counts"><span class="dot">9 items</span></div>
+          </div>
+        </summary>
+        <div class="ch-body">
+          <div class="defer-item">
+            <div><strong>Interactive global educator map</strong><span class="droute">/stories map component</span><div class="dreason">Complexity — region-scroll list covers the v1 need on /stories; map is a richer follow-up.</div></div>
+            <span class="dphase">Phase 2</span>
+          </div>
+          <div class="defer-item">
+            <div><strong>Story Board</strong><span class="droute">/story-board</span><div class="dreason">Prototype exists and works — paused by team decision, not a technical blocker.</div></div>
+            <span class="dphase">Phase 2</span>
+          </div>
+          <div class="defer-item">
+            <div><strong>Foundation Reach Map</strong><span class="droute">/foundation-reach-map</span><div class="dreason">Prototype exists and works — paused by team decision, not a technical blocker.</div></div>
+            <span class="dphase">Phase 2</span>
+          </div>
+          <div class="defer-item">
+            <div><strong>Homeroom member hub</strong><span class="droute">/homeroom</span><div class="dreason">Needs member auth + content that isn't ready; not part of the public nav for this launch.</div></div>
+            <span class="dphase">Phase 2</span>
+          </div>
+          <div class="defer-item">
+            <div><strong>About Us sub-pages (5)</strong><span class="droute">/about/*</span><div class="dreason">Content briefs still in progress — v1 ships as a single page (D-05); sub-pages fast-follow.</div></div>
+            <span class="dphase">Phase 2</span>
+          </div>
+          <div class="defer-item">
+            <div><strong>Get Involved sub-pages</strong><span class="droute">/give/corporate, etc.</span><div class="dreason">Not in Kristina's 7-page launch scope.</div></div>
+            <span class="dphase">Phase 2</span>
+          </div>
+          <div class="defer-item">
+            <div><strong>Impact page</strong><span class="droute">/impact</span><div class="dreason">Content boundary with /about still being worked out — keeping it out avoids duplicate messaging at launch.</div></div>
+            <span class="dphase">Phase 2</span>
+          </div>
+          <div class="defer-item">
+            <div><strong>Press &amp; Media</strong><span class="droute">/press</span><div class="dreason">Not a launch blocker — no press requests queued yet.</div></div>
+            <span class="dphase">Phase 2</span>
+          </div>
+          <div class="defer-item">
+            <div><strong>Festival / 10th anniversary campaigns</strong><span class="droute">/festival, /10years</span><div class="dreason">Needs a 4–6 week campaign brief lead time — starts after launch.</div></div>
+            <span class="dphase">Phase 2</span>
+          </div>
+        </div>
+      </details>
+    </article>
+
+  </div>
+</main>
+
+<footer class="page-footer">
+  <strong>The Contentment Foundation</strong> · Sprint Journey v2 · Aug 2026<br>
+  Prepared by Somesh Bhardwaj · somesh@contentment.org<br>
+  Source of truth: <code>docs/planning/launch-plan-data.json</code> and <code>docs/planning/TRACKER.md</code> — visualization only.<br>
+  <span style="opacity:.7">Prefer the classic spreadsheet? </span><a href="classic/" style="color:var(--teal)">Open Gantt view</a>
+</footer>
+
+<button class="print-btn no-print" onclick="window.print()">Save as PDF</button>
+
+<script>
+  var DEPTS = [
+    { id: 'eng', label: 'Engineering', who: 'Sam · Anik advisory', color: 'var(--c-dev)' },
+    { id: 'design', label: 'Design / UI·UX', who: 'Dave · Veron · Jeff', color: 'var(--c-design)' },
+    { id: 'content', label: 'Content / Marcoms', who: 'Woei Jing · Kristina', color: 'var(--c-concept)' },
+    { id: 'pm', label: 'Project', who: 'Kristina', color: 'var(--c-kick)' },
+    { id: 'leadership', label: 'Leadership', who: 'Nav · approvals', color: 'var(--c-found)' },
+    { id: 'media', label: 'Media', who: 'Dave', color: 'var(--c-media)' },
+    { id: 'external', label: 'External partners', who: 'Finance · Legal · Comms · Programs', color: 'var(--s-block)' },
+    { id: 'shared', label: 'All-hands', who: 'Whole team', color: 'var(--slate)' }
+  ];
+
+  var state = { view: 'timeline', status: 'all', dept: 'all' };
+
+  function classifyDept(task) {
+    var owner = ((task.querySelector('.owner') || {}).textContent || '').toLowerCase().trim();
+    var title = ((task.querySelector('strong') || {}).textContent || '').toLowerCase();
+    var note = ((task.querySelector('.note') || {}).textContent || '').toLowerCase();
+
+    // External partners (inputs outside the core build team)
+    if (/\b(finance|legal\/ops|legal|comms\/programs|comms|programs|leadership\/finance)\b/.test(owner)) {
+      return 'external';
+    }
+    if (/stories content \/ photos|homeroom tier amounts|live keela checkout|legal copy|social media urls|content accuracy/.test(title)) {
+      return 'external';
+    }
+
+    // Media track
+    if (/homepage video|video production|video integration/.test(title)) return 'media';
+
+    // Leadership gates
+    if (/final approval|sign-off|sign off/.test(title)) return 'leadership';
+
+    // All-hands
+    if (/^all\b/.test(owner)) return 'shared';
+
+    // Engineering (Sam primary) — but design handoffs list Sam as recipient
+    if (/\bsam\b/.test(owner)) {
+      if ((/→\s*sam|handed off|handoff/.test(owner + ' ' + title)) && /dave|veron/.test(owner)) {
+        return 'design';
+      }
+      return 'eng';
+    }
+    if (/\banik\b/.test(owner)) return 'eng';
+
+    // Design / UI·UX
+    if (/veron/.test(owner)) return 'design';
+    if (/\bdave\b/.test(owner)) return 'design';
+    if (/\bjeff\b/.test(owner)) return 'design';
+
+    // Content / Marcoms
+    if (/site map|content copy|messaging|copy:|copy–|copy-uiux|feedback: homepage|content &amp; feedback|content & feedback/.test(title)) {
+      return 'content';
+    }
+    if (/\bwj\b|woei/.test(owner)) return 'content';
+
+    // Leadership
+    if (/\bnav\b/.test(owner)) return 'leadership';
+
+    // Project (Kristina)
+    if (/\bkristina\b|\bk\b/.test(owner)) return 'pm';
+
+    return 'shared';
+  }
+
+  function tagTasks() {
+    document.querySelectorAll('.spine .task').forEach(function (t) {
+      var d = classifyDept(t);
+      t.setAttribute('data-dept', d);
+    });
+  }
+
+  function statusRank(s) {
+    return ({ blocked: 0, decision: 1, signoff: 2, progress: 3, upcoming: 4, done: 5 }[s] || 9);
+  }
+
+  function buildDeptBoard() {
+    var grid = document.getElementById('dept-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    var tasks = Array.prototype.slice.call(document.querySelectorAll('.spine .task'));
+
+    DEPTS.forEach(function (dept) {
+      var lane = document.createElement('article');
+      lane.className = 'dept-lane';
+      lane.style.setProperty('--dc', dept.color);
+      lane.setAttribute('data-dept-lane', dept.id);
+
+      var mine = tasks.filter(function (t) { return t.getAttribute('data-dept') === dept.id; });
+      mine.sort(function (a, b) {
+        return statusRank(a.getAttribute('data-status')) - statusRank(b.getAttribute('data-status'));
+      });
+
+      var openCount = mine.filter(function (t) {
+        return t.getAttribute('data-status') !== 'done';
+      }).length;
+
+      lane.innerHTML =
+        '<div class="dept-lane-head">' +
+          '<div><h3>' + dept.label + '</h3><div class="who">' + dept.who + '</div></div>' +
+          '<span class="count">' + openCount + ' open · ' + mine.length + ' total</span>' +
+        '</div>' +
+        '<div class="dept-lane-body"></div>';
+
+      var body = lane.querySelector('.dept-lane-body');
+      if (!mine.length) {
+        body.innerHTML = '<div class="dept-empty">No items in this lane</div>';
+      } else {
+        mine.forEach(function (t) {
+          body.appendChild(t.cloneNode(true));
+        });
+      }
+      grid.appendChild(lane);
+    });
+    applyFilters();
+  }
+
+  function applyFilters() {
+    var status = state.status;
+    var dept = state.dept;
+
+    document.querySelectorAll('.spine .task, #dept-board .task').forEach(function (t) {
+      var s = t.getAttribute('data-status');
+      var d = t.getAttribute('data-dept');
+      var statusOk = status === 'all' || s === status;
+      var deptOk = dept === 'all' || d === dept;
+      t.classList.toggle('hidden-by-filter', !(statusOk && deptOk));
+    });
+
+    document.querySelectorAll('.chapter').forEach(function (ch) {
+      var details = ch.querySelector('details');
+      if (!details || state.view !== 'timeline') return;
+      if (status === 'all' && dept === 'all') return;
+      var visible = ch.querySelectorAll('.task:not(.hidden-by-filter)');
+      if (visible.length) details.open = true;
+    });
+
+    document.querySelectorAll('#dept-board .dept-lane').forEach(function (lane) {
+      var id = lane.getAttribute('data-dept-lane');
+      var focus = dept !== 'all' && id !== dept;
+      lane.classList.toggle('dimmed', focus);
+      var visible = lane.querySelectorAll('.task:not(.hidden-by-filter)');
+      var empty = lane.querySelector('.dept-empty');
+      if (!empty && !lane.querySelector('.task')) return;
+      // hide lane body message if all filtered out
+      if (lane.querySelector('.task') && visible.length === 0) {
+        lane.style.display = dept !== 'all' && id !== dept ? '' : '';
+      }
+      if (dept !== 'all') {
+        lane.style.display = id === dept ? '' : 'none';
+      } else {
+        lane.style.display = '';
+      }
+    });
+  }
+
+  function setView(view, btn) {
+    state.view = view;
+    document.body.classList.toggle('view-dept', view === 'dept');
+    document.body.classList.toggle('view-timeline', view === 'timeline');
+    document.querySelectorAll('.view-switch button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-view') === view ? 'true' : 'false');
+    });
+    if (view === 'dept') {
+      document.getElementById('dept-board').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function setStatusFilter(status, btn) {
+    state.status = status;
+    document.querySelectorAll('#status-filters .chip').forEach(function (c) {
+      c.setAttribute('aria-pressed', 'false');
+    });
+    if (btn) btn.setAttribute('aria-pressed', 'true');
+    applyFilters();
+  }
+
+  function setDeptFilter(dept, btn) {
+    state.dept = dept;
+    document.querySelectorAll('#dept-filters .chip').forEach(function (c) {
+      c.setAttribute('aria-pressed', c.getAttribute('data-dept') === dept ? 'true' : 'false');
+    });
+    document.querySelectorAll('#who-row .avatar').forEach(function (a) {
+      a.setAttribute('aria-pressed', a.getAttribute('data-dept') === dept ? 'true' : 'false');
+    });
+    if (btn && btn.classList.contains('chip')) {
+      /* chip already handled above */
+    }
+    applyFilters();
+    if (dept !== 'all' && state.view === 'timeline') {
+      // optional: stay on timeline filtered
+    }
+  }
+
+  function setAll(open) {
+    document.querySelectorAll('.spine details').forEach(function (d) {
+      d.open = open;
+    });
+  }
+
+  // Back-compat for any leftover calls
+  function setFilter(status, btn) { setStatusFilter(status, btn); }
+
+  // Ribbon: click jumps to chapter; on touch, first tap opens popover
+  (function () {
+    var segs = document.querySelectorAll('.ribbon-seg');
+    var coarse = window.matchMedia('(hover: none)').matches;
+
+    function closeAll(except) {
+      segs.forEach(function (s) {
+        if (s !== except) s.classList.remove('is-open');
+      });
+    }
+
+    segs.forEach(function (seg) {
+      seg.addEventListener('click', function (e) {
+        var jump = seg.getAttribute('data-jump');
+        if (coarse) {
+          if (!seg.classList.contains('is-open')) {
+            e.preventDefault();
+            closeAll(seg);
+            seg.classList.add('is-open');
+            return;
+          }
+        }
+        if (state.view === 'dept') setView('timeline');
+        if (!jump) return;
+        var target = document.querySelector(jump);
+        if (!target) return;
+        var details = target.tagName === 'DETAILS' ? target : target.querySelector('details');
+        if (details) details.open = true;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeAll();
+      });
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.ribbon-seg')) closeAll();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeAll();
+    });
+  })();
+
+  // Team avatars → department filter (+ switch to dept view)
+  document.querySelectorAll('#who-row .avatar').forEach(function (av) {
+    av.addEventListener('click', function () {
+      var d = av.getAttribute('data-dept');
+      setView('dept');
+      setDeptFilter(d);
+      document.getElementById('dept-board').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  document.body.classList.add('view-timeline');
+  tagTasks();
+  buildDeptBoard();
+</script>
+
+</body>
+</html>

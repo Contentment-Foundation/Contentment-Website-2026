@@ -7,7 +7,7 @@
 
 ## Architecture Principle
 
-**Static-first. No custom server in Phase 1.** contentment.org is a static marketing site. **Production:** Vercel (`contentment.org`). **Development (interim):** Netlify publishes the `site/` prototype until Astro migration (`TICKET-002`). Third-party managed services (Keela, Flodesk, Raisely) own the data. A custom backend (Vercel Serverless Functions + GCP Cloud SQL) is introduced only when a provider cannot meet the workflow need.
+**Static-first. No custom server in Phase 1.** contentment.org is the static public website of a 501(c)(3) nonprofit. **Production:** Vercel (`contentment.org`). **Development (interim):** Netlify publishes the `site/` prototype until Astro migration (`TICKET-002`). Third-party managed services (Keela, Flodesk, Raisely) own subscriber and lead data. A custom backend (Vercel Serverless Functions + GCP Cloud SQL) is introduced only when a provider cannot meet the workflow need.
 
 ## Deployment
 
@@ -25,7 +25,7 @@ Browser
         ├── Keela          — donations (redirect link, no API)
         ├── Flodesk        — newsletter (embed or Vercel fn → Flodesk API)
         ├── Raisely        — fundraise (embed/link)
-        ├── Analytics      — Plausible or GA4 (script tag)
+        ├── Analytics      — GA4 + Clarity + PostHog (Osano CMP for consent)
         └── Vercel Fn      — custom forms (optional) → GCP Cloud SQL (Phase 2+)
 ```
 
@@ -44,9 +44,13 @@ Browser
 | **Fundraise** | Raisely | Embed or `PUBLIC_RAISELY_CAMPAIGN_URL` link |
 | **Database** | GCP Cloud SQL (PostgreSQL) | Phase 2+ — only if custom forms or member auth need it |
 | **CMS** | Markdown + JSON in repo | Phase 1 · migrate to Sanity at Phase 1.5 when editors need self-service |
-| **Analytics** | GA4 + Microsoft Clarity + PostHog | See DECISION-001; Plausible dropped (paid); GA4 = primary (existing account) |
-| **Rate limiting** | @upstash/ratelimit + Upstash Redis | 5 req / 15 min / IP on all `/api/*` — DECISION-004 |
-| **Transactional email** | Resend | School inquiry notifications, magic links — DECISION-003 |
+| **Analytics** | GA4 + Microsoft Clarity + PostHog | See DECISION-001; Plausible dropped; GA4 = primary (existing account) |
+| **Cookie consent** | Osano Free + GA4 Consent Mode v2 | DECISION-002 — signed off Somesh Bhardwaj, 14 Jul 2026 |
+| **Rate limiting** | @upstash/ratelimit + Upstash Redis | 5 req / 15 min / IP on all `/api/*` — DECISION-004 — signed off Somesh Bhardwaj, 14 Jul 2026 |
+| **Image optimization** | Astro `<Image />` (`astro:assets`) | Build-time WebP + srcset — DECISION-005 — signed off Somesh Bhardwaj, 14 Jul 2026 |
+| **Observability** | Hybrid: Slack `#errors` + Sentry + Vercel logs + PostHog | DECISION-006 — signed off Somesh Bhardwaj, 14 Jul 2026 |
+| **PostHog hosting** | PostHog Cloud (`app.posthog.com`) | DECISION-007 — signed off Somesh Bhardwaj, 14 Jul 2026 |
+| **Transactional email** | SendGrid (existing paid plan) | School inquiry notifications, magic links — DECISION-003 — signed off Somesh Bhardwaj, 14 Jul 2026 |
 | **Homeroom gate** | Vercel Edge Middleware | Phase 2 — shared password → rotating cookie; magic link if >500 members |
 | **Version control** | Git + GitHub | Vercel auto-deploys `main` to production; PR branches → preview URLs |
 
@@ -281,6 +285,7 @@ PUBLIC_KEELA_TIER_5_URL=           # Keela $5/mo checkout — from finance
 PUBLIC_KEELA_TIER_25_URL=          # Keela $25/mo checkout
 PUBLIC_KEELA_TIER_100_URL=         # Keela $100/mo checkout
 PUBLIC_GA_ID=                      # GA4 measurement ID — existing account (DECISION-001)
+PUBLIC_OSANO_CUSTOMER_ID=          # Osano CMP — cookie consent (DECISION-002)
 PUBLIC_POSTHOG_KEY=                # PostHog project API key (DECISION-001)
 PUBLIC_POSTHOG_HOST=               # PostHog host URL
 PUBLIC_RAISELY_CAMPAIGN_URL=       # Fundraise page link
@@ -289,7 +294,7 @@ PUBLIC_RAISELY_CAMPAIGN_URL=       # Fundraise page link
 FLODESK_API_KEY=
 UPSTASH_REDIS_REST_URL=            # rate limit + webhook dedup (DECISION-004)
 UPSTASH_REDIS_REST_TOKEN=
-RESEND_API_KEY=                    # transactional email (DECISION-003)
+SENDGRID_API_KEY=                  # transactional email — existing TCF paid plan (DECISION-003)
 SLACK_WEBHOOK_PARTNERSHIPS=         # see AUTOMATION-BRIEF.md
 SLACK_WEBHOOK_HOMEROOM=
 SLACK_WEBHOOK_GROWTH=
@@ -306,7 +311,7 @@ GCP_SERVICE_ACCOUNT_JSON=          # Google Sheets / Calendar
 GOOGLE_SCHOOL_SHEET_ID=
 HOMEROOM_GATE_PASSWORD=            # Phase 2 shared password
 GCP_CLOUD_SQL_CONNECTION=          # Phase 2 Cloud SQL
-SENTRY_DSN=                        # Phase 1.5 optional (DECISION-006)
+SENTRY_DSN=                        # Sentry error tracking — Phase 1 (DECISION-006)
 ```
 
 Store in **Vercel project → Settings → Environment Variables**. Commit `.env.example` with all keys, no values.
@@ -345,6 +350,10 @@ Run a full backlink audit before DNS cutover to capture all old WordPress URLs.
 - [ ] Keela links use official hosted checkout URLs only
 - [ ] All form POSTs go to HTTPS endpoints
 - [ ] Honeypot field on every custom form (hidden from users, checked server-side)
+- [ ] Osano CMP + GA4 Consent Mode v2 wired; PostHog Cloud cookieless (`persistence: 'memory'`) — DECISION-002, DECISION-007
+- [ ] Sentry (`@sentry/astro`) wired with `SENTRY_DSN` (DECISION-006)
+- [ ] Slack `#errors` webhook on all `/api/*` catch blocks (DECISION-006)
+- [ ] Cookie Preferences link in footer; compliance copy in `/privacy` (SECURITY-AND-ACCESS §5.1)
 - [ ] Rate limiting on `/api/*` routes via `@upstash/ratelimit` + Upstash Redis (DECISION-004)
 - [ ] `.env` in `.gitignore`; run `git secret` or GitHub secret scan on CI
 - [ ] `GCP_SERVICE_ACCOUNT_JSON` and DB connection string in Vercel env only
@@ -407,18 +416,30 @@ TICKET-101  DNS cutover + production deploy
 
 ---
 
-## Open Decisions — Awaiting Sign-off
+## Resolved Decisions (signed off)
 
-These forks block multiple Phase 1 tickets. Full detail in `docs/planning/DECISIONS.md` (GitHub).
+Full detail in `docs/planning/DECISIONS.md`.
+
+| # | Decision | Chosen | Signed off by | Date |
+|---|----------|--------|---------------|------|
+| DECISION-001 | Primary analytics | GA4 + Clarity + Bing Webmaster + PostHog | Anik Ghosh (engineering review) | 3 Jul 2026 |
+| DECISION-002 | Cookie consent | Osano Free + GA4 Consent Mode v2 + cookieless PostHog | **Somesh Bhardwaj** | 14 Jul 2026 |
+| DECISION-003 | Transactional email | SendGrid (existing paid plan); Resend/AWS/Nodemailer as fallbacks | **Somesh Bhardwaj** | 14 Jul 2026 |
+| DECISION-004 | Rate limiting | @upstash/ratelimit + Upstash Redis | **Somesh Bhardwaj** | 14 Jul 2026 |
+| DECISION-005 | Image optimization | Astro `<Image />` (`astro:assets`) | **Somesh Bhardwaj** | 14 Jul 2026 |
+| DECISION-006 | Observability | Hybrid: Slack `#errors` + Sentry + Vercel logs + PostHog diagnostics | **Somesh Bhardwaj** | 14 Jul 2026 |
+| DECISION-007 | PostHog hosting | PostHog Cloud (`app.posthog.com`) | **Somesh Bhardwaj** | 14 Jul 2026 |
+| — | Build tool | Astro 4.x static output | Anik Ghosh | 5 Jul 2026 |
+
+---
+
+## Open Decisions — Awaiting Sign-off
 
 | # | Decision | Options on the table | Waiting on | Tickets gated |
 |---|----------|---------------------|------------|---------------|
-| DECISION-002 | Cookie consent banner | GA4 Consent Mode v2 + Osano free tier vs custom `<dialog>` | Team sign-off | FEAT-071, FEAT-080 |
-| DECISION-003 | Build tool | Astro 4.x (current plan) vs static + `_partials/` inject script | Anik Ghosh | FEAT-002 and all downstream Phase 1 tickets |
-| DECISION-004 | PostHog hosting | Cloud (faster to ship) vs self-hosted on GCP (no third-party data) | Somesh / team | FEAT-080 |
-| DECISION-005 | Homeroom tier amounts | $5 / $25 / $100 vs $25 / $50 / $100 | Finance / Leadership | FEAT-051 copy, FEAT-060 URL wiring |
+| — | Homeroom tier amounts | $5 / $25 / $100 vs $25 / $50 / $100 | Finance / Leadership | FEAT-051, FEAT-060 |
 
-> For resolved decisions (analytics stack, Vercel as host, GCP Cloud SQL) see `docs/planning/DECISIONS.md`.
+> Product/content decisions (Keela URLs, legal copy, `/give` routing, About Us scope) tracked in [launch-plan-data.json](../planning/launch-plan-data.json) D-01–D-10.
 
 ---
 
