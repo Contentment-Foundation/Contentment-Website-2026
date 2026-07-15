@@ -367,6 +367,7 @@
     .r-pop .rp-badge.now { background: #dbeafe; color: var(--s-prog); }
     .r-pop .rp-badge.done { background: #d1fae5; color: var(--s-done); }
     .r-pop .rp-badge.risk { background: #fde8e8; color: var(--s-block); }
+    .r-pop .rp-badge[hidden] { display: none; }
 
     .today-pin {
       position: absolute;
@@ -374,7 +375,7 @@
       bottom: -6px;
       width: 2px;
       background: var(--deep);
-      left: calc(30% + 1.2%); /* ~Jul 14 in Jun22–Aug28 window (≈ week 4 of 10, mid-week) */
+      left: calc(30% + 1.2%); /* fallback only — JS overrides this using the viewer's local clock */
       z-index: 2;
       pointer-events: none;
     }
@@ -1193,14 +1194,14 @@
   <div class="wrap">
     <div class="ribbon-label">
       <span>Jun 22 → Aug 28</span>
-      <span class="pin-note">Hover a week for detail · You are here · <b>14 Jul</b> — design runway; build starts Aug 3</span>
+      <span class="pin-note">Hover a week for detail · You are here: <b id="today-label">…</b></span>
     </div>
     <div class="ribbon" role="list" aria-label="Sprint weeks — hover or focus for detail">
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-concept)" role="listitem" aria-describedby="rp-w1" data-jump="#spine">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-concept)" role="listitem" aria-describedby="rp-w1" data-jump="#spine" data-start="2026-06-22" data-end="2026-06-26">
         <span class="tip">6/22</span>
         <div class="r-pop" id="rp-w1">
           <div class="rp-phase">Concept + UI/UX</div>
-          <div class="rp-dates">Jun 22–26 <span class="rp-badge done">Done</span></div>
+          <div class="rp-dates">Jun 22–26 <span class="rp-badge done">Done</span><span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">Kickoff week — messaging aligned, V1 homepage meeting.</p>
           <ul>
             <li><b>Design &amp; V1 Homepage Meeting</b> <span class="muted">· K, Veron, WJ, Dave, Sam</span></li>
@@ -1210,11 +1211,11 @@
           <div class="rp-foot">↓ Jump to “Where we stand”</div>
         </div>
       </button>
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w2" data-jump="#spine">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w2" data-jump="#spine" data-start="2026-06-29" data-end="2026-07-03">
         <span class="tip">6/29</span>
         <div class="r-pop" id="rp-w2">
           <div class="rp-phase">UI/UX Sprint</div>
-          <div class="rp-dates">Jun 29 – Jul 3 <span class="rp-badge done">Mostly done</span></div>
+          <div class="rp-dates">Jun 29 – Jul 3 <span class="rp-badge done">Mostly done</span><span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">Homepage design + V2 UI/UX; feedback &amp; copy finalize start.</p>
           <ul>
             <li><b>Design Homepage</b> — graphics, imagery, icons · Veron</li>
@@ -1224,11 +1225,11 @@
           <div class="rp-foot">↓ Jump to “Where we stand”</div>
         </div>
       </button>
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w3" data-jump="#spine">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w3" data-jump="#spine" data-start="2026-07-06" data-end="2026-07-10">
         <span class="tip">7/6</span>
         <div class="r-pop" id="rp-w3">
           <div class="rp-phase">UI/UX Sprint</div>
-          <div class="rp-dates">Jul 6–10 <span class="rp-badge done">Done</span></div>
+          <div class="rp-dates">Jul 6–10 <span class="rp-badge done">Done</span><span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">Remaining pages UI/UX; design meeting.</p>
           <ul>
             <li><b>UIUX: Remaining Pages</b> · Dave</li>
@@ -1238,14 +1239,14 @@
           <div class="rp-foot">↓ Jump to “Where we stand”</div>
         </div>
       </button>
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w4" data-jump="#spine">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w4" data-jump="#spine" data-start="2026-07-13" data-end="2026-07-17">
         <span class="tip">7/13</span>
         <div class="r-pop" id="rp-w4">
-          <div class="rp-phase">UI/UX Sprint · Current</div>
-          <div class="rp-dates">Jul 13–17 <span class="rp-badge now">You are here</span></div>
+          <div class="rp-phase">UI/UX Sprint</div>
+          <div class="rp-dates">Jul 13–17 <span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">Content lock due Jul 14; team feedback meeting Jul 15; all-pages v2 starts.</p>
           <ul>
-            <li><b>Content &amp; feedback lock</b> — due today · All</li>
+            <li><b>Content &amp; feedback lock</b> — due Jul 14 · All</li>
             <li><b>Meeting: Feedback</b> · Jul 15</li>
             <li><b>UIUX: All Pages V2</b> begins Jul 16 · Dave</li>
             <li>Tech decisions 002–007 signed off this week</li>
@@ -1253,11 +1254,11 @@
           <div class="rp-foot">↓ Jump to “Where we stand”</div>
         </div>
       </button>
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w5" data-jump="#spine">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w5" data-jump="#spine" data-start="2026-07-20" data-end="2026-07-24">
         <span class="tip">7/20</span>
         <div class="r-pop" id="rp-w5">
           <div class="rp-phase">UI/UX Sprint</div>
-          <div class="rp-dates">Jul 20–24</div>
+          <div class="rp-dates">Jul 20–24 <span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">All-pages v2 wraps; Veron designs remaining pages.</p>
           <ul>
             <li><b>UIUX: All Pages V2</b> continues through Jul 21 · Dave</li>
@@ -1267,11 +1268,11 @@
           <div class="rp-foot">↓ Jump to “Where we stand”</div>
         </div>
       </button>
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w6" data-jump="#spine">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-design)" role="listitem" aria-describedby="rp-w6" data-jump="#spine" data-start="2026-07-27" data-end="2026-07-31">
         <span class="tip">7/27</span>
         <div class="r-pop" id="rp-w6">
           <div class="rp-phase">UI/UX Sprint → Handoff</div>
-          <div class="rp-dates">Jul 27–31</div>
+          <div class="rp-dates">Jul 27–31 <span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">Final UI/UX polish before Aug 3 design → dev handoff.</p>
           <ul>
             <li><b>Final UIUX</b> · Dave</li>
@@ -1281,11 +1282,11 @@
           <div class="rp-foot">↓ Jump to handoff chapter</div>
         </div>
       </button>
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-dev)" role="listitem" aria-describedby="rp-w7" data-jump="#ch-dev">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-dev)" role="listitem" aria-describedby="rp-w7" data-jump="#ch-dev" data-start="2026-08-03" data-end="2026-08-07">
         <span class="tip">8/3</span>
         <div class="r-pop" id="rp-w7">
           <div class="rp-phase">Dev Sprint · Week 1 + Media</div>
-          <div class="rp-dates">Aug 3–7</div>
+          <div class="rp-dates">Aug 3–7 <span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">Handoff day, then foundation + Homepage / Why / Give.</p>
           <ul>
             <li><b>Aug 3</b> — design handoff + UIUX–Dev kickoff</li>
@@ -1296,11 +1297,11 @@
           <div class="rp-foot">↓ Jump to Development sprint</div>
         </div>
       </button>
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-review)" role="listitem" aria-describedby="rp-w8" data-jump="#ch-review">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-review)" role="listitem" aria-describedby="rp-w8" data-jump="#ch-review" data-start="2026-08-10" data-end="2026-08-14">
         <span class="tip">8/10</span>
         <div class="r-pop" id="rp-w8">
           <div class="rp-phase">Dev Week 2 + Final Review</div>
-          <div class="rp-dates">Aug 10–14</div>
+          <div class="rp-dates">Aug 10–14 <span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">Stories / Schools / Events / About; stakeholder VC Aug 14.</p>
           <ul>
             <li><b>FEAT-030</b> stories JSON <span class="rp-badge risk">Blocked</span> — photos by Aug 10</li>
@@ -1311,11 +1312,11 @@
           <div class="rp-foot">↓ Jump to Final review</div>
         </div>
       </button>
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-launch)" role="listitem" aria-describedby="rp-w9" data-jump="#ch-fixes">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-launch)" role="listitem" aria-describedby="rp-w9" data-jump="#ch-fixes" data-start="2026-08-17" data-end="2026-08-21">
         <span class="tip">8/17</span>
         <div class="r-pop" id="rp-w9">
           <div class="rp-phase">Fixes · Polish · Approval</div>
-          <div class="rp-dates">Aug 17–21</div>
+          <div class="rp-dates">Aug 17–21 <span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">Bugs from review, analytics, legal pages, Nav+WJ sign-off.</p>
           <ul>
             <li><b>FEAT-100</b> bug fixes + mobile polish</li>
@@ -1326,11 +1327,11 @@
           <div class="rp-foot">↓ Jump to Fixes &amp; approval</div>
         </div>
       </button>
-      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-launch)" role="listitem" aria-describedby="rp-w10" data-jump="#ch-launch">
+      <button type="button" class="ribbon-seg has-work" style="--seg:var(--c-launch)" role="listitem" aria-describedby="rp-w10" data-jump="#ch-launch" data-start="2026-08-24" data-end="2026-08-28">
         <span class="tip">8/24</span>
         <div class="r-pop" id="rp-w10">
           <div class="rp-phase">Launch window</div>
-          <div class="rp-dates">Aug 24–28</div>
+          <div class="rp-dates">Aug 24–28 <span class="rp-badge now" hidden>You are here</span></div>
           <p class="rp-lead">Go live as soon as ready — gated on Keela URLs + Aug 21 approval.</p>
           <ul>
             <li><b>FEAT-060</b> Keela CTAs <span class="rp-badge risk">Blocked · Finance by Aug 21</span></li>
@@ -2231,6 +2232,40 @@
 
   // Back-compat for any leftover calls
   function setFilter(status, btn) { setStatusFilter(status, btn); }
+
+  // "Today" marker — computed from the viewer's own device clock, not a
+  // baked-in date, so the pin, the "You are here" badge, and the label
+  // above the ribbon stay correct no matter when this page is opened.
+  (function () {
+    var RANGE_START = new Date(2026, 5, 22); // Jun 22, 2026
+    var RANGE_END = new Date(2026, 7, 28);   // Aug 28, 2026
+    var MS_PER_DAY = 86400000;
+
+    function atMidnight(d) { var c = new Date(d); c.setHours(0, 0, 0, 0); return c; }
+    function parseISODate(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+
+    var today = atMidnight(new Date());
+    var pin = document.querySelector('.today-pin');
+    var label = document.getElementById('today-label');
+
+    if (label) {
+      label.textContent = today.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+    }
+
+    if (pin) {
+      var clamped = Math.min(Math.max(today.getTime(), RANGE_START.getTime()), RANGE_END.getTime());
+      var pct = ((clamped - RANGE_START.getTime()) / (RANGE_END.getTime() - RANGE_START.getTime())) * 100;
+      pin.style.left = pct + '%';
+    }
+
+    document.querySelectorAll('.ribbon-seg[data-start]').forEach(function (seg) {
+      var start = parseISODate(seg.getAttribute('data-start'));
+      var end = parseISODate(seg.getAttribute('data-end'));
+      var isCurrent = today.getTime() >= start.getTime() && today.getTime() <= end.getTime();
+      var nowBadge = seg.querySelector('.rp-badge.now');
+      if (nowBadge) nowBadge.hidden = !isCurrent;
+    });
+  })();
 
   // Ribbon: click jumps to chapter; on touch, first tap opens popover
   (function () {

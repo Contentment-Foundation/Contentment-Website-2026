@@ -1,16 +1,27 @@
 /**
  * contentment.org Launch Plan — Google Sheets builder V1
  *
- * SETUP (one time):
- * 1. Go to https://script.google.com → New project
+ * IMPORTANT — bind this script to the Sheet, don't create it standalone:
+ * Open the Sheet itself → Extensions → Apps Script. Do NOT start from
+ * https://script.google.com → "New project" — a standalone project only
+ * talks to the spreadsheet via CONFIG.SPREADSHEET_ID; it never attaches to
+ * it, so Extensions → Apps Script on the Sheet will show nothing, the
+ * onOpen() simple trigger won't fire, and the "Launch Plan" menu never
+ * appears. (We hit exactly this — fixed by recreating the project bound to
+ * the Sheet and removing the orphaned standalone one.)
+ *
+ * SETUP (one time, on a NEW sheet — the current sheet is already set up):
+ * 1. Open the target Google Sheet → Extensions → Apps Script
  * 2. Paste this entire file → Save
  * 3. Run createOrRefreshLaunchPlan → authorize → check logs for Sheet URL
  * 4. Copy the spreadsheet ID from the URL into CONFIG.SPREADSHEET_ID so future runs update the same file
- * 5. Optional: run installDailyRefreshTrigger to keep the Reference tab current automatically
+ * 5. Reload the Sheet tab so onOpen() registers and the "Launch Plan" menu appears
+ * 6. Optional: Launch Plan menu → "Install daily auto-refresh (9am)" to keep the Reference tab current automatically
  *
  * REFRESH: just push changes to docs/planning/launch-plan-data.json on GitHub.
- * The daily trigger (or a manual "Refresh from source" run) will fetch the latest
- * JSON automatically — no need to re-paste this script.
+ * The daily trigger (or a manual "Refresh from source" run, from the Sheet's
+ * "Launch Plan" menu) will fetch the latest JSON automatically — no need to
+ * re-paste this script for data changes.
  * The EMBEDDED_JSON below is a fallback only (used if GitHub is unreachable).
  */
 
