@@ -85,7 +85,7 @@
     ["D-10", "Annual report format", "Resolved: PDF for Phase 1 (was Embedded vs PDF vs both)", "Leadership", "Resolved", "—", "—"],
     ["D-11", "Astro 4.x build", "Astro vs static partials", "Engineering", "Resolved", "—", "—"],
     ["D-12", "Analytics stack", "GA4 + Clarity + PostHog", "Engineering", "Resolved", "—", "—"],
-    ["D-13", "Cookie consent", "Osano Free + GA4 Consent Mode v2 + cookieless PostHog", "Somesh Bhardwaj", "Resolved — Anik looped in for a second opinion per Kristina", "—", "—"],
+    ["D-13", "Cookie consent", "Osano Free + GA4 Consent Mode v2 + cookieless PostHog — Anik looped in for a second opinion per Kristina", "Somesh Bhardwaj", "Resolved", "—", "—"],
     ["D-14", "Transactional email", "SendGrid (existing paid plan)", "Somesh Bhardwaj", "Resolved", "—", "—"],
     ["D-15", "Rate limiting", "Upstash Redis (@upstash/ratelimit)", "Somesh Bhardwaj", "Resolved", "—", "—"],
     ["D-16", "PostHog hosting", "PostHog Cloud (app.posthog.com)", "Somesh Bhardwaj", "Resolved", "—", "—"],
