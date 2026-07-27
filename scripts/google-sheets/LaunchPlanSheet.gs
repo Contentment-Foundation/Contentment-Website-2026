@@ -264,7 +264,12 @@ function formatDataTab_(sheet, numCols, tabKey) {
 
   if (lastRow > 1) {
     sheet.getRange(2, 1, lastRow - 1, numCols).setWrap(true).setVerticalAlignment('top');
-    sheet.getRange(2, 1, lastRow, numCols).createFilter();
+    // clear() doesn't remove an existing filter object, so re-running this
+    // (e.g. Force reseed on an already-seeded tab) would otherwise throw
+    // "You can't create a filter in a sheet that already has a filter."
+    const existingFilter = sheet.getFilter();
+    if (existingFilter) existingFilter.remove();
+    sheet.getRange(2, 1, lastRow - 1, numCols).createFilter();
   }
 
   // Tab-specific conditional formatting
@@ -278,9 +283,11 @@ function findCol_(sheet, headerName) {
 }
 
 function applyStatusFormatting_(sheet, col) {
-  if (col < 1) return;
-  const rules = sheet.getConditionalFormatRules();
+  if (col < 1 || sheet.getLastRow() < 2) return;
+  // Reset (not append) so re-running this — e.g. repeated Force reseeds —
+  // doesn't keep piling up duplicate rules on every run.
   const range = sheet.getRange(2, col, sheet.getLastRow() - 1, 1);
+  const rules = [];
   ['Blocked', 'Paused'].forEach(function (s) {
     rules.push(SpreadsheetApp.newConditionalFormatRule().whenTextContains(s).setBackground(COLORS.blocked).setRanges([range]).build());
   });
