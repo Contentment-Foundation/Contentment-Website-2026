@@ -321,7 +321,7 @@ function applyDecisionStatus_(sheet, col) {
   applyStatusFormatting_(sheet, col);
 }
 
-/** Dropdowns + per-option colors for Handoff Checklist Status + Priority. */
+/** Dropdowns + per-option colors + side legend for Handoff Checklist. */
 function applyHandoffChecklistControls_(sheet) {
   if (sheet.getLastRow() < 2) return;
 
@@ -331,6 +331,19 @@ function applyHandoffChecklistControls_(sheet) {
 
   const statusValues = ['Open', 'Confirmed', 'Ready', 'Done'];
   const priorityValues = ['Critical', 'High', 'Medium', 'Low'];
+
+  const statusColors = {
+    Open: { bg: '#FEF3C7', fg: '#92400E', meaning: 'Still to discuss / not decided yet' },
+    Confirmed: { bg: '#D1FAE5', fg: '#065F46', meaning: 'Agreed on the call — locked in' },
+    Ready: { bg: '#DBEAFE', fg: '#1E40AF', meaning: 'Unblocked — can act / start work' },
+    Done: { bg: '#BBF7D0', fg: '#14532D', meaning: 'Closed — no further action needed' },
+  };
+  const priorityColors = {
+    Critical: { bg: '#FECACA', fg: '#7F1D1D', meaning: 'Must resolve on this call / blocks sprint' },
+    High: { bg: '#FED7AA', fg: '#9A3412', meaning: 'Important — resolve soon after handoff' },
+    Medium: { bg: '#FEF08A', fg: '#854D0E', meaning: 'Useful — not a launch blocker' },
+    Low: { bg: '#E5E7EB', fg: '#374151', meaning: 'Nice to have / informational' },
+  };
 
   if (statusCol > 0) {
     const statusRange = sheet.getRange(2, statusCol, dataRows, 1);
@@ -359,12 +372,6 @@ function applyHandoffChecklistControls_(sheet) {
 
   if (statusCol > 0) {
     const statusRange = sheet.getRange(2, statusCol, dataRows, 1);
-    const statusColors = {
-      Open: { bg: '#FEF3C7', fg: '#92400E' },       // amber
-      Confirmed: { bg: '#D1FAE5', fg: '#065F46' },  // green
-      Ready: { bg: '#DBEAFE', fg: '#1E40AF' },      // blue
-      Done: { bg: '#BBF7D0', fg: '#14532D' },       // stronger green
-    };
     statusValues.forEach(function (s) {
       const c = statusColors[s];
       rules.push(
@@ -380,12 +387,6 @@ function applyHandoffChecklistControls_(sheet) {
 
   if (priorityCol > 0) {
     const priorityRange = sheet.getRange(2, priorityCol, dataRows, 1);
-    const priorityColors = {
-      Critical: { bg: '#FECACA', fg: '#7F1D1D' }, // red
-      High: { bg: '#FED7AA', fg: '#9A3412' },     // orange
-      Medium: { bg: '#FEF08A', fg: '#854D0E' },   // yellow
-      Low: { bg: '#E5E7EB', fg: '#374151' },      // gray
-    };
     priorityValues.forEach(function (p) {
       const c = priorityColors[p];
       rules.push(
@@ -400,4 +401,87 @@ function applyHandoffChecklistControls_(sheet) {
   }
 
   sheet.setConditionalFormatRules(rules);
+  writeHandoffLegendPanel_(sheet, statusValues, priorityValues, statusColors, priorityColors);
+}
+
+/**
+ * Side legend (columns J–L): Status + Priority meanings with matching colors.
+ * Sits to the right of the checklist so it stays visible while scrolling the list.
+ */
+function writeHandoffLegendPanel_(sheet, statusValues, priorityValues, statusColors, priorityColors) {
+  const legendCol = 10; // column J — one blank spacer after Notes (col H)
+  const labelCol = legendCol;
+  const meaningCol = legendCol + 1;
+
+  sheet.setColumnWidth(legendCol - 1, 24); // spacer column I
+  sheet.setColumnWidth(labelCol, 120);
+  sheet.setColumnWidth(meaningCol, 320);
+  sheet.setColumnWidth(meaningCol + 1, 40);
+
+  let row = 1;
+
+  sheet.getRange(row, labelCol, 1, 2).merge()
+    .setValue('LEGEND — how to use Status & Priority')
+    .setBackground(COLORS.header)
+    .setFontColor(COLORS.headerFont)
+    .setFontWeight('bold')
+    .setFontSize(11);
+  row += 2;
+
+  sheet.getRange(row, labelCol, 1, 2).merge()
+    .setValue('STATUS')
+    .setBackground(COLORS.sectionBand)
+    .setFontWeight('bold');
+  row++;
+
+  statusValues.forEach(function (s) {
+    const c = statusColors[s];
+    sheet.getRange(row, labelCol)
+      .setValue(s)
+      .setBackground(c.bg)
+      .setFontColor(c.fg)
+      .setFontWeight('bold')
+      .setHorizontalAlignment('center');
+    sheet.getRange(row, meaningCol)
+      .setValue(c.meaning)
+      .setWrap(true)
+      .setVerticalAlignment('middle');
+    sheet.setRowHeight(row, 28);
+    row++;
+  });
+
+  row++; // spacer
+
+  sheet.getRange(row, labelCol, 1, 2).merge()
+    .setValue('PRIORITY')
+    .setBackground(COLORS.sectionBand)
+    .setFontWeight('bold');
+  row++;
+
+  priorityValues.forEach(function (p) {
+    const c = priorityColors[p];
+    sheet.getRange(row, labelCol)
+      .setValue(p)
+      .setBackground(c.bg)
+      .setFontColor(c.fg)
+      .setFontWeight('bold')
+      .setHorizontalAlignment('center');
+    sheet.getRange(row, meaningCol)
+      .setValue(c.meaning)
+      .setWrap(true)
+      .setVerticalAlignment('middle');
+    sheet.setRowHeight(row, 28);
+    row++;
+  });
+
+  row += 2;
+  sheet.getRange(row, labelCol, 1, 2).merge()
+    .setValue('Tip: Filter Priority = Critical first. Flip Status as you decide on the call.')
+    .setFontStyle('italic')
+    .setFontColor('#555555')
+    .setWrap(true);
+  sheet.setRowHeight(row, 40);
+
+  // Keep the legend visible while scrolling the checklist vertically
+  // (freeze already set on row 1 for the main header).
 }
