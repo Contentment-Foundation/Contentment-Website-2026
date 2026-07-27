@@ -70,6 +70,24 @@ const COLORS = {
 // the daily trigger would silently discard everyone's live edits.
 const LIVE_TRACKER_TABS = ['tickets', 'decisions', 'handoffChecklist'];
 
+// Append-only black box — all sheet history / edits / bulk ops.
+// Humans should not edit this tab — it is protected.
+// Populated by an *installable* onEdit trigger (see Install Black Box trigger).
+const CHANGE_LOG_SHEET = 'Black Box';
+const CHANGE_LOG_SHEET_LEGACY = 'Change Log'; // renamed → Black Box; migrate if present
+const AUDIT_SKIP_PROP = 'AUDIT_SKIP';
+const AUDIT_HEADERS = [
+  'Timestamp',
+  'User email',
+  'Tab',
+  'Cell',
+  'Column',
+  'Row ID',
+  'Old value',
+  'New value',
+  'Source',
+];
+
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('Launch Plan')
@@ -78,21 +96,45 @@ function onOpen() {
     .addItem('Remove auto-refresh trigger', 'removeDailyRefreshTrigger')
     .addSeparator()
     .addItem('Force reseed Tickets + Decisions + Handoff Checklist (discards manual edits)', 'forceReseedLiveTabs_')
+    .addSeparator()
+    .addItem('Install Black Box trigger (required once)', 'installChangeLogTrigger')
+    .addItem('Remove Black Box trigger', 'removeChangeLogTrigger')
+    .addItem('Ensure Black Box sheet exists', 'ensureChangeLogSheetMenu_')
     .addToUi();
+
+  // Soft ensure — does not fail the open if permissions are limited
+  try {
+    ensureChangeLogSheet_(SpreadsheetApp.getActiveSpreadsheet());
+  } catch (e) {
+    // ignore
+  }
 }
 
 function createOrRefreshLaunchPlan() {
-  const data = loadData_();
-  const ss = getOrCreateSpreadsheet_();
-  buildAllTabs_(ss, data);
-  writeReferenceTab_(ss, data);
-  Logger.log('Done: ' + ss.getUrl());
-  try {
-    SpreadsheetApp.getUi().alert('Launch plan updated.\n\n' + ss.getUrl());
-  } catch (e) {
-    // running from editor without UI
-  }
-  return ss.getUrl();
+  return withAuditPaused_(function () {
+    const data = loadData_();
+    const ss = getOrCreateSpreadsheet_();
+    buildAllTabs_(ss, data);
+    writeReferenceTab_(ss, data);
+    ensureChangeLogSheet_(ss);
+    appendAuditEvent_(ss, {
+      user: Session.getActiveUser().getEmail() || '(script)',
+      tab: '—',
+      cell: '—',
+      column: '—',
+      rowId: '—',
+      oldValue: '—',
+      newValue: 'Reference (+ any new live tabs) refreshed from GitHub JSON',
+      source: 'Refresh from source',
+    });
+    Logger.log('Done: ' + ss.getUrl());
+    try {
+      SpreadsheetApp.getUi().alert('Launch plan updated.\n\n' + ss.getUrl());
+    } catch (e) {
+      // running from editor without UI
+    }
+    return ss.getUrl();
+  });
 }
 
 function installDailyRefreshTrigger() {
@@ -181,27 +223,40 @@ function forceReseedLiveTabs_() {
   const ui = SpreadsheetApp.getUi();
   const resp = ui.alert(
     'Overwrite live tracker tabs?',
-    'This replaces Tickets, Decisions, and Handoff Checklist with the latest data from the repo JSON and discards any manual status/owner/blocker edits made in the Sheet. Continue?',
+    'This replaces Tickets, Decisions, and Handoff Checklist with the latest data from the repo JSON and discards any manual status/owner/blocker edits made in the Sheet. Continue?\n\n(A single Black Box entry will record this reseed — cell-level edits during the rewrite are skipped.)',
     ui.ButtonSet.YES_NO
   );
   if (resp !== ui.Button.YES) return;
 
-  const data = loadData_();
-  const ss = getOrCreateSpreadsheet_();
-  // Create Handoff Checklist first so a later Tickets validation failure
-  // cannot leave the new tab missing.
-  const reseedOrder = ['handoffChecklist', 'tickets', 'decisions'];
-  reseedOrder.forEach(function (key) {
-    const name = TAB_KEYS[key];
-    let sheet = ss.getSheetByName(name);
-    if (!sheet) sheet = ss.insertSheet(name);
-    clearSheetForRewrite_(sheet);
-    const rows = data[key];
-    if (!rows || !rows.length) return;
-    sheet.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
-    formatDataTab_(sheet, rows[0].length, key);
+  withAuditPaused_(function () {
+    const data = loadData_();
+    const ss = getOrCreateSpreadsheet_();
+    // Create Handoff Checklist first so a later Tickets validation failure
+    // cannot leave the new tab missing.
+    const reseedOrder = ['handoffChecklist', 'tickets', 'decisions'];
+    reseedOrder.forEach(function (key) {
+      const name = TAB_KEYS[key];
+      let sheet = ss.getSheetByName(name);
+      if (!sheet) sheet = ss.insertSheet(name);
+      clearSheetForRewrite_(sheet);
+      const rows = data[key];
+      if (!rows || !rows.length) return;
+      sheet.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
+      formatDataTab_(sheet, rows[0].length, key);
+    });
+    ensureChangeLogSheet_(ss);
+    appendAuditEvent_(ss, {
+      user: Session.getActiveUser().getEmail() || '(script)',
+      tab: 'Tickets + Decisions + Handoff Checklist',
+      cell: '—',
+      column: '—',
+      rowId: '—',
+      oldValue: '(previous live-tab contents)',
+      newValue: 'Force reseed from GitHub JSON — manual Status/Owner edits on those tabs discarded',
+      source: 'Force reseed',
+    });
+    ui.alert('Tickets, Decisions, and Handoff Checklist reseeded from source.');
   });
-  ui.alert('Tickets, Decisions, and Handoff Checklist reseeded from source.');
 }
 
 function writeReferenceTab_(ss, data) {
@@ -484,4 +539,234 @@ function writeHandoffLegendPanel_(sheet, statusValues, priorityValues, statusCol
 
   // Keep the legend visible while scrolling the checklist vertically
   // (freeze already set on row 1 for the main header).
+}
+
+// ─── Black Box (all records / history / logs) ───────────────────────────────
+
+function withAuditPaused_(fn) {
+  const props = PropertiesService.getScriptProperties();
+  props.setProperty(AUDIT_SKIP_PROP, '1');
+  try {
+    return fn();
+  } finally {
+    props.deleteProperty(AUDIT_SKIP_PROP);
+  }
+}
+
+function installChangeLogTrigger() {
+  removeChangeLogTrigger();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ensureChangeLogSheet_(ss);
+  ScriptApp.newTrigger('onEditAudit_')
+    .forSpreadsheet(ss)
+    .onEdit()
+    .create();
+  try {
+    SpreadsheetApp.getUi().alert(
+      'Black Box trigger installed.\n\n' +
+      'Every manual edit on Tickets, Decisions, Handoff Checklist, Reference, etc. is recorded in the locked "' +
+      CHANGE_LOG_SHEET +
+      '" tab (who / tab / cell / old → new).\n\n' +
+      'Bulk Refresh / Force reseed are recorded as one summary row each, not cell-by-cell.\n\n' +
+      'This is your flight recorder — do not clear it.'
+    );
+  } catch (e) {
+    Logger.log('Black Box trigger installed.');
+  }
+}
+
+function removeChangeLogTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function (trigger) {
+    if (trigger.getHandlerFunction() === 'onEditAudit_') {
+      ScriptApp.deleteTrigger(trigger);
+    }
+  });
+}
+
+function ensureChangeLogSheetMenu_() {
+  ensureChangeLogSheet_(SpreadsheetApp.getActiveSpreadsheet());
+  SpreadsheetApp.getUi().alert(
+    '"' + CHANGE_LOG_SHEET + '" is ready and protected.\n\n' +
+    'It holds all edit history and bulk-op records. Install the Black Box trigger if you have not already.'
+  );
+}
+
+/**
+ * Installable onEdit handler — must be installed via
+ * Launch Plan → Install Black Box trigger (simple onEdit cannot reliably
+ * read the editor's email).
+ */
+function onEditAudit_(e) {
+  try {
+    if (!e || !e.range) return;
+    if (PropertiesService.getScriptProperties().getProperty(AUDIT_SKIP_PROP) === '1') return;
+
+    const sheet = e.range.getSheet();
+    const tabName = sheet.getName();
+    if (tabName === CHANGE_LOG_SHEET || tabName === CHANGE_LOG_SHEET_LEGACY) return;
+
+    // Ignore Handoff Checklist legend panel (cols J+)
+    if (tabName === 'Handoff Checklist' && e.range.getColumn() >= 10) return;
+
+    const ss = sheet.getParent();
+    ensureChangeLogSheet_(ss);
+
+    const user =
+      (e.user && e.user.getEmail && e.user.getEmail()) ||
+      Session.getActiveUser().getEmail() ||
+      Session.getEffectiveUser().getEmail() ||
+      '(unknown)';
+
+    const numCells = e.range.getNumRows() * e.range.getNumColumns();
+    if (numCells === 1) {
+      const row = e.range.getRow();
+      const col = e.range.getColumn();
+      appendAuditEvent_(ss, {
+        user: user,
+        tab: tabName,
+        cell: e.range.getA1Notation(),
+        column: headerNameForCol_(sheet, col),
+        rowId: rowIdForRow_(sheet, row),
+        oldValue: stringifyAuditValue_(e.oldValue),
+        newValue: stringifyAuditValue_(e.value !== undefined ? e.value : e.range.getValue()),
+        source: 'Manual edit',
+      });
+      return;
+    }
+
+    // Multi-cell paste / fill — one summary row (old values not available per-cell)
+    const newVals = e.range.getValues();
+    appendAuditEvent_(ss, {
+      user: user,
+      tab: tabName,
+      cell: e.range.getA1Notation(),
+      column: '(range)',
+      rowId: rowIdForRow_(sheet, e.range.getRow()),
+      oldValue: '(multi-cell — old values not available)',
+      newValue: truncateAudit_(JSON.stringify(newVals), 500),
+      source: 'Manual multi-cell edit',
+    });
+  } catch (err) {
+    Logger.log('onEditAudit_ failed: ' + err);
+  }
+}
+
+function ensureChangeLogSheet_(ss) {
+  // Migrate legacy "Change Log" tab name → "Black Box" if present
+  let legacy = ss.getSheetByName(CHANGE_LOG_SHEET_LEGACY);
+  let sheet = ss.getSheetByName(CHANGE_LOG_SHEET);
+  if (legacy && !sheet) {
+    legacy.setName(CHANGE_LOG_SHEET);
+    sheet = legacy;
+  } else if (legacy && sheet && legacy.getSheetId() !== sheet.getSheetId()) {
+    // Both exist — keep Black Box, leave legacy alone (do not delete user data)
+  }
+
+  if (!sheet) {
+    sheet = ss.insertSheet(CHANGE_LOG_SHEET);
+  }
+
+  if (sheet.getLastRow() < 1 || sheet.getRange(1, 1).getValue() !== AUDIT_HEADERS[0]) {
+    sheet.clear();
+    sheet.getRange(1, 1, 1, AUDIT_HEADERS.length).setValues([AUDIT_HEADERS]);
+  }
+
+  // Title band above the table feels heavy in Sheets — put meaning in the tab name
+  // and a one-line note in A1 header context via freeze + description on protection.
+
+  sheet.getRange(1, 1, 1, AUDIT_HEADERS.length)
+    .setBackground('#0B1220') // near-black — black box
+    .setFontColor('#F8FAFC')
+    .setFontWeight('bold')
+    .setWrap(true);
+  sheet.setFrozenRows(1);
+  sheet.setColumnWidth(1, 160); // Timestamp
+  sheet.setColumnWidth(2, 200); // User
+  sheet.setColumnWidth(3, 160); // Tab
+  sheet.setColumnWidth(4, 80);  // Cell
+  sheet.setColumnWidth(5, 120); // Column
+  sheet.setColumnWidth(6, 100); // Row ID
+  sheet.setColumnWidth(7, 220); // Old
+  sheet.setColumnWidth(8, 220); // New
+  sheet.setColumnWidth(9, 140); // Source
+
+  protectChangeLogSheet_(sheet);
+  return sheet;
+}
+
+function protectChangeLogSheet_(sheet) {
+  // Remove prior protections on this sheet, then lock for humans.
+  sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET).forEach(function (p) {
+    try { p.remove(); } catch (err) { /* ignore */ }
+  });
+
+  const protection = sheet.protect().setDescription(
+    'BLACK BOX — append-only flight recorder for all sheet edits and bulk ops. ' +
+    'Written only by the Launch Plan script. Do not clear, rewrite, or delete rows.'
+  );
+  protection.setWarningOnly(false);
+
+  // Strip other editors; owner (and the script running as owner) keep access.
+  try {
+    const editors = protection.getEditors();
+    if (editors && editors.length) protection.removeEditors(editors);
+  } catch (err) { /* ignore */ }
+
+  try {
+    if (protection.canDomainEdit()) protection.setDomainEdit(false);
+  } catch (err) { /* ignore */ }
+}
+
+function appendAuditEvent_(ss, evt) {
+  const sheet = ensureChangeLogSheet_(ss);
+  const tz = CONFIG.TIMEZONE || Session.getScriptTimeZone();
+  const stamp = Utilities.formatDate(new Date(), tz, 'yyyy-MM-dd HH:mm:ss z');
+  sheet.appendRow([
+    stamp,
+    evt.user || '',
+    evt.tab || '',
+    evt.cell || '',
+    evt.column || '',
+    evt.rowId || '',
+    evt.oldValue || '',
+    evt.newValue || '',
+    evt.source || '',
+  ]);
+
+  // Soft cap — keep newest ~8000 rows so the sheet stays usable
+  const maxKeep = 8000;
+  const last = sheet.getLastRow();
+  if (last > maxKeep + 1) {
+    sheet.deleteRows(2, last - maxKeep - 1);
+  }
+}
+
+function headerNameForCol_(sheet, col) {
+  try {
+    const h = sheet.getRange(1, col).getValue();
+    return h ? String(h) : 'Col ' + col;
+  } catch (err) {
+    return 'Col ' + col;
+  }
+}
+
+function rowIdForRow_(sheet, row) {
+  if (row <= 1) return '(header)';
+  try {
+    const id = sheet.getRange(row, 1).getValue();
+    return id !== '' && id !== null ? String(id) : 'row ' + row;
+  } catch (err) {
+    return 'row ' + row;
+  }
+}
+
+function stringifyAuditValue_(v) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'object') return truncateAudit_(JSON.stringify(v), 500);
+  return truncateAudit_(String(v), 500);
+}
+
+function truncateAudit_(s, max) {
+  if (!s) return '';
+  return s.length > max ? s.substring(0, max) + '…' : s;
 }
