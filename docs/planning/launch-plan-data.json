@@ -1229,9 +1229,9 @@
       "Privacy / Terms = open ticket",
       "Under process. Phase 1.5 or Phase 2 TBD. Does not block Aug 21.",
       "Sam + Legal",
-      "Open",
+      "Confirmed",
       "Low",
-      "D-08 / FEAT-071"
+      "Approach confirmed (under process; Phase 1.5 or 2 TBD; does not block Aug 21). D-08 / FEAT-071 remain open work tickets."
     ],
     [
       "HC-004",
@@ -1239,9 +1239,9 @@
       "Alternative giving methods left open",
       "Check/stock/crypto/memorial/legacy — Nav, Kristina, Lorna decide. May be Phase 1 or 1.5.",
       "Nav / K / Lorna",
-      "Open",
+      "Confirmed",
       "Medium",
-      "D-20 — do not absorb into sprint unless leadership pulls it in"
+      "Approach confirmed — left with Nav/Kristina/Lorna. May land Phase 1 or 1.5. D-20. Do not absorb into sprint unless leadership pulls it in."
     ],
     [
       "HC-005",
@@ -1251,7 +1251,7 @@
       "Kristina → Sam",
       "Open",
       "Critical",
-      "FEAT-005 — get this early in the handoff call"
+      "Still needed — Kristina delivers. Critical for wiring links + analytics. Ask for timing on the call."
     ],
     [
       "HC-010",
@@ -1259,9 +1259,9 @@
       "Phase 1 = 7 pages only",
       "Homepage, Why, Our Impact, Schools, Events, Get Involved, About Us (single page).",
       "Kristina + Nav",
-      "Open",
+      "Confirmed",
       "Critical",
-      "Say out loud and get a nod"
+      "Confirmed in Slack — Nav endorsed 7-page Phase 1 (Homepage, Why, Our Impact, Schools, Events, Get Involved, About Us). Re-affirm verbally on handoff call."
     ],
     [
       "HC-011",
@@ -1269,9 +1269,9 @@
       "OUT: Interactive map / Reach Map",
       "Foundation Reach Map and any interactive global map stay Phase 2.",
       "All",
-      "Open",
+      "Confirmed",
       "High",
-      "Confirm nobody pulls map back into Phase 1"
+      "Confirmed Phase 2 across Slack + tracker (Reach Map / interactive map deferred)."
     ],
     [
       "HC-012",
@@ -1279,9 +1279,9 @@
       "OUT: Story Board",
       "Interactive corkboard prototype stays Phase 2.",
       "All",
-      "Open",
+      "Confirmed",
       "High",
-      ""
+      "Confirmed Phase 2 — Story Board paused / deferred."
     ],
     [
       "HC-013",
@@ -1289,9 +1289,9 @@
       "OUT: Magazine / page-flip PDF viewer",
       "Phase 1 = PDF link + download only (D-10).",
       "All",
-      "Open",
+      "Confirmed",
       "Medium",
-      ""
+      "Confirmed — D-10 PDF link + download for Phase 1; page-flip viewer Phase 2."
     ],
     [
       "HC-014",
@@ -1299,9 +1299,9 @@
       "OUT: Quiz / lead magnet",
       "Phase 2.",
       "All",
-      "Open",
+      "Confirmed",
       "Medium",
-      ""
+      "Confirmed Phase 2 (quiz / lead magnet deferred)."
     ],
     [
       "HC-015",
@@ -1309,9 +1309,9 @@
       "OUT: About Us sub-pages (5)",
       "v1 = single page only (D-05 resolved).",
       "All",
-      "Open",
+      "Confirmed",
       "Medium",
-      ""
+      "Confirmed — D-05 About Us = single page for v1; 5 sub-pages Phase 2."
     ],
     [
       "HC-016",
@@ -1319,9 +1319,9 @@
       "OUT: Homeroom gated member hub",
       "Phase 2.",
       "All",
-      "Open",
+      "Confirmed",
       "Medium",
-      ""
+      "Confirmed Phase 2 — Homeroom gated hub not in public launch."
     ],
     [
       "HC-017",
@@ -1329,9 +1329,9 @@
       "OUT: Festival / campaign pages",
       "Phase 2.",
       "All",
-      "Open",
+      "Confirmed",
       "Low",
-      ""
+      "Confirmed Phase 2 — festival / campaign pages need briefs."
     ],
     [
       "HC-018",
@@ -1339,9 +1339,9 @@
       "Any new idea → Phase 2 by default",
       "Do not silently absorb scope into the 2-week sprint.",
       "Kristina + Sam",
-      "Open",
+      "Confirmed",
       "Critical",
-      "Escalate to Kristina if someone pushes back"
+      "Standing rule from Jul feedback discipline + Slack scope control. Re-state on call if new ideas appear."
     ],
     [
       "HC-020",
@@ -1361,7 +1361,7 @@
       "Dave + Veron",
       "Open",
       "Critical",
-      "Desktop prioritized first; mobile may continue in parallel"
+      "Approach agreed in Slack (desktop first; mobile parallel — Dave). Still need per-page lock status on the call."
     ],
     [
       "HC-022",
@@ -1459,9 +1459,9 @@
       "Bhutan compliance copy locked",
       "Approved wording from Nav + Lorna — use as locked text.",
       "Content / Nav",
-      "Open",
+      "Confirmed",
       "High",
-      "Confirm still final on the call"
+      "Confirmed Jul 27 — Nav + Lorna signed off: \"In Bhutan, we're honored to support the Ministry of Education's work on educator wellbeing, including trainings and retreats with school counselors nationwide.\""
     ],
     [
       "HC-035",
@@ -1489,9 +1489,9 @@
       "Homeroom tiers $25/$50/$100 in all UI copy",
       "D-01 resolved — update CTA copy to match.",
       "Dave + Sam",
-      "Open",
+      "Confirmed",
       "High",
-      ""
+      "Confirmed — D-01 $25/$50/$100 (Kristina). Sam still audits CTA copy during build to match."
     ],
     [
       "HC-050",
@@ -1509,9 +1509,9 @@
       "Check-in cadence on calendars",
       "Standing sync (~Jul 29) + sprint review (within Aug 3–7).",
       "Kristina",
-      "Open",
+      "Ready",
       "High",
-      "Book before call ends"
+      "Proposed in Slack (standing ~Jul 29 sync; sprint review within Aug 3–7). Book exact times on calendars during handoff."
     ],
     [
       "HC-052",
@@ -1519,9 +1519,9 @@
       "Anik as technical sounding board",
       "Confirm availability during sprint.",
       "Sam + Anik",
-      "Open",
+      "Ready",
       "Medium",
-      ""
+      "Named in Slack as technical/deployment sounding board for the sprint. Confirm availability on call."
     ],
     [
       "HC-053",
@@ -1539,9 +1539,9 @@
       "Post-launch edit ownership",
       "Sam edits via Claude/Cursor + GitHub deploy; Kristina owns Change Request Form + SOP.",
       "Sam + Kristina",
-      "Open",
+      "Confirmed",
       "Medium",
-      "Aug 10–14 deliverable for K"
+      "Confirmed in Slack — Sam edits via Claude/Cursor + GitHub deploy; Kristina owns Website Change Request Form + SOP (Aug 10–14)."
     ],
     [
       "HC-060",
@@ -1609,9 +1609,9 @@
       "Analytics + SEO + Osano",
       "GA4, Clarity, PostHog, cookie consent — decisions already resolved.",
       "Sam",
-      "Open",
+      "Ready",
       "High",
-      "Wire Aug 10–14"
+      "Analytics stack decisions already resolved (GA4 + Clarity + PostHog + Osano). Wire in Aug 10–14 review sprint — not a handoff blocker."
     ],
     [
       "HC-067",
