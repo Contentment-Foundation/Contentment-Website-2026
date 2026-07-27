@@ -291,11 +291,10 @@ function formatDataTab_(sheet, numCols, tabKey) {
     sheet.getRange(1, 1, lastRow, numCols).createFilter();
   }
 
-  // Tab-specific conditional formatting
-  if (tabKey === 'tickets' || tabKey === 'handoffChecklist') {
-    applyStatusFormatting_(sheet, findCol_(sheet, 'Status'));
-  }
+  // Tab-specific conditional formatting + dropdowns
+  if (tabKey === 'tickets') applyStatusFormatting_(sheet, findCol_(sheet, 'Status'));
   if (tabKey === 'decisions') applyDecisionStatus_(sheet, findCol_(sheet, 'Status'));
+  if (tabKey === 'handoffChecklist') applyHandoffChecklistControls_(sheet);
 }
 
 function findCol_(sheet, headerName) {
@@ -310,14 +309,95 @@ function applyStatusFormatting_(sheet, col) {
   const range = sheet.getRange(2, col, sheet.getLastRow() - 1, 1);
   const rules = [];
   ['Blocked', 'Paused'].forEach(function (s) {
-    rules.push(SpreadsheetApp.newConditionalFormatRule().whenTextContains(s).setBackground(COLORS.blocked).setRanges([range]).build());
+    rules.push(SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo(s).setBackground(COLORS.blocked).setRanges([range]).build());
   });
   ['Done', 'Resolved', 'Ready', 'Confirmed', 'In Progress', 'In sprint'].forEach(function (s) {
-    rules.push(SpreadsheetApp.newConditionalFormatRule().whenTextContains(s).setBackground(COLORS.done).setRanges([range]).build());
+    rules.push(SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo(s).setBackground(COLORS.done).setRanges([range]).build());
   });
   sheet.setConditionalFormatRules(rules);
 }
 
 function applyDecisionStatus_(sheet, col) {
   applyStatusFormatting_(sheet, col);
+}
+
+/** Dropdowns + per-option colors for Handoff Checklist Status + Priority. */
+function applyHandoffChecklistControls_(sheet) {
+  if (sheet.getLastRow() < 2) return;
+
+  const statusCol = findCol_(sheet, 'Status');
+  const priorityCol = findCol_(sheet, 'Priority');
+  const dataRows = sheet.getLastRow() - 1;
+
+  const statusValues = ['Open', 'Confirmed', 'Ready', 'Done'];
+  const priorityValues = ['Critical', 'High', 'Medium', 'Low'];
+
+  if (statusCol > 0) {
+    const statusRange = sheet.getRange(2, statusCol, dataRows, 1);
+    statusRange.setDataValidation(
+      SpreadsheetApp.newDataValidation()
+        .requireValueInList(statusValues, true)
+        .setAllowInvalid(false)
+        .setHelpText('Open · Confirmed · Ready · Done')
+        .build()
+    );
+  }
+
+  if (priorityCol > 0) {
+    const priorityRange = sheet.getRange(2, priorityCol, dataRows, 1);
+    priorityRange.setDataValidation(
+      SpreadsheetApp.newDataValidation()
+        .requireValueInList(priorityValues, true)
+        .setAllowInvalid(false)
+        .setHelpText('Critical · High · Medium · Low')
+        .build()
+    );
+  }
+
+  // Distinct colors per option (exact match). Reset rules first.
+  const rules = [];
+
+  if (statusCol > 0) {
+    const statusRange = sheet.getRange(2, statusCol, dataRows, 1);
+    const statusColors = {
+      Open: { bg: '#FEF3C7', fg: '#92400E' },       // amber
+      Confirmed: { bg: '#D1FAE5', fg: '#065F46' },  // green
+      Ready: { bg: '#DBEAFE', fg: '#1E40AF' },      // blue
+      Done: { bg: '#BBF7D0', fg: '#14532D' },       // stronger green
+    };
+    statusValues.forEach(function (s) {
+      const c = statusColors[s];
+      rules.push(
+        SpreadsheetApp.newConditionalFormatRule()
+          .whenTextEqualTo(s)
+          .setBackground(c.bg)
+          .setFontColor(c.fg)
+          .setRanges([statusRange])
+          .build()
+      );
+    });
+  }
+
+  if (priorityCol > 0) {
+    const priorityRange = sheet.getRange(2, priorityCol, dataRows, 1);
+    const priorityColors = {
+      Critical: { bg: '#FECACA', fg: '#7F1D1D' }, // red
+      High: { bg: '#FED7AA', fg: '#9A3412' },     // orange
+      Medium: { bg: '#FEF08A', fg: '#854D0E' },   // yellow
+      Low: { bg: '#E5E7EB', fg: '#374151' },      // gray
+    };
+    priorityValues.forEach(function (p) {
+      const c = priorityColors[p];
+      rules.push(
+        SpreadsheetApp.newConditionalFormatRule()
+          .whenTextEqualTo(p)
+          .setBackground(c.bg)
+          .setFontColor(c.fg)
+          .setRanges([priorityRange])
+          .build()
+      );
+    });
+  }
+
+  sheet.setConditionalFormatRules(rules);
 }
