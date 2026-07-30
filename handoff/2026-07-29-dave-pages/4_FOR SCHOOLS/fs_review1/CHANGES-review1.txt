@@ -1,0 +1,36 @@
+FOR SCHOOLS — Phase-1 review notes applied (2026-07-23)
+index.html is self-contained (all images base64). Ships to repo as one file;
+Netlify Drop needs index.html at the ZIP root (it is).
+
+APPLIED
+  Nav + footer: swapped to the 2026-07-23 header/footer kit — 6 flat tabs,
+    white-on-scroll nav, official ball logo, #0090be footer, 4 clickable social
+    icons, Stories dropped. Schools tab carries aria-current. min-width:0 added
+    to .news input (site-wide fix; note this page has no newsletter section).
+  Hero: green (#54bf98) gradient overlay [deepened for legibility]; eyebrow +
+    script line -> #d3faf1; "Start a Conversation" -> mint #54bf98 w/ navy text.
+  Proof/Trust: proof band -> white; trust band -> 2x blue texture; eyebrow ->
+    "A Collaborative Partner" [FLAG]; eyebrow + script titles -> #81d4ee.
+  Why: "It's"/"you're" contractions; "wellbeing" -> Cedarville; hook -> #1d1d1d.
+  Difference: video -> Middleton International School (2xw6WjymTPU) + real poster;
+    "one more thing to do" -> Cedarville; eyebrow -> #c2ebe1.
+  Four Pillars: eyebrow -> #1d1d1d; header -> #0090be; cards Mindfulness #54bf98,
+    Community #32c0cf, Self-Curiosity #6275b4, Contentment #e9b85b (white text on all four cards, per Dave — contrast intentionally not "fixed").
+  Ripple: KB panel copy in (Wellbeing Lead/Team; bold "Tap each ring to explore").
+    Graphic/animation/ring colours DEFERRED per Dave.
+  Means: header + role subheads -> #1d1d1d.
+  Pathways: pricing One Educator $1,200/yr, One School $6,000/yr; added "virtual";
+    removed "Checkmark = included" key + placeholder-pricing devflag.
+  Voices fold: DELETED (KB).
+  Video: background -> #32c0cf (white body text kept); "in their own words"
+    -> #0090be; playlist button -> #0090be.
+  Close: "Download the partner deck" -> #54bf98, white text.
+  Type: Dancing Script replaced by Cedarville Cursive site-wide (the locked system
+    script font).
+
+NOT DONE — needs team
+  - Ripple animation/graphic (deferred).
+  - Four Pillars now uses V's white texture; Difference uses V's green block.
+  - Folds 7 (What Changes) + 8 backgrounds still not supplied. Fold 7 subheadings
+    kept light — the #1D1D1D change needs the new light background first.
+  - CTA URLs, Sign In / Donate seams still on "#".

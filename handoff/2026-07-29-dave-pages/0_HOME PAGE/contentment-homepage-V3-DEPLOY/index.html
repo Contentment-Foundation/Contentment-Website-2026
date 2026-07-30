@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Contentment Foundation | When one teacher thrives, generations flourish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=Varela+Round&family=Cedarville+Cursive&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#1FAFC0;--ocean:#0080B0;--deep:#024E70;--deep2:#02374f;--green:#4FA98C;
+  --slate:#3C3B43;--ink:#23252b;--paper:#FBFAF7;--paper2:#F2F0EA;--mist:#E8F1F2;
+  --line:rgba(2,78,112,.12);--shadow:0 18px 50px -20px rgba(2,55,79,.35);
+  --display:'Newsreader',Georgia,serif;--body:'Inter',system-ui,sans-serif;
+  --script:'Cedarville Cursive',cursive;
+  /* palette extension — review round 1 (V) */
+  --mint:#55bf98;--navlink:#515154;--btnblue:#0090be;--accent-mint:#a4dcce;--accent-sand:#f9dba5;
+  /* orbit grounds — V's three ring hues, desaturated to one chroma (36%) and deepened so the
+     white rings have something to glow against. The section IS the ripple. */
+  /* V's brand hexes; the scroll-bloom makes white rings read on them */
+  --ob1:#54bf98;--ob2:#32c0cf;--ob3:#6275b4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);color:var(--ink);background:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--ocean)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.55em;font-weight:600;font-size:1rem;padding:.95em 1.7em;border-radius:999px;border:1.5px solid transparent;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .25s,color .25s}
+.btn-primary{background:var(--btnblue);color:#fff;box-shadow:0 10px 28px -10px rgba(0,144,190,.75)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px -10px rgba(0,144,190,.9);background:#00a0d2}
+.btn-ghost{border-color:rgba(255,255,255,.6);color:#fff}
+.btn-ghost:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+.btn .arrow{transition:transform .25s}
+.btn:hover .arrow{transform:translateX(4px)}
+
+/* nav */
+header{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .4s,box-shadow .4s,padding .4s;padding:14px 0}
+header.scrolled{background:#fff;box-shadow:0 6px 22px -14px rgba(2,40,58,.45);padding:10px 0}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
+/* Official horizontal lockup (2026-07-28). Two files, identical viewBox, so they cross-fade
+   without any geometry shift: --light carries the white wordmark + the white coin behind the
+   mark (coin ratio 1.08); --dark is the grey wordmark
+   with no coin, for the white scrolled bar. Replaces the ball + Varela Round text brand. */
+.brand{display:grid;flex-shrink:0;line-height:0}
+.brand img{grid-area:1/1;height:54px;width:auto;display:block;transition:opacity .4s,height .4s}
+.brand-logo--dark{opacity:0}
+header.scrolled .brand-logo--light{opacity:0}
+header.scrolled .brand-logo--dark{opacity:1}
+header.scrolled .brand img{height:47px}
+.nav-links{display:flex;align-items:center;gap:26px;font-size:.9rem;font-weight:500}
+.nav-links>a,.drop>button{color:rgba(255,255,255,.94);transition:color .3s;position:relative;background:none;border:none;font:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:6px 0}
+header.scrolled .nav-links>a,header.scrolled .drop>button{color:var(--navlink)}
+.nav-links>a::after,.drop>button::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--teal);transition:width .3s}
+.nav-links>a:hover::after,.drop:hover>button::after,.drop:focus-within>button::after{width:100%}
+.drop{position:relative}
+.drop .chev{width:9px;height:9px;transition:transform .25s}
+.drop:hover .chev,.drop:focus-within .chev{transform:rotate(180deg)}
+.drop-menu{position:absolute;top:calc(100% + 10px);left:-14px;min-width:190px;background:#fff;border-radius:12px;box-shadow:0 20px 46px -18px rgba(2,40,58,.4);padding:8px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .22s,transform .22s,visibility .22s}
+.drop:hover .drop-menu,.drop:focus-within .drop-menu{opacity:1;visibility:visible;transform:none}
+.drop-menu a{display:block;padding:9px 12px;border-radius:8px;color:var(--navlink);font-size:.88rem;transition:background .2s,color .2s}
+.drop-menu a:hover{background:var(--mist);color:var(--deep)}
+.nav-right{display:flex;align-items:center;gap:18px;flex-shrink:0}
+.signin{font-size:.9rem;font-weight:500;color:rgba(255,255,255,.94);transition:color .3s;white-space:nowrap}
+.signin:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+header.scrolled .signin{color:var(--navlink)}
+header.scrolled .signin:hover{color:var(--deep)}
+.nav-cta{padding:.62em 1.4em;font-size:.9rem;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--mint);color:var(--deep2);transition:transform .25s,box-shadow .25s,background .35s,color .35s}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(0,0,0,.35)}
+header.scrolled .nav-cta{background:var(--btnblue);color:#fff}
+.menu-btn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:6px}
+.menu-btn span{width:24px;height:2px;background:#fff;transition:background .4s}
+header.scrolled .menu-btn span{background:var(--navlink)}
+
+/* ---------- HERO (full-bleed, responsive cover) ---------- */
+.hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;color:#fff;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.06);animation:heroZoom 16s ease-out forwards}
+.hero-bg.mob{display:none}
+@keyframes heroZoom{to{transform:scale(1)}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg, rgba(85,191,152,.97) 0%, rgba(85,191,152,.34) 14%, rgba(85,191,152,0) 28%),linear-gradient(105deg,rgba(2,40,58,.86) 0%,rgba(2,46,66,.6) 32%,rgba(2,46,66,.12) 58%,rgba(2,46,66,.04) 100%)}
+.hero-inner{position:relative;z-index:2;width:100%;will-change:transform}
+.hero-content{max-width:720px}
+.hero .eyebrow{color:#bfeef5}
+.hero h1{font-family:var(--display);font-weight:500;font-size:clamp(2.6rem,5.6vw,5.2rem);line-height:1.01;letter-spacing:-.005em;margin-top:18px;text-wrap:balance;text-shadow:0 2px 40px rgba(2,40,58,.5)}
+.hero h1 .script{font-family:var(--script);font-style:normal;color:var(--accent-mint);font-size:1.02em;line-height:1;display:inline-block;padding:0 .06em;text-shadow:0 2px 26px rgba(2,40,58,.75)}
+.hero p.sub{margin-top:24px;font-size:clamp(1.05rem,1.4vw,1.28rem);max-width:48ch;color:rgba(255,255,255,.95);text-shadow:0 1px 18px rgba(2,40,58,.6)}
+.hero-actions{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.trustcue{margin-top:20px;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.88);text-shadow:0 1px 14px rgba(2,40,58,.7)}
+.scrollcue{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:2;pointer-events:none;opacity:0;animation:fadeIn .9s 1.4s forwards}
+.scrollcue .dot{width:1px;height:40px;background:linear-gradient(rgba(255,255,255,.75),transparent);display:block}
+@keyframes fadeIn{to{opacity:1}}
+
+/* ---------- shared section system ---------- */
+section{position:relative}
+.band{padding:clamp(76px,10vw,132px) 0}
+.band.homeroom{padding:0}
+.band-tight{padding:clamp(56px,7vw,92px) 0}
+h2.title{font-family:var(--display);font-weight:500;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.06;letter-spacing:-.005em;color:var(--deep);text-wrap:balance}
+.lead{font-size:clamp(1.12rem,1.5vw,1.4rem);color:var(--slate);max-width:60ch}
+p.body{font-size:1.1rem;color:var(--slate);max-width:60ch}
+p.body+p.body{margin-top:1.1em}
+.pull{padding-left:22px;border-left:3px solid var(--teal);font-family:var(--display);font-style:italic;font-size:1.3rem;color:var(--deep);line-height:1.4}
+
+/* ---------- text animation system ---------- */
+.anim{opacity:0;transform:translateY(28px);transition:opacity .85s cubic-bezier(.2,.8,.2,1),transform .85s cubic-bezier(.2,.8,.2,1)}
+.anim.in{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.22s}.d3{transition-delay:.34s}.d4{transition-delay:.46s}.d5{transition-delay:.58s}
+/* hero entrance */
+.hero .anim{transition-duration:.95s}
+.hero-loaded .hero .anim{opacity:1;transform:none}
+
+/* ---------- SPLIT band (full-bleed image one side, text floating other) ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;min-height:clamp(680px,82vh,920px);max-height:1040px}
+.split.img-left .split-img{order:1}.split.img-left .split-txt{order:2}
+.split-img{background-size:cover;background-position:center;position:relative;min-height:380px}
+.split.img-left .split-img{background-position:50% 18%}
+.split-txt{display:flex;align-items:center;padding:clamp(48px,7vw,104px) clamp(36px,6vw,92px)}
+.split-txt-inner{max-width:540px}
+.split-txt .eyebrow{display:block;margin-bottom:18px}
+.split-txt h2{margin-bottom:24px}
+
+/* ---------- IMPACT ---------- */
+/* texture: raw asset, no wash. the file is a paper grain (51 levels of range), so this is as strong as it gets. */
+.impact{background:url('assets/green_texture.jpg') center/cover no-repeat,var(--green);color:#fff;overflow:hidden;position:relative}
+.impact::before{content:"";position:absolute;width:680px;height:680px;border-radius:50%;border:1px solid rgba(255,255,255,.07);top:-220px;right:-180px;transform-origin:center;animation:rippleA 24s ease-in-out 0s infinite;will-change:transform,opacity}
+.impact::after{content:"";position:absolute;width:440px;height:440px;border-radius:50%;border:1px solid rgba(255,255,255,.06);bottom:-160px;left:-120px;transform-origin:center;animation:rippleB 30s ease-in-out -8s infinite;will-change:transform,opacity}
+.impact .wrap{position:relative;z-index:2}
+.impact .eyebrow{color:#EAF7F1}
+.impact-head{max-width:60ch;margin-bottom:54px}
+.impact-head h2{color:#fff;margin-top:16px}
+.impact-head .script{font-family:var(--script);font-style:normal;color:var(--accent-mint);font-size:1.02em;line-height:1.15;display:inline-block;padding:0 .06em}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;border-top:1px solid rgba(255,255,255,.16);border-bottom:1px solid rgba(255,255,255,.16);padding:44px 0}
+.stat .num{font-family:var(--display);font-weight:500;font-size:clamp(2.4rem,4.5vw,3.6rem);line-height:1;letter-spacing:-.005em;color:#fff}
+.stat .num .plus{color:var(--accent-sand)}
+.stat .lab{margin-top:10px;font-size:.86rem;color:rgba(255,255,255,.72)}
+.impact-foot{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;margin-top:54px;align-items:center}
+.impact-foot p{font-size:1.18rem;color:rgba(255,255,255,.9);line-height:1.5}
+.impact-foot .big86{font-family:var(--display);color:var(--accent-mint);font-weight:600}
+.quote-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:30px 32px;backdrop-filter:blur(4px);position:relative;overflow:hidden}
+.quote-card .qmark{position:absolute;top:20px;right:22px;width:64px;height:auto;opacity:.22;pointer-events:none}
+.quote-card .q-body{position:relative;z-index:1}
+/* Miguel portrait — placeholder until photo perms land */
+.quote-card .who{display:flex;align-items:center;gap:14px;margin-top:16px}
+.quote-card .portrait{width:72px;height:72px;border-radius:50%;flex-shrink:0;object-fit:cover;border:1px solid rgba(255,255,255,.34);box-shadow:0 6px 18px -8px rgba(2,40,58,.5)}
+.quote-card blockquote{font-family:var(--display);font-style:italic;font-size:1.12rem;line-height:1.5;color:#fff}
+.quote-card cite{display:block;font-style:normal;font-size:.84rem;line-height:1.4;color:rgba(255,255,255,.72);font-family:var(--body)}
+
+/* ---------- INVITATION band (compact, photo + scrim) ---------- */
+.invite{position:relative;overflow:hidden;color:var(--ink);padding:clamp(62px,7.5vw,104px) 0;background:#fafaf8}
+/* framing: locked on Marla. she sits right-of-centre, so as the viewport narrows and
+   cover crops horizontally we hold her and let the kid go, not the reverse. */
+.invite-bg{position:absolute;inset:0;background:url('assets/marla_band.jpg') 80% 32%/cover no-repeat}
+/* the paper itself fades out to the right. mask, not a gradient over an opaque layer. */
+.invite-bg::after{content:"";position:absolute;inset:0;
+  background:url('assets/white_texture.jpg') center/cover no-repeat,#fafaf8;
+  -webkit-mask-image:linear-gradient(95deg,#000 0%,rgba(0,0,0,.97) 34%,rgba(0,0,0,.62) 58%,rgba(0,0,0,.14) 82%,transparent 100%);
+  mask-image:linear-gradient(95deg,#000 0%,rgba(0,0,0,.97) 34%,rgba(0,0,0,.62) 58%,rgba(0,0,0,.14) 82%,transparent 100%)}
+.invite-inner{position:relative;z-index:2}
+/* centered intro line — ties this band back to Susan's Kenya quote above it */
+/* C treatment: left, teal rule, sized to break at two lines. Wider than the type block
+   below it, but capped at 62% so the second line stays on paper, not on Marla. */
+/* ch-cap, not %: forces the wrap after "classrooms" at EVERY width. % drifted per viewport. */
+.invite .intro{text-align:left;max-width:54ch;margin:0 0 24px;padding-left:16px;border-left:3px solid var(--teal);font-size:1.02rem;line-height:1.5;color:var(--slate)}
+.invite h2{font-family:var(--display);font-weight:500;font-size:clamp(1.75rem,3.1vw,2.7rem);line-height:1.1;max-width:19ch;text-wrap:balance;color:var(--deep);text-shadow:0 1px 18px rgba(250,250,248,.8)}
+/* subhead sits on paper now, so ink not white. keeps the type block over the paper side. */
+.invite .sub{margin-top:16px;font-size:1.08rem;line-height:1.5;max-width:min(34ch,44%);color:var(--slate);text-shadow:0 1px 14px rgba(250,250,248,.7)}
+.invite .btn{margin-top:26px}
+
+/* ---------- HOW CHANGE / steps over full-bleed ---------- */
+.how{background:var(--paper2)}
+.how-head{max-width:60ch;margin-bottom:clamp(40px,5vw,56px)}
+.how-head h2{margin-top:14px}.how-head .lead{margin-top:14px}
+.how-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(40px,5vw,72px);align-items:start}
+.steplist{counter-reset:s}
+.step{display:flex;gap:22px;padding:22px 0;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:none}
+.step .n{counter-increment:s;flex:none;width:46px;height:46px;border-radius:50%;background:#fff;border:1.5px solid var(--teal);color:var(--ocean);font-family:var(--display);font-weight:600;font-size:1.2rem;display:grid;place-items:center}
+.step .n::before{content:counter(s)}
+.step h3{font-size:1.18rem;color:var(--deep);margin-bottom:5px;font-weight:600}
+.step p{font-size:1rem;color:var(--slate)}
+.how-aside{position:sticky;top:96px}
+.how-aside .ph{border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
+.how-aside img{width:100%}
+.how-aside .note{margin-top:20px;font-size:1.05rem;color:var(--slate);border-left:3px solid var(--green);padding-left:18px;font-style:italic;font-family:var(--display)}
+
+
+/* HOW as full-bleed split */
+.how-split{background:var(--paper2);align-items:stretch;min-height:auto;max-height:none}
+.how-split .split-txt{padding:clamp(56px,7vw,104px) clamp(36px,6vw,88px)}
+.how-inner{max-width:560px}
+.how-inner .eyebrow{display:block;margin-bottom:16px}
+.how-inner h2{margin-bottom:14px}
+.how-sub{font-size:1.15rem;color:var(--slate);margin-bottom:30px;font-weight:500}
+.how-split .steplist{counter-reset:s}
+.how-img{background-position:50% 30%;position:sticky;top:0;height:100vh;align-self:start}
+@media(max-width:940px){.how-img{position:relative;height:auto;min-height:60vh}}
+
+/* ============ HOW ORBIT (pinned pond ripple) ============ */
+.how-orbit{position:relative;background:var(--ob,var(--ob1));color:#fff;transition:background 1.4s cubic-bezier(.4,0,.2,1)}
+.orbit-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
+.orbit-grid{position:relative;z-index:2;width:100%;display:grid;
+  grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr;
+  grid-template-areas:"head head" "graphic beats";
+  gap:0 56px;align-items:center}
+.orbit-head{grid-area:head;align-self:start;padding-top:4vh;max-width:62ch}
+/* KB: heading is "How Change Happens"; the old eyebrow + "It starts with one teacher." are gone */
+.orbit-title{font-family:var(--display);font-weight:500;font-size:clamp(1.9rem,3.4vw,3rem);line-height:1.05;color:#fff;letter-spacing:0}
+.orbit-sub{font-size:1.1rem;color:rgba(255,255,255,.85);margin-top:14px;font-weight:500;max-width:46ch}
+.orbit-cta{display:inline-flex;align-items:center;gap:.5em;margin-top:20px;font-weight:600;font-size:.95rem;color:#fff;border-bottom:1.5px solid rgba(255,255,255,.5);padding-bottom:2px;transition:border-color .25s,gap .25s}
+.orbit-cta:hover{border-color:#fff;gap:.8em}
+.orbit-graphic{grid-area:graphic;display:flex;align-items:center;justify-content:center}
+.ripple{width:min(100%,460px);height:auto;overflow:visible}
+
+/* rings: white. The glow is a separate BLOOM disc behind them that grows in diameter
+   with scroll (see .orbit-bloom + JS). Colour lives in the ground, which also changes per beat. */
+.ripple{position:relative;z-index:2}
+.ripple .ring{stroke:#fff;stroke-width:2.5;opacity:0;transform:scale(.55);transform-origin:280px 280px;
+  transition:opacity 1.1s cubic-bezier(.22,.7,.25,1),transform 1.1s cubic-bezier(.22,.7,.25,1)}
+.ripple .ring.drawn{opacity:.5;transform:scale(1)}
+.ripple .ring.current{opacity:1;transform:scale(1)}
+.ripple .core-glow{fill:#fff;opacity:.3}
+.ripple .core{fill:#fff}
+/* the growing bloom: radial disc, diameter driven by --bloom (px) from scroll */
+.orbit-graphic{position:relative}
+.orbit-bloom{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:calc(var(--bloom,140)*1px);height:calc(var(--bloom,140)*1px);border-radius:50%;pointer-events:none;z-index:1;filter:blur(2px);
+  background:radial-gradient(circle,rgba(255,255,255,.9) 0%,rgba(255,255,255,.5) 22%,rgba(255,255,255,.18) 45%,rgba(255,255,255,0) 70%)}
+
+/* beats in right negative space, vertically centered to the dot */
+.orbit-beats{grid-area:beats;position:relative;align-self:center;display:flex;align-items:center}
+.beat-stage{position:relative;width:100%;min-height:300px;display:flex;flex-direction:column;justify-content:center}
+.beat{position:absolute;top:50%;left:0;width:100%;opacity:0;transform:translate(0,calc(-50% + 22px));transition:opacity 1.1s cubic-bezier(.22,.7,.25,1),transform 1.1s cubic-bezier(.22,.7,.25,1);pointer-events:none}
+.beat.active{opacity:1;transform:translate(0,-50%);pointer-events:auto}
+.beat.past{opacity:0;transform:translate(0,calc(-50% - 22px))}
+.beat h3{font-family:var(--display);font-weight:500;font-size:clamp(1.7rem,2.8vw,2.5rem);color:#fff;margin-bottom:14px;line-height:1.08}
+.beat p{font-size:1.08rem;color:rgba(255,255,255,.9);line-height:1.55;max-width:42ch}
+
+/* 560vh was paced for 5 beats; 3 beats -> 340vh keeps the same scroll-per-beat */
+.orbit-scroll{height:340vh}
+.orbit-cue{position:absolute;left:50%;bottom:38px;transform:translateX(-50%);z-index:5;display:inline-flex;flex-direction:column;align-items:center;gap:3px;padding:9px 16px 7px;border-radius:30px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.24);color:rgba(255,255,255,.9);font-family:var(--body);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;transition:opacity .6s;pointer-events:none;backdrop-filter:blur(4px)}
+.orbit-cue svg{animation:cuebob 1.5s ease-in-out infinite}
+.orbit-cue.hide{opacity:0}
+@keyframes cuebob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@media(prefers-reduced-motion:reduce){.orbit-cue svg{animation:none}}
+
+@media(max-width:940px){
+  /* beats stack on mobile, so no single beat owns the ground: run all three as a gradient */
+  .how-orbit{background:linear-gradient(180deg,var(--ob1) 0%,var(--ob2) 50%,var(--ob3) 100%)}
+  .orbit-sticky{position:relative;height:auto;padding:64px 0;display:block}
+  .orbit-grid{grid-template-columns:1fr;grid-template-areas:"head" "graphic" "beats";gap:32px 0}
+  .orbit-head{padding-top:0}
+  .orbit-scroll{display:none}
+  .orbit-graphic{justify-content:center}
+  .ripple{width:min(64%,320px)}
+  .beat-stage{min-height:0}
+  .beat{position:static;opacity:1;transform:none;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+  .beat.past{opacity:1;transform:none}
+  .beat:last-child{border-bottom:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .ripple .ring{transition:none;opacity:.34;transform:scale(1)}
+  .core-glow{animation:none;opacity:0}
+}
+
+/* ---------- NOT ALONE / circles full-bleed strip ---------- */
+/* NOTE: --mist, not --paper. The orbit above is now pure white; --paper (#FBFAF7) beside it
+   is a 2% step and the two sections merge. --mist restores the locked colour rhythm.
+   One-line revert: background:var(--paper). */
+/* white per V; the orbit above is coloured now, so no white-on-white merge */
+.alone{background:#FFFFFF}
+.alone-head{text-align:center;max-width:60ch;margin:0 auto clamp(40px,5vw,60px)}
+.alone-head h2{margin-top:14px}.alone-head .lead{margin:16px auto 0}
+.alone-head .script{font-family:var(--script);font-style:normal;color:var(--deep);font-size:1.02em;line-height:1.15;display:inline-block;padding:0 .06em}
+.circles{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;max-width:1100px;margin:0 auto}
+/* watercolour sits behind the photo. geometry derived from V's composites:
+   photo circle = 245px inside each stroke frame, so each stroke gets its own box + offset. */
+.circ-wrap{position:relative;aspect-ratio:1/1}
+.circ-wrap::before{content:"";position:absolute;background-repeat:no-repeat;background-size:100% 100%;z-index:0;pointer-events:none}
+.circ-wrap:nth-child(1)::before{background-image:url('assets/wc1.png');width:134.7%;height:122.0%;left:-18.8%;top:-6.9%}
+.circ-wrap:nth-child(2)::before{background-image:url('assets/wc2.png');width:113.1%;height:112.7%;left:-2.0%;top:-3.3%}
+.circ-wrap:nth-child(3)::before{background-image:url('assets/wc3.png');width:117.1%;height:111.0%;left:-7.8%;top:-3.3%}
+.circ-wrap:nth-child(4)::before{background-image:url('assets/wc4.png');width:122.9%;height:116.7%;left:-7.8%;top:-4.5%}
+.circ{position:absolute;inset:0;z-index:1;overflow:hidden;border-radius:50%;box-shadow:0 14px 34px rgba(2,55,79,.16)}
+.circ img{width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.circ-wrap:hover .circ img{transform:scale(1.06)}
+/* instagram invitation under the strip */
+.ig-follow{display:flex;align-items:center;justify-content:center;gap:11px;margin-top:clamp(38px,4.5vw,58px);
+  font-weight:600;font-size:.98rem;color:var(--deep);transition:gap .25s,color .25s}
+.ig-follow:hover{gap:15px;color:var(--ocean)}
+.ig-follow img{width:26px;height:26px;border-radius:7px}
+
+/* ---------- FOUR PILLARS - full-bleed image w/ interactive words overlay ---------- */
+.pillars{position:relative;min-height:88vh;display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:var(--deep)}
+.pillars-bg{position:absolute;inset:-6% 0;background-size:cover;background-position:center 38%;will-change:transform}
+.pillars::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(36,118,143,.5) 0%,rgba(36,118,143,.22) 26%,rgba(36,118,143,.6) 64%,rgba(36,118,143,.95) 100%)}
+.pillars-inner{position:relative;z-index:2;width:100%;padding:clamp(48px,8vw,90px) 0}
+.pillars-inner .eyebrow{color:#bfeef5}
+.pillars-inner h2{color:#fff;margin-top:14px;margin-bottom:8px}
+.pillars-inner h2 .script{font-family:var(--script);font-style:normal;color:var(--accent-mint);font-size:1.02em;line-height:1.15;display:inline-block;padding:0 .06em}
+.pillars-hint{color:rgba(255,255,255,.7);font-size:.9rem;margin-bottom:36px}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pcard{--pc:rgba(255,255,255,.4);border-top:3px solid var(--pc);padding-top:18px;cursor:pointer;transition:border-color .4s,opacity .4s}
+.pgrid .pcard:nth-child(1){--pc:#32c0ce}
+.pgrid .pcard:nth-child(2){--pc:#0090bd}
+.pgrid .pcard:nth-child(3){--pc:#55bf97}
+.pgrid .pcard:nth-child(4){--pc:#e9b85b}
+.pcard h3 .pi{color:var(--pc)}
+.pcard h3{font-family:var(--display);font-weight:500;font-size:clamp(1.5rem,2.4vw,2.1rem);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pcard h3 .pi{font-size:1rem;transition:transform .4s;font-family:var(--body)}
+.pcard.open h3 .pi{transform:rotate(45deg)}
+.pcard .pdesc{max-height:0;overflow:hidden;opacity:0;transition:max-height .5s cubic-bezier(.2,.8,.2,1),opacity .5s,margin-top .5s}
+.pcard.open .pdesc{max-height:240px;opacity:1;margin-top:14px}
+.pcard .pdesc p{font-size:.96rem;color:rgba(255,255,255,.88);line-height:1.5}
+
+/* ---------- HOMEROOM (image / ask split) ---------- */
+.homeroom{display:grid;grid-template-columns:1.06fr .94fr;align-items:stretch;position:relative;overflow:hidden;background:url('assets/white_texture.jpg') center/cover no-repeat,var(--paper)}
+/* LEFT: Priscillah quote card (designed graphic) as an object on the paper field.
+   Displayed whole, never cropped, because the quote text is baked into the image. */
+.hr-card{display:flex;align-items:center;justify-content:center;padding:clamp(38px,4vw,72px) clamp(28px,3.5vw,56px)}
+.hr-card img{width:100%;max-width:clamp(480px,40vw,920px);height:auto;display:block;border-radius:6px;
+  box-shadow:0 26px 60px -28px rgba(2,55,79,.45)}
+.hr-ask{display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,1.8vw,24px);padding:clamp(44px,4vw,72px) clamp(38px,4.5vw,76px);min-height:100%}
+.hr-ask .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--ocean);margin-bottom:6px}
+.hr-ask h2{font-family:var(--display);font-weight:500;font-size:clamp(1.7rem,2.4vw,2.4rem);line-height:1.1;color:var(--deep);margin:0}
+.hr-ask p.lead{font-size:clamp(1.04rem,1.15vw,1.18rem);line-height:1.55;color:var(--slate);max-width:46ch}
+.hr-widget{max-width:330px;width:100%}
+.hr-widget img{width:100%;border-radius:14px;box-shadow:0 18px 44px -20px rgba(2,55,79,.38);border:1px solid rgba(2,78,112,.06)}
+.hr-note{font-size:.78rem;line-height:1.5;color:var(--slate);opacity:.8;max-width:42ch}
+
+/* KENYA voice band - thin interstitial, image LEFT / text RIGHT, turquoise */
+.voice{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;min-height:clamp(420px,52vh,560px);color:#fff;position:relative;overflow:hidden}
+.voice-img{position:relative;background-size:cover;background-position:left center;min-height:320px}
+.voice-img::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,40,58,0) 68%,rgba(2,40,58,.45) 100%)}
+/* textured version per V. NOTE: the asset is near-flat (lum range 83-105, R stdev 0.00),
+   so this reads as a flat #008ab7 and the previous gradient is gone. */
+.voice-panel{background:url('assets/blue_texture.jpg') center/cover no-repeat,#008ab7;position:relative;display:flex;align-items:center;padding:clamp(40px,4.5vw,76px) clamp(34px,5vw,88px);overflow:hidden}
+.voice-panel::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;border:1px solid rgba(255,255,255,.10);top:-180px;right:-160px;pointer-events:none;transform-origin:center;animation:rippleA 25s ease-in-out -7s infinite;will-change:transform,opacity}
+.voice-panel::after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;border:1px solid rgba(255,255,255,.08);bottom:-150px;right:-90px;pointer-events:none;transform-origin:center;animation:rippleB 31s ease-in-out -16s infinite;will-change:transform,opacity}
+.voice-inner{position:relative;z-index:2;max-width:620px;width:100%}
+.voice .eyebrow{color:#d6f4fb}
+.voice .qmark{display:block;width:54px;height:auto;margin:16px 0 10px;opacity:.85}
+.voice blockquote{font-family:var(--display);font-style:italic;font-weight:500;font-size:clamp(1.12rem,1.55vw,1.42rem);line-height:1.45;color:#fff;margin:0}
+.voice cite{display:block;margin-top:22px;font-style:normal;font-size:.9rem;line-height:1.5;color:rgba(255,255,255,.85);font-family:var(--body)}
+.voice cite b{display:block;color:#fff;font-weight:700;font-size:1rem;margin-bottom:2px}
+@media(max-width:760px){
+  .voice{grid-template-columns:1fr;min-height:0}
+  .voice-img{min-height:280px;order:-1}
+  .voice-img::after{background:linear-gradient(0deg,rgba(2,40,58,.4) 0%,rgba(2,40,58,0) 30%)}
+}
+/* WJ: tiers + button replaced by the Keela widget.
+   PLACEHOLDER: assets/keela_widget.png is a static image standing in for the real embed.
+   data-embed="keela-homeroom" is the seam for tech. */
+.keela-slot{margin:28px 0 18px;max-width:380px}
+.keela-slot img{width:100%;height:auto;border-radius:14px;box-shadow:0 20px 50px -22px rgba(2,55,79,.4)}
+.keela-note{font-size:.82rem;line-height:1.55;color:var(--slate);opacity:.85;max-width:52ch}
+.homeroom-more{display:inline-flex;align-items:center;gap:.5em;margin-top:20px;font-weight:600;font-size:.95rem;color:var(--btnblue);border-bottom:1.5px solid rgba(0,144,190,.3);padding-bottom:2px;transition:border-color .25s,gap .25s}
+.homeroom-more:hover{border-color:var(--btnblue);gap:.8em}
+
+/* ---------- DOORS ---------- */
+/* textured version, reusing the green block from the impact section */
+.doors{background:url('assets/green_texture.jpg') center/cover no-repeat,var(--green);position:relative;overflow:hidden}
+.doors::before{content:"";position:absolute;width:680px;height:680px;border-radius:50%;border:1px solid rgba(255,255,255,.07);top:-240px;right:-180px;pointer-events:none;transform-origin:center;animation:rippleA 26s ease-in-out -5s infinite;will-change:transform,opacity}
+.doors::after{content:"";position:absolute;width:440px;height:440px;border-radius:50%;border:1px solid rgba(255,255,255,.06);bottom:-160px;left:-120px;pointer-events:none;transform-origin:center;animation:rippleB 32s ease-in-out -14s infinite;will-change:transform,opacity}
+.doors .wrap{position:relative;z-index:2}
+.doors .eyebrow{color:#eafaf4}
+.doors-head h2{color:#fff}
+.doors-head{max-width:54ch;margin-bottom:44px}.doors-head h2{margin-top:14px}
+.door-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.door{border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 10px 40px -24px rgba(2,55,79,.4);border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s}
+.door:hover{transform:translateY(-6px);box-shadow:0 26px 56px -28px rgba(2,55,79,.5)}
+.door .ph{aspect-ratio:4/3;overflow:hidden}
+.door .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+.door:hover .ph img{transform:scale(1.06)}
+.door .dbody{padding:24px 24px 26px;display:flex;flex-direction:column;flex:1}
+.door h3{font-family:var(--display);font-size:1.32rem;color:var(--deep);margin-bottom:8px;font-weight:600}
+.door p{font-size:.98rem;color:var(--slate);flex:1}
+.door .dlink{margin-top:16px;font-weight:600;color:var(--ocean);display:inline-flex;align-items:center;gap:.5em;font-size:.96rem}
+.door .dlink .arrow{transition:transform .25s}
+.door:hover .dlink .arrow{transform:translateX(4px)}
+
+/* ---------- NEWSLETTER ---------- */
+.news{background:var(--mist)}
+.news-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.news h2{margin-bottom:12px}
+.news p{color:var(--slate);max-width:44ch}
+.news form{display:flex;flex-direction:column;gap:12px;max-width:420px;margin-left:auto;width:100%}
+.news .row{display:flex;gap:12px}
+.news input{flex:1;min-width:0;padding:.95em 1.1em;border-radius:12px;border:1.5px solid var(--line);font-family:var(--body);font-size:1rem;background:#fff;transition:border-color .25s}
+.news input:focus{outline:none;border-color:var(--teal)}
+.news .btn-primary{justify-content:center}
+.news .fine{font-size:.84rem;color:var(--slate);opacity:.8}
+
+/* ---------- FOOTER ---------- */
+/* V: footer -> #0090be. NOTE: this ground is light. All footer text raised to full
+   white; at rgba(.78) it measured 2.62:1 and at rgba(.55) it was worse. Even at pure
+   white this is 3.66:1, under AA for body text. See PAGE4-APPLIED.txt. */
+footer{background:var(--btnblue);color:#fff;padding:64px 0 36px}
+.foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.3)}
+.foot-brand{margin-bottom:18px;line-height:0}
+.foot-brand img{height:73px;width:auto;display:block}
+.foot-tag{font-family:var(--display);font-style:italic;font-size:1.25rem;color:#fff;max-width:22ch;line-height:1.35}
+.foot-col h4{color:#fff;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:16px;font-weight:600}
+.foot-col a{display:block;margin-bottom:10px;font-size:.95rem;transition:color .25s}
+.foot-col a:hover{color:var(--accent-mint)}
+.foot-bottom{padding-top:26px;display:flex;flex-direction:column;align-items:stretch;gap:10px;font-size:.84rem;line-height:1.55;color:rgba(255,255,255,.92);text-align:left}
+.foot-legal{display:block;width:100%}
+.foot-copy{display:block;width:100%;color:rgba(255,255,255,.78)}
+/* WJ: clickable social icons. Seams: data-link="linkedin|instagram|facebook|youtube" */
+.foot-social{display:flex;align-items:center;gap:12px;margin-top:4px}
+.foot-social a{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);color:#fff;
+  transition:background .25s,transform .25s}
+.foot-social a:hover{background:#fff;color:var(--btnblue);transform:translateY(-2px)}
+.foot-social svg{width:17px;height:17px;fill:currentColor;display:block}
+
+/* ---------- responsive ---------- */
+@media(max-width:940px){
+  .nav-links{display:none}.menu-btn{display:flex}
+  .split{grid-template-columns:1fr}
+  .split.img-left .split-img,.split.img-left .split-txt{order:initial}
+  .split-img{order:1;min-height:62vh}.split-txt{order:2}
+  .how-grid,.news-inner,.impact-foot{grid-template-columns:1fr;gap:36px}
+  .how-aside{position:static}
+  .stats{grid-template-columns:repeat(2,1fr);gap:34px 20px}
+  .circles{grid-template-columns:repeat(2,1fr);gap:18px}
+  .circ{aspect-ratio:16/10}
+  .pgrid{grid-template-columns:1fr 1fr;gap:14px}
+  .tiers,.door-grid{grid-template-columns:1fr}
+  .homeroom{grid-template-columns:1fr}
+  .hr-card{padding:36px 14px 10px}
+  .hr-card img{max-width:100%}
+  .hr-ask{padding:36px 26px 48px}
+  .hr-widget{max-width:380px}
+  .homeroom-img{min-height:clamp(280px,52vw,440px)}
+  .foot-top{grid-template-columns:1fr 1fr;gap:30px}
+  .news form{margin-left:0}
+}
+@media(max-width:560px){
+  .wrap{padding:0 22px}
+  .hero-bg{display:none}.hero-bg.mob{display:block}
+  /* narrow viewport: hold Marla, and fade the paper down the frame rather than across it */
+  .invite-bg{background-position:86% 30%}
+  /* mobile mask fades top-to-bottom, so the whole width is paper: let intro use it */
+  .invite .intro{max-width:82%}
+  .invite-bg::after{-webkit-mask-image:linear-gradient(175deg,#000 0%,rgba(0,0,0,.94) 44%,rgba(0,0,0,.4) 74%,transparent 100%);
+    mask-image:linear-gradient(175deg,#000 0%,rgba(0,0,0,.94) 44%,rgba(0,0,0,.4) 74%,transparent 100%)}
+  .hero::after{background:linear-gradient(0deg, rgba(85,191,152,.95) 0%, rgba(85,191,152,.3) 10%, rgba(85,191,152,0) 22%),linear-gradient(180deg,rgba(2,40,58,.5) 0%,rgba(2,46,66,.15) 35%,rgba(2,40,58,.9) 100%)}
+  .hero{align-items:flex-end}.hero-inner{padding-bottom:36px}
+  .hero-actions .btn{width:100%;justify-content:center}
+  .pgrid{grid-template-columns:1fr}
+  .brand img{height:45px}
+  header.scrolled .brand img{height:40px}
+  .foot-brand img{height:59px}
+  .news .row{flex-direction:column}
+  .foot-top{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .anim{opacity:1;transform:none}.hero-bg{transform:none}
+  .pcard .pdesc{transition:none}
+}
+
+/* ripple motif: slow outward expansion (the rings "spread" like a pond ripple). Gentle opacity. */
+@keyframes rippleA{0%{transform:scale(1);opacity:.92}50%{transform:scale(1.075);opacity:.70}100%{transform:scale(1);opacity:.92}}
+@keyframes rippleB{0%{transform:scale(1);opacity:.95}50%{transform:scale(1.055);opacity:.76}100%{transform:scale(1);opacity:.95}}
+@media(prefers-reduced-motion:reduce){.impact::before,.impact::after,.doors::before,.doors::after,.homeroom-panel::before,.homeroom-panel::after,.voice-panel::before,.voice-panel::after{animation:none}}
+
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="The Contentment Foundation, home">
+      <img src="assets/logo_lockup_light.svg" alt="The Contentment Foundation" class="brand-logo--light">
+      <img src="assets/logo_lockup_dark.svg" alt="" aria-hidden="true" class="brand-logo--dark">
+    </a>
+    <nav class="nav-links">
+      <a href="about.html" data-page="about">About</a>
+      <a href="#" data-page="why-wellbeing">Why Teacher Wellbeing</a>
+      <a href="#" data-page="our-impact">Our Impact</a>
+      <a href="#" data-page="for-schools">Schools</a>
+      <a href="#" data-page="events">Events</a>
+      <a href="#" data-page="get-involved">Get Involved</a>
+    </nav>
+    <div class="nav-right">
+      <a href="#" class="signin" data-link="school-platform">Sign In</a>
+      <a href="#" class="nav-cta" data-donate>Donate</a>
+    </div>
+    <button class="menu-btn" aria-label="Menu" onclick="document.querySelector('.nav-links').scrollIntoView()"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg" style="background-image:url('assets/img02_f3c7dabda3.jpg')"></div>
+  <div class="hero-bg mob" style="background-image:url('assets/img03_7bbd154b69.jpg')"></div>
+  <div class="hero-inner wrap">
+    <div class="hero-content">
+      <h1 class="anim d1">The world you want starts with a teacher who is <span class="script">well.</span></h1>
+      <p class="sub anim d2">For 10 years, The Contentment Foundation has equipped teachers in 12 countries with the wellbeing tools to thrive, and to change the lives of every student who walks through their classroom doors.</p>
+      <div class="hero-actions anim d3">
+        <a href="#why" class="btn btn-primary">Why teacher wellbeing? <span class="arrow">→</span></a>
+      </div>
+      <div class="trustcue anim d4">10 years · 12 countries · 325 partner schools</div>
+    </div>
+  </div>
+  <div class="scrollcue"><span class="dot"></span></div>
+</section>
+
+<!-- WHY (split: image LEFT, text RIGHT) -->
+<section class="split img-left" id="why">
+  <div class="split-img anim" style="background-image:url('assets/img04_62faa64049.jpg')"></div>
+  <div class="split-txt">
+    <div class="split-txt-inner">
+      <h2 class="title anim d1">Can we say it out loud? Teaching right now is a lot.</h2>
+      <p class="body anim d2">It's not just lesson plans anymore. It's anxiety, grief, family situations, and everything students carry through the door. Teachers absorb it all, and are still expected to show up ready, every single day.</p>
+      <p class="body anim d3" style="margin-top:1.1em">The most direct way to help a child is to support the wellbeing of the person who spends six hours a day with them.</p>
+      <p class="pull anim d4" style="margin-top:28px">In a world where a screen can answer almost any question, the one thing it cannot give a child is a present adult who knows them. That is the whole reason we exist.</p>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="band impact" id="impact">
+  <div class="wrap">
+    <div class="impact-head anim">
+      <h2 class="title">When one teacher thrives, <span class="script">generations flourish.</span></h2>
+    </div>
+    <div class="stats">
+      <div class="stat anim"><div class="num" data-count="325">0</div><div class="lab">partner schools</div></div>
+      <div class="stat anim d1"><div class="num" data-count="12">0</div><div class="lab">countries, 4 continents</div></div>
+      <div class="stat anim d2"><div class="num" data-count="11925">0</div><div class="lab">educators reached</div></div>
+      <div class="stat anim d3"><div class="num" data-count="409625" data-plus="1">0</div><div class="lab">students reached</div></div>
+    </div>
+    <div class="impact-foot">
+      <p class="anim">In every region we work in, <span class="big86">86% or more</span> of educators report the same thing: their wellbeing improved, and they show up differently in the classroom.</p>
+      <div class="quote-card anim d2">
+        <img class="qmark" src="assets/quote_symbol.png" alt="" aria-hidden="true">
+        <div class="q-body">
+          <blockquote>The Four Pillars has saved my life, personally and professionally. I can navigate the emotions and ups and downs I face, and help my students do the same. Meeting fear, grief, and other feelings with success and grace.</blockquote>
+          <div class="who">
+            <img class="portrait" src="assets/miguel.jpg" alt="Miguel K. Paʻekukui">
+            <cite>Miguel K. Paʻekukui · Dean of Personalized Learning, Saint Louis School, Hawaiʻi</cite>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KENYA VOICE band (after Impact) -->
+<section class="voice" aria-label="A principal's perspective from Kenya">
+  <div class="voice-img" role="img" aria-label="Principal Susan Muthoni Mundia with students and Contentment Foundation staff at OLC Mugoiri Girls School in Kenya" style="background-image:url('assets/kenya_band.jpg')"></div>
+  <div class="voice-panel">
+    <div class="voice-inner anim">
+      <span class="eyebrow">From a partner school in Kenya</span>
+      <img class="qmark" src="assets/quote_symbol.png" alt="" aria-hidden="true">
+      <blockquote>Teaching is all about a calling, because you have to give so much. You have to support these children emotionally, spiritually, even before academics. They say you only give what you have. And I think this is a skill. And if it can be taught to more young people, it would be a better world.</blockquote>
+      <cite><b>Susan Muthoni Mundia</b>Chief Principal, OLC Mugoiri Girls School, Kenya</cite>
+    </div>
+  </div>
+</section>
+
+<!-- INVITATION band (compact) -->
+<section class="invite">
+  <div class="invite-bg"></div>
+  <div class="wrap invite-inner">
+    <p class="intro anim">You just met our partner school in Kenya. Here's how classrooms like theirs stay supported throughout the year.</p>
+    <h2 class="anim d1">Reach one teacher. Reach every kid they'll ever teach.</h2>
+    <p class="sub anim d2">Homeroom is a monthly gift of any amount, a teacher who gets a whole year of support, and hundreds of kids who feel the difference.</p>
+    <a href="#" class="btn btn-primary anim d3" data-page="get-involved" data-join>Support a teacher monthly <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<!-- HOW CHANGE HAPPENS - pinned pond ripple -->
+<section class="how-orbit" id="how">
+  <div class="orbit-sticky">
+    <div class="wrap orbit-grid">
+      <!-- static frame: heading top-left -->
+      <div class="orbit-head">
+        <h2 class="orbit-title">How Change Happens</h2>
+        <p class="orbit-sub">From one teacher to a classroom of kids to a culture that lasts.</p>
+        <a href="#" class="orbit-cta" data-page="for-schools">Learn more about how we work with schools <span class="arrow">→</span></a>
+      </div>
+      <!-- ripple graphic, lower-left. 3 rings, centre outward: Adults / Kids / School Culture -->
+      <div class="orbit-graphic">
+        <div class="orbit-bloom"></div>
+        <svg class="ripple" viewBox="0 0 560 560" aria-hidden="true">
+          <g class="rings" fill="none">
+            <circle class="ring" data-ring="0" cx="280" cy="280" r="78"></circle>
+            <circle class="ring" data-ring="1" cx="280" cy="280" r="155"></circle>
+            <circle class="ring" data-ring="2" cx="280" cy="280" r="232"></circle>
+          </g>
+          <circle class="core-glow" cx="280" cy="280" r="16"></circle>
+          <circle class="core" cx="280" cy="280" r="9"></circle>
+        </svg>
+      </div>
+      <!-- animating beat text, right negative space, in line with dot -->
+      <div class="orbit-beats">
+        <div class="beat-stage">
+          <div class="beat" data-beat="0"><h3>The adults go first.</h3><p>Nothing real happens until the grown-ups in the building take wellbeing seriously, starting with themselves. Leaders commit, teachers train, and through trainings and practices they build something that's genuinely their own, not one more thing from the outside that fades when we leave.</p></div>
+          <div class="beat" data-beat="1"><h3>The kids start doing it too.</h3><p>It turns into something a whole class shares. A breath before reacting. A kinder question on a rough day. Kids feel the difference, and pretty soon they're doing it without being told.</p></div>
+          <div class="beat" data-beat="2"><h3>It becomes just how the school works.</h3><p>The practice spreads past one classroom. Wellbeing stops being a special initiative and becomes part of any other day. Ordinary, in the best way. The kind of school we wish we could have gone to as kids.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="orbit-cue" aria-hidden="true"><span>Scroll</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  </div>
+  <div class="orbit-scroll"></div>
+</section>
+
+<!-- NOT ALONE / circles -->
+<section class="band-tight alone">
+  <div class="wrap">
+    <div class="alone-head anim">
+      <span class="eyebrow">You are not alone</span>
+      <h2 class="title">One practice. <span class="script">A global community.</span></h2>
+      <p class="lead">From a basketball court in Bhutan to a community hall in Hawaiʻi to a schoolyard in Uganda. Teachers finding their way back to themselves, together.</p>
+    </div>
+    <div class="circles">
+      <div class="circ-wrap anim"><div class="circ"><img src="assets/img05_7be3a8147a.jpg" alt="Teachers in a wellbeing circle on a court in Bhutan"></div></div>
+      <div class="circ-wrap anim d1"><div class="circ"><img src="assets/img06_fad9caad04.jpg" alt="Educators in a wellbeing circle in Hawai‘i"></div></div>
+      <div class="circ-wrap anim d2"><div class="circ"><img src="assets/img07_6e5f9ecefa.jpg" alt="Educators in a wellbeing circle in Uganda"></div></div>
+      <div class="circ-wrap anim d3"><div class="circ"><img src="assets/img08_8646669d20.jpg" alt="A teacher and young students in a classroom in Tampa, Florida"></div></div>
+    </div>
+    <a href="https://www.instagram.com/contentmentorg/" class="ig-follow anim d4" target="_blank" rel="noopener" data-link="instagram"><img src="assets/instagram.png" alt="">Follow the journey on Instagram</a>
+  </div>
+</section>
+
+<!-- FOUR PILLARS - full-bleed image + interactive words -->
+<section class="pillars">
+  <div class="pillars-bg" style="background-image:url('assets/img09_d4a3165ce3.jpg')"></div>
+  <div class="pillars-inner">
+    <div class="wrap">
+      <h2 class="title anim d1">The <span class="script">Four Pillars</span> of Wellbeing.</h2>
+      
+      <div class="pgrid">
+        <div class="pcard open anim d2" tabindex="0" role="button" aria-expanded="true">
+          <h3>Mindfulness</h3>
+          <div class="pdesc"><p>Focused, nonjudgmental attention to the present moment, so we can respond with clarity rather than react automatically.</p></div>
+        </div>
+        <div class="pcard open anim d3" tabindex="0" role="button" aria-expanded="true">
+          <h3>Community</h3>
+          <div class="pdesc"><p>Trust, empathy, compassion, and selfless service, to feel connected and bring out the best in one another.</p></div>
+        </div>
+        <div class="pcard open anim d4" tabindex="0" role="button" aria-expanded="true">
+          <h3>Self-Curiosity</h3>
+          <div class="pdesc"><p>Curiosity about our inner world, to deepen self-discovery and widen our awareness of the perspectives we and others hold.</p></div>
+        </div>
+        <div class="pcard open anim d5" tabindex="0" role="button" aria-expanded="true">
+          <h3>Contentment</h3>
+          <div class="pdesc"><p>Embracing life with acceptance and reading emotions as useful signals, so we can respond in ways that support flourishing.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOMEROOM -->
+<section class="band homeroom" id="homeroom">
+  <div class="hr-card">
+    <img class="anim" src="assets/priscillah_card.jpg" alt="Priscillah Njuguna, Educator at OLC Mugoiri Girls High School in Kenya: You didn't just fund a program. You changed a teacher. You uplifted a staff. You healed a school. And for that, I will remain grateful for the rest of my life.">
+  </div>
+  <div class="hr-ask">
+    <div class="eyebrow anim">Take your seat</div>
+    <h2 class="anim d1">Pull up a seat and join us.</h2>
+    <p class="lead anim d2">Homeroom is our community of monthly supporters. You fund the training and coaching that make change like Priscillah's possible, and you get a front-row seat to it.</p>
+    <div class="hr-widget anim d3" data-embed="keela-homeroom"><img src="assets/keela_widget.png" alt="Choose your donation amount and frequency"></div>
+    <p class="hr-note anim d4">The Contentment Foundation is a 501(c)(3) nonprofit (EIN 47-5432756). Contributions are tax-deductible to the extent permitted by law.</p>
+  </div>
+</section>
+
+<!-- DOORS -->
+<section class="band doors">
+  <div class="wrap">
+    <div class="doors-head anim">
+      <h2 class="title">There's a seat here for everyone.</h2>
+    </div>
+    <div class="door-grid">
+      <div class="door anim">
+        <div class="ph"><img src="assets/img11_22af23ceec.jpg" alt="A teacher and student sharing a high-five in a school gym"></div>
+        <div class="dbody"><h3>For schools</h3><p>When teachers are well, students do better in every way: socially, emotionally, and academically. Bring the Four Pillars to your school.</p><a href="#" class="dlink">Start the conversation <span class="arrow">→</span></a></div>
+      </div>
+      <div class="door anim d1">
+        <div class="ph"><img src="assets/img12_8a69f050b3.jpg" alt="Educators gathered together"></div>
+        <div class="dbody"><h3>Experience it yourself</h3><p>Retreats, workshops, and the worldwide Contentment Festival. Some things you have to feel to understand.</p><a href="#" class="dlink">See events <span class="arrow">→</span></a></div>
+      </div>
+      <div class="door anim d2">
+        <div class="ph"><img src="assets/img13_d48fc1dd30.jpg" alt="Educators holding The Contentment Foundation flag together outside a school in Uganda"></div>
+        <div class="dbody"><h3>Spread the movement</h3><p>Can't give right now? Share the story of the teacher who shaped you.</p><a href="#" class="dlink">Share the movement <span class="arrow">→</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="band-tight news">
+  <div class="wrap news-inner">
+    <div class="anim">
+      <h2 class="title">Stories from the Classroom to your inbox</h2>
+      <p class="body">Wellbeing tools you can actually use, real stories from educators, and the occasional thing that makes the week a little lighter.</p>
+    </div>
+    <form class="anim d1" onsubmit="return false">
+      <div class="row">
+        <input type="text" placeholder="First name" aria-label="First name">
+        <input type="email" placeholder="Email address" aria-label="Email address">
+      </div>
+      <button class="btn btn-primary" type="submit">Subscribe</button>
+      <span class="fine">No noise. No spam. Leave whenever you want.</span>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand"><img src="assets/logo_lockup_light.svg" alt="The Contentment Foundation"></div>
+        <p class="foot-tag">When one teacher thrives, generations flourish.</p>
+      </div>
+      <div class="foot-col"><h4>Explore</h4><a href="#" data-page="about">About</a><a href="#" data-page="why-wellbeing">Why Teacher Wellbeing</a><a href="#" data-page="our-impact">Our Impact</a></div>
+      <div class="foot-col"><h4>Get Involved</h4><a href="#" data-page="for-schools">Schools</a><a href="#" data-page="events">Events</a><a href="#" data-page="get-involved">Get Involved</a><a href="#" data-donate>Donate</a></div>
+      <div class="foot-col"><h4>Connect</h4><a href="mailto:hello@contentment.org">hello@contentment.org</a>
+        <div class="foot-social">
+          <a href="#" data-link="linkedin" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.95 1.83-1.95 3.75-1.95C21.6 8.75 22 11.2 22 14.4V21h-4v-5.9c0-1.4-.03-3.2-2-3.2-2 0-2.3 1.5-2.3 3.1V21h-4V9z"/></svg></a>
+          <a href="https://www.instagram.com/contentmentorg/" target="_blank" rel="noopener" data-link="instagram" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.05 1.8.25 2.2.42.6.22 1 .48 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c0 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2 0-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c0-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.07-1.1.05-1.7.24-2.1.4-.5.2-.9.44-1.3.84-.4.4-.64.8-.84 1.3-.16.4-.35 1-.4 2.1C2.6 9.9 2.6 10.3 2.6 12s0 2.1.06 3.3c.05 1.1.24 1.7.4 2.1.2.5.44.9.84 1.3.4.4.8.64 1.3.84.4.16 1 .35 2.1.4 1.2.06 1.6.06 4.7.06s3.5 0 4.7-.06c1.1-.05 1.7-.24 2.1-.4.5-.2.9-.44 1.3-.84.4-.4.64-.8.84-1.3.16-.4.35-1 .4-2.1.06-1.2.06-1.6.06-3.3s0-2.1-.06-3.3c-.05-1.1-.24-1.7-.4-2.1-.2-.5-.44-.9-.84-1.3-.4-.4-.8-.64-1.3-.84-.4-.16-1-.35-2.1-.4C15.5 4 15.1 4 12 4zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 8.08a3.18 3.18 0 1 0 0-6.36 3.18 3.18 0 0 0 0 6.36zm6.24-8.28a1.14 1.14 0 1 1-2.28 0 1.14 1.14 0 0 1 2.28 0z"/></svg></a>
+          <a href="#" data-link="facebook" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.45 2.9h-2.33V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg></a>
+          <a href="#" data-link="youtube" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2s-.2-1.4-.8-2c-.76-.8-1.6-.8-2-.85C15.94 4.1 12 4.1 12 4.1h-.01s-3.93 0-6.79.25c-.4.05-1.24.05-2 .85-.6.6-.8 2-.8 2S2.2 8.83 2.2 10.5v1.55c0 1.64.2 3.29.2 3.29s.2 1.4.8 2c.76.8 1.76.78 2.2.86 1.6.15 6.8.2 6.8.2s3.94 0 6.8-.22c.4-.05 1.24-.05 2-.85.6-.6.8-2 .8-2s.2-1.65.2-3.3V10.5c0-1.64-.2-3.3-.2-3.3zM9.94 14.2V8.6l5.06 2.81-5.06 2.79z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="foot-legal">The Contentment Foundation is a 501(c)(3) nonprofit organization. EIN 47-5432756. Contributions are tax-deductible to the extent permitted by law. All rights reserved.</span>
+      <span class="foot-copy">© 2026 The Contentment Foundation</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const hdr=document.getElementById('hdr');
+addEventListener('scroll',()=>{hdr.classList.toggle('scrolled',scrollY>40)},{passive:true});
+
+// hero entrance on load
+addEventListener('load',()=>document.body.classList.add('hero-loaded'));
+setTimeout(()=>document.body.classList.add('hero-loaded'),400);
+
+// reveal on scroll
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.16,rootMargin:'0px 0px -7% 0px'});
+document.querySelectorAll('.anim').forEach(el=>{if(!el.closest('.hero'))io.observe(el)});
+
+// count-up
+function fmt(n){return n.toLocaleString('en-US')}
+const cio=new IntersectionObserver((es)=>{es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target,target=+el.dataset.count,plus=el.dataset.plus;
+  const dur=1500,t0=performance.now();
+  function tick(t){let p=Math.min((t-t0)/dur,1);p=1-Math.pow(1-p,3);el.textContent=fmt(Math.round(target*p));if(p===1&&plus){el.innerHTML=fmt(target)+'<span class="plus">+</span>'}if(p<1)requestAnimationFrame(tick)}
+  requestAnimationFrame(tick);cio.unobserve(el);
+})},{threshold:.5});
+document.querySelectorAll('.num').forEach(el=>cio.observe(el));
+
+// interactive pillars (tap/click + keyboard)
+document.querySelectorAll('.pcard').forEach(c=>{
+  function toggle(){const open=c.classList.toggle('open');c.setAttribute('aria-expanded',open)}
+  c.addEventListener('click',toggle);
+  c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
+});
+
+// ===== HOW ORBIT pond ripple =====
+(function(){
+  const sec=document.querySelector('.how-orbit');
+  if(!sec)return;
+  const rings=[...sec.querySelectorAll('.ring')];
+  const beats=[...sec.querySelectorAll('.beat')];
+  const N=beats.length;
+  const mq=window.matchMedia('(max-width:940px)');
+  const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  const GROUNDS=['var(--ob1)','var(--ob2)','var(--ob3)'];
+  function setActive(i){
+    beats.forEach((b,bi)=>{b.classList.toggle('active',bi===i);b.classList.toggle('past',bi<i);});
+    rings.forEach((r,ri)=>{r.classList.toggle('drawn',ri<=i);r.classList.toggle('current',ri===i);});
+    sec.style.setProperty('--ob',GROUNDS[i]||GROUNDS[0]);
+  }
+
+  if(mq.matches || reduce){
+    setActive(0);
+    sec.style.removeProperty('--ob');   // stacked-gradient rule owns the ground here
+    sec.style.setProperty('--bloom','340');   // static bloom when not scroll-driven
+    const io=new IntersectionObserver((es)=>{es.forEach(e=>{
+      if(e.isIntersecting){const i=+e.target.dataset.beat;
+        rings.forEach((r,ri)=>r.classList.toggle('drawn',ri<=i));
+        e.target.classList.add('active');
+      }
+    })},{threshold:.6});
+    beats.forEach(b=>io.observe(b));
+    return;
+  }
+
+  let cur=-1;
+  const cue=sec.querySelector('.orbit-cue');
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  function onScroll(){
+    const rect=sec.getBoundingClientRect();
+    const total=sec.offsetHeight-window.innerHeight;
+    let prog=Math.min(Math.max(-rect.top/total,0),1);
+    // bloom diameter grows with scroll: tight point -> wide soft disc
+    sec.style.setProperty('--bloom', lerp(150,760,prog).toFixed(0));
+    // ease progress so the first beat advances sooner (kills the "frozen" dead-zone on entry)
+    const eased=Math.pow(prog,0.82);
+    let i=Math.floor(eased*N); if(i>N-1)i=N-1; if(i<0)i=0;
+    if(i!==cur){cur=i;setActive(i);}
+    // hide the scroll cue once the final beat is reached; show while pinned and not done
+    if(cue){
+      const pinned = rect.top<=0 && rect.bottom>window.innerHeight;
+      if(i>=N-1 || !pinned){cue.classList.add('hide');}
+      else {cue.classList.remove('hide');}
+    }
+  }
+  setActive(0);
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',onScroll);
+  onScroll();
+})();
+
+
+// ===== subtle parallax on full-bleed bands =====
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const layers=[
+    {el:document.querySelector('.pillars-bg'),rate:0.14,sec:document.querySelector('.pillars')}
+  ].filter(l=>l.el&&l.sec);
+  const heroTxt=document.querySelector('.hero-inner');
+  let ticking=false;
+  function update(){
+    layers.forEach(l=>{
+      const r=l.sec.getBoundingClientRect();
+      if(r.bottom<0||r.top>innerHeight)return;
+      const off=(r.top)* -l.rate;
+      l.el.style.transform='translate3d(0,'+off.toFixed(1)+'px,0) scale(1.12)';
+    });
+    // Hero text lags slightly behind the photo as you scroll away -> gentle depth separation (no fade).
+    if(heroTxt && innerWidth>760){
+      const sc=window.scrollY;
+      if(sc<innerHeight){ heroTxt.style.transform='translate3d(0,'+(sc*0.12).toFixed(1)+'px,0)'; }
+    } else if(heroTxt){ heroTxt.style.transform=''; }
+    ticking=false;
+  }
+  addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(update);ticking=true;}},{passive:true});
+  update();
+})();
+</script>
+<script src="assets/seams.js"></script>
+</body>
+</html>

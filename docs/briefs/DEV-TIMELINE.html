@@ -762,13 +762,13 @@
       <table class="detail" style="margin-bottom:16px;">
         <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
         <tbody>
-          <tr><td class="id">FEAT-001</td><td>Extract shared layout — CSS tokens, nav, footer</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>No dependency — can start day one</td></tr>
-          <tr><td class="id">FEAT-002</td><td>Multi-page routing scaffold (Astro)</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Astro 4.x confirmed — no longer blocked</td></tr>
-          <tr><td class="id">FEAT-003</td><td>Mobile navigation drawer</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>—</td></tr>
-          <tr><td class="id">FEAT-010</td><td>Migrate homepage to <code>/</code></td><td><span class="tag tag-progress">● In progress</span></td><td>Dave's Netlify draft — copy audit already underway</td></tr>
-          <tr><td class="id">FEAT-004</td><td>Wire all nav and footer links</td><td><span class="tag tag-approved">✔ Ready</span></td><td>D-07 resolved: social URLs are in Dave/Veron's UIUX designs — no separate Comms handoff needed</td></tr>
-          <tr><td class="id">FEAT-020</td><td>Build <code>/why</code> page</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Video embed slots (CEO + 3 teacher clips) — URLs land later</td></tr>
-          <tr><td class="id">FEAT-050 / 051</td><td>Build <code>/give</code> gateway + <code>/give/monthly</code> Get Involved page</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Tier amounts resolved (D-01: $25/$50/$100); still needs Keela URLs (D-02) + /give routing call (D-03)</td></tr>
+          <tr><td class="id">FEAT-001</td><td>Extract shared layout — CSS tokens, nav, footer</td><td><span class="tag tag-progress">● In progress</span></td><td>BaseLayout.astro + Nav/Footer built 29 Jul from Dave's homepage handoff</td></tr>
+          <tr><td class="id">FEAT-002</td><td>Multi-page routing scaffold (Astro)</td><td><span class="tag tag-progress">● In progress</span></td><td>Astro 4.x confirmed (D-23/HC-055) — scaffolded 29 Jul, all 7 routes building</td></tr>
+          <tr><td class="id">FEAT-003</td><td>Mobile navigation drawer</td><td><span class="tag tag-done">✓ Done</span></td><td>30 Jul — slide-in drawer in Nav.astro</td></tr>
+          <tr><td class="id">FEAT-010</td><td>Migrate homepage to <code>/</code></td><td><span class="tag tag-progress">● In progress</span></td><td>Ported 29 Jul to src/pages/index.astro; awaiting homepage-first Slack review (HC-057)</td></tr>
+          <tr><td class="id">FEAT-004</td><td>Wire all nav and footer links</td><td><span class="tag tag-progress">● In progress</span></td><td>Internal nav wired via Astro routes; external donate/social still empty in seams.ts (HC-005)</td></tr>
+          <tr><td class="id">FEAT-020</td><td>Build <code>/why</code> page</td><td><span class="tag tag-progress">● In progress</span></td><td>Ported 29 Jul to src/pages/why.astro from Dave's handoff</td></tr>
+          <tr><td class="id">FEAT-050 / 051</td><td>Build <code>/give</code> gateway + <code>/give/monthly</code> Get Involved page</td><td><span class="tag tag-progress">● In progress</span></td><td>Homeroom content ported 29 Jul to src/pages/give.astro; /give vs /give/monthly split (D-03) still open; Keela wiring (D-02) still blocked</td></tr>
         </tbody>
       </table>
       <div class="section-title">Week 2 · Aug 3–7 — Our Impact, Schools, Events, About Us</div>
@@ -776,11 +776,11 @@
         <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
         <tbody>
           <tr><td class="id">FEAT-030</td><td>Our Impact Page data model + JSON (renamed from "Stories"; min. 3 stories)</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Waiting on Comms/Programs for photos + permissions — needed by Aug 3</td></tr>
-          <tr><td class="id">FEAT-031</td><td>Build <code>/stories</code> index (page renamed "Our Impact") — region-scroll, no map in v1</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Depends on FEAT-030</td></tr>
-          <tr><td class="id">FEAT-040 / 041</td><td>Build <code>/schools</code> — ripple diagram, comparison table, discovery form</td><td><span class="tag tag-approved">✔ Ready</span></td><td>D-04 resolved: Google Form embed + Slack integration</td></tr>
-          <tr><td class="id">FEAT-090</td><td>Events page (renamed from "Events &amp; Experiences") — filter chips, access badges</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Confirmed Phase 1 (Kristina); some event dates still TBC (Events team)</td></tr>
+          <tr><td class="id">FEAT-031</td><td>Build <code>/our-impact</code> index (renamed from "Stories") — region-scroll, no map in v1</td><td><span class="tag tag-progress">● In progress</span></td><td>Ported 29 Jul to src/pages/our-impact/index.astro; still depends on FEAT-030 for real story content</td></tr>
+          <tr><td class="id">FEAT-040 / 041</td><td>Build <code>/schools</code> — ripple diagram, comparison table, discovery form</td><td><span class="tag tag-progress">● In progress</span></td><td>Page ported 29 Jul to src/pages/schools.astro; discovery form (041) not started — D-04 resolved: Google Form embed + Slack integration</td></tr>
+          <tr><td class="id">FEAT-090</td><td>Events page (renamed from "Events &amp; Experiences") — filter chips, access badges</td><td><span class="tag tag-progress">● In progress</span></td><td>Ported 29 Jul to src/pages/events.astro — review-only, Dave's 2nd round of team notes still pending (HC-072)</td></tr>
           <tr><td class="id">FEAT-032</td><td>Individual story pages <code>/stories/[slug]</code></td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>After index ships</td></tr>
-          <tr><td class="id">FEAT-093</td><td>About Us — v1 single page</td><td><span class="tag tag-approved">✔ Ready</span></td><td>Confirmed Phase 1 (Kristina); single page confirmed (D-05 resolved) — may fast-follow past Aug 7</td></tr>
+          <tr><td class="id">FEAT-093</td><td>About Us — v1 single page</td><td><span class="tag tag-progress">● In progress</span></td><td>Ported 29 Jul to src/pages/about.astro; roster still needs Dave's full sign-off before public deploy</td></tr>
         </tbody>
       </table>
     </details>

@@ -1,0 +1,333 @@
+function intTone(status: string): "success" | "danger" | "warning" | "info" | "neutral" {
+  if (status === "Ready") return "success";
+  if (status === "Blocked") return "danger";
+  if (status === "Open") return "warning";
+  if (status === "Scheduled" || status === "Phase 2") return "neutral";
+  return "neutral";
+}
+
+function pageTone(status: string): "success" | "danger" | "warning" | "info" | "neutral" {
+  if (status === "Draft") return "info";
+  if (status === "Being drafted") return "warning";
+  if (status === "Paused") return "neutral";
+  if (status === "Not started") return "neutral";
+  return "neutral";
+}
+
+function riskTone(level: string): "success" | "danger" | "warning" | "info" | "neutral" {
+  if (level === "High") return "danger";
+  if (level === "Medium") return "warning";
+  if (level === "Low") return "neutral";
+  return "neutral";
+}
+
+function hcTone(priority: string): "success" | "danger" | "warning" | "info" | "neutral" {
+  if (priority === "Critical") return "danger";
+  if (priority === "High") return "warning";
+  if (priority === "Medium") return "info";
+  return "neutral";
+}
+
+function decTone(status: string): "success" | "danger" | "warning" | "info" | "neutral" {
+  if (status === "Resolved") return "success";
+  if (status === "Open") return "warning";
+  return "neutral";
+}
+
+function seamTone(value: string): "success" | "danger" | "warning" | "info" | "neutral" {
+  if (value === "(empty)") return "warning";
+  return "success";
+}
+
+export default function Phase1LaunchBoard() {
+  const [filter, setFilter] = useCanvasState("ticket-filter", "phase1-must");
+  const [view, setView] = useCanvasState("board-view", "overview");
+
+  const phase1Must = LAUNCH_TICKETS.filter(
+    (t) => t.phase === "1" && t.priority === "Must",
+  );
+  const blocked = phase1Must.filter((t) => t.status === "Blocked");
+  const inFlight = phase1Must.filter(
+    (t) => t.status === "In Progress" || t.status === "In sprint",
+  );
+  const ready = phase1Must.filter((t) => t.status === "Ready");
+  const openMust = phase1Must.filter((t) => t.status === "Open");
+
+  const statusCounts = [
+    { label: "In Progress", value: LAUNCH_TICKETS.filter((t) => t.status === "In Progress").length },
+    { label: "Ready", value: LAUNCH_TICKETS.filter((t) => t.status === "Ready").length },
+    { label: "Open", value: LAUNCH_TICKETS.filter((t) => t.status === "Open").length },
+    { label: "Blocked", value: LAUNCH_TICKETS.filter((t) => t.status === "Blocked").length },
+    { label: "In sprint", value: LAUNCH_TICKETS.filter((t) => t.status === "In sprint").length },
+    { label: "Later / paused", value: LAUNCH_TICKETS.filter((t) => ["Scheduled", "Paused"].includes(t.status)).length },
+  ];
+
+  const filtered: Ticket[] =
+    filter === "all"
+      ? ALL_TICKETS
+      : filter === "phase1-must"
+        ? phase1Must
+        : filter === "blocked"
+          ? ALL_TICKETS.filter((t) => t.status === "Blocked")
+          : filter === "active"
+            ? ALL_TICKETS.filter((t) =>
+                ["In Progress", "In sprint", "Ready", "Open"].includes(t.status),
+              )
+            : filter === "done"
+              ? ALL_TICKETS.filter((t) => t.status === "Done")
+              : filter === "launch-plan"
+                ? LAUNCH_TICKETS
+                : filter === "tracker-only"
+                  ? TRACKER_ONLY
+                  : ALL_TICKETS;
+
+  const hcCrit = HC_OPEN.filter((r) => r[4] === "Critical");
+  const emptySeams = SEAMS_INVENTORY.filter((r) => r[4] === "(empty)");
+  const openDecs = DECISIONS_ALL.filter((r) => r[2] === "Open");
+
+  const show = (id: string) => view === "overview" || view === "all" || view === id;
+
+  return (
+    <Stack gap={24}>
+      <Stack gap={8}>
+        <H1>Phase 1 launch board — full project</H1>
+        <Text tone="secondary">
+          Merged from Launch Plan sheet JSON, TRACKER.md, HANDOFF-CHECKLIST, seams.ts,
+          and engineering DECISIONS. Use the view filter to jump sections.
+        </Text>
+      </Stack>
+
+      <Select
+        value={view}
+        onChange={setView}
+        options={[
+          { value: "overview", label: "Overview (launch critical path)" },
+          { value: "handoff", label: "Handoff checklist (open)" },
+          { value: "tickets", label: "All tickets" },
+          { value: "pages", label: "Pages + seams" },
+          { value: "integrations", label: "Integrations + blockers" },
+          { value: "decisions", label: "Decisions + design risks" },
+          { value: "deferred", label: "Phase 2 deferred" },
+          { value: "all", label: "Everything" },
+        ]}
+      />
+
+      <Grid columns={4} gap={12}>
+        <Stat value="Aug 21" label="Hard go-live" tone="info" />
+        <Stat value={String(phase1Must.length)} label="Phase 1 Must" />
+        <Stat value={String(blocked.length)} label="Must blocked" tone="warning" />
+        <Stat value={String(hcCrit.length)} label="HC Critical open" tone="danger" />
+      </Grid>
+
+      <Grid columns={4} gap={12}>
+        <Stat value={String(ALL_TICKETS.length)} label="All tickets merged" />
+        <Stat value="57" label="Handoff checklist rows" />
+        <Stat value={String(emptySeams.length)} label="Empty seams" tone="warning" />
+        <Stat value={String(openDecs.length)} label="Open product decisions" tone="warning" />
+      </Grid>
+
+      {show("overview") ? (
+        <Stack gap={20}>
+          <Callout tone="warning" title="Critical path">
+            Keela URLs (D-02/HC-030) block FEAT-060/051. Story photos block FEAT-030.
+            CTA Miro (HC-005) blocks wiring. Join-flow (HC-071) blocks gated CTAs.
+            Homepage Slack review (HC-057) before other pages. Events notes (HC-072)
+            before /events production build.
+          </Callout>
+
+          <H2>Sprint timeline</H2>
+          <Table
+            headers={["Phase", "Dates", "Work stream", "Owner"]}
+            rows={[...TIMELINE]}
+            rowTone={["success", "info", "info", "neutral", "warning", "info"]}
+          />
+
+          <H2>Phase 1 Must — by status</H2>
+          <Grid columns={2} gap={12}>
+            <Card>
+              <CardHeader trailing={<Pill size="sm" tone="deleted">{String(blocked.length)}</Pill>}>
+                Blocked
+              </CardHeader>
+              <CardBody>
+                <Table headers={["ID", "Title", "Sprint", "Note"]} rows={boardRows(blocked)} rowTone={blocked.map(() => "danger" as const)} />
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader trailing={<Pill size="sm" tone="info">{String(inFlight.length)}</Pill>}>
+                In progress / in sprint
+              </CardHeader>
+              <CardBody>
+                <Table headers={["ID", "Title", "Sprint", "Note"]} rows={boardRows(inFlight)} rowTone={inFlight.map(() => "info" as const)} />
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader trailing={<Pill size="sm" tone="success">{String(ready.length)}</Pill>}>
+                Ready to build
+              </CardHeader>
+              <CardBody>
+                <Table headers={["ID", "Title", "Sprint", "Note"]} rows={boardRows(ready)} rowTone={ready.map(() => "success" as const)} />
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader trailing={<Pill size="sm">{String(openMust.length)}</Pill>}>
+                Open Must
+              </CardHeader>
+              <CardBody>
+                <Table headers={["ID", "Title", "Sprint", "Note"]} rows={boardRows(openMust)} />
+              </CardBody>
+            </Card>
+          </Grid>
+
+          <Grid columns="1fr 1fr" gap={16}>
+            <Stack gap={10}>
+              <H2>Launch Plan ticket status</H2>
+              <BarChart
+                categories={statusCounts.map((d) => d.label)}
+                series={[{ name: "Tickets", data: statusCounts.map((d) => d.value) }]}
+                height={200}
+                horizontal
+              />
+            </Stack>
+            <Stack gap={10}>
+              <H2>Handoff checklist status</H2>
+              <BarChart
+                categories={HC_STATUS_COUNTS.map((d) => d.label)}
+                series={[{ name: "HC rows", data: HC_STATUS_COUNTS.map((d) => d.value) }]}
+                height={200}
+                horizontal
+              />
+              <Text size="small" tone="tertiary">57 total · 26 open · 11 critical open</Text>
+            </Stack>
+          </Grid>
+
+          <H2>Critical open handoff items</H2>
+          <Table
+            headers={["ID", "Section", "Item", "Owner", "Priority", "Notes"]}
+            rows={hcCrit.map((r) => [...r])}
+            rowTone={hcCrit.map(() => "danger" as const)}
+          />
+        </Stack>
+      ) : null}
+
+      {show("handoff") ? (
+        <Stack gap={12}>
+          <H2>All open handoff checklist ({HC_OPEN.length})</H2>
+          <Text size="small" tone="secondary">
+            Source: launch-plan-data.json handoffChecklist · Sheet tab Handoff Checklist
+          </Text>
+          <Table
+            headers={["ID", "Section", "Item", "Owner", "Priority", "Notes"]}
+            rows={HC_OPEN.map((r) => [...r])}
+            rowTone={HC_OPEN.map((r) => hcTone(r[4]))}
+          />
+        </Stack>
+      ) : null}
+
+      {show("integrations") ? (
+        <Stack gap={16}>
+          <H2>External blockers (12)</H2>
+          <Table
+            headers={["Blocker", "Waiting on", "Gates", "Needed by", "Impact if delayed"]}
+            rows={EXTERNAL_BLOCKERS_FULL.map((r) => [...r])}
+            rowTone={["warning", "warning", "danger", "warning", "warning", "info", "info", "info", "warning", "warning", "warning", "danger"]}
+          />
+          <H2>Integrations (13)</H2>
+          <Table
+            headers={["Integration", "Phase", "Status", "Owner", "Dependency", "Notes"]}
+            rows={INTEGRATIONS.map((r) => [...r])}
+            rowTone={INTEGRATIONS.map((r) => intTone(r[2]))}
+          />
+        </Stack>
+      ) : null}
+
+      {show("pages") ? (
+        <Stack gap={16}>
+          <H2>All pages (18)</H2>
+          <Table
+            headers={["Page", "Route", "Phase", "Draft status", "Design owner", "Complexity", "Notes"]}
+            rows={PAGES_ALL.map((r) => [...r])}
+            rowTone={PAGES_ALL.map((r) => pageTone(r[3]))}
+          />
+          <H2>Seams inventory (src/config/seams.ts)</H2>
+          <Callout tone="warning" title={`${emptySeams.length} empty seams`}>
+            Only Instagram is wired. Donate/join/RSVP/socials wait on Keela + CTA inventory.
+          </Callout>
+          <Table
+            headers={["Seam key", "Purpose", "Blocked by", "Owner", "Value"]}
+            rows={SEAMS_INVENTORY.map((r) => [...r])}
+            rowTone={SEAMS_INVENTORY.map((r) => seamTone(r[4]))}
+          />
+        </Stack>
+      ) : null}
+
+      {show("decisions") ? (
+        <Stack gap={16}>
+          <H2>Product decisions D-01–D-23</H2>
+          <Table
+            headers={["ID", "Decision", "Status", "Priority", "Gates", "Owner"]}
+            rows={DECISIONS_ALL.map((r) => [...r])}
+            rowTone={DECISIONS_ALL.map((r) => decTone(r[2]))}
+          />
+          <H2>Engineering decisions (DECISIONS.md)</H2>
+          <Table
+            headers={["ID", "Topic", "Choice", "Status"]}
+            rows={ENG_DECISIONS.map((r) => [...r])}
+            rowTone={ENG_DECISIONS.map(() => "success" as const)}
+          />
+          <H2>Design notes / build risks</H2>
+          <Table
+            headers={["Page", "Item", "Risk", "Mitigation"]}
+            rows={DESIGN_NOTES.map((r) => [...r])}
+            rowTone={DESIGN_NOTES.map((r) => riskTone(r[2]))}
+          />
+        </Stack>
+      ) : null}
+
+      {show("deferred") ? (
+        <Stack gap={12}>
+          <H2>Phase 2 / deferred (15)</H2>
+          <Table
+            headers={["Item", "Route / asset", "Reason", "Target"]}
+            rows={PHASE2_DEFERRED.map((r) => [...r])}
+          />
+        </Stack>
+      ) : null}
+
+      {show("tickets") ? (
+        <Stack gap={12}>
+          <Row gap={12} align="center" justify="space-between">
+            <H2>All tickets</H2>
+            <Select
+              value={filter}
+              onChange={setFilter}
+              options={[
+                { value: "phase1-must", label: "Phase 1 Must only" },
+                { value: "active", label: "Active (open / ready / in progress)" },
+                { value: "blocked", label: "Blocked only" },
+                { value: "launch-plan", label: "Launch Plan sheet (24)" },
+                { value: "tracker-only", label: "Tracker-only (OPS/DOC/QA/extra)" },
+                { value: "done", label: "Done" },
+                { value: "all", label: `All merged (${ALL_TICKETS.length})` },
+              ]}
+            />
+          </Row>
+          <Text size="small" tone="secondary">
+            Showing {filtered.length} · Launch Plan preferred where FEAT overlaps TRACKER · FEAT-005 Launch-Plan-only
+          </Text>
+          <Table
+            headers={["ID", "Title", "Phase", "Priority", "Status", "Owner", "Sprint", "Depends", "Note"]}
+            rows={ticketRows(filtered)}
+            rowTone={ticketTones(filtered)}
+          />
+        </Stack>
+      ) : null}
+
+      <Divider />
+      <Text size="small" tone="tertiary">
+        Coverage: tickets 47 · HC open 26 · blockers 12 · integrations 13 · pages 18 ·
+        decisions 23+7 · design notes 15 · phase2 15 · seams 11 · Sources:
+        launch-plan-data.json, LaunchPlanSheet.gs, TRACKER.md, DECISIONS.md, seams.ts · 29 Jul 2026
+      </Text>
+    </Stack>
+  );
+}

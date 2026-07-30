@@ -1,0 +1,94 @@
+/* ============ CONTENTMENT — SHARED HEADER + FOOTER ============
+   Version 2026-07-23. Paste into every page. Requires Varela Round
+   (brand wordmark) and assets/cf_ball.png.
+   ============================================================== */
+
+/* --- required layout + palette --- */
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+
+:root{
+  --teal:#1FAFC0;--ocean:#0080B0;--deep:#024E70;--deep2:#02374f;--green:#4FA98C;
+  --slate:#3C3B43;--ink:#23252b;--paper:#FBFAF7;--paper2:#F2F0EA;--mist:#E8F1F2;
+  --line:rgba(2,78,112,.12);--shadow:0 18px 50px -20px rgba(2,55,79,.35);
+  --display:'Newsreader',Georgia,serif;--body:'Inter',system-ui,sans-serif;
+  --script:'Cedarville Cursive',cursive;
+  /* palette extension — review round 1 (V) */
+  --mint:#55bf98;--navlink:#515154;--btnblue:#0090be;--accent-mint:#a4dcce;--accent-sand:#f9dba5;
+  /* orbit grounds — V's three ring hues, desaturated to one chroma (36%) and deepened so the
+     white rings have something to glow against. The section IS the ripple. */
+  /* V's brand hexes; the scroll-bloom makes white rings read on them */
+  --ob1:#54bf98;--ob2:#32c0cf;--ob3:#6275b4;
+}
+
+/* --- HEADER --- */
+header{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .4s,box-shadow .4s,padding .4s;padding:14px 0}
+header.scrolled{background:#fff;box-shadow:0 6px 22px -14px rgba(2,40,58,.45);padding:10px 0}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
+/* Official horizontal lockup. TWO files, identical viewBox, so they cross-fade with no shift.
+   --light = white wordmark + white coin behind the mark (coin ratio 1.08). --dark = grey wordmark, no coin, for the white scrolled bar.
+   The coin is REQUIRED on any dark or blue ground: the mark's #0190BE against the footer's
+   #0090be measures 1.000:1 and 44.6% of the mark disappears without it. */
+.brand{display:grid;flex-shrink:0;line-height:0}
+.brand img{grid-area:1/1;height:54px;width:auto;display:block;transition:opacity .4s,height .4s}
+.brand-logo--dark{opacity:0}
+header.scrolled .brand-logo--light{opacity:0}
+header.scrolled .brand-logo--dark{opacity:1}
+header.scrolled .brand img{height:47px}
+.nav-links{display:flex;align-items:center;gap:26px;font-size:.9rem;font-weight:500}
+.nav-links>a{color:rgba(255,255,255,.94);transition:color .3s;position:relative;background:none;border:none;font:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:6px 0}
+header.scrolled .nav-links>a{color:var(--navlink)}
+.nav-links>a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--teal);transition:width .3s}
+.nav-links>a:hover::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:18px;flex-shrink:0}
+.signin{font-size:.9rem;font-weight:500;color:rgba(255,255,255,.94);transition:color .3s;white-space:nowrap}
+.signin:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+header.scrolled .signin{color:var(--navlink)}
+header.scrolled .signin:hover{color:var(--deep)}
+.nav-cta{padding:.62em 1.4em;font-size:.9rem;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--mint);color:var(--deep2);transition:transform .25s,box-shadow .25s,background .35s,color .35s}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(0,0,0,.35)}
+header.scrolled .nav-cta{background:var(--btnblue);color:#fff}
+.menu-btn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:6px}
+.menu-btn span{width:24px;height:2px;background:#fff;transition:background .4s}
+header.scrolled .menu-btn span{background:var(--navlink)}
+
+/* --- FOOTER --- */
+footer{background:var(--btnblue);color:#fff;padding:64px 0 36px}
+.foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.3)}
+.foot-brand{margin-bottom:18px;line-height:0}
+.foot-brand img{height:73px;width:auto;display:block}
+.foot-tag{font-family:var(--display);font-style:italic;font-size:1.25rem;color:#fff;max-width:22ch;line-height:1.35}
+.foot-col h4{color:#fff;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:16px;font-weight:600}
+.foot-col a{display:block;margin-bottom:10px;font-size:.95rem;transition:color .25s}
+.foot-col a:hover{color:var(--accent-mint)}
+.foot-bottom{padding-top:26px;display:flex;flex-direction:column;align-items:stretch;gap:10px;font-size:.84rem;line-height:1.55;color:rgba(255,255,255,.92);text-align:left}
+.foot-legal{display:block;width:100%}
+.foot-copy{display:block;width:100%;color:rgba(255,255,255,.78)}
+/* WJ: clickable social icons. Seams: data-link="linkedin|instagram|facebook|youtube" */
+.foot-social{display:flex;align-items:center;gap:12px;margin-top:4px}
+.foot-social a{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);color:#fff;
+  transition:background .25s,transform .25s}
+.foot-social a:hover{background:#fff;color:var(--btnblue);transform:translateY(-2px)}
+.foot-social svg{width:17px;height:17px;fill:currentColor;display:block}
+
+/* --- responsive: drop these into your existing breakpoints --- */
+@media(max-width:900px){
+  .nav-links{display:none}
+  .menu-btn{display:flex}
+  .foot-top{grid-template-columns:1fr 1fr;gap:30px}
+}
+@media(max-width:600px){
+  .foot-top{grid-template-columns:1fr}
+}
+
+
+/* --- 2026-07-28 additions --- */
+/* Confirmed bug: flex items default to min-width:auto, so the two newsletter inputs refuse to
+   shrink below ~237px each. 237x2+12 = 486px of content in a 420px row -> the whole page gains a
+   horizontal scrollbar between roughly 960px and 1280px. flex:1 does NOT fix it. */
+.news input{min-width:0}
+@media(max-width:760px){
+  .brand img{height:45px}
+  header.scrolled .brand img{height:40px}
+  .foot-brand img{height:59px}
+}

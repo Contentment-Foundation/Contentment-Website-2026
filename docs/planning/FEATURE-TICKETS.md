@@ -66,10 +66,10 @@ Set up project for multi-page static site (Astro recommended per Technical Archi
 Prototype menu button only exists at `≤940px` with no drawer. Implement full-screen or slide-down mobile menu matching nav link styles (white text, teal underline hover). Include Homeroom CTA pill. Trap focus when open; close on Escape and link click.
 
 **Acceptance criteria:**
-- [ ] All main nav links accessible on mobile
-- [ ] Keyboard navigable; `aria-expanded` on menu button
-- [ ] Body scroll locked when menu open
-- [ ] Visual style matches existing header (deep background)
+- [x] All main nav links accessible on mobile
+- [x] Keyboard navigable; `aria-expanded` on menu button
+- [x] Body scroll locked when menu open
+- [x] Visual style matches existing header (deep background)
 
 ---
 
@@ -103,11 +103,13 @@ Replace `href="#"` and hash-only links with real routes per [Website Architectur
 **Description:**  
 Port entire homepage from `site/index.html` to index route. All sections: hero, why split, impact, Kenya voice band, orbit, alone circles, pillars, homeroom, doors, newsletter, footer. All JS behavior unchanged: scroll nav, hero load, IntersectionObserver, count-up, pillars accordion, orbit scroll, parallax.
 
+> **Status (30 Jul 2026):** Ported to `src/pages/index.astro` from Dave's Jul 29 2026 handoff (supersedes the old `site/index.html` prototype as source — see FRONTEND-SPECIFICATION.md). Browser-tested 320–1280px, zero horizontal scroll, zero console errors (`docs/planning/HOMEPAGE-RESPONSIVE-AUDIT.md`). **Not yet done:** formal Lighthouse run; still awaiting the homepage-first Slack review (HC-057) before moving on.
+
 **Acceptance criteria:**
-- [ ] Visual parity with prototype on desktop and mobile
-- [ ] All animations work; reduced motion disables orbit scroll
-- [ ] All images load from `assets/`
-- [ ] Lighthouse performance ≥ 85 mobile
+- [x] Visual parity with prototype on desktop and mobile
+- [x] All animations work; reduced motion disables orbit scroll
+- [x] All images load from `assets/`
+- [ ] Lighthouse performance ≥ 85 mobile — not yet run
 
 ---
 
@@ -140,6 +142,8 @@ Compare homepage copy to [Messaging brief §6 Home](../research/MESSAGING-AND-CO
 
 **Description:**  
 Long-form page using existing section patterns (`.split`, `.impact`, `.quote-card`, `.band`). Structure per messaging brief: objection → weight → ripple → reflection pause → why now → evidence → "but what about" cards → Peter's school → CTA. Open with orientation line. Primary CTA: Join Homeroom. Secondary: Share this page.
+
+> **Status (29–30 Jul 2026):** Ported verbatim to `src/pages/why.astro` from Dave's Jul 29 2026 handoff. Fixed one real bug during migration: the stat numbers (86%, 90%+, 9 in 10, National) shared the homepage's `.num` class, which the site-wide count-up script would have overwritten with "NaN" on scroll — renamed to `.rnum`. Content/UX acceptance criteria below are unverified against the messaging brief (technical migration only, not a copy audit).
 
 **Acceptance criteria:**
 - [ ] Passes first-time visitor test (messaging brief §5)
@@ -179,6 +183,8 @@ Create `src/data/stories.json` with schema: slug, name, country, school, quote, 
 
 **Description:**  
 Stories index using `.door` card grid pattern. Filter UI optional for MVP (nice-to-have: region/theme filters). Orientation line in hero. Each card links to `/stories/[slug]`. Global framing copy per story pillars.
+
+> **Status (29 Jul 2026):** Page renamed "Our Impact" per Kristina — route is `/our-impact`, not `/stories` (confirmed, see HC-073). Ported to `src/pages/our-impact/index.astro` (subfolder, leaving room for a future `[slug].astro`) from Dave's Jul 29 2026 handoff. TICKET-030's story-content dependency is still unresolved (comms/programs owe photos + permissions), so the underlying data model isn't wired — this ships the static handoff content as-is.
 
 **Acceptance criteria:**
 - [ ] All published stories render as cards
@@ -229,6 +235,8 @@ Map with country pins on `/stories`. Filters by region, theme, school type. Use 
 **Description:**  
 School leader journey page: wellbeing → achievement → proof → conversation. Use `.split`, `.impact`, `.door` patterns. Include Durlak/Jennings evidence per Evidence doc. Primary CTA: Start the conversation → form anchor.
 
+> **Status (29 Jul 2026):** Ported to `src/pages/schools.astro` from Dave's `fs_review1` handoff. Some images (6 of 17) remain inline base64 — couldn't be cleanly attributed to a named source file in `source-images/`/`video-posters/`, documented in the file's own header comment. Partner-deck download seam (`seams.schools.deck`) still empty, pending Kristina's button/CTA inventory (HC-005).
+
 **Acceptance criteria:**
 - [ ] Frames wellbeing as path to achievement (per Tim / messaging brief)
 - [ ] Partnership tier overview (Educator, School, Network)
@@ -268,6 +276,8 @@ Form on `/schools`: school name, contact name, email, role, country, message. St
 
 **Description:**  
 Five "seats" per messaging brief using door-card or tier patterns: Homeroom, school, spread, events, educators. Each seat has mechanism line. Homeroom featured first.
+
+> **Status (29 Jul 2026):** Ported to `src/pages/give.astro` (Get Involved / Homeroom monthly-giving content) from Dave's Jul 29 2026 handoff. D-03/HC-031 (whether this stays a single `/give` gateway or splits into `/give` + `/give/monthly`) is still open — built the single page Dave shipped at `/give` only, matching what `Nav.astro` already links to. Join/give-one-time/ways-to-give seams wired to `src/config/seams.ts`, all still empty pending Lorna/Keela.
 
 **Acceptance criteria:**
 - [ ] Five seats in correct order
@@ -408,6 +418,8 @@ Per-page `<title>`, meta description, Open Graph tags (use hero or logo image). 
 **Description:**  
 Build `/events` per messaging brief: event cards with three access badges, Festival block, email capture, past recaps. Member-only events visible; RSVP gated.
 
+> **Status (29 Jul 2026):** Ported to `src/pages/events.astro` from Dave's `events-kit-2026-07-28-page2r4` handoff. **Not production-final** — Dave's own handoff notes flag that a second round of team review notes hasn't been applied yet (see `HANDOFF-contentment-2026-07-27-events-notes.md` "STILL PENDING"). Treat as review-only until that lands (HC-072). RSVP/join seams wired to `seams.ts`, empty pending the Keela/Homeroom join-flow choreography (HC-071).
+
 > **Messaging brief alignment:** The messaging brief treats Events & Experiences as a named page in the core page map (Belief Step 5 — belonging — feeding back into Step 4). Although classified `should-have` here to protect Phase 1 scope, prioritize this page as close to launch as possible. It is the retention step that makes Homeroom membership feel worth renewing. Defer only if event calendar is not confirmed in time.
 
 ---
@@ -436,15 +448,17 @@ Implement gate per Security doc: env password, rate limit, session cookie. Rotat
 
 ---
 
-### TICKET-093 · About section (5 pages)
+### TICKET-093 · About Us page (v1 single page)
 
 | Field | Value |
 |-------|-------|
-| **Priority** | nice-to-have |
-| **Dependencies** | TICKET-002, content briefs |
+| **Priority** | must-have |
+| **Dependencies** | TICKET-002 |
 
 **Description:**  
-Build `/about` and sub-pages: our-work, how-we-work, impact, team, faqs.
+Build `/about` as a single page (**D-05, resolved 27 Jul 2026** — was single page vs. 5 sub-pages; single page won). The 5 sub-pages (our-work, how-we-work, impact, team, faqs) framing below is superseded — do not build separately; Phase 2 only if ever revisited.
+
+> **Status (29 Jul 2026):** Ported to `src/pages/about.astro` from Dave's `about-deploy-rev4` handoff (single self-contained page, all photos extracted to `public/assets/ab-*`). One content bug caught and fixed during migration: Dave Kebo's title was transcribed as "Chief Creative Officer," corrected to "Chief Media Officer" per HC-035. Roster otherwise still needs Dave's full line-by-line sign-off before public deploy (`about-name-manifest.txt`).
 
 ---
 
@@ -532,3 +546,4 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | 2026-06 | Initial feature ticket list for Phase 1 MVP. |
 | 2026-06 | Fixed sprint order (TICKET-060 moved after 050; TICKET-020 does not depend on Keela). Added Homeroom naming convention note. Added external content dependency note to TICKET-030. Added Keela blocking chain note to TICKET-051. Added messaging brief alignment note to TICKET-090. |
 | 2026-06 | Sprint order corrected: TICKET-011 (homepage copy audit) and TICKET-081 (SEO baseline) were missing — both added in correct dependency position. |
+| 2026-07-29/30 | Astro migration status added to TICKET-010/020/031/040/050/090/093 (all ported to `src/pages/` from Dave's Jul 29 handoff; see TRACKER.md for full detail). **TICKET-093 corrected**: was "About section (5 pages)," now "About Us page (v1 single page)" per D-05 (resolved 27 Jul) — the 5-sub-page framing was stale. TICKET-003 (mobile nav drawer) acceptance criteria all checked — done 30 Jul. |

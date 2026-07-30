@@ -1,0 +1,885 @@
+---
+// Our Impact — migrated verbatim from Dave's Jul 29 2026 handoff:
+// handoff/2026-07-29-dave-pages/3_OUR IMPACT/our-impact-github-build_1/index.html
+// (the de-inlined form, per HANDOFF.md §5 — canonical repo copy).
+// See docs/planning/TECHNICAL-ARCHITECTURE.md §3 — no redesign, structure/CSS copied as-is.
+// Shared <Nav />/<Footer /> replace this page's own header/footer markup (deleted per
+// migration hard rules); nav/footer seams are wired centrally in src/config/seams.ts.
+//
+// Note on the two-triangle play-button bug (HANDOFF.md §2): already fixed upstream in
+// this source file via `.schoolsvid .videoframe .vplay::before{content:none}` — ported
+// verbatim below, do not remove.
+//
+// Deliberate deviation from source (flagged, not a visual change): the per-region
+// highlight numbers (source class `.mag-stats .num`, e.g. "210", "90.9%", "9 in 10")
+// were renamed to `.rnum` in this file only. BaseLayout's shared initCountUp()
+// (src/scripts/animations.js) calls `document.querySelectorAll('.num')` on every page
+// and rewrites an element's textContent from `+el.dataset.count`; these labels have no
+// `data-count` (they're static, and several carry a "%"/"+"/text suffix count-up can't
+// reproduce), so under the literal `.num` class the shared script would overwrite each
+// one with the string "NaN" once scrolled into view. Renaming sidesteps the collision
+// without touching animations.js (out of scope here). Same underlying class-name
+// collision appears to exist on why.astro's `.stat .num` block too — flagged in the
+// handoff report for whoever owns that page, not fixed here.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { seams } from '../../config/seams';
+---
+<BaseLayout title="Our Impact · The Contentment Foundation" description="Wellbeing is taking root in classrooms around the world. Meet the teachers living this work, region by region.">
+
+<!-- ============ HERO (single full-screen composition, map as faint wallpaper) ============ -->
+<section class="hero hero-map" id="top">
+  <div class="hero-worldmap"><img src="/assets/oi-worldmap.png" alt=""></div>
+  <div class="hero-inner wrap">
+    <div class="hero-top">
+      <span class="eyebrow anim" style="color:#2E7864">Stories from the field</span>
+      <h1 class="hero-q">
+        <span class="l1 anim"><span class="cursive">Wellbeing</span> is taking</span>
+        <span class="l2 anim d1">root in classrooms</span>
+        <span class="l3 anim d2">around the world.</span>
+      </h1>
+    </div>
+    <div class="hero-mid">
+      <p class="lead lead-accent anim d2" style="color:#c2ebe1;font-weight:600;max-width:52ch">Meet the teachers living this work, region by region.</p>
+      <div class="hero-regions anim d3" id="regions">
+        <a class="hrc" href="#bhutan"><span class="ph"><img src="/assets/oi-img-04.jpg" alt="Bhutan"></span><span class="hrc-name">Bhutan</span></a>
+        <a class="hrc" href="#kenya"><span class="ph"><img src="/assets/oi-img-05.jpg" alt="East Africa"></span><span class="hrc-name">East Africa</span></a>
+        <a class="hrc" href="#hawaii"><span class="ph"><img src="/assets/oi-img-06.jpg" alt="Hawai&#699;i"></span><span class="hrc-name">Hawai&#699;i</span></a>
+        <a class="hrc" href="#mainland"><span class="ph"><img src="/assets/oi-img-07.jpg" alt="North America"></span><span class="hrc-name">North America</span></a>
+        <a class="hrc soon" href="#singapore"><span class="hrc-badge">Coming<br>2027</span><span class="ph"><img src="/assets/oi-img-08.jpg" alt="Singapore"></span><span class="hrc-name">Singapore</span></a>
+      </div>
+    </div>
+    <div class="hero-stats anim d3">
+      <b>12 countries</b><span class="sep">&middot;</span><b>4 continents</b><span class="sep">&middot;</span>
+      <b>325</b><span>partner schools</span><span class="sep">&middot;</span>
+      <b>11,925</b><span>educators reached</span><span class="sep">&middot;</span>
+      <b>409,625+</b><span>students reached</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REGION: BHUTAN ============ -->
+<section class="region region-mag" id="bhutan">
+  <div class="wrap">
+    <div class="region-photo anim"><img src="/assets/oi-img-09.jpg" alt="Educators in Bhutan"></div>
+
+    <div class="mag-intro anim">
+      <h2 class="region-header">Bhutan</h2>
+    </div>
+
+    <div class="mag-lead anim">
+      <div class="mag-lead-vid">
+        <button class="vfeat" data-yt="18gc2s-JSjY" aria-label="Play video: ELC High School, Thimphu">
+          <span class="vposter" style="background-image:url('/assets/oi-img-10.jpg')"></span>
+          <span class="vscrim"></span><span class="vplay"></span>
+        </button>
+        <span class="vlabel">ELC High School<i>Thimphu, Bhutan &middot; video story</i></span>
+      </div>
+      <div class="mag-lead-text">
+        <p class="lede"><strong class="lede-open">It started with a single school in Thimphu in 2019.</strong> Not a government mandate, not a national rollout, just one circle of educators willing to sit together and ask: what does it feel like to be well?</p>
+        <p>That question changed everything. ELC (Educating for Lifelong Citizenship) High School became a lighthouse school, a place where wellbeing isn&#8217;t delivered at certain hours but lived throughout the culture. From there the work spread, from one school to 50 across a valley, to annual national retreats for roughly 200 counselors, and into Bhutan&#8217;s National School Health and Wellbeing Strategy.</p>
+      </div>
+    </div>
+
+    <div class="mag-stats anim">
+      <div class="rhl-i"><div class="rnum">210</div><div class="lab">schools with a trained educator</div></div>
+      <div class="rhl-i"><div class="rnum">500</div><div class="lab">educators in the national community</div></div>
+      <div class="rhl-i"><div class="rnum">200</div><div class="lab">counselors trained</div></div>
+      <div class="rhl-i"><div class="rnum">90.9%</div><div class="lab">called the wellbeing retreats deeply effective (2025)</div></div>
+      <div class="rhl-i"><div class="rnum">94.4%</div><div class="lab">came away deeply restored</div></div>
+      <div class="rhl-i"><div class="rnum">88.8%</div><div class="lab">would recommend it to a colleague facing burnout</div></div>
+    </div>
+
+    <div class="voices voices-interactive anim" data-voices>
+      <div class="voices-lab">What educators told us</div>
+      <div class="voices-people vp-2" role="tablist">
+        <button class="vperson" role="tab" aria-selected="false" data-vq="bhu-1">
+          <span class="vp-portrait"><img src="/assets/oi-img-11.jpg" alt="Deki Choden"></span>
+          <span class="vp-name">Deki Choden</span>
+        </button>
+        <button class="vperson" role="tab" aria-selected="false" data-vq="bhu-2">
+          <span class="vp-portrait"><img src="/assets/oi-img-12.jpg" alt="Yeshi Wangchuk"></span>
+          <span class="vp-name">Yeshi Wangchuk</span>
+        </button>
+      </div>
+      <div class="voices-panels">
+        <blockquote class="vpanel" id="bhu-1">Wellbeing is the non-negotiable subject every school should have. It&#8217;s been a gift that our children have the language to name what they feel. They will be a force of good, not just for themselves, but for the world.<cite><b>Deki Choden</b><span>Head of School, ELC High School, Bhutan</span></cite></blockquote>
+        <blockquote class="vpanel" id="bhu-2">As a teacher you feel like you never have enough time. After this training, I&#8217;ve learned that accepting things as they are can be a beautiful thing, and I&#8217;ve started sharing it with everyone. The attitude you bring to your work matters a lot.<cite><b>Yeshi Wangchuk</b><span>Teacher, Changangkha Middle Secondary School, Bhutan</span></cite></blockquote>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ REGION: KENYA ============ -->
+<section class="region region-mag region-flip-mag" id="kenya">
+  <div class="wrap">
+    <div class="region-photo anim"><img src="/assets/oi-img-13.jpg" alt="Educators in East Africa with the Contentment Foundation flag"></div>
+
+    <div class="mag-intro anim">
+      <h2 class="region-header">East Africa</h2>
+    </div>
+
+    <div class="mag-lead anim">
+      <div class="mag-lead-vid">
+        <button class="vfeat" data-yt="vo2VAWoxc34" aria-label="Play video: Nyang'ori Boys High School">
+          <span class="vposter" style="background-image:url('/assets/oi-img-14.jpg')"></span>
+          <span class="vscrim"></span><span class="vplay"></span>
+        </button>
+        <span class="vlabel">Nyang&#699;ori Boys High School<i>Vihiga County, Kenya &middot; video story</i></span>
+      </div>
+      <div class="mag-lead-text">
+        <p class="lede"><strong class="lede-open">Many African educators carry extraordinary weight:</strong> overcrowded classrooms, student needs shaped by poverty and broken homes, and constant pressure at the front line of support.</p>
+        <p>Many were giving everything and running on empty, some close to leaving the profession. The Four Pillars of Wellbeing offered something different, an invitation to turn inward first and become, as one educator put it, a self-scientist. Across Kenya, Uganda, Tanzania, and the DRC, teachers who found calm in themselves brought that calm to their classrooms. What began in Kenya in 2023 has taken root across the region, not by replication, but through local ownership. It turns out wellbeing is contagious.</p>
+      </div>
+    </div>
+
+    <div class="mag-stats anim">
+      <div class="rhl-i"><div class="rnum">4</div><div class="lab">countries, begun in Kenya</div></div>
+      <div class="rhl-i"><div class="rnum">300+</div><div class="lab">teachers in the Africa community</div></div>
+      <div class="rhl-i"><div class="rnum">20+</div><div class="lab">youth communities reached across Africa</div></div>
+      <div class="rhl-i"><div class="rnum">86%</div><div class="lab">felt their own wellbeing improve (2025)</div></div>
+      <div class="rhl-i"><div class="rnum">100%</div><div class="lab">saw their relationships improve</div></div>
+      <div class="rhl-i"><div class="rnum">100%</div><div class="lab">felt ready to bring the Four Pillars to their school and community</div></div>
+    </div>
+
+    <div class="voices voices-interactive anim" data-voices>
+      <div class="voices-lab">What educators told us</div>
+      <div class="voices-people" role="tablist">
+        <button class="vperson" role="tab" aria-selected="false" data-vq="ea-1">
+          <span class="vp-portrait"><img src="/assets/oi-img-15.jpg" alt="Evelyn Bilha Wanjiru"></span>
+          <span class="vp-name">Evelyn Bilha Wanjiru</span>
+        </button>
+        <button class="vperson" role="tab" aria-selected="false" data-vq="ea-2">
+          <span class="vp-portrait"><img src="/assets/oi-img-16.jpg" alt="Sister Jane Soita"></span>
+          <span class="vp-name">Sister Jane Soita</span>
+        </button>
+        <button class="vperson" role="tab" aria-selected="false" data-vq="ea-3">
+          <span class="vp-portrait"><img src="/assets/oi-img-17.jpg" alt="Micah Nkalubo"></span>
+          <span class="vp-name">Micah Nkalubo</span>
+        </button>
+      </div>
+      <div class="voices-panels">
+        <blockquote class="vpanel" id="ea-1">Having taught for more than 25 years, I have never felt as fulfilled as I have in the last 3 years of my teaching journey.<cite><b>Evelyn Bilha Wanjiru</b><span>Teacher, Thika Girls Karibaribi, Kenya</span></cite></blockquote>
+        <blockquote class="vpanel" id="ea-2">Before the Four Pillars, I was about to resign as Director. I was sliding into mental distress. Mindfulness gave me a new lease on life. I no longer feel stressed and tired, and I can give my students and staff my full attention.<cite><b>Sister Jane Soita</b><span>Director, Starehe Girls Centre and School, Kenya</span></cite></blockquote>
+        <blockquote class="vpanel" id="ea-3">We now have 20 communities across Africa supporting young people through self-discovery, many from disadvantaged backgrounds: former child soldiers, refugees, orphans. The Four Pillars gave us a better starting point to address not just mental health, but the whole wellbeing of our scholars and trainers. It&#8217;s a preventative approach to wellness, which is rare on this side of the world.<cite><b>Micah Nkalubo</b><span>Community Building Strategist, SINA Global</span></cite></blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REGION: HAWAII ============ -->
+<section class="region region-mag" id="hawaii">
+  <div class="wrap">
+    <div class="region-photo anim"><img src="/assets/oi-img-18.jpg" alt="Educators at a Hawaii Level 2 wellbeing training"></div>
+
+    <div class="mag-intro anim">
+      <h2 class="region-header">Hawai&#699;i</h2>
+    </div>
+
+    <div class="mag-lead anim">
+      <div class="mag-lead-vid">
+        <button class="vfeat" data-yt="grCEinjo3C8" aria-label="Play video: Deepening Educator Wellbeing">
+          <span class="vposter" style="background-image:url('/assets/oi-img-19.jpg')"></span>
+          <span class="vscrim"></span><span class="vplay"></span>
+        </button>
+        <span class="vlabel">Deepening Educator Wellbeing<i>Level 2 Educator Training, Hawai&#699;i &middot; video story</i></span>
+      </div>
+      <div class="mag-lead-text">
+        <p class="lede"><strong class="lede-open">Hawai&#699;i doesn&#8217;t need another wellness program.</strong> What educators across 10 schools on O&#699;ahu, Kaua&#699;i, Maui, and Hawai&#699;i Island needed was a partner willing to slow down, listen, and earn the right to be present.</p>
+        <p>As Jennifer Gonsalves, the Foundation&#8217;s Hawai&#699;i Program Lead, put it: trust is not given, it is earned, through consistency, humility, and respect for <span class="term">pilina</span> <span class="gloss">(relationship)</span>. Here, change looks like a skeptical teacher becoming a champion, or a <span class="term">kumu</span> <span class="gloss">(teacher)</span> arriving on autopilot and leaving reconnected to her <span class="term">na&#699;au</span> <span class="gloss">(center)</span>. This is what happens when wellbeing is offered as relationship, not program. <span class="term">He alo a he alo</span> <span class="gloss">(face to face)</span>, until trust becomes the ground everything else grows from.</p>
+      </div>
+    </div>
+
+    <div class="mag-stats anim">
+      <div class="rhl-i"><div class="rnum">10</div><div class="lab">schools across 4 islands actively engaged</div></div>
+      <div class="rhl-i"><div class="rnum">50</div><div class="lab">educators Level 1 or Level 2 certified</div></div>
+      <div class="rhl-i"><div class="rnum">200</div><div class="lab">educators using the Contentment School Platform</div></div>
+      <div class="rhl-i"><div class="rnum">100%</div><div class="lab">of fully certified educators felt their own wellbeing improve (2025)</div></div>
+      <div class="rhl-i"><div class="rnum">95.5%</div><div class="lab">gained practical wellbeing tools they could use right away</div></div>
+      <div class="rhl-i"><div class="rnum">100%</div><div class="lab">felt the work honored Hawaiian culture and values</div></div>
+    </div>
+
+    <div class="voices voices-interactive anim" data-voices>
+      <div class="voices-lab">What educators told us</div>
+      <div class="voices-people vp-2" role="tablist">
+        <button class="vperson" role="tab" aria-selected="false" data-vq="haw-1">
+          <span class="vp-portrait"><img src="/assets/oi-img-20.jpg" alt="Miguel K. Pa&#699;ekukui"></span>
+          <span class="vp-name">Miguel K. Pa&#699;ekukui</span>
+        </button>
+        <button class="vperson" role="tab" aria-selected="false" data-vq="haw-2">
+          <span class="vp-portrait"><img src="/assets/oi-img-21.jpg" alt="Jamie Fong"></span>
+          <span class="vp-name">Jamie Fong</span>
+        </button>
+      </div>
+      <div class="voices-panels">
+        <blockquote class="vpanel" id="haw-1">The Four Pillars of Wellbeing has saved my life, personally and professionally. I can navigate the emotions and ups and downs I face, and help my students do the same, meeting fear, grief, and other feelings with success and grace.<cite><b>Miguel K. Pa&#699;ekukui</b><span>Dean of Personalized Learning, Saint Louis School, Honolulu, Hawai&#699;i</span></cite></blockquote>
+        <blockquote class="vpanel" id="haw-2">Connecting with other educators has been amazing. When we build <span class="term">pilina</span> <span class="gloss">(relationships)</span> and show gratitude, the students see it. To serve our students fully, our cup needs to be full. Educator wellbeing is paramount in school settings.<cite><b>Jamie Fong</b><span>Counselor / Director of Student Success, Saint Louis School, Honolulu, Hawai&#699;i</span></cite></blockquote>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ REGION: MAINLAND NORTH AMERICA ============ -->
+<section class="region region-mag region-flip-mag" id="mainland">
+  <div class="wrap">
+    <div class="region-photo anim"><img src="/assets/oi-img-22.jpg" alt="Educators in North America"></div>
+
+    <div class="mag-intro anim">
+      <h2 class="region-header">North America</h2>
+    </div>
+
+    <div class="mag-lead anim">
+      <div class="mag-lead-vid">
+        <button class="vfeat" data-yt="eZXBmoe-RZk" aria-label="Play video: Corbett Preparatory School, Tampa">
+          <span class="vposter" style="background-image:url('/assets/oi-img-23.jpg')"></span>
+          <span class="vscrim"></span><span class="vplay"></span>
+        </button>
+        <span class="vlabel">Corbett Preparatory School<i>Tampa, FL &middot; the first pilot school &middot; video story</i></span>
+      </div>
+      <div class="mag-lead-text">
+        <p><strong class="lede-open">In 2016, Corbett Preparatory School in Tampa became the first school in the world to say yes.</strong> Then Covid hit, and a digital platform carried the work to New York City schools through one of the hardest seasons educators had faced.</p>
+        <p>From there it traveled person to person, to Siskiyou County in California, to Lakeland in Florida, and beyond. A Corbett educator carried it with him to The Country School in California, as something he had lived, not a program in a binder. The Four Pillars of Wellbeing spread because educators who felt something real wanted others to feel it too.</p>
+      </div>
+    </div>
+
+    <div class="mag-stats anim">
+      <div class="rhl-i"><div class="rnum">31</div><div class="lab">schools &amp; partner organizations</div></div>
+      <div class="rhl-i"><div class="rnum">5</div><div class="lab">states &amp; provinces, Florida to California to Ontario</div></div>
+      <div class="rhl-i"><div class="rnum">698</div><div class="lab">educators on the Contentment School Platform</div></div>
+      <div class="rhl-i"><div class="rnum">94.1%</div><div class="lab">felt their own wellbeing improve (2025)</div></div>
+      <div class="rhl-i"><div class="rnum">76.4%</div><div class="lab">felt more confident bringing the Four Pillars into their classroom</div></div>
+      <div class="rhl-i"><div class="rnum">100%</div><div class="lab">left excited to bring the Four Pillars to their school</div></div>
+    </div>
+
+    <div class="voices voices-interactive anim" data-voices>
+      <div class="voices-lab">What educators told us</div>
+      <div class="voices-people" role="tablist">
+        <button class="vperson" role="tab" aria-selected="false" data-vq="na-1">
+          <span class="vp-portrait"><img src="/assets/oi-img-24.jpg" alt="Rachele Lalonde"></span>
+          <span class="vp-name">Rachele Lalonde</span>
+        </button>
+        <button class="vperson" role="tab" aria-selected="false" data-vq="na-2">
+          <span class="vp-portrait"><img src="/assets/oi-img-25.jpg" alt="Ginger Lee Charles"></span>
+          <span class="vp-name">Ginger Lee Charles</span>
+        </button>
+        <button class="vperson" role="tab" aria-selected="false" data-vq="na-3">
+          <span class="vp-portrait"><img src="/assets/oi-img-26.jpg" alt="Matt Melnick"></span>
+          <span class="vp-name">Matt Melnick</span>
+        </button>
+      </div>
+      <div class="voices-panels">
+        <blockquote class="vpanel" id="na-1">The Four Pillars has reached every part of who I am, as a person, a mother, a teacher, a friend. It gave me something I didn&#8217;t realize I was missing: the pause, the grace, the ability to meet my life with presence instead of exhaustion. In my classroom, I see the transformation every day.<cite><b>Rachele Lalonde</b><span>Williamstown Public School, Ontario, Canada</span></cite></blockquote>
+        <blockquote class="vpanel" id="na-2">Staff say it&#8217;s one of the best trainings of their entire career. When someone says this has profoundly changed me as a human being, that&#8217;s huge. These are skills they&#8217;ll carry for the rest of their lives. It&#8217;s one of the best things you can do for your students and your staff.<cite><b>Ginger Lee Charles</b><span>Superintendent / Principal, Grenada Elementary, Siskiyou County, California</span></cite></blockquote>
+        <blockquote class="vpanel" id="na-3">The Four Pillars have allowed me to slow down in meaningful ways. It&#8217;s helped me trust myself more fully and truly listen to what others reflect back to me. My relationships have deepened, grounded in greater presence and authenticity.<cite><b>Matt Melnick</b><span>Assistant Head of Academics &amp; Wellness, The Country School, Los Angeles, California</span></cite></blockquote>
+      </div>
+    </div>
+
+    <div class="mag-more anim">
+      <div class="voices-lab">More from these schools</div>
+      <div class="vrow mag-vrow">
+        <button class="vthumb" data-yt="aUuF_xx-opA" aria-label="Play video: P.S./M.S. 124, Queens">
+          <span class="vposter" style="background-image:url('/assets/oi-img-27.jpg')"></span>
+          <span class="vscrim"></span><span class="vplay"></span>
+          <span class="vt-cap">P.S./M.S. 124 &middot; Queens, NY</span>
+        </button>
+        <button class="vthumb" data-yt="j1qMIFUHoFU" aria-label="Play video: Grenada Elementary, Siskiyou County">
+          <span class="vposter" style="background-image:url('/assets/oi-img-28.jpg')"></span>
+          <span class="vscrim"></span><span class="vplay"></span>
+          <span class="vt-cap">Grenada Elementary &middot; Siskiyou County, CA</span>
+        </button>
+        <button class="vthumb" data-yt="EPbg8bD1A4M" aria-label="Play video: Excel Christian Academy, Lakeland">
+          <span class="vposter" style="background-image:url('/assets/oi-img-29.jpg')"></span>
+          <span class="vscrim"></span><span class="vplay"></span>
+          <span class="vt-cap">Excel Christian Academy &middot; Lakeland, FL</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REGION: SINGAPORE (stub) ============ -->
+<section class="region stub" id="singapore">
+  <div class="wrap">
+    <div class="region-photo anim"><img src="/assets/oi-img-30.jpg" alt="Educators gathered in Singapore"></div>
+    <div class="region-body">
+      <div class="region-story anim">
+        <h2 class="region-header">Singapore <span class="stub-badge">New region</span></h2>
+        <div class="stub-note">
+          <span class="kick">Story coming soon</span>
+          <p>Our work in Singapore is just beginning to scale. Full story and educator voices coming soon.</p>
+        </div>
+      </div>
+      <div class="region-vid anim d1">
+        <div class="mag-lead-vid">
+          <button class="vfeat" data-yt="0DzrKSN3Glc" aria-label="Play video: Singapore">
+            <span class="vposter" style="background-image:url('/assets/oi-img-31.jpg')"></span>
+            <span class="vscrim"></span><span class="vplay"></span>
+          </button>
+          <span class="vlabel">Singapore<i>video story</i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCHOOLS OF WELLBEING VIDEO (shared with For Schools) ============ -->
+<section class="schoolsvid">
+  <div class="wrap">
+    <span class="eyebrow anim">In their own words</span>
+    <h2 class="anim d1">See the work in real schools</h2>
+    <p class="vsub anim d1">Our Schools of Wellbeing series: educators and leaders sharing what changed.</p>
+    <div class="videoframe anim d2" role="button" tabindex="0" data-yt="Ot_ZecrcNs0" data-list="PL6grto2rTA0-W5HRhrk6i7S0UqJ2030Q3" aria-label="Play video: The Country School">
+      <div class="vposter" style="background-image:url('/assets/oi-img-32.jpg')"></div>
+      <div class="vplay"></div>
+      <div class="vlabel">The Country School</div>
+    </div>
+    <div class="vplaylist anim d2"><a class="btn-playlist" href="https://www.youtube.com/playlist?list=PL6grto2rTA0-W5HRhrk6i7S0UqJ2030Q3" target="_blank" rel="noopener">Watch the full Schools of Wellbeing playlist <span class="arrow">&rarr;</span></a></div>
+  </div>
+</section>
+
+<!-- ============ WAVE + JOIN HOMEROOM CLOSE ============ -->
+<div class="wavesep"><svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M0,32 C240,72 480,72 720,44 C960,16 1200,16 1440,40 L1440,70 L0,70 Z"></path></svg></div>
+<section class="close-cta">
+  <div class="wrap">
+    <span class="eyebrow">Be part of the story</span>
+    <h2>Every story here began with a <span class="cursive">supported teacher</span></h2>
+    <p>When you give monthly, you stand behind the educators carrying this work forward, in North America, Bhutan, Kenya, Hawai&#699;i, and beyond.</p>
+    <!-- Homeroom / Keela join flow. Falls back to /give while HC-071 (Keela/Homeroom join-flow
+         choreography) is unresolved, matching seams.ts's own documented fallback for `join`. -->
+    <a href={seams.join || '/give'} class="btn-give">Become a monthly giver</a>
+  </div>
+</section>
+
+<!-- ============ ANNUAL REPORTS ============ -->
+<section class="reports">
+  <div class="wrap">
+    <div class="r-head anim">
+      <span class="eyebrow region-eyebrow">Transparency</span>
+      <h2 class="title" style="margin-top:12px">Our Annual Reports &amp; Impact</h2>
+      <p class="r-intro">Read the full story of our reach, our impact, and the educators behind the work.</p>
+    </div>
+    <div class="r-feat">
+      <div class="rcard anim">
+        <div class="rcard-cover land"><img src="/assets/oi-img-33.jpg" alt="2025 Annual Report cover"></div>
+        <div class="rcard-b">
+          <h4>2025 Annual Report</h4>
+          <p class="rc-sub">The full year in impact, reach, and stories.</p>
+          <!-- 2025 Annual Report (Google Drive). HC-074: interim link, final hosted PDF pending from Somesh. -->
+          <a class="rbtn" href="https://drive.google.com/file/d/11sRQB5vbcCWI7c0RQjEbNfmdq7or7arp/view?usp=sharing" target="_blank" rel="noopener">Read the report</a>
+        </div>
+      </div>
+      <div class="rcard anim d1">
+        <div class="rcard-cover land"><img src="/assets/oi-img-34.jpg" alt="2025 Highlights cover"></div>
+        <div class="rcard-b">
+          <h4>2025 Highlights</h4>
+          <p class="rc-sub">The one-pager, for a fast read.</p>
+          <!-- 2025 Highlights (Google Drive). HC-074: interim link, final hosted PDF pending from Somesh. -->
+          <a class="rbtn" href="https://drive.google.com/file/d/1PbRWIanXUD9zu7fU0KcP-Hr4lLofnAsJ/view?usp=sharing" target="_blank" rel="noopener">View highlights</a>
+        </div>
+      </div>
+    </div>
+    <div class="r-past anim">
+      <span class="r-past-lab">Past reports</span>
+      <a href="https://docs.google.com/presentation/d/e/2PACX-1vQ45GVcyZLxxfDfBvvGS9ZiXBYs_POkis9eCWC5CuQVt_YjtE662PKKxlYf6_4noZsE2blectSRxSyM/pub?start=true&amp;loop=true&amp;delayms=10000&amp;slide=id.g2e703642804_0_0" target="_blank" rel="noopener">2024</a><a href="https://0107643d-b722-4eea-8271-ac0b0b7d6e87.filesusr.com/ugd/53b628_7de11a9735c74500b5554dc939ea4363.pdf" target="_blank" rel="noopener">2023</a><a href="https://drive.google.com/file/d/11uelGVLbSDBHxy_CULGZsLLjbO0CrYwi/view" target="_blank" rel="noopener">2022</a>
+      <a href="https://0107643d-b722-4eea-8271-ac0b0b7d6e87.filesusr.com/ugd/53b628_6db9543862c748d8bac3af52f3788640.pdf" target="_blank" rel="noopener">2021</a><a href="https://0107643d-b722-4eea-8271-ac0b0b7d6e87.filesusr.com/ugd/53b628_cca93162d95d4c819b876f8e5b1b07a0.pdf" target="_blank" rel="noopener">2020</a><a href="https://0107643d-b722-4eea-8271-ac0b0b7d6e87.filesusr.com/ugd/53b628_a071a7e081ee4c438f5d8ce8c95c6ebf.pdf" target="_blank" rel="noopener">2019</a>
+    </div>
+  </div>
+</section>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Video">
+  <div class="lb-inner"><button class="lb-close" id="lbClose" aria-label="Close">&#215;</button><div id="lbSlot" class="lb-video"></div></div>
+</div>
+
+</BaseLayout>
+
+<style>
+  /* Page-specific CSS only — reset/wrap/eyebrow/buttons/nav/footer/.anim/section-typography
+     system, and the base .hero rules, are already in src/styles/global.css (verified, see
+     TECHNICAL-ARCHITECTURE §3). This page's own hero variant (.hero-map) fully replaces the
+     base .hero::after background via a same-specificity, later-in-cascade selector, so the
+     base .hero rules don't need to be repeated here.
+     Kit boilerplate this page doesn't use (.impact/.stats, .split, .how/.how-orbit,
+     .alone/.circles, .pillars, .doors, .tiers/.homeroom, .voice, .news) is omitted — dead
+     CSS, no matching markup on this page. Also dropped as genuinely dead within the
+     "Stories page addendum" itself (no matching markup anywhere in this page's HTML):
+     .gstat, the alternate SVG-worldmap `.regcards`/`.rc-grid`/`.rc` region-card grid,
+     `.devflag`, `.vquote`/`.vq-portrait`, the bare `.rhl` wrapper (superseded by the
+     `.mag-stats .rhl-i` version below), and the `.region.flip` combinator (this page uses
+     the single `.region-flip-mag` class instead). */
+
+  /* ---------- HERO (single full-screen composition, map as faint wallpaper) ---------- */
+  .hero-map{background:url('/assets/oi-img-01.jpg') center/cover no-repeat, #6cbfa0;
+     position:relative;overflow:hidden;
+     height:100svh;min-height:680px;display:flex;align-items:stretch}
+  .hero-map::after{content:"";position:absolute;inset:0;z-index:1;
+     background:linear-gradient(160deg,rgba(255,255,255,.28) 0%,rgba(108,191,160,.05) 45%,rgba(46,120,100,.18) 100%)}
+  .hero-map .hero-worldmap{position:absolute;inset:0;z-index:0;pointer-events:none;
+     display:flex;align-items:center;justify-content:center}
+  .hero-map .hero-worldmap img{width:100%;height:auto;max-width:1600px;
+     mix-blend-mode:overlay;opacity:.10;object-fit:contain}
+  .hero-map .hero-inner{position:relative;z-index:2;width:100%;
+     display:flex;flex-direction:column;justify-content:space-between;
+     padding:150px 0 48px}
+  .hero-map .hero-top{max-width:960px}
+  .hero-map .hero-q{margin-top:14px;color:var(--deep)}
+  .hero-map .hero-q .cursive{font-family:var(--script);font-weight:400;
+     font-style:normal;color:var(--deep);padding-right:.12em}
+  .hero-map .hero-mid .lead{margin:0 0 22px}
+  .hero-map .lead-accent{font-family:var(--display);font-style:italic;font-weight:400;
+     font-size:clamp(1.3rem,1.9vw,1.72rem);line-height:1.34;letter-spacing:.002em}
+  .hero-map .hero-regions{margin:0}
+  .hero-map .hero-stats{margin-top:0}
+
+  /* region cards: the centered focal band */
+  .hero-regions{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;
+     max-width:1120px}
+  .hrc{position:relative;text-decoration:none;
+     transition:transform .3s ease}
+  .hrc:hover{transform:translateY(-6px)}
+  .hrc .ph{position:relative;display:block;aspect-ratio:1/1;
+     border-radius:16px;overflow:hidden;
+     box-shadow:0 20px 48px -22px rgba(0,20,35,.75);
+     transition:box-shadow .3s ease}
+  .hrc:hover .ph{box-shadow:0 30px 64px -24px rgba(0,20,35,.85)}
+  .hrc .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .hrc-name{display:block;margin-top:12px;color:#fff;text-align:center;
+     font:600 1.02rem/1.15 var(--display);text-transform:uppercase;
+     letter-spacing:.03em}
+  .hrc.soon .hrc-badge{position:absolute;top:12px;left:12px;z-index:4;
+     font:700 .58rem/1.15 var(--body);letter-spacing:.08em;text-transform:uppercase;
+     text-align:left;
+     background:rgba(2,55,79,.72);color:#fff;border:1px solid rgba(255,255,255,.45);
+     padding:8px 10px;border-radius:12px;backdrop-filter:blur(5px)}
+
+  /* stats: bottom anchor of the hero composition */
+  .hero-stats{display:flex;flex-wrap:wrap;gap:8px 30px;align-items:baseline;
+     padding-top:26px;border-top:1px solid rgba(255,255,255,.16)}
+  .hero-stats b{font:600 1.04rem/1.3 var(--display);color:#27664f}
+  .hero-stats span{font:600 1.04rem/1.3 var(--display);color:#27664f;opacity:1}
+  .hero-stats .sep{opacity:.34;padding:0 2px}
+
+  @media(max-width:900px){
+    .hero-regions{grid-template-columns:repeat(3,1fr);max-width:600px}
+    .hero-map .hero-inner{padding:104px 0 32px}
+  }
+  @media(max-width:560px){
+    .hero-map{height:auto;min-height:0;padding-bottom:10px}
+    .hero-map .hero-inner{padding:96px 0 30px;gap:32px}
+    .hero-regions{grid-template-columns:repeat(2,1fr);gap:12px}
+    .hrc-name{font-size:.98rem}
+    .hero-stats{gap:6px 16px}
+    .hero-stats b,.hero-stats span{font-size:.92rem}
+    .hero-stats .sep{display:none}
+  }
+
+  /* duotone placeholder tile — sits behind the real photo in .hrc .ph; harmless, fully
+     covered by the real <img>, kept for source fidelity */
+  .ph{position:relative;display:flex;align-items:flex-end;overflow:hidden;background:
+     linear-gradient(135deg,var(--deep) 0%,var(--ocean) 55%,var(--teal) 130%);
+     color:#EAF7F1}
+  .ph::before{content:"";position:absolute;inset:0;
+     background:radial-gradient(120% 120% at 80% -10%,rgba(255,255,255,.10),transparent 60%);
+     mix-blend-mode:screen}
+
+  /* --- region section --- */
+  .region{padding:88px 0 8px}
+  .region .wrap{max-width:1180px}
+  .region-photo{position:relative;border-radius:20px;overflow:hidden;
+     aspect-ratio:21/9;box-shadow:var(--shadow);margin-bottom:8px}
+  .region-eyebrow{color:var(--ocean)}
+  /* big, unmistakable region section headers */
+  .region-header{font:600 clamp(2.4rem,5vw,3.6rem)/1.02 var(--display);
+     color:var(--deep);text-transform:uppercase;letter-spacing:.01em;
+     margin:0 0 22px}
+  .region-header em{display:inline-block;font:500 .9rem/1 var(--body);
+     letter-spacing:.16em;text-transform:uppercase;color:var(--ocean);
+     vertical-align:middle;margin-left:14px;font-style:normal;
+     background:var(--mist);padding:7px 12px;border-radius:999px}
+  .region-body{display:grid;grid-template-columns:1.05fr 1fr;gap:52px;
+     align-items:start;margin-top:40px}
+  .region-story .title{margin:12px 0 18px}
+  .region-story p{font:400 1.06rem/1.72 var(--body);color:var(--slate);
+     max-width:52ch}
+  .region-story p + p{margin-top:1.1em}
+  .region-story .lede{color:var(--ink)}
+  .region-story .lede-open{font-weight:600;color:var(--deep)}
+
+  /* --- video feature + thumbnail row (captions below the image) --- */
+  .region-vid{position:relative}
+  .vfeat{position:relative;display:block;width:100%;
+     cursor:pointer;background:none;border:0;padding:0;box-shadow:none;text-align:left;
+     -webkit-appearance:none;appearance:none;font:inherit;color:inherit}
+  .vfeat .vposter{position:relative;display:block;width:100%;aspect-ratio:16/9;
+     border-radius:16px;overflow:hidden;background-size:cover;
+     background-position:center;box-shadow:var(--shadow);transition:transform .5s ease}
+  .vfeat:hover .vposter{transform:translateY(-2px)}
+  .vfeat .vscrim{position:absolute;inset:0;border-radius:16px;
+     background:linear-gradient(to top,rgba(2,45,66,.28),transparent 45%)}
+  .vplay{position:absolute;top:calc(50% - 20px);left:50%;transform:translate(-50%,-50%);
+     width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.94);
+     display:grid;place-items:center;z-index:3;transition:transform .3s ease}
+  .vfeat:hover .vplay{transform:translate(-50%,-50%) scale(1.08)}
+  .vplay::after{content:"";width:0;height:0;margin-left:4px;
+     border-left:19px solid var(--deep);border-top:12px solid transparent;
+     border-bottom:12px solid transparent}
+  .vlabel{display:block;margin-top:13px;color:var(--ink);
+     font:600 1.06rem/1.28 var(--display)}
+  .vlabel i{display:block;font:500 .82rem/1.3 var(--body);letter-spacing:.01em;
+     color:var(--slate);margin-top:5px;font-style:normal}
+
+  /* framed feature video (magazine lead): colored card + indented caption */
+  .mag-lead-vid{background:var(--deep);border-radius:20px;overflow:hidden;
+     box-shadow:0 24px 60px -28px rgba(2,40,58,.7)}
+  .mag-lead-vid .vfeat{padding:14px 14px 0}
+  .mag-lead-vid .vposter{border-radius:12px;box-shadow:none}
+  .mag-lead-vid .vscrim{border-radius:12px}
+  .mag-lead-vid .vlabel{color:#fff;padding:16px 20px 20px;margin-top:0}
+  .mag-lead-vid .vlabel i{color:#CFE8EE}
+
+  .vrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}
+  .vthumb{position:relative;display:block;cursor:pointer;background:none;
+     border:0;padding:0;box-shadow:none;text-align:left;min-width:0;
+     -webkit-appearance:none;appearance:none;font:inherit;color:inherit}
+  .vthumb .vposter{position:relative;display:block;width:100%;aspect-ratio:16/9;
+     border-radius:11px;overflow:hidden;background-size:cover;background-position:center;
+     box-shadow:0 10px 26px -14px rgba(2,55,79,.4)}
+  .vthumb .vscrim{display:none}
+  .vthumb .vplay{width:38px;height:38px;top:50%}
+  .vthumb:hover .vplay{transform:translate(-50%,-50%) scale(1.08)}
+  .vthumb .vplay::after{border-left:12px solid var(--deep);border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
+  .vthumb .vt-cap{display:block;margin-top:9px;color:var(--slate);
+     font:500 .8rem/1.32 var(--body)}
+
+  /* --- educator voices (interactive: face -> expanding quote) --- */
+  .voices{margin:46px 0 4px}
+  .voices-lab{font:600 .74rem/1 var(--body);letter-spacing:.14em;
+     text-transform:uppercase;color:var(--ocean);margin-bottom:20px}
+
+  /* Hawaiian / non-english term styling */
+  .term{font-style:italic}
+  .gloss{font-style:normal;color:var(--slate)}
+
+  /* ===== per-region accent color system ===== */
+  #bhutan{--accent:#54bf98;--accent-box:#54bf98;--accent-quotebox:#c6e4dc}
+  #kenya{--accent:#32c0cf;--accent-box:#32c0cf;--accent-quotebox:#c7ecef;background:#f2f2f1}
+  #hawaii{--accent:#0090be;--accent-box:#0090be;--accent-quotebox:#caeff4}
+  #mainland{--accent:#0090be;--accent-box:#0090be;--accent-quotebox:#d6f4f8;background:#f2f2f1}
+  /* apply accent to region elements */
+  .region-mag .region-header{color:var(--accent,var(--deep))}
+  .region-mag .mag-lead-text .lede-open{color:var(--accent,var(--deep))}
+  .region-mag .voices-lab{color:var(--accent,var(--ocean))}
+  .region-mag .mag-stats .rnum{color:var(--accent,var(--deep))}
+  .region-mag .vp-name{color:var(--accent,var(--deep))}
+  .region-mag .vpanel cite b{color:var(--accent,var(--deep))}
+  .region-mag .mag-lead-vid{background:var(--accent-box,var(--deep))}
+  .region-mag .vpanel{background:var(--accent-quotebox,var(--mist))}
+  .region-mag .vpanel::before{background:var(--accent-quotebox,var(--mist))}
+  .region-mag .vperson[aria-selected="true"] .vp-portrait{box-shadow:0 0 0 4px var(--accent,var(--teal)),0 16px 38px -14px rgba(2,55,79,.6)}
+
+  /* ===== region separation: alternating tint + line ornament divider ===== */
+  .region-mag{position:relative;padding:70px 0 84px}
+  .region-mag::after{content:"";position:absolute;left:50%;bottom:0;
+     transform:translate(-50%,50%);width:280px;height:1px;z-index:2;
+     background:linear-gradient(to right,transparent,var(--slate) 30%,var(--slate) 70%,transparent);
+     opacity:.45}
+  .region-mag::before{content:"";position:absolute;left:50%;bottom:0;
+     transform:translate(-50%,50%) rotate(45deg);width:7px;height:7px;z-index:3;
+     background:var(--slate);opacity:.55}
+
+  /* ===== MAGAZINE region layout ===== */
+  .region-mag .region-photo{margin-bottom:38px}
+  .mag-intro{max-width:none;margin:0 0 30px}
+  .mag-intro .region-header{margin-bottom:0;font-size:clamp(3rem,5vw,4.4rem);
+     line-height:1.0;white-space:nowrap}
+  /* North America: two long words in a flipped column -> smaller so it fits */
+  #mainland .region-header{font-size:clamp(2.4rem,3.6vw,3.2rem)}
+  /* non-flip: text is left column (1fr of 1fr+1.15fr) -> header sits over it */
+  .region-mag:not(.region-flip-mag) .mag-intro{width:calc(46.5% - 22px)}
+  /* flip: text is right column -> header right-aligned over it */
+  .region-flip-mag .mag-intro{width:calc(46.5% - 22px);margin-left:auto}
+
+  /* lead: feature video + story text side by side */
+  .mag-lead{display:grid;grid-template-columns:1fr 1.15fr;gap:44px;align-items:start;
+     margin-bottom:16px}
+  .mag-lead-text{order:1}
+  .mag-lead-vid{order:2}
+  /* flipped magazine region: video left, text right, title over the text */
+  .region-flip-mag .mag-lead{grid-template-columns:1.15fr 1fr}
+  .region-flip-mag .mag-lead-vid{order:1}
+  .region-flip-mag .mag-lead-text{order:2}
+  .mag-lead-text p{font:400 1.04rem/1.72 var(--body);color:var(--slate);margin:0}
+  .mag-lead-text p + p{margin-top:1.1em}
+  .mag-lead-text .lede-open{font-weight:600;color:var(--deep)}
+
+  /* stats: contained color block, tidy aligned columns */
+  .mag-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 44px;
+     margin:44px 0 8px;padding:38px 44px;background:#fff;border-radius:20px;
+     box-shadow:0 18px 44px -26px rgba(2,55,79,.4)}
+  .mag-stats .rhl-i{display:grid;grid-template-columns:4.6em 1fr;gap:16px;align-items:baseline}
+  .mag-stats .rnum{font:600 1.6rem/1 var(--display);color:var(--deep);white-space:nowrap;text-align:right}
+  .mag-stats .lab{font:400 .9rem/1.42 var(--body);color:var(--slate)}
+
+  /* more-to-watch video row: deep navy block, matches feature frame */
+  .mag-more{margin-top:60px;background:var(--deep);border-radius:22px;
+     padding:44px 44px 48px}
+  .mag-more .voices-lab{color:#fff;margin-bottom:20px;opacity:.92}
+  .mag-vrow{margin-top:0}
+  .mag-more .vt-cap{color:#EAF7F1}
+  .mag-more .vthumb .vposter{box-shadow:0 14px 30px -14px rgba(0,20,35,.6)}
+
+  /* ===== interactive educator voices (faces -> expanding quote) ===== */
+  .voices-interactive{margin-top:52px}
+  .voices-people{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .voices-people.vp-2{grid-template-columns:repeat(2,minmax(0,260px));justify-content:center;gap:60px}
+  .vperson{display:flex;flex-direction:column;align-items:center;text-align:center;
+     gap:12px;cursor:pointer;background:none;border:0;padding:14px 12px;
+     border-radius:16px;-webkit-appearance:none;appearance:none;font:inherit;color:inherit;
+     transition:background .25s ease,transform .25s ease,box-shadow .25s ease}
+  .vperson:hover{background:var(--paper2);transform:translateY(-3px)}
+  .vperson[aria-selected="true"]{background:var(--accent-quotebox,var(--mist))}
+  .vp-portrait{width:100%;max-width:220px;aspect-ratio:1/1;height:auto;
+     border-radius:24px;overflow:hidden;flex:none;
+     box-shadow:0 16px 38px -16px rgba(2,55,79,.55);position:relative;
+     transition:box-shadow .25s ease,transform .25s ease}
+  .vperson[aria-selected="true"] .vp-portrait{box-shadow:0 0 0 4px var(--teal),0 16px 38px -14px rgba(2,55,79,.6)}
+  .vp-portrait img{width:100%;height:100%;object-fit:cover;display:block}
+  .vp-name{font:600 1.24rem/1.2 var(--display);color:var(--deep)}
+
+  .voices-panels{margin-top:8px}
+  .vpanel{display:none;position:relative;margin:22px auto 0;max-width:none;
+     background:var(--mist);border-radius:18px;padding:30px 34px 26px;
+     font:400 1.16rem/1.56 var(--display);font-style:italic;color:var(--ink)}
+  .vpanel.open{display:block;animation:vfade .3s ease}
+  .vpanel::before{content:"";position:absolute;top:-9px;left:var(--arrow,16%);
+     width:18px;height:18px;background:var(--mist);transform:rotate(45deg)}
+  .vpanel cite{display:block;margin-top:18px;font-style:normal}
+  .vpanel cite b{display:block;font:600 .98rem/1.3 var(--body);color:var(--deep)}
+  .vpanel cite span{display:block;margin-top:3px;font:400 .88rem/1.4 var(--body);color:var(--slate)}
+  @keyframes vfade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+  @media(max-width:900px){
+    .mag-lead{grid-template-columns:1fr;gap:14px}
+    .mag-lead-text{order:1}
+    .mag-lead-vid{order:2}
+    .mag-stats{grid-template-columns:1fr 1fr;gap:22px 30px}
+    .mag-intro,.region-mag:not(.region-flip-mag) .mag-intro,.region-flip-mag .mag-intro{width:auto;margin:0 0 24px}
+    .mag-intro .region-header{white-space:normal;font-size:clamp(2rem,7vw,2.8rem)}
+  }
+  @media(max-width:620px){
+    .voices-people{grid-template-columns:repeat(3,1fr);gap:8px}
+    .vp-portrait{max-width:120px;border-radius:18px}
+    .vp-name{font-size:.94rem}
+    .mag-stats{grid-template-columns:1fr}
+    .vpanel{font-size:1.08rem;padding:24px 22px}
+    .vpanel::before{left:50%;margin-left:-9px}
+  }
+
+  /* --- singapore stub --- */
+  .region.stub{padding-bottom:72px}
+  .region.stub .region-body{grid-template-columns:1fr 1fr;align-items:center}
+  #singapore .region-header{color:#6275b4}
+  #singapore .mag-lead-vid{background:#6275b4}
+  .stub-badge{display:inline-block;vertical-align:middle;margin-left:14px;
+     background:#c7d0eb;color:#6275b4;font:700 .62rem/1.15 var(--body);
+     letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;
+     border-radius:10px;transform:translateY(-.35em)}
+  #singapore .stub-note .kick{color:#6275b4}
+  .stub-note{background:var(--paper2);border:1px dashed var(--line);
+     border-radius:16px;padding:30px 32px}
+  .stub-note .kick{font:600 .72rem/1 var(--body);letter-spacing:.14em;
+     text-transform:uppercase;color:var(--ocean)}
+  .stub-note p{font:400 1.02rem/1.6 var(--body);color:var(--slate);margin:12px 0 0}
+
+  /* --- wave divider into close --- */
+  .wavesep{display:block;width:100%;height:70px;margin-bottom:-6px;color:#e9b85b}
+  .wavesep svg{display:block;width:100%;height:100%}
+  /* blue-to-gold wave (no white strip): tint the wave block with the same blue ground as the section above */
+  .schoolsvid + .wavesep{background:url('/assets/oi-img-02.jpg') center/cover no-repeat, var(--deep);margin-top:-1px}
+
+  /* --- join homeroom close --- */
+  .close-cta{background:#e9b85b;color:#fff;position:relative;overflow:hidden;
+     padding:82px 0 92px;text-align:center}
+  .close-cta .wrap{position:relative;z-index:2;max-width:60ch}
+  .close-cta .eyebrow{color:#fff}
+  .close-cta h2 .cursive{font-family:var(--script);font-weight:400;font-style:normal;padding:0 .1em}
+  .close-cta h2{color:#fff;font:500 2.4rem/1.14 var(--display);margin:14px 0 18px}
+  .close-cta p{color:#EAF7F1;font:400 1.12rem/1.66 var(--body);
+     max-width:52ch;margin:0 auto 30px}
+  .btn-give{display:inline-block;background:#bf8e30;color:#fff;
+     font:600 1rem/1 var(--body);padding:17px 34px;border-radius:999px;
+     text-decoration:none;box-shadow:0 16px 40px -16px rgba(0,0,0,.5);
+     transition:transform .25s ease}
+  .btn-give:hover{transform:translateY(-2px)}
+
+  /* --- annual reports band --- */
+  .reports{background:url('/assets/oi-img-03.jpg') center/cover no-repeat, #fff;
+     padding:76px 0 90px;border-top:1px solid var(--line)}
+  .reports .region-eyebrow{color:#a4dcce}
+  .reports h2.title{color:#54bf98}
+  .reports .r-head{max-width:52ch;margin:0 auto 40px;text-align:center}
+  .reports .r-intro{font:400 1.06rem/1.6 var(--body);color:var(--slate);margin:14px auto 0;max-width:44ch}
+  .r-feat{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;
+     max-width:760px;margin:0 auto 40px}
+  .rcard{background:#fff;border:1px solid var(--line);border-radius:16px;
+     overflow:hidden;box-shadow:0 14px 40px -22px rgba(2,55,79,.4);
+     display:flex;flex-direction:column}
+  .rcard-cover{aspect-ratio:8.5/11;position:relative;background:var(--paper2)}
+  .rcard-cover.land{aspect-ratio:1.414/1}
+  .rcard-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .rcard-b{padding:20px 22px 22px}
+  .rcard-b h4{font:600 1.08rem/1.3 var(--display);color:var(--ink);margin:0 0 4px}
+  .rcard-b .rc-sub{font:400 .86rem/1.4 var(--body);color:var(--slate);margin:0 0 16px}
+  .rbtn{display:inline-block;background:#54bf98;color:#fff;
+     font:600 .88rem/1 var(--body);padding:12px 20px;border-radius:999px;
+     text-decoration:none;transition:background .25s ease}
+  .rbtn:hover{background:#2E7864}
+  .r-past{max-width:760px;margin:0 auto;padding-top:26px;border-top:1px solid var(--line);
+     display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;justify-content:center}
+  .r-past .r-past-lab{font:600 .74rem/1 var(--body);letter-spacing:.12em;
+     text-transform:uppercase;color:var(--slate);margin-right:6px}
+  .r-past a{font:500 .92rem/1 var(--body);color:var(--ocean);text-decoration:none;
+     padding:8px 14px;border:1px solid var(--line);border-radius:999px;
+     transition:background .2s ease,color .2s ease}
+  .r-past a:hover{background:var(--ocean);color:#fff}
+
+  /* --- responsive --- */
+  @media(max-width:960px){
+    .region-body{grid-template-columns:1fr;gap:34px}
+    .region-vid{position:static}
+    .region.stub .region-body{grid-template-columns:1fr}
+    .region-photo{aspect-ratio:16/9}
+  }
+  @media(max-width:620px){
+    .vrow{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .r-feat{grid-template-columns:1fr;max-width:340px}
+    .close-cta h2{font-size:1.9rem}
+    .region{padding:60px 0 4px}
+  }
+
+  /* ===== video lightbox ===== */
+  .lb{position:fixed;inset:0;z-index:9999;display:none;
+     align-items:center;justify-content:center;padding:24px;
+     background:rgba(2,20,32,.86);backdrop-filter:blur(4px)}
+  .lb.open{display:flex}
+  .lb-inner{position:relative;width:min(1100px,94vw);aspect-ratio:16/9;
+     background:#000;border-radius:14px;overflow:hidden;
+     box-shadow:0 40px 120px -30px rgba(0,0,0,.8)}
+  .lb-inner #lbSlot{position:absolute;inset:0}
+  .lb-inner iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+  .lb-close{position:absolute;top:-14px;right:-14px;z-index:3;
+     width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;
+     background:#fff;color:var(--deep);font:400 1.6rem/1 var(--body);
+     display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .lb-close:hover{background:var(--mist)}
+  @media(max-width:560px){
+    .lb{padding:14px}
+    .lb-close{top:-12px;right:-6px;width:38px;height:38px;font-size:1.4rem}
+  }
+
+  /* ===== "See the work in real schools" video fold (shared with For Schools) ===== */
+  .schoolsvid{background:url('/assets/oi-img-02.jpg') center/cover no-repeat, var(--deep);color:#fff;position:relative;overflow:hidden;padding:82px 0 90px}
+  .schoolsvid::before{content:"";position:absolute;width:560px;height:560px;border-radius:50%;border:1px solid rgba(255,255,255,.07);bottom:-200px;left:-150px;z-index:0}
+  .schoolsvid .wrap{position:relative;z-index:1;max-width:960px;text-align:center}
+  .schoolsvid .eyebrow{color:#fff}
+  .schoolsvid h2{color:#fff;margin-top:14px;font-family:var(--display);font-weight:500;font-size:clamp(2rem,3.6vw,2.9rem);letter-spacing:-.01em}
+  .schoolsvid .vsub{margin-top:14px;font-size:1.08rem;color:rgba(255,255,255,.86);line-height:1.55;margin-left:auto;margin-right:auto;max-width:60ch;text-wrap:balance}
+  .schoolsvid .videoframe{margin-top:38px;position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);background:#02374f;cursor:pointer;border:1px solid rgba(255,255,255,.16)}
+  .schoolsvid .videoframe .vposter{position:absolute;inset:0;background-size:cover;background-position:center}
+  .schoolsvid .videoframe .vplay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center;box-shadow:0 12px 34px -12px rgba(0,0,0,.5);transition:transform .3s}
+  .schoolsvid .videoframe:hover .vplay{transform:translate(-50%,-50%) scale(1.08)}
+  /* two-triangle play-button bug fix (HANDOFF.md §2): this card's .vplay was drawing a
+     SECOND arrow via its own ::before on top of the shared .vplay::after — neutralized so
+     it uses only the base ::after, exactly like the other feature videos. Do not remove. */
+  .schoolsvid .videoframe .vplay::before{content:none}
+  .schoolsvid .videoframe .vlabel{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:18px 22px;background:linear-gradient(0deg,rgba(2,30,44,.9),transparent);text-align:left;font-size:.92rem;font-weight:600;color:#fff}
+  .schoolsvid .vplaylist{margin-top:clamp(28px,3.5vw,40px);display:flex;justify-content:center}
+  .schoolsvid .btn-playlist{display:inline-flex;align-items:center;gap:10px;background:#d6f1f6;color:var(--deep);font-family:var(--body);font-weight:700;font-size:1rem;padding:15px 30px;border-radius:999px;text-decoration:none;transition:background .25s,transform .25s,box-shadow .25s;box-shadow:0 14px 30px -16px rgba(2,55,79,.5)}
+  .schoolsvid .btn-playlist:hover{background:#e6f7fb;color:var(--deep);transform:translateY(-2px);box-shadow:0 0 34px 4px rgba(214,241,246,.55),0 14px 30px -16px rgba(2,55,79,.5)}
+  .schoolsvid .btn-playlist:focus{outline:none}
+  .schoolsvid .btn-playlist:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(214,241,246,.6),0 14px 30px -16px rgba(2,55,79,.5)}
+  .schoolsvid .btn-playlist .arrow{transition:transform .25s;display:inline-block}
+  .schoolsvid .btn-playlist:hover .arrow{transform:translateX(4px)}
+</style>
+
+<script>
+  // Page-specific behaviour not covered by src/scripts/*: video lightbox / inline data-yt
+  // play, and the interactive "educator voices" face -> quote panels. Ported verbatim from
+  // this page's own inline <script> in the source handoff (nav scroll, hero entrance,
+  // reveal-on-scroll, count-up are already handled globally by BaseLayout's
+  // animations.js/nav.js).
+
+  // Our Impact: nav pinned white — the hero ground here is light green/white, not dark,
+  // so the header must render in its scrolled (white-bar) state even at the very top of
+  // the page. Ported from the source's own `hdr.classList.add('scrolled')` call.
+  const hdr = document.getElementById('hdr');
+  hdr?.classList.add('scrolled');
+
+  // video lightbox for any element with data-yt
+  const lb = document.getElementById('lb');
+  const lbSlot = document.getElementById('lbSlot');
+  const lbClose = document.getElementById('lbClose');
+
+  function openLb(id?: string, list?: string) {
+    if (!lbSlot || !lb) return;
+    if (!id || id === 'PENDING_YT_ID') {
+      lbSlot.innerHTML = '<div style="color:#fff;padding:60px 30px;text-align:center;font-family:Inter,sans-serif">Video coming soon.</div>';
+      lb.classList.add('open');
+      return;
+    }
+    const listParam = list ? ('&list=' + list) : '';
+    lbSlot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0' + listParam + '" title="Video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+    lb.classList.add('open');
+  }
+  function closeLb() {
+    if (!lbSlot || !lb) return;
+    lb.classList.remove('open');
+    lbSlot.innerHTML = '';
+  }
+  document.querySelectorAll<HTMLElement>('[data-yt]').forEach((el) => {
+    el.addEventListener('click', () => openLb(el.dataset.yt, el.dataset.list));
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(el.dataset.yt, el.dataset.list); }
+    });
+  });
+  lbClose?.addEventListener('click', closeLb);
+  lb?.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
+
+  // interactive educator voices: click a face -> reveal its quote panel. Native <button
+  // role="tab"> elements, so Enter/Space activation is free via the native click event —
+  // no extra keydown handler needed (unlike the div-based [data-yt] triggers above).
+  document.querySelectorAll<HTMLElement>('[data-voices]').forEach((group) => {
+    const people = [...group.querySelectorAll<HTMLElement>('.vperson')];
+    const panels = group.querySelector('.voices-panels');
+    function show(btn: HTMLElement) {
+      const id = btn.dataset.vq;
+      people.forEach((p) => p.setAttribute('aria-selected', p === btn ? 'true' : 'false'));
+      group.querySelectorAll('.vpanel').forEach((pl) => pl.classList.toggle('open', pl.id === id));
+      // point the arrow at the active face
+      if (!panels) return;
+      const gr = panels.getBoundingClientRect(), br = btn.getBoundingClientRect();
+      const cx = br.left + br.width / 2 - gr.left;
+      const panel = group.querySelector('#' + CSS.escape(id ?? ''));
+      if (panel instanceof HTMLElement) panel.style.setProperty('--arrow', (cx - 9) + 'px');
+    }
+    people.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.getAttribute('aria-selected') === 'true') {
+          // clicking the open one closes it
+          btn.setAttribute('aria-selected', 'false');
+          group.querySelectorAll('.vpanel').forEach((pl) => pl.classList.remove('open'));
+        } else {
+          show(btn);
+        }
+      });
+    });
+    // open the first by default
+    if (people[0]) show(people[0]);
+    // reposition arrow on resize
+    addEventListener('resize', () => {
+      const sel = group.querySelector<HTMLElement>('.vperson[aria-selected="true"]');
+      if (sel) show(sel);
+    }, { passive: true });
+  });
+</script>

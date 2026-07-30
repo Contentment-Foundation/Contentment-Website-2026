@@ -1,0 +1,40 @@
+<section class="pillars">
+  <div class="pillars-bg" style="background-image:url('/assets/img09_d4a3165ce3.jpg')"></div>
+  <div class="pillars-inner">
+    <div class="wrap">
+      <h2 class="title anim d1">The <span class="script">Four Pillars</span> of Wellbeing.</h2>
+
+      <div class="pgrid">
+        <div class="pcard open anim d2" tabindex="0" role="button" aria-expanded="true">
+          <h3>Mindfulness</h3>
+          <div class="pdesc"><p>Focused, nonjudgmental attention to the present moment, so we can respond with clarity rather than react automatically.</p></div>
+        </div>
+        <div class="pcard open anim d3" tabindex="0" role="button" aria-expanded="true">
+          <h3>Community</h3>
+          <div class="pdesc"><p>Trust, empathy, compassion, and selfless service, to feel connected and bring out the best in one another.</p></div>
+        </div>
+        <div class="pcard open anim d4" tabindex="0" role="button" aria-expanded="true">
+          <h3>Self-Curiosity</h3>
+          <div class="pdesc"><p>Curiosity about our inner world, to deepen self-discovery and widen our awareness of the perspectives we and others hold.</p></div>
+        </div>
+        <div class="pcard open anim d5" tabindex="0" role="button" aria-expanded="true">
+          <h3>Contentment</h3>
+          <div class="pdesc"><p>Embracing life with acceptance and reading emotions as useful signals, so we can respond in ways that support flourishing.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.pcard').forEach((c) => {
+    function toggle() {
+      const open = c.classList.toggle('open');
+      c.setAttribute('aria-expanded', String(open));
+    }
+    c.addEventListener('click', toggle);
+    c.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
+</script>

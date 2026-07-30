@@ -1,10 +1,10 @@
 {
   "meta": {
     "title": "contentment.org — Launch Plan",
-    "version": "2026-07-27",
+    "version": "2026-07-30",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "UIUX–Dev handoff Jul 27/28. Dev sprint Jul 27–Aug 7 (Sam-led). Final review meeting anytime Aug 3–7. Fixes/polish Aug 10–14. Phase 1 hard go-live Aug 21 (end of Phase 1); next phase timeline TBD. 7 Phase 1 pages: Homepage, Why, Our Impact, Schools, Events, Get Involved, About Us. Privacy/Terms remain an open ticket (Phase 1.5 or Phase 2 — TBD). Story Board + Reach Map deferred. Kristina owns Button/CTA inventory (critical for sprint speed). Alternative giving methods left open for Nav/Kristina/Lorna (Phase 1 or 1.5 TBD). Resolved: D-01 $25/$50/$100; D-04 Google Form+Slack; D-05 About single page; D-07 social URLs in UIUX; D-09 EIN in UIUX; D-10 annual report PDF Phase 1. Open: D-02 Keela URLs; D-03 /give Keela widget (Lorna); D-19 newsletter."
+    "summary": "Jul 30: Homepage responsive audit complete; mobile nav drawer shipped (FEAT-003). All 7 Phase 1 pages in Astro. Homepage awaiting Slack review (HC-057). Events review-only (HC-072). Keela (D-02), /give routing (D-03), newsletter (D-19) still open. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -13,7 +13,7 @@
     ],
     [
       "Design handoff deadline",
-      "Jul 27 — UIUX–Dev meeting (Dave + Veron); lands with Sam morning of Jul 28 (timezone)"
+      "Jul 28 handoff call done — Dave finalizes logo + critical flags tomorrow AM; zip/assets/Handoff Report MDs → Somesh (Drive/GitHub)"
     ],
     [
       "Dev sprint (build)",
@@ -45,7 +45,7 @@
     ],
     [
       "Build approach",
-      "Merge Dave + Veron HTML drafts → Astro multi-page site"
+      "Dave HTML drafts → multi-page production build (D-11 Astro 4.x resolved; call mentioned React — pending Nick sign-off before any stack change)"
     ],
     [
       "Design owners",
@@ -53,19 +53,19 @@
     ],
     [
       "Critical handoff dependency",
-      "Kristina delivers Button/CTA inventory — required for wiring links + event tracking at speed"
+      "Logo SVG (Nav→Dave, immediate) + Kristina critical-flag list (EOD) + Button/CTA Miro inventory (EOW) + Dave asset zip"
     ],
     [
       "Phase 2 / later",
-      "Interactive map, Story Board, /homeroom gate; Privacy/Terms TBD Phase 1.5 or 2; next phase dates TBD"
+      "Copy updates; Priscilla quote replacement; branding/horizontal logo alignment; map, Story Board, /homeroom gate; Privacy/Terms TBD Phase 1.5 or 2"
     ],
     [
       "Mobile requirement",
-      "Every page ships desktop + mobile-responsive during the dev sprint"
+      "Somesh owns responsive layout in the 2-week sprint (desktop + mobile). No separate Dave mobile deliverable; non-scaling elements hide/adjust post-Phase 1 if needed"
     ],
     [
       "Bottom line",
-      "Build-complete by Aug 7; Phase 1 hard live Aug 21. Scope freeze at handoff is the critical risk control."
+      "Handoff call complete; Dave polish → Sam sprint. Homepage first (desktop+mobile) for Slack review. Phase 1 hard live Aug 21."
     ]
   ],
   "timeline": [
@@ -151,77 +151,77 @@
       "/",
       "1",
       "https://comfy-brigadeiros-00c4b6.netlify.app/",
-      "Draft",
+      "Astro ported",
       "Dave",
       "Medium",
       "Yes",
-      "5-step How Change Happens scroll; updated from earlier prototype"
+      "src/pages/index.astro — responsive audit done 30 Jul; awaiting HC-057 Slack review"
     ],
     [
       "Why Teacher Wellbeing",
       "/why",
       "1",
       "https://loquacious-zuccutto-ec29f4.netlify.app/",
-      "Draft",
+      "Astro ported",
       "Dave",
       "Medium",
       "Yes",
-      "FAQ accordion, CEO + teacher video slots"
+      "src/pages/why.astro"
     ],
     [
       "Our Impact",
-      "/stories",
+      "/our-impact",
       "1",
       "https://heartfelt-nougat-9d490a.netlify.app/",
-      "Draft",
+      "Astro ported",
       "Dave",
       "Medium-High",
       "Yes",
-      "Renamed from 'Stories' per Kristina; region nav + long sections; NO interactive map in v1; route may be renamed to /our-impact — confirm before launch"
+      "src/pages/our-impact/index.astro"
     ],
     [
       "For Schools",
       "/schools",
       "1",
       "https://timely-dasik-427334.netlify.app/",
-      "Draft",
+      "Astro ported",
       "Dave / Veron",
       "High",
       "Yes",
-      "Ripple diagram + comparison table; pricing TBD"
+      "src/pages/schools.astro — some images still base64"
     ],
     [
       "Events",
       "/events",
       "1",
       "https://helpful-elf-ba3c06.netlify.app/",
-      "Draft",
+      "Astro ported (review-only)",
       "Dave / Veron",
       "Medium-High",
       "Yes",
-      "Renamed from 'Events & Experiences'; confirmed Phase 1 (Kristina — UIUX ready); filter chips, access badges; some dates TBC"
+      "src/pages/events.astro — HC-072 second notes pending"
     ],
     [
       "Get Involved",
       "/give or /give/monthly",
       "1",
       "https://cute-palmier-4c93e1.netlify.app/",
-      "Draft",
+      "Astro ported",
       "Dave",
       "Low-Medium",
       "Yes",
-      "Renamed from 'Get Involved (Homeroom)' — 'Homeroom' dropped from public page name per Kristina; /give gateway decision pending (D-03, Keela widget)"
+      "src/pages/give.astro (Homeroom at /give; D-03 routing open)"
     ],
     [
       "About Us",
       "/about",
       "1",
       "—",
-      "Being drafted",
-      "Veron",
+      "Astro ported",
+      "Dave (rev4)",
       "TBD",
       "Yes",
-      "Confirmed Phase 1 (Kristina — UIUX ready); single page v1 (D-05 resolved)"
+      "src/pages/about.astro from Dave rev4 (D-05 single page)"
     ],
     [
       "Privacy Policy",
@@ -365,6 +365,12 @@
       "Build from Dave's latest Netlify draft"
     ],
     [
+      "Homepage",
+      "Responsive layout audit (320–1280px)",
+      "Low",
+      "Passed 30 Jul 2026 — see docs/planning/HOMEPAGE-RESPONSIVE-AUDIT.md; FEAT-003 drawer shipped"
+    ],
+    [
       "Why",
       "Video embed placeholders (CEO + 3x teacher 9:16)",
       "Medium",
@@ -416,7 +422,7 @@
       "Get Involved",
       "Video embed placeholder",
       "Low",
-      "Shell now, URL later"
+      "Placeholder retained (Jul 28). Jose video sent directly to Somesh when ready — integrate then."
     ],
     [
       "About Us",
@@ -432,9 +438,9 @@
     ],
     [
       "All builds",
-      "Kristina: timeline must cover both desktop AND mobile-accessible sites",
+      "Mobile responsive owned by Somesh in sprint (Jul 28 handoff)",
       "High",
-      "Every FEAT ticket ships desktop + mobile-responsive; Aug 10–14 'Mobile UI/UX' line is final polish, not first pass"
+      "No separate Dave mobile comps. Build responsive natively; hide/adjust awkward elements after Phase 1 if needed. Aug 10–14 is polish, not first mobile pass."
     ],
     [
       "Our Impact / Impact (main nav)",
@@ -632,6 +638,33 @@
       "Open",
       "Get Involved /give completeness if pulled into Phase 1",
       "Medium"
+    ],
+    [
+      "D-21",
+      "Primary logo for Phase 1",
+      "Resolved: use existing live-site logo (without three dots). Nav sends SVG via Slack; Dave implements in final pages; Somesh uses same SVG in build.",
+      "Nav / Dave / Sam",
+      "Resolved",
+      "Final design freeze + favicon/OG",
+      "Critical"
+    ],
+    [
+      "D-22",
+      "Phase 1 copy / non-critical design changes",
+      "Resolved: copy changes excluded from Phase 1 entirely. Only critical design/compliance red flags accepted before handoff freeze.",
+      "Kristina / Nav / WJ",
+      "Resolved",
+      "—",
+      "—"
+    ],
+    [
+      "D-23",
+      "Confirm production framework (call mentioned React)",
+      "Resolved: Astro 4.x, full stop — no React anywhere. Somesh signed off directly (in place of the pending Nick sign-off), delegating the technical call to Engineering. Jul 29 audit of Dave's actual 7-page handoff found zero external JS libraries, zero npm/build tooling, zero framework fingerprints — every page is plain HTML/CSS + vanilla inline JS (IIFEs, IntersectionObserver, scroll listeners; no import/require anywhere), the same pattern already used in site/index.html. Nothing in the handoff needs client state or SPA routing, so there's no technical case for React; Astro's static-first model and file-based routing are a direct match and replace the interim seams.js nav pattern.",
+      "Somesh (delegated to Engineering)",
+      "Resolved",
+      "—",
+      "—"
     ]
   ],
   "integrations": [
@@ -793,33 +826,33 @@
       "Extract shared layout (CSS, nav, footer)",
       "1",
       "Must",
-      "Open",
+      "In Progress",
       "Sam",
       "Jul 27–28",
       "—",
-      "—"
+      "BaseLayout + Nav/Footer + tokens shared across all 7 Astro routes. Mobile drawer shipped (FEAT-003 ✅ 30 Jul)."
     ],
     [
       "FEAT-002",
       "Multi-page routing scaffold (Astro)",
       "1",
       "Must",
-      "Ready",
+      "In Progress",
       "Sam",
       "Jul 27–28",
       "FEAT-001",
-      "Astro 4.x confirmed"
+      "All 7 Phase 1 content routes under src/pages/. Utility pages (privacy/terms/404) not started."
     ],
     [
       "FEAT-003",
       "Mobile navigation drawer",
       "1",
       "Must",
-      "Open",
+      "Done",
       "Sam",
-      "Jul 28",
+      "Jul 30",
       "FEAT-001",
-      "—"
+      "Slide-in drawer in Nav.astro + nav.js — focus trap, Escape, Join Homeroom + Donate. See HOMEPAGE-RESPONSIVE-AUDIT.md."
     ],
     [
       "FEAT-004",
@@ -852,18 +885,18 @@
       "Dave + Sam",
       "Jul 28–29",
       "FEAT-001, FEAT-002",
-      "Use Dave Netlify draft"
+      "Jul 29 — src/pages/index.astro + section components. Responsive audit + drawer done 30 Jul (HOMEPAGE-RESPONSIVE-AUDIT.md). Awaiting Slack review (HC-057). Seams empty."
     ],
     [
       "FEAT-020",
       "Build /why page",
       "1",
       "Must",
-      "Open",
+      "In Progress",
       "Sam",
       "Jul 29–30",
       "FEAT-001, FEAT-002",
-      "—"
+      "Jul 29 — ported to src/pages/why.astro from Dave why-wellbeing handoff. Needs QA + Slack after homepage."
     ],
     [
       "FEAT-030",
@@ -878,25 +911,25 @@
     ],
     [
       "FEAT-031",
-      "Build /stories index (page renamed 'Our Impact')",
+      "Build Our Impact index (/our-impact)",
       "1",
       "Must",
-      "Open",
+      "In Progress",
       "Sam",
-      "Aug 3–4",
+      "Jul 31 · Aug 3–4",
       "FEAT-002",
-      "Region layout; no map v1; confirm if route becomes /our-impact"
+      "Jul 29 — ported to src/pages/our-impact/index.astro. Route /our-impact. FEAT-030 story data still blocked."
     ],
     [
       "FEAT-040",
       "Build /schools page",
       "1",
       "Must",
-      "Open",
+      "In Progress",
       "Sam",
       "Aug 4–5",
       "FEAT-002",
-      "—"
+      "Jul 29 — ported to src/pages/schools.astro from Dave fs_review1. Partner-deck seam empty."
     ],
     [
       "FEAT-041",
@@ -914,11 +947,11 @@
       "Build /give gateway",
       "1",
       "Must",
-      "Open",
+      "In Progress",
       "Sam",
       "Jul 30–31",
       "FEAT-002",
-      "May redirect to /give/monthly; routing pending Keela widget (D-03)"
+      "Jul 29 — Get Involved (Homeroom) at src/pages/give.astro. D-03 open (/give vs /give/monthly). Join/donate seams empty."
     ],
     [
       "FEAT-051",
@@ -929,7 +962,7 @@
       "Sam",
       "Jul 30–31",
       "FEAT-050, FEAT-060",
-      "Renamed from 'Homeroom page' per Kristina; tier amounts resolved (D-01: $25/$50/$100); still blocked on Keela URLs (D-02)"
+      "Homeroom UI currently at /give. No separate /give/monthly route yet. Blocked on Keela (D-02) + D-03 routing."
     ],
     [
       "FEAT-060",
@@ -991,11 +1024,11 @@
       "Events page (renamed from 'Events & Experiences')",
       "1",
       "Must",
-      "In sprint",
+      "In Progress",
       "Sam",
       "Aug 6–7",
       "FEAT-002",
-      "Confirmed Phase 1 — Kristina has UIUX ready"
+      "Jul 29 — ported to src/pages/events.astro. HC-072: review-only until Dave second notes. RSVP seams empty."
     ],
     [
       "FEAT-032",
@@ -1024,11 +1057,11 @@
       "About Us page (v1 single page)",
       "1",
       "Must",
-      "Ready",
+      "In Progress",
       "Sam / Veron",
-      "Aug 7 or fast-follow",
+      "Aug 7 or FF",
       "FEAT-002",
-      "Confirmed Phase 1 — Kristina has UIUX ready; single page confirmed (D-05 resolved)"
+      "Jul 29 — ported to src/pages/about.astro from about-deploy-rev4 (D-05 single page; not 5 sub-pages)."
     ],
     [
       "FEAT-100",
@@ -1063,16 +1096,16 @@
     ],
     [
       "Design handoff (all pages)",
-      "Dave + Veron",
+      "Dave (logo + critical flags) → Somesh",
       "Entire dev sprint",
-      "Jul 27",
-      "Dev cannot start without locked designs — preponed from Aug 3"
+      "Jul 29 AM (Dave polish) then zip",
+      "Sprint starts on homepage once assets land; logo SVG blocks Dave finalize"
     ],
     [
       "Button / CTA inventory",
-      "Kristina",
+      "Kristina (Miro board, page-by-page)",
       "FEAT-004, FEAT-005, analytics event wiring",
-      "Handoff / early sprint (Jul 28–29)",
+      "End of week (Jul 28 week)",
       "Sprint slows — CTAs stay href=# and tracking cannot be instrumented correctly"
     ],
     [
@@ -1116,6 +1149,34 @@
       "FEAT-101",
       "Aug 14 (pre Aug 21 hard go-live)",
       "DNS cutover cannot proceed without sign-off"
+    ],
+    [
+      "Logo SVG (live-site wordmark, no three dots)",
+      "Nav → Slack",
+      "Dave final pages + Somesh build branding",
+      "Immediate (Jul 28)",
+      "Dave cannot finalize pages; build uses wrong mark if delayed"
+    ],
+    [
+      "Critical-only page review notes",
+      "WJ + Nav (Slack #website) → Kristina collate → Dave",
+      "Dave final rework before zip",
+      "Flags ~1hr post-call; Kristina list EOD Jul 28; Dave applies Jul 29 AM",
+      "Handoff package slips a day if list late"
+    ],
+    [
+      "Events page — second round of team notes",
+      "Dave",
+      "FEAT-090 production build",
+      "Before /events is built off the Jul 29 drop",
+      "Current events-build is review-only; building to production early risks rework once notes land"
+    ],
+    [
+      "Keela / Homeroom join-flow choreography",
+      "Lorna / Kristina",
+      "FEAT-051, FEAT-060, Events gated-CTA wiring",
+      "Before those CTAs can be wired and tested",
+      "Gated buttons on Events + Get Involved stay href=# beyond basic nav"
     ]
   ],
   "phase2Deferred": [
@@ -1190,6 +1251,30 @@
       "/festival, /10years",
       "Need campaign briefs (4-6 wk lead)",
       "Phase 2"
+    ],
+    [
+      "Priscilla duplicate quote replacement",
+      "Get Involved / quote slots",
+      "Jul 28 — leave as-is for launch; replace in Phase 2",
+      "Phase 2"
+    ],
+    [
+      "Copy updates (non-critical)",
+      "All pages",
+      "Jul 28 — copy excluded from Phase 1; critical design/compliance only",
+      "Phase 2"
+    ],
+    [
+      "Horizontal logo / branding realignment",
+      "Global brand",
+      "Horizontal logo referenced but unconfirmed; deferred with Phase 2 branding",
+      "Phase 2"
+    ],
+    [
+      "Non-critical design refinements",
+      "All pages",
+      "Jul 28 scope freeze — only red flags before handoff",
+      "Phase 2"
     ]
   ],
   "handoffChecklist": [
@@ -1251,7 +1336,7 @@
       "Kristina → Sam",
       "Open",
       "Critical",
-      "Still needed — Kristina delivers. Critical for wiring links + analytics. Ask for timing on the call."
+      "Jul 28 — Kristina delivers Miro board (page-by-page link mapping) by end of week. Still Critical for FEAT-005."
     ],
     [
       "HC-010",
@@ -1349,19 +1434,19 @@
       "Final desktop prototype URLs (7 pages)",
       "Confirm Netlify draft URLs are the final locked versions.",
       "Dave",
-      "Open",
+      "Confirmed",
       "Critical",
-      "Homepage / Why / Our Impact / Schools / Events / Get Involved / About"
+      "Jul 29 — Dave 7-page zip landed in handoff/2026-07-29-dave-pages/"
     ],
     [
       "HC-021",
       "Design handoff",
-      "Mobile design status per page",
-      "Which pages have locked mobile; which are still catching up in parallel.",
-      "Dave + Veron",
-      "Open",
+      "Mobile = Somesh responsive build (no Dave mobile comps)",
+      "Somesh handles responsive layout natively in the sprint. Elements that don't scale may be hidden/adjusted after Phase 1.",
+      "Sam (Somesh)",
+      "Confirmed",
       "Critical",
-      "Approach agreed in Slack (desktop first; mobile parallel — Dave). Still need per-page lock status on the call."
+      "Confirmed Jul 28 handoff — no separate Dave mobile deliverable."
     ],
     [
       "HC-022",
@@ -1391,7 +1476,7 @@
       "Dave + Veron + WJ",
       "Open",
       "High",
-      "Direct links — not Drive folder hunting"
+      "Jul 28 — Dave zip includes assets. Jose video placeholder OK; video file → Somesh directly when ready."
     ],
     [
       "HC-025",
@@ -1411,7 +1496,7 @@
       "Dave + K + WJ + Nav",
       "Open",
       "High",
-      ""
+      "Jul 28 — critical-only red flags via Slack #website (~1hr); Kristina collates EOD → Dave; Dave reworks Jul 29 AM. Copy changes out of scope."
     ],
     [
       "HC-030",
@@ -1469,19 +1554,19 @@
       "Team / staff roster accuracy",
       "Titles, ordering, current staff for About Us.",
       "WJ / HR",
-      "Open",
+      "Confirmed",
       "Medium",
-      ""
+      "Jul 29 — Dave confirmed Dave Kebo's title is Chief Media Officer, resolving the one discrepancy flagged against about-name-manifest.txt (24 Board/Advisory names). Roster otherwise as transcribed."
     ],
     [
       "HC-040",
       "Content",
       "Get Involved donor quote / video",
-      "Jose video pending — confirm placeholder plan if not ready by Aug 21.",
-      "WJ / Dave",
-      "Open",
+      "Placeholder retained on Get Involved; Jose video sent to Somesh for integration when ready.",
+      "WJ → Sam",
+      "Confirmed",
       "Medium",
-      ""
+      "Confirmed Jul 28 — does not block handoff or Aug 21 if video still pending."
     ],
     [
       "HC-041",
@@ -1507,11 +1592,11 @@
       "HC-051",
       "Process",
       "Check-in cadence on calendars",
-      "Standing sync (~Jul 29) + sprint review (within Aug 3–7).",
+      "Bi-weekly check-ins with Kristina and Nick during the two-week sprint; homepage Slack review before remaining pages.",
       "Kristina",
-      "Ready",
+      "Confirmed",
       "High",
-      "Proposed in Slack (standing ~Jul 29 sync; sprint review within Aug 3–7). Book exact times on calendars during handoff."
+      "Confirmed Jul 28 handoff. Book exact calendar holds."
     ],
     [
       "HC-052",
@@ -1541,7 +1626,7 @@
       "Sam + Kristina",
       "Confirmed",
       "Medium",
-      "Confirmed in Slack — Sam edits via Claude/Cursor + GitHub deploy; Kristina owns Website Change Request Form + SOP (Aug 10–14)."
+      "Confirmed — Sam edits via Claude/Cursor + GitHub; Kristina creating single CR form + Google Sheet to track all future website change requests."
     ],
     [
       "HC-060",
@@ -1559,9 +1644,9 @@
       "Astro scaffold + shared layout",
       "FEAT-001 / FEAT-002 — nav, footer, tokens.",
       "Sam",
-      "Open",
+      "In Progress",
       "Critical",
-      ""
+      "BaseLayout/Nav/Footer/tokens live; FEAT-003 drawer shipped 30 Jul"
     ],
     [
       "HC-062",
@@ -1569,9 +1654,9 @@
       "Convert 7 Dave prototypes → production",
       "Astro multi-page build.",
       "Sam",
-      "Open",
+      "In Progress",
       "Critical",
-      ""
+      "All 7 pages under src/pages/; polish + seams + Slack review remain"
     ],
     [
       "HC-063",
@@ -1579,9 +1664,9 @@
       "Responsive + a11y across 7 pages",
       "Desktop and mobile; prefers-reduced-motion.",
       "Sam",
-      "Open",
+      "In Progress",
       "Critical",
-      ""
+      "Homepage responsive audit done 30 Jul (docs/planning/HOMEPAGE-RESPONSIVE-AUDIT.md). Remaining pages still need pass."
     ],
     [
       "HC-064",
@@ -1632,6 +1717,146 @@
       "Open",
       "Critical",
       ""
+    ],
+    [
+      "HC-027",
+      "Design handoff",
+      "Logo SVG = live-site mark (no three dots)",
+      "Nav sends SVG via Slack; Dave implements in final pages; Somesh uses same file in build (D-21).",
+      "Nav → Dave → Sam",
+      "Open",
+      "Critical",
+      "Jul 28 blocker — Dave cannot finalize pages until SVG lands."
+    ],
+    [
+      "HC-028",
+      "Design handoff",
+      "Critical-only final page review",
+      "WJ + Nav flag critical design/compliance red flags in Slack #website (name the page). No copy-change requests for Phase 1 (D-22).",
+      "WJ / Nav → Kristina → Dave",
+      "Open",
+      "Critical",
+      "Flags ~1hr post-call; Kristina consolidated list EOD Jul 28; Dave applies Jul 29 AM."
+    ],
+    [
+      "HC-042",
+      "Content",
+      "Priscilla duplicate quote → Phase 2",
+      "Leave duplicate quote as-is for launch; replacement deferred.",
+      "Content",
+      "Confirmed",
+      "Medium",
+      "Confirmed Jul 28 — Phase 2."
+    ],
+    [
+      "HC-043",
+      "Content",
+      "Copy changes excluded from Phase 1",
+      "Only critical design/compliance red flags accepted before freeze (D-22).",
+      "All",
+      "Confirmed",
+      "High",
+      "Confirmed Jul 28 handoff."
+    ],
+    [
+      "HC-055",
+      "Process",
+      "Framework sign-off (React vs Astro)",
+      "Resolved Jul 29 — Somesh signed off directly in place of the pending Nick confirmation, delegating the technical call to Engineering. Decision: Astro 4.x, no React (D-23).",
+      "Somesh / Sam",
+      "Confirmed",
+      "Critical",
+      "Unblocks FEAT-002 — scaffold choice no longer pending external sign-off."
+    ],
+    [
+      "HC-056",
+      "Process",
+      "Claude AI subscription for Somesh",
+      "Kristina confirms ~$100/month plan with Lorna.",
+      "Kristina / Lorna",
+      "Open",
+      "Medium",
+      "Jul 28 action item — does not block code start but needed for sustained sprint tooling."
+    ],
+    [
+      "HC-057",
+      "Process",
+      "Homepage-first build + Slack review",
+      "Somesh builds homepage (desktop + mobile responsive) first; share on Slack for team review before remaining pages.",
+      "Sam",
+      "Confirmed",
+      "Critical",
+      "Confirmed Jul 28. Sprint day one starts after Dave assets land."
+    ],
+    [
+      "HC-058",
+      "Process",
+      "Website Change Request form + Sheet",
+      "Kristina creates single form + Google Sheet to track all future website change requests.",
+      "Kristina",
+      "Open",
+      "High",
+      "Jul 28 — pairs with HC-054 SOP ownership. Target during/after sprint window."
+    ],
+    [
+      "HC-069",
+      "Design handoff",
+      "Photo usage rights cleared",
+      "Rights confirmed for About Us team/story photos and For Schools photography.",
+      "WJ / Comms",
+      "Confirmed",
+      "High",
+      "Jul 29 — cleared for build; no longer a launch blocker. Unblocks HC-024 image asset use."
+    ],
+    [
+      "HC-070",
+      "Integrations",
+      "Keela Donate button color mismatch",
+      "Shipped pages show default Keela button (#507b91); brand spec is #0090bd. Fix lives in the Keela dashboard, not page CSS.",
+      "Finance / Lorna",
+      "Open",
+      "Medium",
+      "Jul 29 — flagged across every page (Home, Why, Our Impact, Schools, Events, Get Involved). Push to Google Sheet + timeline."
+    ],
+    [
+      "HC-071",
+      "Integrations",
+      "Keela / Homeroom join-flow choreography undecided",
+      "Every gated CTA (Events RSVPs, Get Involved tiers) carries a data-event/data-join seam for a return-trip redirect that can't be wired or tested until the Keela/Homeroom join flow is decided.",
+      "Lorna / Kristina",
+      "Open",
+      "High",
+      "Jul 29 — blocks FEAT-051, FEAT-060, and Events gated-CTA wiring. Broader than D-03 (/give routing alone)."
+    ],
+    [
+      "HC-072",
+      "Content",
+      "Events page handoff incomplete — second round of team notes pending",
+      "Dave's own handoff notes flag that a second page of team review notes has not been delivered yet; current events-build should be treated as review-only, not production-final.",
+      "Dave → Somesh",
+      "Open",
+      "High",
+      "Jul 29 — do not build /events to production off this drop until the second notes round lands and design is locked. Tag Dave for delivery."
+    ],
+    [
+      "HC-073",
+      "Scope freeze",
+      "Our Impact route confirmed: /our-impact",
+      "Final page/file name and nav seam are 'our-impact' (was 'stories'). Applied in pages table, FEAT-031, and the shared seams.js page-route config.",
+      "Somesh",
+      "Confirmed",
+      "Medium",
+      "Jul 29 — resolves the Our Impact vs Impact (main nav, Phase 2) naming ambiguity for Phase 1 scope."
+    ],
+    [
+      "HC-074",
+      "Content",
+      "Annual Report PDFs (2019–2024) — hosting + URLs",
+      "Our Impact page needs the actual report PDFs hosted with links; Somesh to supply files/links later.",
+      "Somesh",
+      "Open",
+      "Medium",
+      "Jul 29 — placeholder until files are provided; does not block other Our Impact build work."
     ]
   ]
 }

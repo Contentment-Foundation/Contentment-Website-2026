@@ -241,7 +241,7 @@ cd site && python3 -m http.server 8080
 # http://localhost:8080/story-board-feed-guide
 ```
 
-Serve from `site/` (recommended). `file://` works for these pages if `program-data.js` and `assets/countries-110m.js` load via `<script>` tags; D3/topojson still load from CDN (internet required once). See [`prototypes/world-map/README.md`](./prototypes/world-map/README.md).
+Serve from `site/` (recommended). `file://` works for these pages if `program-data.js` and `assets/countries-110m.js` load via `<script>` tags; D3/topojson still load from CDN (internet required once). See [`prototypes/phase-2/world-map/README.md`](./prototypes/phase-2/world-map/README.md).
 
 **Homepage + project docs:**
 
@@ -309,7 +309,7 @@ cd site && python3 -m http.server 8080
 | `href="#"` on donation CTAs | Hero, nav pill, Homeroom section — wire to Keela URLs when finance provides them (FEAT-060) |
 | `href="#"` on door / footer links | "Start the conversation", "See events", social links — wire when pages exist (FEAT-004) |
 | Newsletter form | `onsubmit="return false"` — no backend yet (FEAT-070) |
-| Mobile nav drawer | Button scrolls to nav only — full drawer in FEAT-003 |
+| Mobile nav drawer | Slide-in drawer in `Nav.astro` at ≤940px (FEAT-003 ✅) |
 
 ---
 

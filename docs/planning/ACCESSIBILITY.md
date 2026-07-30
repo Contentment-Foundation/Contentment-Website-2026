@@ -58,7 +58,7 @@ Match each interactive component we've built (or plan to build) to its APG refer
 | Component | Where | APG pattern | Key requirements | Status |
 |---|---|---|---|---|
 | Four Pillars accordion | `site/index.html` | [Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) | Trigger has `aria-expanded`, controls the panel via `aria-controls`; panel is hidden, not just visually collapsed | ✅ `tabindex="0"`, `role="button"`, `aria-expanded` per FRONTEND-SPEC §5 |
-| Mobile nav menu | `site/index.html` | [Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) | `aria-expanded` on toggle; focus moves into the panel when opened; Escape closes and returns focus to the toggle | ⚠️ Button currently only scrolls to nav — no drawer yet (PRD `F12`, known gap) |
+| Mobile nav menu | `src/components/Nav.astro` | [Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) | `aria-expanded` on toggle; focus moves into the panel when opened; Escape closes and returns focus to the toggle | ✅ Slide-in drawer shipped 30 Jul 2026 (FEAT-003) |
 | Story detail modal | `site/story-board.html` `#modal` | [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) | `role="dialog"`, `aria-modal="true"`, `aria-labelledby`; focus moves in on open and is trapped inside; focus returns to the trigger on close; Escape closes | ⚠️ Escape + backdrop-click work; `role`/`aria-modal`/focus trap/focus-return not yet implemented — see §4 |
 | Pin-a-Story modal | `site/story-board.html` `#pinModal` | [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) | Same as above | ⚠️ Has `role="dialog"` + `aria-modal` + `aria-labelledby` + initial focus on the quote field; still missing focus trap and focus-return-on-close — see §4 |
 | Filters dropdown panel | `site/story-board.html` `#filterPanel` | [Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) | Toggle has `aria-expanded`/`aria-controls`; Escape and click-outside close it | ⚠️ `aria-expanded` toggled; Escape + click-outside work; missing `aria-controls` wiring and focus-return to the toggle button |
@@ -90,7 +90,7 @@ Found while auditing `site/story-board.html` — these are real, not hypothetica
 3. Neither dialog returns focus to the element that opened it when closed (keyboard/screen-reader users lose their place; mouse users won't notice).
 4. Board/Grid toggle and filter chips expose state via CSS class only, not `aria-pressed`.
 5. `#countLabel` isn't a live region, so screen reader users filtering the board don't hear the updated count.
-6. Mobile nav menu button (`site/index.html`) only scrolls to the nav — no real disclosure/drawer yet (tracked under PRD `F12`).
+6. ~~Mobile nav menu button (`site/index.html`) only scrolls to the nav — no real disclosure/drawer yet (tracked under PRD `F12`).~~ **Resolved 30 Jul 2026** — drawer in `src/components/Nav.astro` (FEAT-003).
 
 None of these block a design-review prototype, but they should be resolved before `TICKET-100` (pre-launch QA) — add them as explicit line items there, or open a dedicated ticket if the list grows.
 

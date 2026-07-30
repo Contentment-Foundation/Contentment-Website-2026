@@ -1,0 +1,60 @@
+---
+import { seams } from '../config/seams';
+
+const navLinks = [
+  { href: '/about', label: 'About' },
+  { href: '/why', label: 'Why Teacher Wellbeing' },
+  { href: '/our-impact', label: 'Our Impact' },
+  { href: '/schools', label: 'Schools' },
+  { href: '/events', label: 'Events' },
+  { href: '/give', label: 'Get Involved' },
+];
+
+const homeroomHref = seams.join || '/give';
+const donateHref = seams.donate || '#';
+const signInHref = seams.schoolPlatform || '#';
+---
+<header id="hdr">
+  <div class="wrap nav">
+    <a class="brand" href="/" aria-label="The Contentment Foundation, home">
+      <img src="/assets/logo_lockup_light.svg" alt="The Contentment Foundation" class="brand-logo--light">
+      <img src="/assets/logo_lockup_dark.svg" alt="" aria-hidden="true" class="brand-logo--dark">
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      {navLinks.map((link) => (
+        <a href={link.href}>{link.label}</a>
+      ))}
+    </nav>
+    <div class="nav-right">
+      <a href={signInHref} class="signin">Sign In</a>
+      <a href={donateHref} class="nav-cta">Donate</a>
+    </div>
+    <button
+      type="button"
+      class="menu-btn"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="nav-drawer"
+    ><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div id="nav-drawer" class="nav-drawer" aria-hidden="true">
+  <div class="nav-drawer__backdrop" tabindex="-1"></div>
+  <nav class="nav-drawer__panel" aria-label="Main">
+    <button type="button" class="nav-drawer__close" aria-label="Close menu">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+    <div class="nav-drawer__links">
+      {navLinks.map((link) => (
+        <a href={link.href}>{link.label}</a>
+      ))}
+    </div>
+    <div class="nav-drawer__actions">
+      <a href={signInHref} class="nav-drawer__signin">Sign In</a>
+      <a href={homeroomHref} class="nav-drawer__cta nav-drawer__cta--homeroom">Join Homeroom</a>
+      <a href={donateHref} class="nav-drawer__cta nav-drawer__cta--donate">Donate</a>
+    </div>
+  </nav>
+</div>

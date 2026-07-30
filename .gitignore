@@ -1,5 +1,10 @@
 .DS_Store
 
+# Astro (TICKET-002 multi-page migration)
+node_modules/
+dist/
+.astro/
+
 # Netlify build copies docs/*.html here — source of truth is docs/
 site/docs/
 

@@ -1,0 +1,59 @@
+ABOUT PAGE - NAME MANIFEST (verify every line against source before deploy)
+Names below render on the page exactly as written here.
+Team titles print as specced in the Phase 1 doc. Board/Advisory transcribed
+from old-site screenshots - these especially need Dave's eyeball.
+
+TEAM (rank order per Dave 2026-07-19)
+ 1. Navin Amarasuriya - Chief Executive Officer
+ 2. Lorna Holman - Chief Financial Officer
+ 3. Dave Kebo - Chief Creative Officer  [per Dave 2026-07-19; Phase 1 doc says Chief Media Officer - team should be told the page differs from the doc]
+ 4. Jennifer Jones - Chief Implementation Officer
+ 5. WoeiJing Teng - Mission Advancement + Community Building   [spacing: "WoeiJing" per Phase 1 doc; who's-who says "Woei Jing" - CONFIRM]
+ 6. Somesh Bhardwaj - Senior System Administrator
+ 7. Kristina Blundon - Director of Operations
+ 8. Pamila Nigah - Finance Director
+ 9. Tim Huang - Director, Global Implementation
+10. Tshering Eudon - Director, Asia   [ambiguous "tshering.jpg" confirmed as Eudon by Dave 2026-07-19]
+11. Karma Doma Tshering - Director, Bhutan   [photo source file was named "Kueron.jpg" - identity confirmed by Dave 2026-07-19]
+12. Tempa Ragbay - Associate Director, Bhutan
+13. Susan Gathu - Senior Program Lead, Africa
+14. Jennifer Gonsalves - Outreach & Implementation Specialist, Hawai'i  [okina used on page per site convention]
+15. Anik Ghosh - Senior Software Engineer
+16. Ryan Miller - Internal Culture Associate
+17. Cikara Ni Luh - Community Engagement Coordinator
+
+ALL 24 PHOTOS LIVE as of 2026-07-19. Yikai Xu, Tempa Ragbay, Ryan Miller
+sourced from circle-crop screenshots (backgrounds removed, verified clean).
+
+BOARD OF DIRECTORS (from old-site screenshot - VERIFY)
+ 1. Emmet B. Keeffe III - Chairman & Co-Founder of The Contentment Foundation
+ 2. Heidi Roddenberry - President at The Roddenberry Foundation
+ 3. Yossri Abdou, J.D. - Founder & Partner at Libertas Law
+ 4. David Simas, J.D. - Managing Director of Research, Emerson Collective
+    [old site punctuated "J.D" without final period and no comma before
+     "Emerson Collective"; both normalized here - CONFIRM preferred forms]
+
+ADVISORS (from old-site screenshot - VERIFY)
+ 1. Yikai Xu - Scientific Advisor (New York University)
+ 2. Robin Graat - Events Strategy Advisor
+ 3. Lakhan Samani - Tech Advisor
+
+ALSO ON PAGE
+- Dan Cordaro (Our Story only; left the foundation 2025, correctly absent from team grid)
+- Photo caption: "Dan teaching in Bhutan, 2014"
+- Kristina and WoeiJing named in the Talk with Us card
+
+PAGE-VS-SPEC DIVERGENCES (both per Dave, for team review)
+- Our Story name: prose now reads "Dr. Daniel Cordaro" (compliance copy,
+  rev 4 2026-07-28). Photo caption stays "Dan teaching in Bhutan, 2014" -
+  familiar form in caption, formal in prose, per Dave. The rev3 seed + this
+  manifest previously said "Dan" throughout; the page now diverges by design.
+- Our Story copy (rev 4): replaced verbatim with the compliance-approved
+  block from WJ. It reintroduces two voice-doc banned words - "quiet" and
+  "donors" - inside approved copy. build_about.py flags both at build time;
+  this is a documented override, not a slip. Do NOT auto-"correct" them.
+- Dave Kebo title: Chief Creative Officer (doc says Chief Media Officer)
+- What We Believe: full-bleed two-color halves + section title added
+  (doc says "two separate boxes, side by side")
+- Pass it On card is WHITE, not yellow (doc says green/blue/yellow) - per Dave 2026-07-20
+- Humility line set in Cedarville script at display-adjacent size - per Dave 2026-07-20

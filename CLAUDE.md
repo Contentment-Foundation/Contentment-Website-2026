@@ -104,13 +104,30 @@ subtle parallax.
 
 - Donation/CTA links are `href="#"` — wire to the real Keela URL when available.
 - Newsletter form is `onsubmit="return false"` — no backend yet.
-- Mobile menu button only scrolls to nav; no full drawer.
+- Mobile nav drawer at `≤940px` in shared `Nav.astro` (focus trap, Escape, body scroll lock).
 - **Foundation Reach Map (in progress):** flat D3 + TopoJSON world map with pin cards per served country.
   Prototype: **`site/foundation-reach-map.html`** → `/foundation-reach-map` on Netlify.
   Stack: D3 + topojson-client (CDN), `assets/countries-110m.js` (bundled map), `program-data.js` (stories).
   Desktop: hanging pendulum pin cards (hover to preview, click to open modal). Mobile (`pointer:coarse`): 18 px balloon pins that scale with zoom (√zoom factor); crowded pins show a bottom-sheet picker so the user can choose which country to open.
-  Notes: [`prototypes/world-map/README.md`](prototypes/world-map/README.md). After approval, embed on homepage and restyle to site tokens.
+  Notes: [`prototypes/phase-2/world-map/README.md`](prototypes/phase-2/world-map/README.md). After approval, embed on homepage and restyle to site tokens.
 - **Story Board (in progress):** **`site/story-board.html`** → `/story-board`. Same `program-data.js`.
+
+## Browser MCP (dev QA)
+
+Two browser MCP servers may be available in Cursor:
+
+| Server | Use for |
+|--------|---------|
+| **cursor-ide-browser** (built-in) | Fast layout QA — navigate pages, click nav/accordions, snapshots, screenshots |
+| **chrome-devtools** ([chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp)) | Deeper checks — Lighthouse, performance traces, console/network inspection |
+
+**Astro dev:** run `npm run dev` (default `http://localhost:4321`), then ask the agent to verify behavior in the browser.
+
+**Locked responsive widths** (from `docs/planning/HOMEPAGE-RESPONSIVE-AUDIT.md`): 320, 390, 759, 768, 940, 1280 px — use `resize_page` or viewport emulation.
+
+**Example prompts:** “Open `/our-impact` at 390px and screenshot the hero”; “Run Lighthouse a11y on the homepage”; “List console errors on the Foundation Reach Map.”
+
+Config: `~/.cursor/mcp.json` (global — applies to all Cursor projects). Restart Cursor or reload MCP after changes.
 
 ## Standing instructions for AI sessions
 

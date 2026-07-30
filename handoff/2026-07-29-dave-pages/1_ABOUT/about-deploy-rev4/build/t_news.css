@@ -1,0 +1,12 @@
+/* ---------- NEWSLETTER ---------- */
+.news{background:var(--mist)}
+.news-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.news h2{margin-bottom:12px}
+.news p{color:var(--slate);max-width:44ch}
+.news form{display:flex;flex-direction:column;gap:12px;max-width:420px;margin-left:auto;width:100%}
+.news .row{display:flex;gap:12px}
+.news input{flex:1;min-width:0;padding:.95em 1.1em;border-radius:12px;border:1.5px solid var(--line);font-family:var(--body);font-size:1rem;background:#fff;transition:border-color .25s}
+.news input:focus{outline:none;border-color:var(--teal)}
+.news .btn-primary{justify-content:center}
+.news .fine{font-size:.84rem;color:var(--slate);opacity:.8}
+

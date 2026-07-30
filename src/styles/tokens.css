@@ -1,0 +1,15 @@
+/* Design tokens — extracted verbatim from Dave's Jul 29 2026 homepage handoff
+   (handoff/2026-07-29-dave-pages/0_HOME PAGE/contentment-homepage-V3-DEPLOY/index.html).
+   Do not redesign during migration — see TECHNICAL-ARCHITECTURE.md §3. */
+:root{
+  --teal:#1FAFC0;--ocean:#0080B0;--deep:#024E70;--deep2:#02374f;--green:#4FA98C;
+  --slate:#3C3B43;--ink:#23252b;--paper:#FBFAF7;--paper2:#F2F0EA;--mist:#E8F1F2;
+  --line:rgba(2,78,112,.12);--shadow:0 18px 50px -20px rgba(2,55,79,.35);
+  --display:'Newsreader',Georgia,serif;--body:'Inter',system-ui,sans-serif;
+  --script:'Cedarville Cursive',cursive;
+  /* palette extension — review round 1 (V) */
+  --mint:#55bf98;--navlink:#515154;--btnblue:#0090be;--accent-mint:#a4dcce;--accent-sand:#f9dba5;
+  /* orbit grounds — V's three ring hues, desaturated to one chroma (36%) and deepened so the
+     white rings have something to glow against. The section IS the ripple. */
+  --ob1:#54bf98;--ob2:#32c0cf;--ob3:#6275b4;
+}

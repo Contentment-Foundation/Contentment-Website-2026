@@ -1,0 +1,43 @@
+<section class="how-orbit" id="how">
+  <div class="orbit-sticky">
+    <div class="wrap orbit-grid">
+      <!-- static frame: heading top-left -->
+      <div class="orbit-head">
+        <h2 class="orbit-title">How Change Happens</h2>
+        <p class="orbit-sub">From one teacher to a classroom of kids to a culture that lasts.</p>
+        <a href="/schools" class="orbit-cta">Learn more about how we work with schools <span class="arrow">→</span></a>
+      </div>
+      <!-- ripple graphic, lower-left. 3 rings, centre outward: Adults / Kids / School Culture -->
+      <div class="orbit-graphic">
+        <div class="orbit-bloom"></div>
+        <svg class="ripple" viewBox="0 0 560 560" aria-hidden="true">
+          <g class="rings" fill="none">
+            <circle class="ring" data-ring="0" cx="280" cy="280" r="78"></circle>
+            <circle class="ring" data-ring="1" cx="280" cy="280" r="155"></circle>
+            <circle class="ring" data-ring="2" cx="280" cy="280" r="232"></circle>
+          </g>
+          <circle class="core-glow" cx="280" cy="280" r="16"></circle>
+          <circle class="core" cx="280" cy="280" r="9"></circle>
+        </svg>
+      </div>
+      <!-- animating beat text, right negative space, in line with dot -->
+      <div class="orbit-beats">
+        <div class="beat-stage">
+          <div class="beat" data-beat="0"><h3>The adults go first.</h3><p>Nothing real happens until the grown-ups in the building take wellbeing seriously, starting with themselves. Leaders commit, teachers train, and through trainings and practices they build something that's genuinely their own, not one more thing from the outside that fades when we leave.</p></div>
+          <div class="beat" data-beat="1"><h3>The kids start doing it too.</h3><p>It turns into something a whole class shares. A breath before reacting. A kinder question on a rough day. Kids feel the difference, and pretty soon they're doing it without being told.</p></div>
+          <div class="beat" data-beat="2"><h3>It becomes just how the school works.</h3><p>The practice spreads past one classroom. Wellbeing stops being a special initiative and becomes part of any other day. Ordinary, in the best way. The kind of school we wish we could have gone to as kids.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="orbit-cue" aria-hidden="true">
+      <span class="orbit-cue__label">Scroll</span>
+      <span class="orbit-cue__chev"></span>
+    </div>
+  </div>
+  <div class="orbit-scroll"></div>
+</section>
+
+<script>
+  import { initOrbit } from '../scripts/orbit.js';
+  initOrbit();
+</script>

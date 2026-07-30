@@ -1,11 +1,11 @@
 # Frontend Specification Document — contentment.org
 
 > **Status:** Draft  
-> **Last updated:** June 2026  
+> **Last updated:** 29 July 2026  
 > **Contact:** somesh@contentment.org  
-> **UI/UX policy:** **LOCKED.** This spec documents the approved prototype in `site/index.html`. New pages must reuse these patterns. No redesign, no new color palette, no new typography in v1.
+> **UI/UX policy:** **LOCKED.** Dave's Jul 29 2026 handoff (`handoff/2026-07-29-dave-pages/`) is now the approved design source of truth for all 7 Phase 1 pages, superseding the earlier `site/index.html` prototype it was built from. New pages must reuse these patterns. No redesign, no new color palette, no new typography in v1.
 
-**Source of truth:** `site/index.html` · [Messaging & Copy](../research/MESSAGING-AND-COPY.md) · [Voice & Tone](../research/VOICE-AND-TONE.md)
+**Source of truth:** `handoff/2026-07-29-dave-pages/` (Dave's Jul 29 handoff — being migrated into `src/` per TECHNICAL-ARCHITECTURE.md §3) · superseded prototype reference: `site/index.html` · [Messaging & Copy](../research/MESSAGING-AND-COPY.md) · [Voice & Tone](../research/VOICE-AND-TONE.md)
 
 Related: [Technical Architecture](./TECHNICAL-ARCHITECTURE.md) · [PRD](./PRD.md)
 
@@ -74,7 +74,7 @@ Related: [Technical Architecture](./TECHNICAL-ARCHITECTURE.md) · [PRD](./PRD.md
 | `--shadow` | `0 18px 50px -20px rgba(2,55,79,.35)` |
 | Button hover lift | `translateY(-2px)` |
 | Scroll reveal | `.anim` → `.anim.in` via IntersectionObserver |
-| Orbit scroll height | `560vh` (`.orbit-scroll`) |
+| Orbit scroll height | `340vh` (`.orbit-scroll`, 3 beats) |
 | Beat fade duration | `1.1s` |
 | **Reduced motion** | `@media (prefers-reduced-motion: reduce)` disables orbit animation, pulse, parallax |
 
@@ -99,7 +99,7 @@ Related: [Technical Architecture](./TECHNICAL-ARCHITECTURE.md) · [PRD](./PRD.md
 |-------|--------|
 | Top of page | Transparent over hero |
 | Scrolled (`scrollY > 40`) | `.scrolled` — deep background, blur, reduced padding |
-| Mobile `≤940px` | `.nav-links` hidden; `.menu-btn` visible — **MVP must add drawer** |
+| Mobile `≤940px` | `.nav-links` hidden; `.menu-btn` opens slide-in drawer (`Nav.astro`, FEAT-003) |
 | Persistent CTA | "Join Homeroom" pill → `/give/monthly` |
 
 ### 2.3 Section patterns

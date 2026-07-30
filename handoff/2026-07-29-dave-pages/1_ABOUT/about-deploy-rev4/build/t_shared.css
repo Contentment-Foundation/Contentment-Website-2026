@@ -1,0 +1,29 @@
+/* ---------- shared section system ---------- */
+section{position:relative}
+.band{padding:clamp(76px,10vw,132px) 0}
+.band.homeroom{padding:0}
+.band-tight{padding:clamp(56px,7vw,92px) 0}
+h2.title{font-family:var(--display);font-weight:500;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.06;letter-spacing:-.005em;color:var(--deep);text-wrap:balance}
+.lead{font-size:clamp(1.12rem,1.5vw,1.4rem);color:var(--slate);max-width:60ch}
+p.body{font-size:1.1rem;color:var(--slate);max-width:60ch}
+p.body+p.body{margin-top:1.1em}
+.pull{padding-left:22px;border-left:3px solid var(--teal);font-family:var(--display);font-style:italic;font-size:1.3rem;color:var(--deep);line-height:1.4}
+
+/* ---------- text animation system ---------- */
+.anim{opacity:0;transform:translateY(28px);transition:opacity .85s cubic-bezier(.2,.8,.2,1),transform .85s cubic-bezier(.2,.8,.2,1)}
+.anim.in{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.22s}.d3{transition-delay:.34s}.d4{transition-delay:.46s}.d5{transition-delay:.58s}
+/* hero entrance */
+.hero .anim{transition-duration:.95s}
+.hero-loaded .hero .anim{opacity:1;transform:none}
+
+/* ---------- SPLIT band (full-bleed image one side, text floating other) ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;min-height:clamp(680px,82vh,920px);max-height:1040px}
+.split.img-left .split-img{order:1}.split.img-left .split-txt{order:2}
+.split-img{background-size:cover;background-position:center;position:relative;min-height:380px}
+.split.img-left .split-img{background-position:50% 18%}
+.split-txt{display:flex;align-items:center;padding:clamp(48px,7vw,104px) clamp(36px,6vw,92px)}
+.split-txt-inner{max-width:540px}
+.split-txt .eyebrow{display:block;margin-bottom:18px}
+.split-txt h2{margin-bottom:24px}
+

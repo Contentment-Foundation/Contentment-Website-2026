@@ -1,0 +1,404 @@
+/* ---------- EMAIL CAPTURE FOLD (new) ---------- */
+.ev-signup{background:var(--paper2);padding:clamp(64px,9vh,120px) 0}
+.ev-signup-inner{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(36px,5vw,72px);align-items:center}
+.ev-signup-lead{font-family:var(--display);font-weight:500;font-size:clamp(1.6rem,2.8vw,2.4rem);line-height:1.25;color:#1d1d1d;text-wrap:balance}
+.ev-signup-sub{margin-top:16px;font-size:clamp(1.02rem,1.3vw,1.18rem);line-height:1.55;color:#54bf98;font-weight:500;max-width:52ch}
+.ev-signup-form .ev-capture-slot{min-height:150px;background:#fff;border:1px dashed var(--line)}
+.ev-signup-form .ev-capture-label{color:var(--deep)}
+.ev-signup-form .ev-capture-sub{color:var(--slate)}
+@media(max-width:860px){
+  .ev-signup-inner{grid-template-columns:1fr;gap:28px}
+}
+
+/* ---------- PARALLAX ---------- */
+/* scale gives vertical headroom so the JS translateY never reveals an edge */
+.ev-hero-media,.ev-flagship-media,.ev-why-media,.ev-close-media{will-change:transform;transform:scale(1.14)}
+@media(prefers-reduced-motion:reduce){
+  [data-parallax]{transform:none!important;will-change:auto}
+}
+
+/* ================= EVENTS & EXPERIENCES ================= */
+
+/* 1. HERO - image and content share one grid cell so content ALWAYS sits on the image */
+.ev-hero{position:relative;display:grid;isolation:isolate;min-height:100vh;color:#fff;background:var(--deep);overflow:hidden}
+/* both children occupy the same single grid cell (stacked) */
+.ev-hero-media,.ev-hero-content{grid-area:1/1}
+.ev-hero-media{background-size:cover;background-position:34% 42%;filter:saturate(1.02)}
+/* scrim + content layer; the scrim pools dark at the base + left for legibility */
+.ev-hero-content{position:relative;display:flex;align-items:flex-end;z-index:1}
+.ev-hero-content::before{content:"";position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(to top,rgba(98,117,180,.92) 0%,rgba(98,117,180,.66) 18%,rgba(98,117,180,.26) 38%,rgba(98,117,180,0) 58%),
+  linear-gradient(100deg,rgba(98,117,180,.62) 0%,rgba(98,117,180,.2) 38%,rgba(98,117,180,0) 62%)}
+/* wider container pushes text toward the frame edge instead of a centered 1240 band */
+.ev-hero-grid{width:100%;max-width:1600px;margin:0 auto;padding-left:clamp(32px,5vw,88px);padding-right:clamp(32px,5vw,88px);display:grid;grid-template-columns:1.4fr .6fr;gap:clamp(28px,4vw,72px);align-items:end;padding-top:clamp(130px,20vh,240px);padding-bottom:clamp(52px,7vh,96px)}
+.ev-hero-txt{max-width:640px}
+.ev-hero .eyebrow{color:#bfeef5;display:block;margin-bottom:14px}
+.ev-hero h1{font-family:var(--display);font-weight:500;font-size:clamp(2rem,3.3vw,3.3rem);line-height:1.08;letter-spacing:-.005em;text-shadow:0 2px 34px rgba(1,26,40,.72),0 1px 3px rgba(1,26,40,.5)}
+.ev-hero h1 .hl-nowrap{white-space:nowrap}
+.ev-hero-lead{margin-top:20px;font-size:clamp(1.02rem,1.3vw,1.22rem);line-height:1.55;color:rgba(255,255,255,.94);max-width:50ch;text-shadow:0 1px 18px rgba(1,26,40,.7)}
+.ev-hero-jump{display:inline-flex;align-items:center;gap:.5em;margin-top:24px;font-weight:600;color:#fff;text-shadow:0 1px 12px rgba(1,26,40,.6)}
+.ev-hero-jump .arrow{transition:transform .25s}
+.ev-hero-jump:hover .arrow{transform:translateY(4px)}
+.ev-hero-card{background:rgba(98,117,180,.82);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:clamp(24px,2.2vw,32px);backdrop-filter:blur(12px);box-shadow:0 26px 70px -30px rgba(1,22,34,.85);align-self:end}
+.ev-hero-card h2{font-family:var(--display);font-weight:600;font-size:1.42rem;color:#fff;margin-bottom:10px;line-height:1.1}
+.ev-hero-card p{font-size:.96rem;color:rgba(255,255,255,.9);line-height:1.5;margin-bottom:20px}
+.ev-hero-card .btn-primary{background:#fff;color:var(--deep);width:100%;justify-content:center}
+.ev-hero-card .btn-primary:hover{background:#eafafc}
+@media(max-width:860px){
+  .ev-hero{min-height:100vh}
+  .ev-hero-media{background-position:38% 42%}
+  .ev-hero-grid{grid-template-columns:1fr;gap:18px;padding-top:clamp(150px,30vh,240px);padding-bottom:clamp(32px,6vw,52px)}
+  .ev-hero-txt{max-width:100%}
+  .ev-hero h1{font-size:clamp(2rem,7vw,2.9rem)}
+  .ev-hero-card{max-width:100%}
+}
+
+/* 2. FLAGSHIP - image-led, mirrors the hero (grid-stack) */
+.ev-flagship{position:relative;display:grid;isolation:isolate;min-height:clamp(760px,98vh,1000px);color:#fff;background:var(--deep);overflow:hidden}
+.ev-flagship-media,.ev-flagship-content{grid-area:1/1}
+.ev-flagship-media{background-size:cover;background-position:center 68%;filter:saturate(1.02)}
+.ev-flagship-content{position:relative;display:flex;align-items:flex-start;z-index:1}
+.ev-flagship-content::before{content:"";position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(to bottom,rgba(20,90,100,.6) 0%,rgba(30,130,145,.32) 24%,rgba(50,192,207,.12) 44%,rgba(30,120,135,.4) 100%),
+  linear-gradient(100deg,rgba(20,90,100,.5) 0%,rgba(50,192,207,.16) 40%,rgba(50,192,207,0) 64%)}
+.ev-flagship-grid{width:100%;max-width:1600px;margin:0 auto;padding-left:clamp(32px,5vw,88px);padding-right:clamp(32px,5vw,88px);display:block;padding-top:clamp(72px,11vh,150px);padding-bottom:clamp(48px,6vh,80px)}
+.ev-flagship-txt{max-width:760px}
+.ev-flagship-title{font-family:var(--display);font-weight:500;font-size:clamp(2.4rem,5vw,4.6rem);line-height:1.0;letter-spacing:-.01em;color:#fff;white-space:nowrap;text-shadow:0 2px 34px rgba(1,26,40,.72),0 1px 3px rgba(1,26,40,.5)}
+.ev-flagship-script{font-family:var(--display);font-weight:500;font-style:italic;font-size:clamp(1.5rem,2.6vw,2.4rem);line-height:1.15;color:#bfeef5;margin-top:14px;white-space:nowrap;text-shadow:0 2px 24px rgba(1,26,40,.6)}
+.ev-flagship-body{margin-top:24px;font-size:clamp(1.02rem,1.3vw,1.2rem);line-height:1.6;color:rgba(255,255,255,.94);max-width:60ch;text-shadow:0 1px 18px rgba(1,26,40,.7)}
+.ev-flagship-note{margin-top:18px;font-style:italic;font-family:var(--display);color:#bfeef5!important;text-shadow:0 1px 16px rgba(1,26,40,.6)}
+.ev-flagship-jump{display:inline-flex;align-items:center;gap:.5em;margin-top:24px;font-weight:600;color:#fff;text-shadow:0 1px 12px rgba(1,26,40,.6)}
+.ev-flagship-jump .arrow{transition:transform .25s}
+.ev-flagship-jump:hover .arrow{transform:translateY(4px)}
+.ev-flagship-card{align-self:end;background:rgba(2,48,68,.58);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:clamp(24px,2.2vw,32px);backdrop-filter:blur(12px);box-shadow:0 26px 70px -30px rgba(1,22,34,.85)}
+.ev-flagship-card h3{font-family:var(--display);font-weight:600;font-size:1.42rem;color:#fff;margin-bottom:8px}
+.ev-flagship-card>p{font-size:.96rem;color:rgba(255,255,255,.88);margin-bottom:20px}
+.ev-flagship-member{font-size:.9rem!important;color:rgba(255,255,255,.82)!important;border-left:3px solid var(--teal);padding-left:14px;margin:20px 0!important}
+.ev-flagship-card .btn-primary{background:#fff;color:var(--deep);width:100%;justify-content:center}
+.ev-flagship-card .btn-primary:hover{background:#eafafc}
+@media(max-width:900px){
+  .ev-flagship{min-height:auto}
+  .ev-flagship-grid{grid-template-columns:1fr;gap:24px;padding-top:clamp(120px,26vh,220px);padding-bottom:clamp(40px,6vw,64px)}
+  .ev-flagship-title{white-space:normal;font-size:clamp(2rem,7.5vw,3rem)}
+  .ev-flagship-script{white-space:normal}
+  .ev-flagship-txt{max-width:100%}
+}
+
+/* email capture seam */
+.ev-capture-slot{position:relative;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;min-height:120px;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.3)}
+.ev-capture-label{font-family:var(--display);font-weight:500;font-size:1.1rem;color:#fff}
+.ev-capture-sub{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+
+/* 3. UPCOMING GRID */
+.ev-upcoming{background:var(--paper)}
+.ev-up-head{display:flex;justify-content:space-between;align-items:flex-end;gap:clamp(32px,6vw,80px);margin-bottom:32px}
+.ev-up-head-txt{flex:1;max-width:none}
+.ev-up-head h2{margin:14px 0 14px;white-space:nowrap}
+.ev-up-head .body{max-width:60ch}
+.ev-up-join{flex-shrink:0}
+@media(max-width:720px){
+  .ev-up-head{flex-direction:column;align-items:flex-start;gap:20px}
+  .ev-up-join{width:100%;justify-content:center}
+}
+/* filters */
+.ev-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:38px}
+.ev-filter{font-family:var(--body);font-weight:600;font-size:.92rem;padding:.6em 1.25em;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--slate);cursor:pointer;transition:all .25s}
+.ev-filter:hover{border-color:var(--teal);color:var(--deep)}
+.ev-filter.is-active{background:var(--ocean);border-color:var(--ocean);color:#fff;box-shadow:0 8px 20px -10px rgba(0,128,176,.7)}
+/* grid */
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.ev-card{background:#fff;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 40px -26px rgba(2,55,79,.4);display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s,border-color .3s}
+.ev-card:hover{transform:translateY(-6px);box-shadow:0 26px 58px -30px rgba(2,55,79,.5)}
+.ev-card[hidden]{display:none}
+.ev-card-media{position:relative;aspect-ratio:16/10;background-size:cover;background-position:center}
+.ev-card-body{padding:24px 24px 26px;display:flex;flex-direction:column;flex:1}
+.ev-card-body h3{font-family:var(--display);font-weight:600;font-size:1.28rem;color:var(--deep);margin-bottom:8px;line-height:1.2}
+.ev-meta{font-size:.86rem;font-weight:600;letter-spacing:.02em;color:var(--ocean);margin-bottom:12px}
+.ev-desc{font-size:.98rem;color:var(--slate);line-height:1.6;flex:1}
+.ev-note{font-size:.9rem;color:var(--slate);font-style:italic;font-family:var(--display);margin-top:12px;border-left:3px solid var(--green);padding-left:14px}
+.ev-btn{margin-top:18px;width:100%;justify-content:center}
+/* badges */
+.ev-badge{display:inline-block;font-family:var(--body);font-weight:700;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;padding:.5em 1em;border-radius:999px}
+.ev-card-media .ev-badge{position:absolute;top:14px;left:14px;z-index:2;box-shadow:0 6px 18px -8px rgba(2,40,58,.5)}
+.ev-badge-open{background:#fff;color:var(--deep)}
+.ev-badge-member{background:var(--teal);color:#023047}
+/* velvet rope: member cards are the most attractive on the grid */
+.ev-card-member{border:2px solid var(--teal);box-shadow:0 16px 48px -24px rgba(31,175,192,.55)}
+.ev-card-member:hover{box-shadow:0 30px 64px -28px rgba(31,175,192,.6)}
+/* duotone tile for dates-TBC / no-photo events */
+.ev-card-tile{display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(150deg,var(--ocean) 0%,var(--deep) 60%,var(--deep2) 100%)}
+/* per-tile hue variety so the open-access row isn't monotonous */
+.ev-card-tile[data-tile="festival-virtual"]{background:linear-gradient(145deg,#2a93c4 0%,var(--ocean) 55%,var(--deep) 100%)}
+.ev-card-tile[data-tile="festival"]{background:linear-gradient(150deg,var(--deep) 0%,var(--deep2) 70%,#01293b 100%)}
+.ev-card-tile[data-tile="bali-retreat"]{background:linear-gradient(145deg,#4FA98C 0%,#347e66 55%,var(--deep) 100%)}
+.ev-card-member .ev-card-tile{background:linear-gradient(150deg,#0a93c0 0%,var(--deep) 62%,var(--deep2) 100%)}
+.ev-card-tile::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;border:1px solid rgba(255,255,255,.12);top:-90px;right:-70px;pointer-events:none}
+.ev-tile-title{position:relative;z-index:2;font-family:var(--display);font-weight:500;font-size:1.5rem;color:#fff;line-height:1.15;padding:0 20px}
+.ev-empty{text-align:center;color:var(--slate);font-size:1.05rem;padding:40px 0 0;font-style:italic;font-family:var(--display)}
+
+/* 4. HOW ACCESS WORKS - single unified two-column table */
+.ev-access{background:linear-gradient(160deg,var(--green) 0%,#347e66 100%)}
+.ev-access-head h2{color:#fff}
+.ev-access-head{margin-bottom:32px}
+.ev-access-head h2{margin-top:12px}
+.ev-access-table{display:grid;grid-template-columns:1fr 1fr;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 20px 54px -32px rgba(2,55,79,.35)}
+.ev-access-col{padding:clamp(30px,3vw,48px);display:flex;flex-direction:column}
+.ev-access-col + .ev-access-col{border-left:1px solid var(--line)}
+.ev-access-col .ev-badge{align-self:flex-start;margin-bottom:20px}
+.ev-access-desc{font-size:1.06rem;color:var(--slate);line-height:1.6}
+/* member column subtly emphasized as the "more" option */
+.ev-access-col-member{background:linear-gradient(180deg,rgba(31,175,192,.06) 0%,rgba(31,175,192,.02) 100%)}
+.ev-access-list{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.ev-access-list li{position:relative;padding-left:34px;font-size:1.06rem;color:var(--deep);line-height:1.4}
+.ev-access-list li::before{content:"";position:absolute;left:0;top:-1px;width:22px;height:22px;border-radius:50%;background:var(--teal);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23023047' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-size:14px;background-position:center;background-repeat:no-repeat}
+.ev-access-foot{margin-top:auto;padding-top:28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.ev-access-price{font-family:var(--display);font-weight:600;font-size:2rem;color:var(--deep);line-height:1;white-space:nowrap}
+.ev-access-price span{font-family:var(--body);font-weight:500;font-size:.92rem;color:var(--slate)}
+.ev-access-cta{white-space:nowrap}
+@media(max-width:760px){
+  .ev-access-table{grid-template-columns:1fr}
+  .ev-access-col + .ev-access-col{border-left:none;border-top:1px solid var(--line)}
+  .ev-access-foot{flex-direction:column;align-items:flex-start;gap:16px}
+  .ev-access-cta{width:100%;justify-content:center}
+}
+
+/* 5. RECAPS */
+.ev-recaps{position:relative;overflow:hidden;background:linear-gradient(165deg,var(--ocean) 0%,var(--deep) 62%,var(--deep2) 100%)}
+.ev-recaps::before{content:"";position:absolute;width:680px;height:680px;border-radius:50%;border:1px solid rgba(255,255,255,.06);top:-220px;right:-160px;pointer-events:none}
+.ev-recaps .wrap{position:relative;z-index:2}
+.ev-recaps-head{margin-bottom:44px}
+.ev-recaps-head .eyebrow{color:#bfeef5}
+.ev-recaps-head h2{margin-top:14px;color:#fff}
+.ev-recaps-head .recaps-sub{display:inline-block;font-size:.62em;font-weight:500;color:rgba(255,255,255,.82);margin-top:.15em}
+.ev-recap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+/* light cards float on the blue band */
+.ev-recap{background:#fff;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.5);box-shadow:0 22px 60px -34px rgba(1,25,38,.7);display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s}
+.ev-recap:hover{transform:translateY(-5px);box-shadow:0 30px 68px -32px rgba(1,25,38,.75)}
+/* Bali FEATURE card: full white-on-blue, image-led */
+.ev-recap:first-child{grid-column:1 / -1;flex-direction:row;align-items:stretch;background:linear-gradient(150deg,#3C8E74 0%,#256B57 70%);border:1px solid rgba(255,255,255,.5)}
+.ev-recap:first-child .ev-recap-media{flex:1.5;min-height:0;align-self:stretch}
+.ev-recap:first-child .ev-recap-video{aspect-ratio:16/9}
+.ev-recap:first-child .ev-recap-body{flex:1;justify-content:center}
+.ev-recap:first-child .ev-recap-place{color:#eaf6e8}
+.ev-recap:first-child .ev-recap-body>p{color:rgba(255,255,255,.92)}
+.ev-recap:first-child .ev-recap-hook{color:#fff!important}
+.ev-recap:first-child .ev-recap-link{color:#fff}
+.ev-recap-media{aspect-ratio:16/10;background-size:cover;background-position:center}
+/* click-to-play YouTube tile: YT thumbnail poster + play button */
+.ev-recap-video{position:relative;cursor:pointer;background-color:#012230;background-image:url("https://i.ytimg.com/vi/CoZ_J51AfNc/maxresdefault.jpg");background-size:contain;background-position:center;background-repeat:no-repeat}
+.ev-recap-video::after{content:"";position:absolute;inset:0;background:rgba(1,26,40,.18);transition:background .3s}
+.ev-recap-video:hover::after,.ev-recap-video:focus-visible::after{background:rgba(1,26,40,.06)}
+.ev-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:72px;height:auto;transition:transform .3s,filter .3s;filter:drop-shadow(0 6px 20px rgba(1,20,30,.5))}
+.ev-recap-video:hover .ev-play,.ev-recap-video:focus-visible .ev-play{transform:translate(-50%,-50%) scale(1.08)}
+.ev-play svg{width:100%;height:auto;display:block}
+.ev-play-bg{fill:#023047;opacity:.92;transition:fill .3s,opacity .3s}
+.ev-recap-video:hover .ev-play-bg{fill:#e02f2f;opacity:1}
+.ev-recap-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ev-recap-video.playing::after,.ev-recap-video.playing .ev-play{display:none}
+.ev-recap-video:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.ev-recap-body{padding:30px 32px 32px;display:flex;flex-direction:column;justify-content:center}
+.ev-recap-place{font-family:var(--body);font-weight:700;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ocean);margin-bottom:14px}
+.ev-recap-body>p{font-size:1rem;color:var(--slate);line-height:1.6;margin-bottom:12px}
+.ev-recap-quote{font-family:var(--display);font-style:italic;font-size:1.08rem;line-height:1.5;color:var(--deep);border-left:3px solid var(--teal);padding-left:18px;margin:6px 0 14px}
+.ev-recap-quote cite{display:block;margin-top:8px;font-style:normal;font-size:.82rem;color:var(--slate);font-family:var(--body)}
+.ev-recap-hook{font-weight:600;color:var(--deep)!important}
+.ev-recap-link{display:inline-flex;align-items:center;gap:.5em;margin-top:14px;font-weight:600;color:var(--ocean);align-self:flex-start}
+.ev-recap-link .arrow{transition:transform .25s}
+.ev-recap-link:hover .arrow{transform:translateX(4px)}
+
+/* 6. WHY WE GATHER - full-bleed scene, text pooled LEFT over photo */
+.ev-why{position:relative;display:grid;isolation:isolate;min-height:clamp(600px,82vh,840px);color:#fff;background:var(--green);overflow:hidden}
+.ev-why-media,.ev-why-content{grid-area:1/1}
+.ev-why-media{background-size:cover;background-position:60% 40%;filter:saturate(1.02)}
+.ev-why-content{position:relative;display:flex;align-items:center;z-index:1}
+.ev-why-content::before{content:"";position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(95deg,rgba(6,26,18,.9) 0%,rgba(10,36,26,.74) 28%,rgba(12,40,30,.34) 50%,rgba(12,40,30,0) 68%),
+  linear-gradient(to top,rgba(6,26,18,.5) 0%,rgba(6,26,18,0) 42%)}
+.ev-why-grid{width:100%;max-width:1600px;margin:0 auto;padding-left:clamp(32px,5vw,88px);padding-right:clamp(32px,5vw,88px);padding-top:clamp(72px,8vh,120px);padding-bottom:clamp(72px,8vh,120px)}
+.ev-why-txt{max-width:540px}
+.ev-why-title{font-family:var(--display);font-weight:500;font-size:clamp(2.4rem,4.4vw,3.6rem);line-height:1.05;color:#fff;margin-bottom:22px;text-shadow:0 2px 30px rgba(4,20,14,.7)}
+.ev-why-lead{font-family:var(--display);font-weight:500;font-size:clamp(1.4rem,2.2vw,2rem);line-height:1.35;color:#fff;text-wrap:balance;text-shadow:0 1px 22px rgba(4,20,14,.65)}
+.ev-why-detail{margin-top:22px;font-size:1.06rem;line-height:1.6;color:rgba(255,255,255,.92);max-width:50ch;text-shadow:0 1px 18px rgba(4,20,14,.7)}
+.ev-why-promise{margin-top:22px;font-size:1.06rem;line-height:1.6;color:rgba(255,255,255,.92);max-width:50ch;text-shadow:0 1px 18px rgba(4,20,14,.7)}
+@media(max-width:860px){
+  .ev-why{min-height:auto}
+  .ev-why-media{background-position:56% 40%}
+  .ev-why-content::before{background:linear-gradient(to top,rgba(5,22,15,.92) 0%,rgba(8,30,21,.64) 44%,rgba(8,30,21,.34) 100%)}
+  .ev-why-grid{padding-top:clamp(280px,44vh,420px);padding-bottom:clamp(48px,7vw,72px)}
+  .ev-why-txt{max-width:100%}
+}
+
+/* 7. CLOSE - full-bleed image-led emotional close */
+.ev-close{position:relative;display:grid;isolation:isolate;min-height:clamp(560px,74vh,760px);color:#fff;background:var(--deep);overflow:hidden}
+.ev-close-media,.ev-close-content{grid-area:1/1}
+.ev-close-media{background-size:cover;background-position:center 38%;filter:saturate(1.02)}
+.ev-close-content{position:relative;display:flex;align-items:flex-end;z-index:1}
+.ev-close-content::before{content:"";position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(to top,rgba(1,26,40,.9) 0%,rgba(2,40,58,.62) 20%,rgba(2,48,68,.24) 42%,rgba(2,55,79,0) 62%),
+  linear-gradient(100deg,rgba(1,26,40,.56) 0%,rgba(2,40,58,.18) 40%,rgba(2,55,79,0) 64%)}
+.ev-close-grid{width:100%;max-width:1600px;margin:0 auto;padding-left:clamp(32px,5vw,88px);padding-right:clamp(32px,5vw,88px);display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(28px,4vw,72px);align-items:end;padding-top:clamp(100px,14vh,180px);padding-bottom:clamp(52px,7vh,92px)}
+.ev-close-primary{max-width:640px}
+.ev-close-title{font-family:var(--display);font-weight:500;font-size:clamp(2.2rem,4.2vw,3.7rem);line-height:1.05;letter-spacing:-.005em;color:#fff;text-shadow:0 2px 34px rgba(1,26,40,.72),0 1px 3px rgba(1,26,40,.5)}
+.ev-close-body{margin-top:18px;font-size:clamp(1.02rem,1.3vw,1.2rem);line-height:1.55;color:rgba(255,255,255,.92);max-width:52ch;text-shadow:0 1px 18px rgba(1,26,40,.7)}
+.ev-close-btn{margin-top:30px;background:#fff;color:var(--deep)}
+.ev-close-btn:hover{background:#eafafc}
+.ev-close-secondary{align-self:end;background:rgba(2,48,68,.58);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:clamp(24px,2.2vw,32px);backdrop-filter:blur(12px);box-shadow:0 26px 70px -30px rgba(1,22,34,.85)}
+.ev-close-secondary h3{font-family:var(--display);font-weight:600;font-size:1.32rem;color:#fff;margin-bottom:8px}
+.ev-close-secondary>p{font-size:.96rem;color:rgba(255,255,255,.9);margin-bottom:20px}
+.ev-close-secondary .ev-capture-slot{background:rgba(255,255,255,.1);border:1px dashed rgba(255,255,255,.4)}
+.ev-close-secondary .ev-capture-label{color:#fff}
+.ev-close-secondary .ev-capture-sub{color:rgba(255,255,255,.72)}
+@media(max-width:900px){
+  .ev-close{min-height:auto}
+  .ev-close-grid{grid-template-columns:1fr;gap:22px;padding-top:clamp(90px,20vh,160px);padding-bottom:clamp(36px,6vw,52px)}
+  .ev-close-primary{max-width:100%}
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:980px){
+  .ev-grid{grid-template-columns:repeat(2,1fr)}
+  .ev-access-cols{grid-template-columns:1fr}
+  .ev-close-inner{grid-template-columns:1fr;gap:32px}
+}
+@media(max-width:760px){
+  .ev-recap-grid{grid-template-columns:1fr}
+  .ev-recap:first-child{flex-direction:column}
+  .ev-recap:first-child .ev-recap-media{min-height:0;aspect-ratio:16/10}
+}
+@media(max-width:620px){
+  .ev-grid{grid-template-columns:1fr}
+  .ev-filters{gap:8px}
+  .ev-filter{font-size:.84rem;padding:.55em 1em}
+}
+
+/* ==================================================================== */
+/* PAGE 2 TEAM NOTES -- OVERRIDES  (applied 2026-07-27)                  */
+/* Grouped by section. Kept at end of addendum so they win the cascade. */
+/* ==================================================================== */
+
+/* [What's coming up] V: section heading + card headings -> #1d1d1d */
+.ev-upcoming .ev-up-head .title{color:#1d1d1d}
+.ev-upcoming .ev-card-body h3{color:#1d1d1d}
+
+/* [What's coming up] V: buttons -> #54bf98 (mint).
+   White-on-mint measures ~2.1:1 (fails AA); #1d1d1d ink on mint ~8:1, so the
+   button text is set to ink for legibility. Scoped to every CTA in this
+   section (header Join Homeroom + all card buttons). */
+.ev-upcoming .btn-primary{background:#54bf98;color:#1d1d1d;box-shadow:0 10px 28px -12px rgba(84,191,152,.7)}
+.ev-upcoming .btn-primary:hover{background:#49b189;color:#1d1d1d;box-shadow:0 16px 34px -12px rgba(84,191,152,.85)}
+.ev-upcoming .btn-primary .arrow{color:#1d1d1d}
+
+/* [How access works] V: 'Open to everyone' subheader + 'Join Homeroom' button -> #1d1d1d */
+.ev-access .ev-badge-open{color:#1d1d1d}
+.ev-access-cta.btn-primary{background:#1d1d1d;color:#fff;box-shadow:0 10px 28px -12px rgba(29,29,29,.5)}
+.ev-access-cta.btn-primary:hover{background:#000;color:#fff}
+/* member-side fine print: cancel-anytime reassurance + 501(c)(3) line */
+.ev-access-fine{margin-top:18px;font-size:.92rem;line-height:1.55;color:var(--slate)}
+.ev-access-legal{margin-top:10px;font-size:.78rem;line-height:1.5;color:var(--slate);opacity:.85}
+
+/* [Why we gather] WJ: inline email-subscription box (pooled left with the copy) */
+.ev-why-signup{margin-top:30px;max-width:430px}
+.ev-why-signup-lead{font-family:var(--display);font-weight:500;font-size:1.15rem;line-height:1.35;color:#fff;margin-bottom:14px;text-shadow:0 1px 18px rgba(4,20,14,.7)}
+.ev-why-capture{min-height:96px}
+
+/* [Why we gather] V: image overlay -> #e9b85b family.
+   A flat #e9b85b wash would blow out the photo and kill the white text, so this
+   is an amber-family scrim that still pools dark-warm at the text (left edge)
+   for legibility. Push warmer/brighter on V's call. */
+.ev-why{background:#8a6a2e}
+.ev-why-content::before{background:
+  linear-gradient(95deg,rgba(74,52,18,.92) 0%,rgba(120,86,30,.72) 26%,rgba(233,184,91,.30) 52%,rgba(233,184,91,0) 72%),
+  linear-gradient(to top,rgba(60,42,14,.5) 0%,rgba(60,42,14,0) 44%)}
+@media(max-width:860px){
+  .ev-why-content::before{background:linear-gradient(to top,rgba(60,42,14,.94) 0%,rgba(90,64,24,.66) 44%,rgba(120,86,30,.4) 100%)}
+}
+
+/* [Where we've already been] V: band background -> #32c0cf family.
+   Cards float as their own white/green tiles so they stay legible; only the
+   section heading sat directly on the band. White heading on bright #32c0cf
+   measures ~2.1:1 (fails), so the eyebrow + h2 are recolored to brand --deep2
+   (~6:1 on cyan). Flagged for V -- alternative is a darker cyan gradient. */
+.ev-recaps{background:linear-gradient(160deg,#3ccadb 0%,#32c0cf 55%,#25b3c4 100%)}
+.ev-recaps-head .eyebrow{color:var(--deep2)}
+.ev-recaps-head h2{color:var(--deep2)}
+
+/* [Close] V: image overlay -> #0090be family (pooled darker at the text base) */
+.ev-close-content::before{background:
+  linear-gradient(to top,rgba(0,110,150,.94) 0%,rgba(0,144,190,.7) 20%,rgba(0,144,190,.3) 42%,rgba(0,144,190,0) 62%),
+  linear-gradient(100deg,rgba(0,110,150,.6) 0%,rgba(0,144,190,.2) 40%,rgba(0,144,190,0) 64%)}
+
+/* ============================================================
+   PAGE 2 -- ROUND 2 (Dave in-browser corrections, 2026-07-27)
+   ============================================================ */
+
+/* [How access works] BG: swap the flat green gradient for the supplied
+   green textured block. Brand green under it as the load/edge fallback. */
+.ev-access{background:#4FA98C url('__EV_ACCESS_BG__') center/cover no-repeat}
+
+/* [Homeroom members] price removed -> single CTA is centered; the foot
+   stack was running together, so re-spaced with real breathing room and a
+   smaller, lower, more-muted legal line (was reading same weight as the
+   cancel-anytime reassurance). Extra bottom padding so nothing crowds the
+   card edge. */
+.ev-access-foot-solo{justify-content:center;padding-top:30px}
+.ev-access-col-member{padding-bottom:clamp(40px,3.8vw,60px)}
+.ev-access-fine{margin-top:28px;font-size:.95rem;line-height:1.6}
+.ev-access-legal{margin-top:22px;font-size:.72rem;line-height:1.5;opacity:.72}
+@media(max-width:860px){
+  .ev-access-foot-solo{align-items:center}
+}
+
+/* [Where we've already been] Bali recap card green read off-brand (it used a
+   darker #3C8E74->#256B57 ramp). Retuned to the canonical brand-green gradient
+   used site-wide on .impact / .doors, so white text sits on an already-shipped
+   approved combination. */
+.ev-recap:first-child{background:linear-gradient(155deg,var(--green) 0%,#3C8E74 100%)}
+
+/* ============================================================
+   PAGE 2 -- ROUND 3 (Dave in-browser corrections, 2026-07-27)
+   ============================================================ */
+
+/* [Email capture fold] was reading stark on flat --paper2. Dropped in the
+   white paper texture (avg #E8E8E8 under it as fallback). Dark #1d1d1d lead
+   copy stays high-contrast on it. */
+.ev-signup{background:#E8E8E8 url('__EV_SIGNUP_BG__') center/cover}
+
+/* [Homeroom members] changed from centered to RIGHT-justified so the CTA
+   balances the top-left "HOMEROOM MEMBERS" eyebrow on the diagonal. */
+.ev-access-foot-solo{justify-content:flex-end}
+
+/* [Where we've already been] Reverting the band to the team's original
+   DARK-BLUE ground (their design worked off it) -- now the supplied blue
+   textured block (avg #008BB9 fallback). Because the ground is dark again the
+   heading goes back to WHITE (white on #008BB9 ~3.85:1), which retires the
+   page-2 dark-heading-on-cyan workaround. */
+.ev-recaps{background:#008BB9 url('__EV_RECAPS_BG__') center/cover}
+.ev-recaps-head .eyebrow{color:#fff}
+.ev-recaps-head h2{color:#fff}
+
+/* [Bali recap card] Dave: make the panel #32c0cf with white title + eyebrow
+   (the cyan accent moves off the band and onto this card). NOTE: white on flat
+   #32c0cf measures ~2.19:1 -- under the 3:1 large-text floor. Shipping as asked
+   for review; a hair-darker cyan (~#2497a6) would read the same and clear 3:1,
+   or a soft scrim behind the text would keep the exact hue. Flagged. */
+.ev-recap:first-child{background:#32c0cf}
+.ev-recap:first-child .ev-recap-place{color:#fff}
+.ev-recap:first-child .ev-recap-body>p{color:#fff}
+.ev-recap:first-child .ev-recap-hook{color:#fff!important}
+.ev-recap:first-child .ev-recap-link{color:#fff}
+
+/* ============================================================
+   PAGE 2 -- ROUND 4 (team notes + Dave, 2026-07-28)
+   ============================================================ */
+
+/* [How access works] The "Open to everyone" free column was deleted (team note).
+   The Homeroom box is now the ONLY box, so the table collapses to one full-width
+   column. To keep a full-width box from reading half-empty, the six benefits run
+   in two columns on desktop; intro text + CTA + fine print stay full width. */
+.ev-access-table{grid-template-columns:1fr}
+.ev-access-col-solo .ev-access-list{display:grid;grid-template-columns:1fr 1fr;column-gap:38px;row-gap:14px;margin-top:24px}
+.ev-access-col-solo .ev-access-desc{max-width:60ch}
+@media(max-width:640px){
+  .ev-access-col-solo .ev-access-list{grid-template-columns:1fr}
+}
