@@ -4,7 +4,7 @@
     "version": "2026-07-30",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Jul 30: Homepage responsive audit complete; mobile nav drawer shipped (FEAT-003). All 7 Phase 1 pages in Astro. Homepage awaiting Slack review (HC-057). Events review-only (HC-072). Keela (D-02), /give routing (D-03), newsletter (D-19) still open. Hard go-live Aug 21."
+    "summary": "Jul 30 eve: Netlify preview (contentmentweb2.netlify.app) cut over to Astro dist — all 7 Phase 1 pages live for review. Footer Project docs restored. Homepage Slack review (HC-057) + mobile check requested. Events review-only (HC-072). Keela (D-02), /give routing (D-03), newsletter (D-19) still open. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -155,7 +155,7 @@
       "Dave",
       "Medium",
       "Yes",
-      "src/pages/index.astro — responsive audit done 30 Jul; awaiting HC-057 Slack review"
+      "https://contentmentweb2.netlify.app/ — Netlify now publishes Astro dist; responsive audit done; awaiting HC-057 Slack + mobile review"
     ],
     [
       "Why Teacher Wellbeing",
@@ -166,7 +166,7 @@
       "Dave",
       "Medium",
       "Yes",
-      "src/pages/why.astro"
+      "https://contentmentweb2.netlify.app/why — Astro live on Netlify preview"
     ],
     [
       "Our Impact",
@@ -177,7 +177,7 @@
       "Dave",
       "Medium-High",
       "Yes",
-      "src/pages/our-impact/index.astro"
+      "https://contentmentweb2.netlify.app/our-impact — Astro live on Netlify preview"
     ],
     [
       "For Schools",
@@ -188,7 +188,7 @@
       "Dave / Veron",
       "High",
       "Yes",
-      "src/pages/schools.astro — some images still base64"
+      "https://contentmentweb2.netlify.app/schools — Astro live; some images still base64"
     ],
     [
       "Events",
@@ -199,7 +199,7 @@
       "Dave / Veron",
       "Medium-High",
       "Yes",
-      "src/pages/events.astro — HC-072 second notes pending"
+      "https://contentmentweb2.netlify.app/events — Astro live; HC-072 second notes pending"
     ],
     [
       "Get Involved",
@@ -210,7 +210,7 @@
       "Dave",
       "Low-Medium",
       "Yes",
-      "src/pages/give.astro (Homeroom at /give; D-03 routing open)"
+      "https://contentmentweb2.netlify.app/give — Homeroom at /give; D-03 routing open"
     ],
     [
       "About Us",
@@ -221,7 +221,7 @@
       "Dave (rev4)",
       "TBD",
       "Yes",
-      "src/pages/about.astro from Dave rev4 (D-05 single page)"
+      "https://contentmentweb2.netlify.app/about — Astro live from Dave rev4 (D-05 single page)"
     ],
     [
       "Privacy Policy",
@@ -331,7 +331,7 @@
       "—",
       "—",
       "No",
-      "Phase 2 — not in 2-week sprint"
+      "public/story-board.html → /story-board (ships in Astro public/ passthrough)"
     ],
     [
       "Foundation Reach Map",
@@ -342,7 +342,7 @@
       "—",
       "—",
       "No",
-      "Phase 2 — not in 2-week sprint"
+      "public/foundation-reach-map.html → /foundation-reach-map (ships in Astro public/ passthrough)"
     ]
   ],
   "designNotes": [
@@ -841,7 +841,7 @@
       "Sam",
       "Jul 27–28",
       "FEAT-001",
-      "All 7 Phase 1 content routes under src/pages/. Utility pages (privacy/terms/404) not started."
+      "All 7 Phase 1 content routes under src/pages/. Netlify preview publishes dist/ (cut over 30 Jul). Utility pages (privacy/terms/404) not started."
     ],
     [
       "FEAT-003",
@@ -863,7 +863,7 @@
       "Sam",
       "Jul 29",
       "FEAT-002",
-      "D-07 resolved: social URLs are in Dave/Veron's UIUX designs — pull directly from there, no separate Comms handoff needed"
+      "Internal page links + footer Project docs (/docs) wired. External donate/join/social still empty in seams.ts (HC-030/071, FEAT-005)."
     ],
     [
       "FEAT-005",
@@ -885,7 +885,7 @@
       "Dave + Sam",
       "Jul 28–29",
       "FEAT-001, FEAT-002",
-      "Jul 29 — src/pages/index.astro + section components. Responsive audit + drawer done 30 Jul (HOMEPAGE-RESPONSIVE-AUDIT.md). Awaiting Slack review (HC-057). Seams empty."
+      "Jul 29 — src/pages/index.astro + section components. Live on contentmentweb2.netlify.app. Responsive audit + drawer done 30 Jul. Awaiting Slack review (HC-057). Seams empty."
     ],
     [
       "FEAT-020",
