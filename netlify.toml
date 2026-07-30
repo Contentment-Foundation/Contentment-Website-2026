@@ -1,9 +1,15 @@
-# Netlify config for contentment.org static site
-# The homepage lives in site/ — not the repo root.
+# Netlify config for contentment.org
+# 30 Jul 2026: cut over from the static site/ prototype to the Astro build
+# (src/pages/ → dist/). Prototype passthrough (docs hub, Foundation Reach Map,
+# Story Board) now lives in public/ so it ships unchanged inside dist/.
+# Production target remains Vercel (TICKET-002) — this is the dev preview.
 
 [build]
-  publish = "site"
-  command = "bash scripts/copy-docs.sh"
+  publish = "dist"
+  command = "bash scripts/copy-docs.sh public/docs && npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
 
 # Security headers — interim Netlify config (migrate to Vercel in TICKET-002)
 [[headers]]

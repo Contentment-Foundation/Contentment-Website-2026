@@ -7,6 +7,7 @@ dist/
 
 # Netlify build copies docs/*.html here — source of truth is docs/
 site/docs/
+public/docs/
 
 # Python bytecode cache (scripts/tracker-app/python)
 __pycache__/

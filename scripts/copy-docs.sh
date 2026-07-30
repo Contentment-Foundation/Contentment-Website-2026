@@ -1,20 +1,24 @@
 #!/usr/bin/env bash
-# Copy docs/briefs/*.html into site/docs/ for local preview and Netlify publish.
-# Source of truth: docs/ — site/docs/ is gitignored build output.
+# Copy docs/briefs/*.html into <target>/docs/ (default site/docs/) for local
+# preview and Netlify publish. Source of truth: docs/ — the target docs/ dir
+# is gitignored build output either way.
+# Usage: scripts/copy-docs.sh [target-dir]   (default: site/docs)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-mkdir -p site/docs/tech-brief site/docs/team-brief site/docs/growth-brief site/docs/automation-brief site/docs/dev-timeline site/docs/dev-timeline/classic
+TARGET="${1:-site/docs}"
 
-cp docs/index.html      site/docs/index.html
-cp docs/drive-links.js  site/docs/drive-links.js
-cp docs/briefs/TECH-BRIEF.html       site/docs/tech-brief/index.html
-cp docs/briefs/TEAM-BRIEF.html       site/docs/team-brief/index.html
-cp docs/briefs/GROWTH-BRIEF.html     site/docs/growth-brief/index.html
-cp docs/briefs/AUTOMATION-BRIEF.html site/docs/automation-brief/index.html
-cp docs/briefs/dev-timelinev2.html   site/docs/dev-timeline/index.html
-cp docs/briefs/DEV-TIMELINE.html     site/docs/dev-timeline/classic/index.html
+mkdir -p "$TARGET/tech-brief" "$TARGET/team-brief" "$TARGET/growth-brief" "$TARGET/automation-brief" "$TARGET/dev-timeline" "$TARGET/dev-timeline/classic"
 
-echo "Copied docs → site/docs/ (ready for local server or Netlify publish)"
+cp docs/index.html      "$TARGET/index.html"
+cp docs/drive-links.js  "$TARGET/drive-links.js"
+cp docs/briefs/TECH-BRIEF.html       "$TARGET/tech-brief/index.html"
+cp docs/briefs/TEAM-BRIEF.html       "$TARGET/team-brief/index.html"
+cp docs/briefs/GROWTH-BRIEF.html     "$TARGET/growth-brief/index.html"
+cp docs/briefs/AUTOMATION-BRIEF.html "$TARGET/automation-brief/index.html"
+cp docs/briefs/dev-timelinev2.html   "$TARGET/dev-timeline/index.html"
+cp docs/briefs/DEV-TIMELINE.html     "$TARGET/dev-timeline/classic/index.html"
+
+echo "Copied docs → $TARGET/ (ready for local server or Netlify publish)"
