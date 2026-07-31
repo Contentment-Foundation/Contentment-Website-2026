@@ -1,0 +1,44 @@
+# Planning docs sync (commit hygiene)
+
+Not every commit needs planning updates. **Code-only** UI/CSS/copy fixes → ship code only.
+
+When **status, scope, schedule, or team-facing truth** changes, sync the planning layer before/with the commit.
+
+## Source of truth (edit these)
+
+| Priority | File | Touch when |
+|----------|------|------------|
+| 1 | `docs/planning/launch-plan-data.json` | Ticket / HC / decision / page / date / summary |
+| 2 | `docs/planning/TRACKER.md` | Same progress + append changelog row |
+| 3 | `src/config/seams.ts` | Real CTA/URL values land |
+
+## Full sync chain (after JSON/TRACKER edits)
+
+```bash
+python3 scripts/google-sheets/build-sheet-script.py   # → LaunchPlanSheet.gs EMBEDDED_JSON
+python3 scripts/refresh-launch-canvas.py              # → local canvas (not in git)
+```
+
+Then remind the human: push JSON, re-paste `.gs` if needed, Sheet menu **Launch Plan → Refresh from source**.
+
+## Sometimes (milestones only)
+
+- `docs/planning/FEATURE-TICKETS.md`, `DECISIONS.md`, `ACCESSIBILITY.md` — scope/spec actually changed
+- `docs/briefs/HANDOFF-CHECKLIST.md` — meeting outcomes (Sheet is live HC tracker)
+- `docs/briefs/DEV-TIMELINE.html`, `dev-timelinev2.html` — schedule or FEAT status narrative
+- Stakeholder `docs/briefs/*-BRIEF.html` — only if non-eng readers need the update
+
+## Do not commit / do not hand-edit
+
+- Canvas output under `~/.cursor/projects/.../canvases/` — regenerate only
+- `public/docs/`, `site/docs/`, `dist/` — build output
+- Don't rewrite `LaunchPlanSheet.gs` by hand — use `build-sheet-script.py`
+
+## Quick matrix
+
+| Change | Update |
+|--------|--------|
+| Visual/CSS/copy tweak | Code only |
+| Ticket done / HC flipped / decision closed | JSON + TRACKER → `.gs` → canvas → Sheet refresh |
+| Sprint / go-live narrative | + timeline HTML (+ briefs if stakeholders need it) |
+| Deploy / architecture milestone | + TRACKER changelog (+ FEATURE-TICKETS note if useful) |

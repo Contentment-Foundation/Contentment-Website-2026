@@ -131,10 +131,10 @@ Config: `~/.cursor/mcp.json` (global — applies to all Cursor projects). Restar
 
 ## Standing instructions for AI sessions
 
-- Prefer editing `site/index.html` over creating new files unless a ticket calls for it.
+- **Day-to-day page work → `src/` (Astro).** Routes under `src/pages/`; shared chrome in `src/components/`; tokens/CSS in `src/styles/`. Netlify publishes `dist/` from `npm run build`. `site/` is the superseded Phase 1 prototype — don't edit it for production.
 - Match existing tokens, fonts, and the `.anim` reveal pattern — don't introduce a new design language.
-- Keep the homepage a single self-contained file for Phase 1 (no build step) until the Astro migration.
 - When in doubt about scope or architecture, check `docs/planning/` before acting.
+- **Planning sync:** follow `.claude/rules/planning-docs-sync.md` (mirrored in `.cursor/rules/planning-docs-sync.mdc`). Code-only UI fixes don't need JSON/TRACKER/canvas; ticket/HC/decision/deploy status changes do — update `launch-plan-data.json` + `TRACKER.md`, then run `build-sheet-script.py` + `refresh-launch-canvas.py`.
 
 ## Contact
 

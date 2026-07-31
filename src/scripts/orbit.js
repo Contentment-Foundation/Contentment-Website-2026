@@ -44,12 +44,17 @@ export function initOrbit() {
   let cur = -1;
   const cue = sec.querySelector('.orbit-cue');
   const lerp = (a, b, t) => a + (b - a) * t;
+  const mobileOrbit = window.matchMedia('(max-width:940px)');
   function onScroll() {
     const rect = sec.getBoundingClientRect();
     const total = Math.max(sec.offsetHeight - window.innerHeight, 1);
     let prog = Math.min(Math.max(-rect.top / total, 0), 1);
-    // bloom diameter grows with scroll: tight point -> wide soft disc
-    sec.style.setProperty('--bloom', lerp(150, 760, prog).toFixed(0));
+    // bloom diameter grows with scroll: tight point -> wide soft disc.
+    // On stacked mobile layout, cap well below the beat copy so the glow
+    // doesn't wash over the last (purple) paragraph (Kristina / mobile QA).
+    const bloomMax = mobileOrbit.matches ? 300 : 760;
+    const bloomMin = mobileOrbit.matches ? 120 : 150;
+    sec.style.setProperty('--bloom', lerp(bloomMin, bloomMax, prog).toFixed(0));
     // ease progress so the first beat advances sooner (kills the "frozen" dead-zone on entry)
     const eased = Math.pow(prog, 0.82);
     let i = Math.floor(eased * N);
