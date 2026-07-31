@@ -726,6 +726,16 @@ footer .wrap{position:relative;z-index:1}
      Sign In is secondary; drop it here so Donate + hamburger stay reachable. */
   .signin{display:none}
 }
+/* 320 locked width: after the horizontal lockup landed, brand (~162px) + Donate +
+   hamburger still overflow the 22px-padded row; body overflow-x:hidden clips the
+   menu control. Tighten chrome only — no redesign. */
+@media(max-width:380px){
+  .nav{gap:12px}
+  .brand img{height:36px}
+  header.scrolled .brand img{height:32px}
+  .nav-cta{font-size:.78rem;padding:.45em .95em}
+  .menu-btn{padding:4px;flex-shrink:0}
+}
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
   .anim{opacity:1;transform:none}.hero-bg{transform:none}
