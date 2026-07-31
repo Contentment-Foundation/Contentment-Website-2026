@@ -15,7 +15,8 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    # X-Frame-Options omitted so responsive-testing tools can iframe the site.
+    # Clickjacking risk is low for this marketing surface; re-add DENY if needed.
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
