@@ -121,12 +121,8 @@ export default function Phase1LaunchBoard() {
       </Grid>
 
       <Grid columns={4} gap={12}>
-        <Stat value={String(COVERAGE.reviewOpen ?? REVIEW_OPEN.length)} label="Review feedback open" tone="warning" />
-      </Grid>
-
-      <Grid columns={4} gap={12}>
         <Stat value={String(ALL_TICKETS.length)} label="All tickets merged" />
-        <Stat value="57" label="Handoff checklist rows" />
+        <Stat value={String(COVERAGE.reviewOpen ?? REVIEW_OPEN.length)} label="Review feedback open" tone="warning" />
         <Stat value={String(emptySeams.length)} label="Empty seams" tone="warning" />
         <Stat value={String(openDecs.length)} label="Open product decisions" tone="warning" />
       </Grid>
