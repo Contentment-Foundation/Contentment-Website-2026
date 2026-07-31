@@ -188,7 +188,7 @@ Create `src/data/stories.json` with schema: slug, name, country, school, quote, 
 **Description:**  
 Stories index using `.door` card grid pattern. Filter UI optional for MVP (nice-to-have: region/theme filters). Orientation line in hero. Each card links to `/stories/[slug]`. Global framing copy per story pillars.
 
-> **Status (29 Jul 2026):** Page renamed "Our Impact" per Kristina — route is `/our-impact`, not `/stories` (confirmed, see HC-073). Ported to `src/pages/our-impact/index.astro` (subfolder, leaving room for a future `[slug].astro`) from Dave's Jul 29 2026 handoff. TICKET-030's story-content dependency is still unresolved (comms/programs owe photos + permissions), so the underlying data model isn't wired — this ships the static handoff content as-is.
+> **Status (31 Jul 2026):** RF-006 Our Impact click-through done — locked widths (320–1280) clean; no code fixes. Page renamed "Our Impact" per Kristina — route is `/our-impact`, not `/stories` (HC-073). Ported to `src/pages/our-impact/index.astro` from Dave's Jul 29 handoff. TICKET-030 story-content dependency still unresolved (comms/programs owe photos + permissions); ships static handoff content as-is.
 
 **Acceptance criteria:**
 - [ ] All published stories render as cards
@@ -239,7 +239,7 @@ Map with country pins on `/stories`. Filters by region, theme, school type. Use 
 **Description:**  
 School leader journey page: wellbeing → achievement → proof → conversation. Use `.split`, `.impact`, `.door` patterns. Include Durlak/Jennings evidence per Evidence doc. Primary CTA: Start the conversation → form anchor.
 
-> **Status (29 Jul 2026):** Ported to `src/pages/schools.astro` from Dave's `fs_review1` handoff. Some images (6 of 17) remain inline base64 — couldn't be cleanly attributed to a named source file in `source-images/`/`video-posters/`, documented in the file's own header comment. Partner-deck download seam (`seams.schools.deck`) still empty, pending Kristina's button/CTA inventory (HC-005).
+> **Status (31 Jul 2026):** RF-006 Schools click-through done — locked widths (320–1280) clean; matrix side-scroll / fsr-bloom intentional (not bugs). Ported to `src/pages/schools.astro` from Dave's `fs_review1` handoff. Some images (6 of 17) remain inline base64. Partner-deck download seam (`seams.schools.deck`) still empty (HC-005).
 
 **Acceptance criteria:**
 - [ ] Frames wellbeing as path to achievement (per Tim / messaging brief)
@@ -281,7 +281,7 @@ Form on `/schools`: school name, contact name, email, role, country, message. St
 **Description:**  
 Five "seats" per messaging brief using door-card or tier patterns: Homeroom, school, spread, events, educators. Each seat has mechanism line. Homeroom featured first.
 
-> **Status (29 Jul 2026):** Ported to `src/pages/give.astro` (Get Involved / Homeroom monthly-giving content) from Dave's Jul 29 2026 handoff. D-03/HC-031 (whether this stays a single `/give` gateway or splits into `/give` + `/give/monthly`) is still open — built the single page Dave shipped at `/give` only, matching what `Nav.astro` already links to. Join/give-one-time/ways-to-give seams wired to `src/config/seams.ts`, all still empty pending Lorna/Keela.
+> **Status (31 Jul 2026):** RF-006 Give click-through done — locked widths (320–1280) clean; no code fixes. Ported to `src/pages/give.astro` (Get Involved / Homeroom monthly-giving content) from Dave's Jul 29 handoff. D-03/HC-031 (`/give` vs `/give` + `/give/monthly`) still open — single page at `/give` only. Join/give-one-time/ways-to-give seams empty pending Lorna/Keela (HC-075).
 
 **Acceptance criteria:**
 - [ ] Five seats in correct order
@@ -426,7 +426,7 @@ Per-page `<title>`, meta description, Open Graph tags (use hero or logo image). 
 **Description:**  
 Build `/events` per messaging brief: event cards with three access badges, Festival block, email capture, past recaps. Member-only events visible; RSVP gated.
 
-> **Status (29 Jul 2026):** Ported to `src/pages/events.astro` from Dave's `events-kit-2026-07-28-page2r4` handoff. **Not production-final** — Dave's own handoff notes flag that a second round of team review notes hasn't been applied yet (see `HANDOFF-contentment-2026-07-27-events-notes.md` "STILL PENDING"). Treat as review-only until that lands (HC-072). RSVP/join seams wired to `seams.ts`, empty pending the Keela/Homeroom join-flow choreography (HC-071).
+> **Status (31 Jul 2026):** RF-006/RF-007 review-only QA pass — locked widths (320–1280): no P0/P1 overflow, broken images, or console errors. Ported to `src/pages/events.astro` from Dave's `events-kit-2026-07-28-page2r4` handoff. **Not production-final** — Dave's second team-notes round still pending (`HANDOFF-contentment-2026-07-27-events-notes.md` "STILL PENDING"); treat as review-only until HC-072 closes. RSVP/join seams empty (HC-071); Flodesk placeholders (FEAT-070).
 
 > **Messaging brief alignment:** The messaging brief treats Events & Experiences as a named page in the core page map (Belief Step 5 — belonging — feeding back into Step 4). Although classified `should-have` here to protect Phase 1 scope, prioritize this page as close to launch as possible. It is the retention step that makes Homeroom membership feel worth renewing. Defer only if event calendar is not confirmed in time.
 

@@ -4,7 +4,7 @@
     "version": "2026-07-31",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Jul 31: Tickets tab now has every real FEAT/OPS/QA ticket (28 launch + 4 historical OPS/QA). RF-006 — About + Why QA/polish done; Cursor now running Our Impact/Schools/Give/Events in parallel. Homepage Done (HC-057). FEAT-081 (SEO) Done; FEAT-080 (Analytics) scaffolded, no-op until real credentials land. Events HC-072 still open. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
+    "summary": "Jul 31: RF-006 6/6 click-through done (About, Why, Our Impact, Schools, Give, Events review-only). Events still HC-072 review-only — no P0/P1 in RF-007 QA. Homepage Done (HC-057). FEAT-081 (SEO) Done; FEAT-080 (Analytics) scaffolded, no-op until real credentials land. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -181,7 +181,7 @@
       "Dave",
       "Medium-High",
       "Yes",
-      "https://contentmentweb2.netlify.app/our-impact — Astro live on Netlify preview"
+      "https://contentmentweb2.netlify.app/our-impact — Astro live. RF-006 QA pass 31 Jul (locked widths clean; no code fixes). FEAT-030 story data still blocked."
     ],
     [
       "For Schools",
@@ -192,7 +192,7 @@
       "Dave / Veron",
       "High",
       "Yes",
-      "https://contentmentweb2.netlify.app/schools — Astro live; some images still base64"
+      "https://contentmentweb2.netlify.app/schools — Astro live. RF-006 QA pass 31 Jul (locked widths clean; matrix side-scroll / fsr-bloom intentional). Some images still base64; partner-deck seam empty."
     ],
     [
       "Events",
@@ -203,7 +203,7 @@
       "Dave / Veron",
       "Medium-High",
       "Yes",
-      "https://contentmentweb2.netlify.app/events — Astro live; HC-072 second notes pending"
+      "https://contentmentweb2.netlify.app/events — Astro live. RF-006/RF-007 review-only QA pass 31 Jul (320–1280: no overflow, no broken images, no console errors). HC-072 second notes still pending; RSVP seams empty."
     ],
     [
       "Get Involved",
@@ -214,7 +214,7 @@
       "Dave",
       "Low-Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/give — Homeroom at /give; D-03 routing open"
+      "https://contentmentweb2.netlify.app/give — Homeroom at /give. RF-006 QA pass 31 Jul (locked widths clean; no code fixes). D-03 routing open; join/donate seams empty (HC-075)."
     ],
     [
       "About Us",
@@ -933,7 +933,7 @@
       "Sam",
       "Jul 31 · Aug 3–4",
       "FEAT-002",
-      "Jul 29 — ported to src/pages/our-impact/index.astro. Route /our-impact. FEAT-030 story data still blocked."
+      "Jul 29 — ported to src/pages/our-impact/index.astro. Route /our-impact. 31 Jul RF-006 QA pass (320–1280 clean; no code fixes). FEAT-030 story data still blocked."
     ],
     [
       "FEAT-040",
@@ -944,7 +944,7 @@
       "Sam",
       "Aug 4–5",
       "FEAT-002",
-      "Jul 29 — ported to src/pages/schools.astro from Dave fs_review1. Partner-deck seam empty."
+      "Jul 29 — ported to src/pages/schools.astro from Dave fs_review1. 31 Jul RF-006 QA pass (320–1280 clean; matrix side-scroll / fsr-bloom intentional). Partner-deck seam empty; some images still base64."
     ],
     [
       "FEAT-041",
@@ -966,7 +966,7 @@
       "Sam",
       "Jul 30–31",
       "FEAT-002",
-      "Get Involved at src/pages/give.astro + homepage HomeroomBand dummy form (data-embed=keela-homeroom). Real Keela blocked on D-02 + D-03."
+      "Get Involved at src/pages/give.astro + homepage HomeroomBand dummy form (data-embed=keela-homeroom). 31 Jul RF-006 QA pass (320–1280 clean; no code fixes). Real Keela blocked on D-02 + D-03 + HC-075."
     ],
     [
       "FEAT-051",
@@ -1076,7 +1076,7 @@
       "Sam",
       "Aug 6–7",
       "FEAT-002",
-      "Jul 29 — ported to src/pages/events.astro. HC-072: review-only until Dave second notes. RSVP seams empty."
+      "Jul 29 — ported to src/pages/events.astro. HC-072: review-only until Dave second notes. 31 Jul RF-006/RF-007 QA pass (320–1280: no P0/P1 overflow/images/console). RSVP seams empty (HC-071)."
     ],
     [
       "FEAT-032",
@@ -2047,10 +2047,10 @@
       "All Phase 1",
       "Both",
       "High",
-      "Open",
+      "Done",
       "Click-through review of About, Why, Our Impact, Schools, Events, Give after homepage sign-off.",
       "Team",
-      "31 Jul — About + Why QA + polish done (no P0/P1 layout bugs on either). Next: Our Impact. Use one row per issue (page + device).",
+      "6 of 6 click-through done (Events review-only per RF-007/HC-072). Team can still log new RF rows per issue.",
       "https://contentmentweb2.netlify.app/"
     ],
     [
@@ -2063,7 +2063,7 @@
       "Open",
       "Events remains review-only until Dave second notes (HC-072) — flag any production-risk findings but do not treat as locked.",
       "Dave → Sam",
-      "HC-072 still Open.",
+      "31 Jul review-only QA: no P0/P1 (overflow/images/console) at 320–1280. HC-072 still Open — design not locked.",
       "https://contentmentweb2.netlify.app/events"
     ]
   ]
