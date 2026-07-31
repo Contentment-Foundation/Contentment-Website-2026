@@ -4,7 +4,7 @@
     "version": "2026-07-31",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Jul 31: RF-006 6/6 click-through done (About, Why, Our Impact, Schools, Give, Events review-only). Events still HC-072 review-only; RF-007 P1 mobile nav clip (\u2264380px) shipped; soft flags (title/chips/hero) for Dave. Homepage Done (HC-057). FEAT-081 (SEO), FEAT-011 (copy audit), FEAT-041 (school form, Google Form live) Done. FEAT-080 (Analytics, HC-076) and FEAT-070 (newsletter, needs FEAT-101) still blocked on real credentials/hosting. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
+    "summary": "Jul 31: RF-006 6/6 click-through done (Events review-only). Events HC-072 still Open; RF-007 soft flags for Dave; light responsive audit logged (EVENTS-RESPONSIVE-AUDIT.md) \u2014 no new CSS. D-24 opened: Events email-capture destination (Flodesk vs Keela vs other) pending WoeiJing + Kristina (pairs FEAT-070 / D-19; do not wire). Homepage Done (HC-057). FEAT-081/011/041 Done. FEAT-080/070 blocked on credentials/hosting. Keela (HC-075) blocks FEAT-060. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -203,7 +203,7 @@
       "Dave / Veron",
       "Medium-High",
       "Yes",
-      "https://contentmentweb2.netlify.app/events \u2014 Astro live. RF-006/RF-007 review-only QA 31 Jul: P1 shared-nav menu clip \u2264380px fixed; soft flags (flagship title/chips/hero) for Dave. HC-072 second notes still pending; RSVP seams empty."
+      "https://contentmentweb2.netlify.app/events \u2014 Astro live. RF-006/RF-007 review-only; HC-072 Open. Soft flags for Dave (title/chips/hero). Light audit EVENTS-RESPONSIVE-AUDIT.md (no new CSS). Email-capture slots unwired pending D-24 (WJ + Kristina). RSVP seams empty (HC-071)."
     ],
     [
       "Get Involved",
@@ -669,6 +669,15 @@
       "Resolved",
       "\u2014",
       "\u2014"
+    ],
+    [
+      "D-24",
+      "Events email-capture destination",
+      "Flodesk vs Keela vs other \u2014 Somesh to ask WoeiJing + Kristina. /events keeps three placeholder slots (newsletter-signup fold \u201cEmbed slot \u00b7 tech to wire\u201d; event-announcements in Why + Close \u201cWant first access to all of it?\u201d; festival-signup CTAs). Do NOT invent provider embeds until decided. Pairs with FEAT-070 / D-19 (sitewide newsletter).",
+      "Somesh \u2192 WoeiJing + Kristina",
+      "Open",
+      "Events capture wiring (FEAT-070 related)",
+      "High"
     ]
   ],
   "integrations": [
@@ -999,7 +1008,7 @@
       "Sam",
       "Aug 13\u201314",
       "FEAT-010",
-      "31 Jul \u2014 /updates page built (footer-linked, in sitemap.xml). Form submission stays a placeholder; reverted an unverified direct-to-Flodesk-API attempt. Real send needs a hosting adapter for a server route (FEAT-101), not just credentials."
+      "31 Jul \u2014 /updates page built (footer-linked, in sitemap.xml). Form submission stays a placeholder; reverted an unverified direct-to-Flodesk-API attempt. Real send needs a hosting adapter for a server route (FEAT-101), not just credentials. Events page capture slots also unwired \u2014 destination Flodesk vs Keela vs other is D-24 (Somesh asking WoeiJing + Kristina); pairs with D-19."
     ],
     [
       "FEAT-071",
@@ -1076,7 +1085,7 @@
       "Sam",
       "Aug 6\u20137",
       "FEAT-002",
-      "Jul 29 \u2014 ported to src/pages/events.astro. HC-072: review-only until Dave second notes. 31 Jul RF-006/RF-007 QA: P1 shared-nav menu clip \u2264380px fixed (global.css); soft flags (title/chips/hero) for Dave. RSVP seams empty (HC-071)."
+      "Jul 29 \u2014 ported to src/pages/events.astro. HC-072: review-only until Dave second notes. 31 Jul RF-006/RF-007 QA + light EVENTS-RESPONSIVE-AUDIT.md (no new CSS; soft flags for Dave). Email capture unwired pending D-24 (WJ + Kristina). RSVP seams empty (HC-071)."
     ],
     [
       "FEAT-032",
@@ -1614,7 +1623,7 @@
       "HC-032",
       "Integrations",
       "Newsletter destination (D-19)",
-      "Flodesk vs Keela vs custom \u2014 still open. Owner + decision date.",
+      "Flodesk vs Keela vs custom \u2014 still open. Owner + decision date. Events page slots separately tracked as D-24 (Somesh \u2192 WoeiJing + Kristina).",
       "Comms + Eng",
       "Open",
       "High",
@@ -2073,7 +2082,7 @@
       "Open",
       "Events remains review-only until Dave second notes (HC-072) \u2014 flag any production-risk findings but do not treat as locked.",
       "Dave \u2192 Sam",
-      "31 Jul review-only QA: P1 shared-nav `.menu-btn` clipped at \u2264380px fixed in global.css (compact gap/brand/Donate/menu padding). Soft flags for Dave (not blockers): flagship title nowrap soft overflow at 1280; filter chip wrap; hero contrast. HC-072 still Open \u2014 design not locked.",
+      "31 Jul review-only QA: P1 shared-nav `.menu-btn` clipped at \u2264380px fixed in global.css. Soft flags for Dave (not blockers): flagship title nowrap soft overflow at 1280; filter chip wrap; hero contrast. Light EVENTS-RESPONSIVE-AUDIT.md logged \u2014 no new page CSS. HC-072 still Open. Email-capture destination opened as D-24 (Flodesk vs Keela vs other \u2014 Somesh asking WoeiJing + Kristina); slots stay placeholders.",
       "https://contentmentweb2.netlify.app/events"
     ]
   ]

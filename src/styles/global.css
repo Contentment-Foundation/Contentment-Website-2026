@@ -51,7 +51,7 @@ header.scrolled .nav-links>a,header.scrolled .drop>button{color:var(--navlink)}
 .signin:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
 header.scrolled .signin{color:var(--navlink)}
 header.scrolled .signin:hover{color:var(--deep)}
-.nav-cta{padding:.62em 1.4em;font-size:.9rem;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--mint);color:var(--deep2);transition:transform .25s,box-shadow .25s,background .35s,color .35s}
+.nav-cta{padding:.62em 1.4em;font-size:.9rem;border-radius:999px;font-weight:600;white-space:nowrap;background:var(--mint);color:var(--deep2);border:1px solid rgba(255,255,255,.55);box-shadow:0 4px 14px -6px rgba(2,55,79,.4);transition:transform .25s,box-shadow .25s,background .35s,color .35s,border-color .35s}
 .nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(0,0,0,.35)}
 header.scrolled .nav-cta{background:var(--btnblue);color:#fff}
 .menu-btn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:6px}

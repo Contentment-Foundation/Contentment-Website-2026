@@ -27,7 +27,8 @@
 // for THE CRITICAL SEAM (future return-trip redirect back to that event) — see the handoff
 // doc; nothing is wired to it yet, it's just carried through inert. The 3 email-capture
 // slots (data-embed="festival-signup" | "event-announcements" | "newsletter-signup") stay as
-// literal placeholders, matching NewsletterForm.astro's pattern (FEAT-070 not wired yet).
+// literal placeholders (FEAT-070 / D-19 / D-24). Destination (Flodesk vs Keela vs other) is
+// open — Somesh asking WoeiJing + Kristina; do NOT invent embeds until decided.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { seams } from '../config/seams';
 ---
@@ -67,7 +68,7 @@ import { seams } from '../config/seams';
       <p class="ev-signup-sub">One-ish email a month, usually about a teacher, a tool or resource you can try, and events you can join.</p>
     </div>
     <div class="ev-signup-form">
-      <!-- FEAT-070 (Flodesk integration) not wired yet — placeholder slot, matches Home's NewsletterForm. -->
+      <!-- D-24 / FEAT-070: provider TBD (Flodesk vs Keela vs other) — WoeiJing + Kristina. Placeholder only. -->
       <div class="ev-capture-slot" data-embed="newsletter-signup" role="img" aria-label="Email signup coming soon">
         <span class="ev-capture-label">Email capture</span>
         <span class="ev-capture-sub">Embed slot &middot; tech to wire</span>
@@ -337,7 +338,7 @@ import { seams } from '../config/seams';
       <aside class="ev-close-secondary anim">
         <h3>Just want to know what's coming?</h3>
         <p>Get event announcements in your inbox.</p>
-        <!-- FEAT-070 (Flodesk integration) not wired yet — placeholder slot. -->
+        <!-- D-24 / FEAT-070: provider TBD — placeholder only; do not invent Flodesk/Keela embeds. -->
         <div class="ev-capture-slot" data-embed="event-announcements" role="img" aria-label="Email signup coming soon">
           <span class="ev-capture-label">Email capture</span>
           <span class="ev-capture-sub">Embed slot &middot; tech to wire</span>

@@ -15,6 +15,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <!-- 1 - HERO with CEO video -->
 <section class="hero" id="top">
   <div class="hero-bg" style="background-image:url('/assets/why-hero-bg.jpg');background-size:cover;background-position:62% 30%"></div>
+  <div class="hero-bg mob" style="background-image:url('/assets/why-hero-bg.jpg');background-size:cover;background-position:70% 24%"></div>
   <div class="hero-inner wrap">
     <div class="hero-content">
       <h1 class="hero-q">
@@ -146,11 +147,57 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <h2 class="title">Tend to the teacher, and you reach every child.</h2>
         <p>Since 2016, the 11,925 educators we have walked alongside have carried this work to more than 409,000 students. Certifying one educator costs about $1,200 over a year.</p>
       </div>
-      <!-- PLACEHOLDER: real Keela embed pending Keela checkout URLs (D-02, HC-030) and
-           the Keela/Homeroom join-flow choreography (HC-071). Matches Home's HomeroomBlock. -->
+      <!-- Coded stand-in donate form, same pattern as Home's HomeroomBlock, until the real
+           Keela checkout URLs land (D-02, HC-030) and the Keela/Homeroom join-flow
+           choreography (HC-071). data-embed="keela-homeroom" is the tech seam. -->
       <div class="keela-slot anim" data-embed="keela-homeroom">
-        <img class="keela-img" src="/assets/why-keela-img.png" alt="Keela donation form: choose one-time or monthly, $25, $50, $100 or other">
-        <span class="keela-tag">Placeholder. Tech seam: real Keela embed goes here.</span>
+        <form class="donate-form" id="why-donate-form-dummy" aria-label="Choose donation amount" onsubmit="return false">
+          <h3 class="donate-form__title">Choose Amount</h3>
+          <p class="donate-form__desc">Your gift sends ripples of wellbeing to the teachers and children around the world.</p>
+
+          <fieldset class="donate-form__fieldset">
+            <legend class="donate-form__label">Frequency</legend>
+            <div class="donate-form__row" role="group" aria-label="Frequency">
+              <button type="button" class="donate-form__chip" data-group="frequency" data-value="one-time" aria-pressed="false">One-Time</button>
+              <button type="button" class="donate-form__chip is-selected" data-group="frequency" data-value="monthly" aria-pressed="true">Monthly</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="donate-form__fieldset">
+            <legend class="donate-form__label">Amount (USD)</legend>
+            <div class="donate-form__row" role="group" aria-label="Amount">
+              <button type="button" class="donate-form__chip" data-group="amount" data-value="25" aria-pressed="false">$25</button>
+              <button type="button" class="donate-form__chip" data-group="amount" data-value="50" aria-pressed="false">$50</button>
+              <button type="button" class="donate-form__chip is-selected" data-group="amount" data-value="100" aria-pressed="true">$100</button>
+            </div>
+            <button type="button" class="donate-form__chip donate-form__chip--full" data-group="amount" data-value="other" aria-pressed="false">$Other</button>
+            <label class="donate-form__other" hidden>
+              <span class="sr-only">Custom amount</span>
+              <span class="donate-form__other-prefix" aria-hidden="true">$</span>
+              <input type="number" name="custom-amount" min="1" step="1" placeholder="Enter amount" inputmode="numeric">
+            </label>
+          </fieldset>
+
+          <fieldset class="donate-form__fieldset">
+            <legend class="donate-form__label">I am donating as</legend>
+            <div class="donate-form__row" role="group" aria-label="Donor type">
+              <button type="button" class="donate-form__chip is-selected" data-group="donor" data-value="individual" aria-pressed="true">Individual</button>
+              <button type="button" class="donate-form__chip" data-group="donor" data-value="company" aria-pressed="false">Company</button>
+            </div>
+          </fieldset>
+
+          <label class="donate-form__check">
+            <input type="checkbox" name="dedicate">
+            <span>I would like to dedicate this gift.</span>
+          </label>
+
+          <label class="donate-form__check">
+            <input type="checkbox" name="cover-fees" checked>
+            <span>Add <strong data-fee>$2.56</strong> to help cover the processing fees</span>
+          </label>
+
+          <button type="submit" id="why-homeroom-donate-cta" class="donate-form__submit" disabled title="Donation checkout coming soon">Donate</button>
+        </form>
       </div>
       <div class="homeroom-cta anim d1">
         <span class="fine">Cancel anytime. Gifts are unrestricted.</span>
@@ -202,11 +249,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .hero-q .l2{font-size:clamp(1.4rem,2.45vw,2.1rem);font-weight:400;color:rgba(255,255,255,.9)}
   .hero-q .l3{font-size:clamp(1.4rem,2.45vw,2.1rem);font-weight:400;margin-top:.4em}
   .hero-q .l3 em{font-style:italic;color:#bfeef5}
-  .hero .hero-content{transform:translateY(64px)}
   .hero .hero-inner{max-width:clamp(1240px,86vw,2040px)}
   .hero .hero-content{max-width:clamp(720px,52vw,760px)}
   @media(min-width:561px) and (max-width:1240px){.hero .wrap{padding-left:clamp(40px,5.5vw,64px);padding-right:clamp(40px,5.5vw,64px)}}
-  @media(max-width:560px){.hero-video{width:78%}}
   @media(max-width:560px){.hero::after{background:linear-gradient(180deg,rgba(2,40,58,.5) 0%,rgba(2,46,66,.15) 35%,rgba(2,40,58,.9) 100%)}}
 
   /* merged "the teacher" beat */
@@ -232,6 +277,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .tq-body figcaption{margin-top:12px;font-size:.86rem;color:var(--slate)}
   .tq-body figcaption b{color:var(--deep)}
   @media(max-width:640px){.teacher-quote{gap:18px}}
+  @media(max-width:480px){.teacher-quote{flex-direction:column;align-items:flex-start}.tq-photo{width:84px;height:84px}}
   .jd-close{margin-top:34px}
   .jd-close p{font-size:clamp(1.05rem,1.4vw,1.2rem);color:var(--slate);line-height:1.62;max-width:820px;text-wrap:pretty}
   .jd-close p+p{margin-top:1em}
@@ -337,9 +383,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .homeroom .eyebrow{color:#bfeef5}
   .homeroom-head h2{color:#fff;margin-top:14px}
   .homeroom-head p{margin-top:18px;font-size:1.1rem;color:rgba(255,255,255,.92);max-width:52ch}
-  .keela-slot{margin-top:22px;position:relative;max-width:380px}
-  .keela-img{width:100%;height:auto;display:block;border-radius:14px;box-shadow:0 22px 54px -18px rgba(2,24,38,.6)}
-  .keela-tag{display:block;margin-top:10px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.62);font-weight:600}
+  .keela-slot{margin-top:22px;position:relative;max-width:330px}
   .legal{margin-top:16px;font-size:.8rem;line-height:1.5;color:rgba(255,255,255,.78);max-width:56ch}
   .homeroom-cta{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
   #give .homeroom-head p{margin-bottom:6px}
@@ -371,6 +415,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   // Page-specific behaviour not covered by src/scripts/*: accordion + video lightbox/inline-play.
   // Ported verbatim from why-wellbeing.html's inline <script> (nav scroll, hero entrance, reveal-on-
   // scroll, count-up are already handled globally by BaseLayout's animations.js/nav.js).
+  import { trackEvent } from '../scripts/analytics.js';
+
   document.querySelectorAll('.qa-item').forEach((item) => {
     const b = item.querySelector('.qa-q');
     b?.addEventListener('click', () => {
@@ -378,6 +424,60 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       b.setAttribute('aria-expanded', String(open));
     });
   });
+
+  // Coded stand-in donate form — same logic as Home's HomeroomBlock, disabled submit
+  // until the real Keela checkout URL lands (D-02, HC-030).
+  const donateForm = document.getElementById('why-donate-form-dummy');
+  if (donateForm) {
+    const feeEl = donateForm.querySelector('[data-fee]');
+    const otherWrap = donateForm.querySelector('.donate-form__other');
+    const otherInput = donateForm.querySelector<HTMLInputElement>('input[name="custom-amount"]');
+
+    const donateCta = document.getElementById('why-homeroom-donate-cta');
+    donateCta?.addEventListener('click', () => {
+      trackEvent('cta_homeroom_click', { source: 'why_homeroom_block' });
+    });
+
+    function feeFor(amount: number) {
+      return (Math.round(amount * 0.0256 * 100) / 100).toFixed(2);
+    }
+
+    function selectedAmount() {
+      const chip = donateForm!.querySelector('[data-group="amount"].is-selected');
+      if (!chip) return 100;
+      if (chip.getAttribute('data-value') === 'other') {
+        const n = Number(otherInput?.value);
+        return Number.isFinite(n) && n > 0 ? n : 0;
+      }
+      return Number(chip.getAttribute('data-value')) || 100;
+    }
+
+    function updateFee() {
+      const amt = selectedAmount();
+      if (feeEl) feeEl.textContent = amt > 0 ? `$${feeFor(amt)}` : '$—';
+    }
+
+    donateForm.querySelectorAll('.donate-form__chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const group = chip.getAttribute('data-group');
+        donateForm.querySelectorAll(`.donate-form__chip[data-group="${group}"]`).forEach((c) => {
+          c.classList.remove('is-selected');
+          c.setAttribute('aria-pressed', 'false');
+        });
+        chip.classList.add('is-selected');
+        chip.setAttribute('aria-pressed', 'true');
+
+        if (group === 'amount') {
+          const isOther = chip.getAttribute('data-value') === 'other';
+          if (otherWrap) (otherWrap as HTMLElement).hidden = !isOther;
+          if (isOther) otherInput?.focus();
+          updateFee();
+        }
+      });
+    });
+
+    otherInput?.addEventListener('input', updateFee);
+  }
 
   const lb = document.getElementById('lb');
   const lbSlot = document.getElementById('lbSlot');

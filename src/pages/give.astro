@@ -432,33 +432,73 @@ import { seams } from '../config/seams';
   .btn-outline:hover{background:var(--ocean);color:#fff;transform:translateY(-2px)}
 
   /* ---------- RESPONSIVE ---------- */
+  /* Locked widths: 320 / 390 / 759 / 768 / 940 / 1280.
+     Breakpoints aligned to site system (≤940 stack splits, ≤560 mobile).
+     Mid ≤680 collapses benefit grid only — 2×2 still reads at 759/768. */
+
   @media(max-width:940px){
-    .split{grid-template-columns:1fr}
-  }
-  @media(max-width:900px){
-    .gi-what-split{grid-template-columns:1fr;padding-bottom:clamp(48px,7vw,90px)}
-    .gi-what-media{padding:clamp(32px,5vw,56px) clamp(32px,5vw,72px) 0;justify-content:center}
-    .gi-what-split .split-txt{padding:0 clamp(32px,5vw,72px);justify-content:flex-start}
-    .gi-what-video{aspect-ratio:9/16;max-width:330px;margin:0 auto}
+    .split{grid-template-columns:1fr;min-height:0;max-height:none}
+
+    /* What-is: single column. Drop section side padding so we don't double
+       with .split-txt / .gi-what-media gutters (was ~64px each side at 320). */
+    .gi-what-split{
+      grid-template-columns:1fr;
+      padding-left:0;
+      padding-right:0;
+      padding-bottom:clamp(48px,7vw,90px);
+    }
+    .gi-what-split .split-txt{
+      order:1;
+      padding:0 clamp(22px,4vw,48px);
+      justify-content:flex-start;
+    }
+    .gi-what-media{
+      order:2;
+      min-height:auto;
+      padding:clamp(12px,2.4vw,28px) clamp(22px,4vw,48px) 0;
+      justify-content:center;
+    }
+    /* Landscape placeholder when stacked — portrait 9:16 was ~660px tall at 940 */
+    .gi-what-video{
+      aspect-ratio:16/9;
+      max-width:min(520px,100%);
+      min-height:0;
+      margin:0 auto;
+      gap:6px;
+    }
+    .gi-play{width:56px;height:56px;margin-bottom:2px}
+    .gi-play::after{border-width:10px 0 10px 16px;margin-left:3px}
+    .gi-what-video .gi-embed-label{font-size:1.05rem;max-width:22ch}
+    .gi-embed-sub{font-size:.7rem;letter-spacing:.12em}
+
     .gi-other-inner{grid-template-columns:1fr;gap:28px}
     .gi-other-actions{flex-direction:row;flex-wrap:wrap}
-    .gi-other-actions .btn{flex:1;min-width:200px}
-    .become-split{grid-template-columns:1fr}
-    .become-content-inner{max-width:none}
-    .become-photo{order:2;min-height:56vh}
-    .become-content{order:1}
-    .gi-what-media{min-height:auto;padding:0}
-    .gi-what-video{aspect-ratio:16/9;min-height:0}
+    .gi-other-actions .btn{flex:1 1 200px;min-width:0;justify-content:center}
+
+    .become-split{grid-template-columns:1fr;min-height:0}
+    .become-content{
+      order:1;
+      padding:clamp(48px,6vw,88px) clamp(22px,4vw,48px);
+    }
+    .become-content-inner{max-width:none;margin-left:0}
+    .become-photo{order:2;min-height:min(52vh,420px)}
+    .become-split .homeroom-cta{align-items:stretch}
+    .become-split .homeroom-cta .btn-primary{width:100%;max-width:360px;margin-inline:auto;justify-content:center}
   }
+
   @media(max-width:680px){
     .benefit-grid{grid-template-columns:1fr}
     .bcard-feature{flex-direction:column}
     .bcard-feature .bphoto{width:100%;aspect-ratio:16/10;min-height:0}
+    .bfeat-panel{padding:clamp(24px,5vw,36px)}
     .gi-hero .hero-actions .btn{width:100%;justify-content:center}
-    .become-split .homeroom-cta .btn-primary{width:100%;justify-content:center}
+    .gi-other-actions{flex-direction:column}
+    .gi-other-actions .btn{flex:none;width:100%}
   }
+
   @media(max-width:560px){
-    .gi-hero-bg{display:none}.gi-hero-bg.mob{display:block;background-position:center 55%}
+    .gi-hero-bg{display:none}
+    .gi-hero-bg.mob{display:block;background-position:center 55%}
     /* mobile hero crop is tight on the embrace; lift the scrim from the bottom
        so the centred text block still clears the faces */
     .gi-hero::after{background:linear-gradient(0deg,
@@ -466,7 +506,48 @@ import { seams } from '../config/seams';
       rgba(var(--v-overlay),.68) 32%,
       rgba(var(--v-overlay),.40) 62%,
       rgba(var(--v-overlay),.50) 100%)}
+    .gi-hero{align-items:flex-end;padding-bottom:clamp(56px,12vh,96px)}
+    .gi-hero-inner{max-width:none;padding-bottom:8px}
+    .gi-hero .h1-name{font-size:clamp(2.55rem,11.5vw,3.2rem)}
+    .gi-hero .h1-sub{font-size:clamp(1.2rem,5vw,1.5rem)}
+    .gi-hero-lead{font-size:clamp(1rem,3.8vw,1.08rem);margin-top:16px}
+    .gi-hero .hero-actions{margin-top:22px}
     .gi-hero .hero-actions .btn{width:100%;justify-content:center}
+    .hero-seelink{
+      display:inline-flex;align-items:center;
+      min-height:44px;padding:8px 0;margin-top:12px;
+    }
+
+    .gi-what-split .split-txt,
+    .gi-what-media{padding-left:22px;padding-right:22px}
+    .gi-what-split .title{font-size:clamp(1.85rem,8vw,2.4rem)}
+    .gi-what-split .body{font-size:1.02rem}
+
+    .gi-benefits-head h2{font-size:clamp(1.85rem,8vw,2.4rem)}
+    .bcard-body{padding:clamp(22px,5vw,28px)}
+    .beyebrow{margin-bottom:12px}
+    .bbody{font-size:.98rem}
+
+    .quoteband{padding:clamp(56px,12vw,96px) 0}
+    .quoteband-title{font-size:clamp(1.3rem,5.2vw,1.5rem)}
+    .quoteband-q{font-size:clamp(1.32rem,5.4vw,1.6rem)}
+    .quoteband-cite{font-size:.95rem}
+
+    .become-content{padding-left:22px;padding-right:22px}
+    .become-title{font-size:clamp(2rem,9vw,2.4rem)}
+    .become-body,.become-sub{font-size:1rem}
+    .become-split .tier{
+      gap:12px 14px;
+      padding:16px 16px;
+      align-items:flex-start;
+    }
+    .become-split .tier .amt{font-size:1.45rem;min-width:4.6ch}
+    .become-split .tier .tdesc{font-size:.88rem}
+    .tier-note{font-size:.92rem}
+    .become-photo{min-height:min(48vh,360px)}
+    .taxline{font-size:.7rem}
+
+    .gi-other .title{font-size:clamp(1.85rem,8vw,2.4rem)}
   }
 
 </style>
