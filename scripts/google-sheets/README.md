@@ -40,6 +40,25 @@ Refresh **skips** Tickets / Decisions / Handoff Checklist / Review & Feedback on
 `ID · Date · Reviewer · Page · Device · Severity · Status · Feedback · Owner · Resolution / Notes · Preview URL`
 
 Statuses: Open · In Progress · Done · Won't Fix · Deferred
+Severities: Critical · High · Medium · Low · Nit
+
+A side legend panel (columns M–N) explains the row format (one issue per row, next
+sequential RF-0xx, leave Status/Owner/Resolution to the triager) plus what each Status
+and Severity value means — mirrors the Handoff Checklist tab's legend (columns J–K).
+Built by `writeReviewFeedbackLegendPanel_` / `writeHandoffLegendPanel_` in
+`LaunchPlanSheet.gs`; edits there don't trip the Black Box (ignored by column).
+
+---
+
+## Black Box is one-way
+
+The Black Box tab is an **append-only edit log inside the Sheet** (`onEditAudit_` →
+`appendAuditEvent_`) — it records who changed what, when, on the live tabs. It does
+**not** sync anything back to the repo. If a manual Sheet edit (a Status flip, a new
+HC/RF row, an Owner reassignment) should actually change project truth, someone has to
+read the Black Box / live tabs and port that change into `docs/planning/launch-plan-data.json`
++ `TRACKER.md` by hand — same as any other planning update (see repo root
+`.claude/rules/planning-docs-sync.md`). There is no Apps Script → GitHub write path.
 
 ---
 

@@ -4,7 +4,7 @@
     "version": "2026-07-31",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Jul 31: Netlify preview (contentmentweb2.netlify.app) serves all 7 Astro pages. Homepage polish: trustcue middots, dummy Homeroom donate form, mobile orbit bloom fix. New Sheet tab Review & Feedback for team QA. HC-057 homepage Slack + mobile review open. Events HC-072 review-only. Keela D-02, /give D-03, newsletter D-19 still open. Hard go-live Aug 21."
+    "summary": "Jul 31: Netlify preview (contentmentweb2.netlify.app) serves all 7 Astro pages. Homepage (FEAT-010) Done — polish shipped, HC-057 Slack + mobile review passed (Kristina sign-off) — cleared to build out remaining pages (RF-006). Events HC-072 review-only. Keela checkout URLs (HC-075, Lorna + Somesh escalating with Keela support) still open, blocks FEAT-060/give-monthly not the homepage. /give D-03, newsletter D-19 still open. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -159,7 +159,7 @@
       "Dave",
       "Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/ — Astro live. Trustcue middots + dummy Homeroom form + mobile orbit bloom fix (31 Jul). Awaiting HC-057 Slack + mobile review."
+      "https://contentmentweb2.netlify.app/ — Astro live. Trustcue middots + dummy Homeroom form + mobile orbit bloom fix (31 Jul). HC-057 Slack + mobile review passed (Kristina sign-off, 31 Jul)."
     ],
     [
       "Why Teacher Wellbeing",
@@ -885,11 +885,11 @@
       "Migrate homepage to /",
       "1",
       "Must",
-      "In Progress",
+      "Done",
       "Dave + Sam",
       "Jul 28–29",
       "FEAT-001, FEAT-002",
-      "Live on contentmentweb2.netlify.app. 31 Jul polish: hero trustcue middots, coded Homeroom donate placeholder (Keela pending D-02), mobile orbit bloom cap. Awaiting Slack review (HC-057)."
+      "Live on contentmentweb2.netlify.app. 31 Jul polish: hero trustcue middots, coded Homeroom donate placeholder, mobile orbit bloom cap. Slack review passed 31 Jul (HC-057, Kristina). Live Keela checkout URL is tracked under FEAT-060/HC-075, not a blocker on this ticket."
     ],
     [
       "FEAT-020",
@@ -977,7 +977,7 @@
       "Sam",
       "Aug 14–16",
       "—",
-      "Finance URLs needed before wiring"
+      "Finance URLs needed before wiring (HC-075). Lorna + Somesh escalating with Keela support to get a dedicated senior support exec, given the delay."
     ],
     [
       "FEAT-070",
@@ -1790,7 +1790,7 @@
       "Sam",
       "Confirmed",
       "Critical",
-      "Confirmed Jul 28. Sprint day one starts after Dave assets land."
+      "Confirmed Jul 28. Gate cleared 31 Jul — Kristina's Slack message (\"finished the Homepage... timeline to finish the other pages?\") taken as review sign-off, incl. mobile. RF-004/RF-005 closed. Cleared to proceed on remaining pages (see RF-006)."
     ],
     [
       "HC-058",
@@ -1861,6 +1861,16 @@
       "Open",
       "Medium",
       "Jul 29 — placeholder until files are provided; does not block other Our Impact build work."
+    ],
+    [
+      "HC-075",
+      "Integrations",
+      "Live Keela donation checkout URLs (per tier)",
+      "Homeroom donate button on the homepage (FEAT-010) is coded against a placeholder; needs the actual live Keela checkout URL per giving tier ($25/$50/$100) before it can go live.",
+      "Lorna + Somesh",
+      "Open",
+      "Critical",
+      "Jul 31 — Finance-side deliverable behind D-02 (decision) and FEAT-060 (dev wiring ticket); blocks FEAT-060/FEAT-051 (/give/monthly), not FEAT-010 itself (page migration is done). Lorna and Somesh both engaging Keela support to escalate to a senior support exec, given the delay."
     ]
   ],
   "reviewFeedback": [
@@ -1923,10 +1933,10 @@
       "Home",
       "Both",
       "Critical",
-      "Open",
+      "Done",
       "Homepage-first Slack review: content, nav, CTAs, Homeroom, footer. Drop screenshots + device in Slack thread.",
       "Sam + team",
-      "Preview live. Log new issues as new RF-xxx rows on this tab.",
+      "Closed 31 Jul — Kristina (Slack): \"Now that you've finished the Homepage, what's your estimate on timeline to finish the other pages?\" Read as sign-off; HC-057 gate cleared to start other pages. Other team members' pass is still ongoing in parallel — feedback received so far already fixed and shipped (see RF-001/002/003). Somesh to spot-check this row before/at next Sheet refresh.",
       "https://contentmentweb2.netlify.app/"
     ],
     [
@@ -1936,10 +1946,10 @@
       "Home",
       "Mobile",
       "High",
-      "Open",
+      "Done",
       "Homepage mobile pass (~390px / real phone): hero, nav drawer, orbit scroll, Homeroom form, footer.",
       "Sam + team",
-      "Partial fixes already shipped (bloom, trustcue). Continue logging gaps here.",
+      "Closed 31 Jul — Kristina's Slack message treats mobile layout as ready/acceptable. Other team members' device-by-device pass continues in parallel; known gaps already fixed and shipped. Log any new device-specific gaps as fresh RF-xxx rows if found.",
       "https://contentmentweb2.netlify.app/"
     ],
     [

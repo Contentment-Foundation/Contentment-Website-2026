@@ -375,7 +375,7 @@
       bottom: -6px;
       width: 2px;
       background: var(--deep);
-      left: calc(30% + 1.2%); /* fallback only — JS overrides this using the viewer's local clock */
+      left: 55%; /* fallback — JS places pin inside the current equal-width week segment */
       z-index: 2;
       pointer-events: none;
     }
@@ -1164,9 +1164,9 @@
 
 <nav class="doc-nav no-print">
   <div class="wrap">
-    <a href="../">← Project docs</a>
-    <a href="../../">Homepage</a>
-    <a class="v-toggle" href="classic/">Classic Gantt view</a>
+    <a href="/docs/">← Project docs</a>
+    <a href="/">Homepage</a>
+    <a class="v-toggle" href="/docs/dev-timeline/classic/">Classic Gantt view</a>
   </div>
 </nav>
 
@@ -1179,11 +1179,8 @@
         <p class="hero-lead">One path from design handoff to go-live. Scan the ribbon, open a chapter for tickets. Blockers and decisions sit up top so risk is never buried in a grid.</p>
       </div>
       <div class="hero-meta">
-        <strong>Prepared by</strong>
-        Somesh Bhardwaj · somesh@contentment.org<br>
-        Sr. System Admin · Full Stack AI Engineer<br><br>
-        <strong>As of 30 Jul 2026</strong>
-        Design handoff complete (Jul 27, landed with Sam morning of Jul 28) — dev sprint underway since: all 7 Phase 1 routes ported to Astro 29 Jul, mobile nav drawer done 30 Jul<br>
+        <strong>As of 31 Jul 2026</strong>
+        Design handoff complete (Jul 27, landed with Sam morning of Jul 28) — dev sprint underway since: all 7 Phase 1 routes ported to Astro 29 Jul, mobile nav drawer done 30 Jul, homepage (FEAT-010) Slack review passed 31 Jul — team now moving through the other 6 pages<br>
         Kristina’s Gantt · launch-plan-data.json · TRACKER.md
       </div>
     </div>
@@ -1798,7 +1795,7 @@
             <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong><span class="tid">FEAT-001</span>Extract shared layout</strong><div class="note">BaseLayout.astro + Nav/Footer built 29 Jul from Dave's homepage handoff</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
             <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong><span class="tid">FEAT-002</span>Multi-page routing scaffold</strong><div class="note">Astro 4.x confirmed (D-23/HC-055) — scaffolded 29 Jul, all 7 routes building</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
             <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong><span class="tid">FEAT-003</span>Mobile navigation drawer</strong><div class="note">30 Jul — slide-in drawer in Nav.astro</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
-            <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong><span class="tid">FEAT-010</span>Migrate homepage to /</strong><div class="note">Ported 29 Jul to src/pages/index.astro; awaiting homepage-first Slack review (HC-057)</div></div><div class="owner">Sam / Dave</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
+            <div class="task" data-status="done"><span class="mark" style="--sc:var(--s-done)"></span><div class="main"><strong><span class="tid">FEAT-010</span>Migrate homepage to /</strong><div class="note">Ported 29 Jul, Slack review passed 31 Jul (HC-057, Kristina sign-off). Homeroom donate button live-URL wiring tracked separately as FEAT-060/HC-075</div></div><div class="owner">Sam / Dave</div><div class="st" style="--sc:var(--s-done)">Done</div></div>
             <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong><span class="tid">FEAT-004</span>Wire all nav and footer links</strong><div class="note">Internal nav wired via Astro routes; external donate/social still empty in seams.ts</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
             <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong><span class="tid">FEAT-020</span>Build /why page</strong><div class="note">Ported 29 Jul to src/pages/why.astro from Dave's handoff</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
             <div class="task" data-status="progress"><span class="mark" style="--sc:var(--s-prog)"></span><div class="main"><strong><span class="tid">FEAT-050 / 051</span>Build /give + /give/monthly (Get Involved)</strong><div class="note">Homeroom content ported 29 Jul to src/pages/give.astro; /give vs /give/monthly split (D-03) still open; Keela wiring (D-02) still blocked</div></div><div class="owner">Sam</div><div class="st" style="--sc:var(--s-prog)">In progress</div></div>
@@ -1993,9 +1990,11 @@
 
 <footer class="page-footer">
   <strong>The Contentment Foundation</strong> · Sprint Journey v2 · Jul–Aug 2026<br>
-  Prepared by Somesh Bhardwaj · somesh@contentment.org<br>
+  <strong>Prepared by</strong><br>
+  Somesh Bhardwaj · somesh@contentment.org<br>
+  Sr. System Admin · Full Stack AI Engineer<br>
   Source of truth: <code>docs/planning/launch-plan-data.json</code> and <code>docs/planning/TRACKER.md</code> — visualization only.<br>
-  <span style="opacity:.7">Prefer the classic spreadsheet? </span><a href="classic/" style="color:var(--teal)">Open Gantt view</a>
+  <span style="opacity:.7">Prefer the classic spreadsheet? </span><a href="/docs/dev-timeline/classic/" style="color:var(--teal)">Open Gantt view</a>
 </footer>
 
 <button class="print-btn no-print" onclick="window.print()">Save as PDF</button>
@@ -2206,9 +2205,10 @@
   // "Today" marker — computed from the viewer's own device clock, not a
   // baked-in date, so the pin, the "You are here" badge, and the label
   // above the ribbon stay correct no matter when this page is opened.
+  // Pin position tracks equal-width ribbon segments (not a linear date %),
+  // otherwise mid/late days in a week (e.g. Jul 31 in the 7/27 bar) drift
+  // into the next column.
   (function () {
-    var RANGE_START = new Date(2026, 5, 22); // Jun 22, 2026
-    var RANGE_END = new Date(2026, 7, 21);   // Aug 21, 2026 — preponed one week from Aug 28
     var MS_PER_DAY = 86400000;
 
     function atMidnight(d) { var c = new Date(d); c.setHours(0, 0, 0, 0); return c; }
@@ -2217,18 +2217,56 @@
     var today = atMidnight(new Date());
     var pin = document.querySelector('.today-pin');
     var label = document.getElementById('today-label');
+    var segs = Array.prototype.slice.call(document.querySelectorAll('.ribbon-seg[data-start]'));
 
     if (label) {
       label.textContent = today.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
     }
 
-    if (pin) {
-      var clamped = Math.min(Math.max(today.getTime(), RANGE_START.getTime()), RANGE_END.getTime());
-      var pct = ((clamped - RANGE_START.getTime()) / (RANGE_END.getTime() - RANGE_START.getTime())) * 100;
-      pin.style.left = pct + '%';
+    if (pin && segs.length) {
+      var idx = -1;
+      var frac = 0.5;
+
+      segs.forEach(function (seg, i) {
+        var start = parseISODate(seg.getAttribute('data-start'));
+        var end = parseISODate(seg.getAttribute('data-end'));
+        if (today.getTime() >= start.getTime() && today.getTime() <= end.getTime()) {
+          idx = i;
+          // Inclusive day index within the work week (Mon–Fri bars)
+          var days = Math.round((end.getTime() - start.getTime()) / MS_PER_DAY) + 1;
+          var dayIdx = Math.round((today.getTime() - start.getTime()) / MS_PER_DAY);
+          frac = days > 0 ? (dayIdx + 0.5) / days : 0.5;
+        }
+      });
+
+      // Weekends / gaps between Fri→Mon bars: snap to nearest segment edge
+      if (idx < 0) {
+        var firstStart = parseISODate(segs[0].getAttribute('data-start'));
+        var lastEnd = parseISODate(segs[segs.length - 1].getAttribute('data-end'));
+        if (today.getTime() < firstStart.getTime()) {
+          idx = 0; frac = 0;
+        } else if (today.getTime() > lastEnd.getTime()) {
+          idx = segs.length - 1; frac = 1;
+        } else {
+          for (var i = 0; i < segs.length - 1; i++) {
+            var prevEnd = parseISODate(segs[i].getAttribute('data-end'));
+            var nextStart = parseISODate(segs[i + 1].getAttribute('data-start'));
+            if (today.getTime() > prevEnd.getTime() && today.getTime() < nextStart.getTime()) {
+              var gap = nextStart.getTime() - prevEnd.getTime();
+              var t = (today.getTime() - prevEnd.getTime()) / gap;
+              if (t < 0.5) { idx = i; frac = 1; }
+              else { idx = i + 1; frac = 0; }
+              break;
+            }
+          }
+        }
+      }
+
+      if (idx < 0) idx = 0;
+      pin.style.left = ((idx + frac) / segs.length) * 100 + '%';
     }
 
-    document.querySelectorAll('.ribbon-seg[data-start]').forEach(function (seg) {
+    segs.forEach(function (seg) {
       var start = parseISODate(seg.getAttribute('data-start'));
       var end = parseISODate(seg.getAttribute('data-end'));
       var isCurrent = today.getTime() >= start.getTime() && today.getTime() <= end.getTime();

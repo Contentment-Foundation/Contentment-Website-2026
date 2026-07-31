@@ -103,7 +103,9 @@ Replace `href="#"` and hash-only links with real routes per [Website Architectur
 **Description:**  
 Port entire homepage from `site/index.html` to index route. All sections: hero, why split, impact, Kenya voice band, orbit, alone circles, pillars, homeroom, doors, newsletter, footer. All JS behavior unchanged: scroll nav, hero load, IntersectionObserver, count-up, pillars accordion, orbit scroll, parallax.
 
-> **Status (30 Jul 2026):** Ported to `src/pages/index.astro` from Dave's Jul 29 2026 handoff (supersedes the old `site/index.html` prototype as source — see FRONTEND-SPECIFICATION.md). Browser-tested 320–1280px, zero horizontal scroll, zero console errors (`docs/planning/HOMEPAGE-RESPONSIVE-AUDIT.md`). **Not yet done:** formal Lighthouse run; still awaiting the homepage-first Slack review (HC-057) before moving on.
+> **Status (30 Jul 2026):** Ported to `src/pages/index.astro` from Dave's Jul 29 2026 handoff (supersedes the old `site/index.html` prototype as source — see FRONTEND-SPECIFICATION.md). Browser-tested 320–1280px, zero horizontal scroll, zero console errors (`docs/planning/HOMEPAGE-RESPONSIVE-AUDIT.md`). **Not yet done:** formal Lighthouse run.
+>
+> **Update (31 Jul 2026):** Homepage-first Slack review (HC-057) passed — Kristina's Slack message ("finished the Homepage... timeline to finish the other pages?") taken as sign-off on desktop + mobile. Gate cleared to proceed on remaining pages (RF-006). Donate CTA still on a placeholder pending live Keela URLs (D-02/HC-075) — that does not block starting other pages.
 
 **Acceptance criteria:**
 - [x] Visual parity with prototype on desktop and mobile

@@ -57,7 +57,7 @@
     .page-header h1 { font-family: var(--display); font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 500; line-height: 1.2; color: #fff; }
     .page-header h1 span { color: var(--teal); }
     .page-header .lead { max-width: 56ch; font-size: 13.5px; color: rgba(255,255,255,.72); margin-top: 10px; line-height: 1.6; }
-    .meta { font-size: 11.5px; color: rgba(255,255,255,.5); text-align: right; line-height: 1.7; flex-shrink: 0; }
+    .meta { font-size: 11.5px; color: rgba(255,255,255,.5); text-align: right; line-height: 1.7; flex: 0 1 36ch; max-width: 36ch; margin-left: auto; }
     .meta strong { color: rgba(255,255,255,.8); font-weight: 600; }
 
     /* Quick nav pills */
@@ -184,7 +184,7 @@
     @media (max-width: 760px) {
       .wrap { padding: 0 16px; }
       .page-header .wrap { flex-direction: column; align-items: flex-start; }
-      .meta { text-align: left; }
+      .meta { text-align: left; max-width: none; margin-left: 0; flex-basis: auto; }
     }
   </style>
 </head>
@@ -192,9 +192,9 @@
 
 <nav class="doc-nav no-print">
   <div class="wrap">
-    <a href="../../">← Project docs</a>
-    <a href="../../../">Homepage</a>
-    <a href="../" style="margin-left:auto;color:#fff;background:rgba(255,255,255,.1);padding:4px 12px;border-radius:99px;font-weight:600;font-size:11.5px;">← Back to Sprint Journey (primary)</a>
+    <a href="/docs/">← Project docs</a>
+    <a href="/">Homepage</a>
+    <a href="/docs/dev-timeline/" style="margin-left:auto;color:#fff;background:rgba(255,255,255,.1);padding:4px 12px;border-radius:99px;font-weight:600;font-size:11.5px;">← Back to Sprint Journey (primary)</a>
   </div>
 </nav>
 
@@ -206,11 +206,8 @@
       <p class="lead">A transparency board: the engineering + media breakdown behind Kristina's redesign Gantt — what's already done, what's in flight, what's planned, and what's still waiting on a decision or sign-off, day by day.</p>
     </div>
     <div class="meta">
-      <strong>Prepared by</strong><br>
-      Somesh Bhardwaj · somesh@contentment.org<br>
-      Sr. System Admin · Full Stack AI Engineer<br><br>
-      <strong>As of 30 Jul 2026</strong><br>
-      Design handoff complete (Jul 27, landed with Sam morning of Jul 28) — dev sprint underway since: all 7 Phase 1 routes ported to Astro 29 Jul, mobile nav drawer done 30 Jul<br>
+      <strong>As of 31 Jul 2026</strong><br>
+      Design handoff complete (Jul 27, landed with Sam morning of Jul 28) — dev sprint underway since: all 7 Phase 1 routes ported to Astro 29 Jul, mobile nav drawer done 30 Jul, homepage (FEAT-010) Slack review passed 31 Jul — team now moving through the other 6 pages<br>
       Source: Kristina's Gantt · <code>launch-plan-data.json</code> · <code>TRACKER.md</code>
     </div>
   </div>
@@ -765,7 +762,7 @@
           <tr><td class="id">FEAT-001</td><td>Extract shared layout — CSS tokens, nav, footer</td><td><span class="tag tag-progress">● In progress</span></td><td>BaseLayout.astro + Nav/Footer built 29 Jul from Dave's homepage handoff</td></tr>
           <tr><td class="id">FEAT-002</td><td>Multi-page routing scaffold (Astro)</td><td><span class="tag tag-progress">● In progress</span></td><td>Astro 4.x confirmed (D-23/HC-055) — scaffolded 29 Jul, all 7 routes building</td></tr>
           <tr><td class="id">FEAT-003</td><td>Mobile navigation drawer</td><td><span class="tag tag-done">✓ Done</span></td><td>30 Jul — slide-in drawer in Nav.astro</td></tr>
-          <tr><td class="id">FEAT-010</td><td>Migrate homepage to <code>/</code></td><td><span class="tag tag-progress">● In progress</span></td><td>Ported 29 Jul to src/pages/index.astro; awaiting homepage-first Slack review (HC-057)</td></tr>
+          <tr><td class="id">FEAT-010</td><td>Migrate homepage to <code>/</code></td><td><span class="tag tag-done">✓ Done</span></td><td>Ported 29 Jul, Slack review passed 31 Jul (HC-057, Kristina sign-off). Homeroom donate button live-URL wiring tracked separately as FEAT-060/HC-075</td></tr>
           <tr><td class="id">FEAT-004</td><td>Wire all nav and footer links</td><td><span class="tag tag-progress">● In progress</span></td><td>Internal nav wired via Astro routes; external donate/social still empty in seams.ts (HC-005)</td></tr>
           <tr><td class="id">FEAT-020</td><td>Build <code>/why</code> page</td><td><span class="tag tag-progress">● In progress</span></td><td>Ported 29 Jul to src/pages/why.astro from Dave's handoff</td></tr>
           <tr><td class="id">FEAT-050 / 051</td><td>Build <code>/give</code> gateway + <code>/give/monthly</code> Get Involved page</td><td><span class="tag tag-progress">● In progress</span></td><td>Homeroom content ported 29 Jul to src/pages/give.astro; /give vs /give/monthly split (D-03) still open; Keela wiring (D-02) still blocked</td></tr>
@@ -908,7 +905,9 @@
 
 <footer class="page-footer">
   <strong>The Contentment Foundation</strong> · Development Sprint Timeline · Jul–Aug 2026<br>
-  Prepared by Somesh Bhardwaj · somesh@contentment.org<br>
+  <strong>Prepared by</strong><br>
+  Somesh Bhardwaj · somesh@contentment.org<br>
+  Sr. System Admin · Full Stack AI Engineer<br>
   Source of truth: <code>docs/planning/launch-plan-data.json</code> and <code>docs/planning/TRACKER.md</code> — this page is a read-only visualization, not a separate tracker.
 </footer>
 
