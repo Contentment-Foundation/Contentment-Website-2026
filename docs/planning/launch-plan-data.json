@@ -892,6 +892,17 @@
       "Live on contentmentweb2.netlify.app. 31 Jul polish: hero trustcue middots, coded Homeroom donate placeholder, mobile orbit bloom cap. Slack review passed 31 Jul (HC-057, Kristina). Live Keela checkout URL is tracked under FEAT-060/HC-075, not a blocker on this ticket."
     ],
     [
+      "FEAT-011",
+      "Homepage copy audit vs messaging brief",
+      "1",
+      "Should",
+      "Open",
+      "Sam",
+      "—",
+      "FEAT-010",
+      "Not started. Homepage is live and reviewed (FEAT-010 Done) — this is a copy-only pass against MESSAGING-AND-COPY.md, no code blocker."
+    ],
+    [
       "FEAT-020",
       "Build /why page",
       "1",
@@ -1022,6 +1033,39 @@
       "Aug 12–13",
       "FEAT-002",
       "—"
+    ],
+    [
+      "FEAT-091",
+      "Homeroom gated member hub (/homeroom)",
+      "2",
+      "Nice",
+      "Scheduled",
+      "Sam",
+      "—",
+      "FEAT-060, FEAT-092",
+      "Phase 2"
+    ],
+    [
+      "FEAT-092",
+      "Homeroom access middleware (edge + password)",
+      "2",
+      "Nice",
+      "Scheduled",
+      "Sam",
+      "—",
+      "Edge function hosting",
+      "Phase 2"
+    ],
+    [
+      "FEAT-094",
+      "Campaign page template (/festival/2026)",
+      "2",
+      "Nice",
+      "Scheduled",
+      "Sam",
+      "—",
+      "FEAT-080",
+      "Phase 2"
     ],
     [
       "FEAT-090",
