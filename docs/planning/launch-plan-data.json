@@ -4,7 +4,7 @@
     "version": "2026-07-31",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Jul 31: RF-006 — About + Why QA/polish done (locked widths clean). About: social seams + favicon shipped. Next: Our Impact → Schools → Give → Events (review-only). Homepage Done (HC-057). FEAT-081 (SEO) Done; FEAT-080 (Analytics) scaffolded, no-op until real credentials land. Events HC-072 still open. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
+    "summary": "Jul 31: Tickets tab now has every real FEAT/OPS/QA ticket (28 launch + 4 historical OPS/QA). RF-006 — About + Why QA/polish done; Cursor now running Our Impact/Schools/Give/Events in parallel. Homepage Done (HC-057). FEAT-081 (SEO) Done; FEAT-080 (Analytics) scaffolded, no-op until real credentials land. Events HC-072 still open. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -1132,6 +1132,50 @@
       "Aug 21",
       "FEAT-100",
       "contentment.org cutover — Phase 1 hard go-live Aug 21"
+    ],
+    [
+      "OPS-001",
+      "Add security headers to netlify.toml (interim env)",
+      "1",
+      "Must",
+      "Done",
+      "Sam",
+      "—",
+      "—",
+      "Interim Netlify security headers ahead of the Vercel cutover (TECHNICAL-ARCHITECTURE §9)."
+    ],
+    [
+      "OPS-002",
+      "Commit vercel.json from TECHNICAL-ARCHITECTURE §9 spec",
+      "1",
+      "Must",
+      "Done",
+      "Sam",
+      "—",
+      "—",
+      "Vercel security headers config, ready for the production cutover (FEAT-101)."
+    ],
+    [
+      "OPS-003",
+      "CI step — auto-regenerate contentment-home.html on push",
+      "1",
+      "Should",
+      "Done",
+      "Sam",
+      "—",
+      "—",
+      "Keeps the portable single-file build in sync with site/index.html without a manual step."
+    ],
+    [
+      "QA-001",
+      "Story Board a11y gaps (dialog focus trap, aria-pressed, live region)",
+      "1",
+      "Should",
+      "Done",
+      "Sam",
+      "—",
+      "—",
+      "Fixed in the Story Board prototype (site/story-board.html) ahead of the Astro migration."
     ]
   ],
   "externalBlockers": [
