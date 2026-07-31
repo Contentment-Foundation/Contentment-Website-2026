@@ -352,6 +352,42 @@ import { seams } from '../config/seams';
   </div>
 </section>
 
+<!-- 12a · DISCOVERY FORM (TICKET-041 / D-04: Google Form + Slack) -->
+{seams.schools.discoveryFormUrl && (
+  <section class="band discovery-form">
+    <div class="wrap">
+      <span class="eyebrow anim">start here</span>
+      <h2 class="anim d1">Tell us about your school</h2>
+      <p class="anim d1">Use this quick form to share your school's context, and we'll get back to you within 48 hours with next steps.</p>
+      <div class="form-embed anim d2">
+        <iframe
+          src={seams.schools.discoveryFormUrl}
+          width="100%"
+          height="800"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          title="School partnership inquiry form">
+          Loading…
+        </iframe>
+      </div>
+    </div>
+  </section>
+)}
+
+{!seams.schools.discoveryFormUrl && (
+  <section class="band discovery-form discovery-form--placeholder">
+    <div class="wrap">
+      <span class="eyebrow anim">start here</span>
+      <h2 class="anim d1">Tell us about your school</h2>
+      <p class="anim d1">We're putting together a brief inquiry form. In the meantime, reach out directly:</p>
+      <div class="form-placeholder anim d2">
+        <p>Email <a href="mailto:somesh@contentment.org">somesh@contentment.org</a> with your school's name, location, and what you're working on.</p>
+      </div>
+    </div>
+  </section>
+)}
+
 <!-- 13 · CLOSE -->
 <div class="wavetop" aria-hidden="true">
   <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -669,6 +705,18 @@ import { seams } from '../config/seams';
 
   @media(prefers-reduced-motion:reduce){
     .trust::before,.paths::before,.close::before,.videosec::before{animation:none}
+  }
+
+  /* discovery form (TICKET-041 / D-04) */
+  .discovery-form{background:#fff}
+  .form-embed iframe{border:1px solid var(--line);border-radius:8px;display:block;max-height:90vh}
+  .discovery-form--placeholder{background:var(--mist)}
+  .form-placeholder{padding:32px;background:#fff;border-radius:8px;border-left:3px solid var(--teal)}
+  .form-placeholder p{margin:0;font-size:1rem;line-height:1.6;color:var(--body)}
+  .form-placeholder a{color:var(--teal);text-decoration:none;font-weight:500}
+  .form-placeholder a:hover{text-decoration:underline}
+  @media(max-width:760px){
+    .form-embed iframe{height:600px}
   }
 
   /* lightbox (video) */

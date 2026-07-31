@@ -7,8 +7,8 @@
     <!-- FEAT-070 (Flodesk integration) not wired yet — placeholder submit, matches Dave's handoff. -->
     <form class="anim d1" id="newsletter-form">
       <div class="row">
-        <input type="text" placeholder="First name" aria-label="First name">
-        <input type="email" placeholder="Email address" aria-label="Email address">
+        <input type="text" placeholder="First name" aria-label="First name" name="first_name">
+        <input type="email" placeholder="Email address" aria-label="Email address" name="email" required>
       </div>
       <button class="btn btn-primary" type="submit">Subscribe</button>
       <span class="fine">No noise. No spam. Leave whenever you want.</span>
@@ -22,6 +22,12 @@
   // TICKET-080: newsletter_submit. No backend/Flodesk wiring yet (FEAT-070) — the
   // form still doesn't POST anywhere, so "success" today means the client-side
   // submit interaction itself, matching the existing placeholder behaviour.
+  //
+  // FEAT-070 note: TECHNICAL-ARCHITECTURE §6.2 specs a server-side /api/newsletter
+  // route (FLODESK_API_KEY, server-only) as the intended integration, which needs a
+  // hosting adapter this static build doesn't have yet (FEAT-101). Wire the real
+  // submission there once that lands, rather than calling Flodesk's API directly
+  // from the browser with an unauthenticated request.
   const form = document.getElementById('newsletter-form');
   form?.addEventListener('submit', (event) => {
     event.preventDefault();

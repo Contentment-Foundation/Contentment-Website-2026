@@ -52,5 +52,11 @@ export const seams = {
     /** Partner-deck download (For Schools hero + closing section). Pending
      *  Kristina's button/CTA inventory (HC-005). */
     deck: '',
+
+    /** School discovery form embed URL (TICKET-041 / D-04).
+     *  Resolved to Google Form + Slack integration. Form does not exist yet —
+     *  when created, paste the Google Form embed URL here. Consumers treat ''
+     *  as "not wired yet" and show a fallback message. */
+    discoveryFormUrl: '',
   },
 };

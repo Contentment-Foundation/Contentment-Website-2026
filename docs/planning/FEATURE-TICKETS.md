@@ -125,11 +125,13 @@ Port entire homepage from `site/index.html` to index route. All sections: hero, 
 **Description:**  
 Compare homepage copy to [Messaging brief §6 Home](../research/MESSAGING-AND-COPY.md). Update headlines/subheads only where brief specifies different copy. Do not change layout. Ensure orientation line, three beats, and proof stats match Section 8 exactly.
 
+> **Status (31 Jul 2026):** Done. Fixed Four Pillars definitions to verbatim brief wording (`Pillars.astro`) and the Homeroom CTA to "Join Homeroom, from $5/month" (`InviteBand.astro`). Everything else already matched. One item flagged, not fixed: `HomeroomBlock.astro`'s dummy donate form has `data-group="donor"` — banned-word cleanup deferred to whoever wires the real Keela form (FEAT-060), since that file is mid-flight on another ticket.
+
 **Acceptance criteria:**
-- [ ] Stats: 325 schools, 12 countries, 11,925 educators, 409,625+ students, 86%
-- [ ] Primary CTA label: "Join Homeroom, from $5/month"
-- [ ] No banned words (donor, em dashes, quiet, steady, upstream)
-- [ ] Tagline in footer matches verbatim
+- [x] Stats: 325 schools, 12 countries, 11,925 educators, 409,625+ students, 86%
+- [x] Primary CTA label: "Join Homeroom, from $5/month"
+- [x] No banned words (donor, em dashes, quiet, steady, upstream)
+- [x] Tagline in footer matches verbatim
 
 ---
 
@@ -259,11 +261,13 @@ School leader journey page: wellbeing → achievement → proof → conversation
 **Description:**  
 Form on `/schools`: school name, contact name, email, role, country, message. Style with `.news input` patterns. Submit via **Flodesk form, Keela form, Raisely, or custom POST** to `/api/school-inquiry` (optional GCP). Honeypot spam field. Success/error states per Security doc.
 
+> **Status (31 Jul 2026):** Scaffolded per D-04 (Google Form + Slack, superseding this ticket's original Flodesk/Keela/Raisely/custom-POST options). `seams.schools.discoveryFormUrl` added (empty), `/schools` conditionally renders a Google Form iframe embed when it's set, an honest "coming soon, email us" fallback when not. **Blocked:** nobody has created the actual Google Form yet — that's the only remaining work, no more code needed once the URL exists.
+
 **Acceptance criteria:**
-- [ ] Client validation on required fields
-- [ ] Successful submit shows thank-you message in voice & tone
-- [ ] Failure shows fallback email somesh@contentment.org
-- [ ] Notification email to partnerships team
+- [ ] Client validation on required fields — n/a under D-04, Google Forms handles its own validation
+- [ ] Successful submit shows thank-you message in voice & tone — n/a, Google Forms' own confirmation screen
+- [x] Failure shows fallback email somesh@contentment.org — shown whenever the form isn't wired yet
+- [ ] Notification email to partnerships team — n/a under D-04, uses Google Forms' native Slack notification instead
 
 ---
 
@@ -340,11 +344,13 @@ Wire all Homeroom CTAs to Keela hosted checkout via env vars. Support tiers $5, 
 **Description:**  
 Connect homepage newsletter form and build `/updates` standalone page. Integrate with **Flodesk** (embed or `/api/newsletter` → Flodesk API). Remove `onsubmit="return false"`.
 
+> **Status (31 Jul 2026):** `/updates` page built (linked from Footer Explore, in `sitemap.xml`). The form-submission piece is still the placeholder stub — a first pass wired a direct client-side `fetch` to Flodesk's API, but that doesn't match this doc's own §6.2 spec (server-side `/api/newsletter` using `FLODESK_API_KEY`, server-only) and isn't a verified Flodesk API contract, so it was reverted rather than ship something likely to break. Real submission needs a hosting adapter (FEAT-101) before a server route can exist — blocked on that, not on Flodesk credentials alone.
+
 **Acceptance criteria:**
-- [ ] Form submits successfully to email provider
-- [ ] Inline validation for email format
-- [ ] Success and error messages on-brand
-- [ ] `/updates` page live with orientation line
+- [ ] Form submits successfully to email provider — blocked on FEAT-101 (hosting adapter for a server route)
+- [x] Inline validation for email format — `required` + `type="email"` on the input
+- [ ] Success and error messages on-brand — depends on the real submission path landing first
+- [x] `/updates` page live with orientation line
 
 ---
 
@@ -558,3 +564,4 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | 2026-06 | Sprint order corrected: TICKET-011 (homepage copy audit) and TICKET-081 (SEO baseline) were missing — both added in correct dependency position. |
 | 2026-07-29/30 | Astro migration status added to TICKET-010/020/031/040/050/090/093 (all ported to `src/pages/` from Dave's Jul 29 handoff; see TRACKER.md for full detail). **TICKET-093 corrected**: was "About section (5 pages)," now "About Us page (v1 single page)" per D-05 (resolved 27 Jul) — the 5-sub-page framing was stale. TICKET-003 (mobile nav drawer) acceptance criteria all checked — done 30 Jul. |
 | 2026-07-31 | TICKET-081 (SEO baseline) done — all acceptance criteria checked. TICKET-080 (Analytics) scaffolded — all criteria checked except live pageviews on staging, blocked on real credentials (none exist yet). See TRACKER.md for the full FEAT-080/081 detail. |
+| 2026-07-31 | TICKET-011 (homepage copy audit) done. TICKET-041 (school form) scaffolded per D-04, blocked on the Google Form itself existing. TICKET-070 (newsletter) — `/updates` page built, form submission reverted back to a placeholder after an unverified direct-to-Flodesk-API implementation was caught in review (doesn't match this doc's own §6.2 spec, blocked on FEAT-101 for a real server route). See TRACKER.md for full detail. |

@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+---
+<BaseLayout
+  title="Contentment Updates: Stories and Tools for Educators"
+  description="Subscribe to stories from the classroom, wellbeing practices, and invitations to build a more caring future for education."
+>
+
+<!-- Hero section with simple orientation line -->
+<section class="hero" id="top">
+  <div class="hero-inner wrap">
+    <div class="hero-content">
+      <h1 class="hero-q">
+        <span class="l1 anim">Stories from the classroom.</span>
+        <span class="l2 anim d1">Right to your inbox.</span>
+      </h1>
+    </div>
+  </div>
+  <div class="scrollcue"><span class="dot"></span></div>
+</section>
+
+<!-- Newsletter signup section -->
+<section class="band-tight news">
+  <div class="wrap news-inner">
+    <div class="anim">
+      <h2 class="title">Wellbeing for educators, curated by us.</h2>
+      <p class="body">Practical tools you can actually use, real stories from educators working in classrooms today, and the occasional thing that makes the week feel a little lighter.</p>
+    </div>
+    <NewsletterForm />
+  </div>
+</section>
+
+<!-- Closing copy section -->
+<section class="band">
+  <div class="wrap">
+    <div class="anim">
+      <p class="lead">No noise. No spam. You can unsubscribe anytime. We respect your inbox.</p>
+    </div>
+  </div>
+</section>
+
+</BaseLayout>

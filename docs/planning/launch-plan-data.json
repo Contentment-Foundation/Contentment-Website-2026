@@ -4,7 +4,7 @@
     "version": "2026-07-31",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Jul 31: RF-006 6/6 click-through done (About, Why, Our Impact, Schools, Give, Events review-only). Events still HC-072 review-only; RF-007 P1 mobile nav clip (\u2264380px) shipped; soft flags (title/chips/hero) for Dave. Homepage Done (HC-057). FEAT-081 (SEO) Done; FEAT-080 (Analytics) scaffolded, no-op until real credentials land. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
+    "summary": "Jul 31: RF-006 6/6 click-through done (About, Why, Our Impact, Schools, Give, Events review-only). Events still HC-072 review-only; RF-007 P1 mobile nav clip (\u2264380px) shipped; soft flags (title/chips/hero) for Dave. Homepage Done (HC-057). FEAT-081 (SEO), FEAT-011 (copy audit) Done. FEAT-080 (Analytics), FEAT-041 (school form), FEAT-070 (newsletter) scaffolded \u2014 all three blocked on a real external credential/resource, not code. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -254,11 +254,11 @@
       "/updates",
       "1",
       "\u2014",
-      "Not started",
-      "\u2014",
+      "Astro built",
+      "Sam",
       "Low",
       "No",
-      "Footer Subscribe destination"
+      "31 Jul \u2014 src/pages/updates.astro live, linked from Footer Explore. Uses NewsletterForm (still a placeholder submit \u2014 FEAT-070)."
     ],
     [
       "404 page",
@@ -896,11 +896,11 @@
       "Homepage copy audit vs messaging brief",
       "1",
       "Should",
-      "Open",
+      "Done",
       "Sam",
-      "\u2014",
+      "31 Jul",
       "FEAT-010",
-      "Not started. Homepage is live and reviewed (FEAT-010 Done) \u2014 this is a copy-only pass against MESSAGING-AND-COPY.md, no code blocker."
+      "31 Jul \u2014 Four Pillars fixed to verbatim brief wording, Homeroom CTA fixed to \"Join Homeroom, from $5/month\". No banned words found elsewhere."
     ],
     [
       "FEAT-020",
@@ -951,11 +951,11 @@
       "School discovery form",
       "1",
       "Should",
-      "Ready",
+      "Blocked",
       "Sam",
       "Aug 5",
       "FEAT-040",
-      "D-04 resolved: Google Form embed + Slack integration"
+      "31 Jul — scaffolded (seams.schools.discoveryFormUrl + iframe embed on /schools with a coming-soon fallback). Blocked on the Google Form itself being created — no code left once that lands."
     ],
     [
       "FEAT-050",
@@ -995,11 +995,11 @@
       "Newsletter integration (Flodesk)",
       "1",
       "Must",
-      "Open",
+      "Blocked",
       "Sam",
       "Aug 13\u201314",
       "FEAT-010",
-      "Flodesk creds"
+      "31 Jul \u2014 /updates page built (footer-linked, in sitemap.xml). Form submission stays a placeholder; reverted an unverified direct-to-Flodesk-API attempt. Real send needs a hosting adapter for a server route (FEAT-101), not just credentials."
     ],
     [
       "FEAT-071",
