@@ -1,0 +1,116 @@
+---
+/**
+ * Analytics.astro — TICKET-080 (Analytics setup).
+ *
+ * Single self-contained analytics/consent bundle: Osano CMP, GA4 (gtag.js) with
+ * Consent Mode v2, Microsoft Clarity, and PostHog Cloud (cookieless).
+ *
+ * Every piece checks its OWN env var independently and renders nothing if that
+ * var is empty — same "empty string = not wired yet" philosophy as
+ * src/config/seams.ts. A missing PostHog key must never disable GA4, and vice
+ * versa. With every var unset (today's real state), this component renders
+ * nothing at all: no script tags, no console errors.
+ *
+ * Tool stack + reasoning: docs/planning/DECISIONS.md DECISION-001 (tool
+ * stack), DECISION-002 (Osano + GA4 Consent Mode v2 + cookieless PostHog),
+ * DECISION-007 (PostHog Cloud). Env var reference: TECHNICAL-ARCHITECTURE §6.1.
+ */
+const GA_ID = import.meta.env.PUBLIC_GA_ID;
+const OSANO_CUSTOMER_ID = import.meta.env.PUBLIC_OSANO_CUSTOMER_ID;
+const POSTHOG_KEY = import.meta.env.PUBLIC_POSTHOG_KEY;
+const POSTHOG_HOST = import.meta.env.PUBLIC_POSTHOG_HOST || 'https://app.posthog.com';
+const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
+---
+{OSANO_CUSTOMER_ID && (
+  <!-- Osano CMP — must load before GA4 gtag (DECISION-002). Renders the consent
+       banner for EU/UK visitors and re-opens via the footer "Cookie Preferences" link. -->
+  <script async src={`https://cmp.osano.com/${OSANO_CUSTOMER_ID}/osano.js`}></script>
+)}
+
+{GA_ID && (
+  <>
+    <!-- GA4 Consent Mode v2 — default to denied/cookieless until Osano reports consent. -->
+    <script is:inline define:vars={{ GA_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      window.gtag = gtag;
+
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      });
+
+      gtag('js', new Date());
+      gtag('config', GA_ID, { anonymize_ip: true });
+    </script>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+    <script is:inline>
+      // Osano -> GA4 Consent Mode v2 bridge: update consent state once the visitor
+      // responds to the banner. Event name/detail shape per Osano's CMP API.
+      window.addEventListener('osano-cm-consent-saved', function (event) {
+        if (typeof window.gtag !== 'function') return;
+        const consent = (event && event.detail) || {};
+        const analyticsGranted = consent.ANALYTICS === 'ACCEPT' ? 'granted' : 'denied';
+        const marketingGranted = consent.MARKETING === 'ACCEPT' ? 'granted' : 'denied';
+        window.gtag('consent', 'update', {
+          analytics_storage: analyticsGranted,
+          ad_storage: marketingGranted,
+          ad_user_data: marketingGranted,
+          ad_personalization: marketingGranted,
+        });
+      });
+    </script>
+  </>
+)}
+
+{CLARITY_ID && (
+  <!-- Microsoft Clarity — heatmaps + session recordings (DECISION-001). First-party
+       session cookies only, no personal data; disclosed in /privacy, no banner needed. -->
+  <script is:inline define:vars={{ CLARITY_ID }}>
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CLARITY_ID);
+  </script>
+)}
+
+{POSTHOG_KEY && (
+  <!-- PostHog Cloud — product analytics/funnels. Cookieless: persistence: 'memory'
+       is REQUIRED per DECISION-002/DECISION-007 (no PostHog cookies, no banner). -->
+  <script is:inline define:vars={{ POSTHOG_KEY, POSTHOG_HOST }}>
+    (function () {
+      if (window.posthog) return;
+      var ph = (window.posthog = []);
+      var methods = [
+        'init', 'capture', 'identify', 'alias', 'set_config', 'register',
+        'register_once', 'unregister', 'opt_out_capturing', 'has_opted_out_capturing',
+        'opt_in_capturing', 'reset', 'isFeatureEnabled', 'onFeatureFlags',
+        'getFeatureFlag', 'getFeatureFlagPayload', 'reloadFeatureFlags', 'group',
+      ];
+      methods.forEach(function (method) {
+        ph[method] = function () {
+          ph.push([method].concat(Array.prototype.slice.call(arguments)));
+        };
+      });
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = POSTHOG_HOST + '/static/array.js';
+      var first = document.getElementsByTagName('script')[0];
+      first.parentNode.insertBefore(script, first);
+
+      ph.init(POSTHOG_KEY, {
+        api_host: POSTHOG_HOST,
+        persistence: 'memory',
+        autocapture: false,
+      });
+    })();
+  </script>
+)}

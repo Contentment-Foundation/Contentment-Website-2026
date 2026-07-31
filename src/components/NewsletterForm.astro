@@ -5,7 +5,7 @@
       <p class="body">Wellbeing tools you can actually use, real stories from educators, and the occasional thing that makes the week a little lighter.</p>
     </div>
     <!-- FEAT-070 (Flodesk integration) not wired yet — placeholder submit, matches Dave's handoff. -->
-    <form class="anim d1" onsubmit="return false">
+    <form class="anim d1" id="newsletter-form">
       <div class="row">
         <input type="text" placeholder="First name" aria-label="First name">
         <input type="email" placeholder="Email address" aria-label="Email address">
@@ -15,3 +15,16 @@
     </form>
   </div>
 </section>
+
+<script>
+  import { trackEvent } from '../scripts/analytics.js';
+
+  // TICKET-080: newsletter_submit. No backend/Flodesk wiring yet (FEAT-070) — the
+  // form still doesn't POST anywhere, so "success" today means the client-side
+  // submit interaction itself, matching the existing placeholder behaviour.
+  const form = document.getElementById('newsletter-form');
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    trackEvent('newsletter_submit', { source: 'homepage_newsletter_band' });
+  });
+</script>

@@ -329,7 +329,10 @@ Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../brie
 | `PUBLIC_OSANO_CUSTOMER_ID` | 1 | Yes | Osano CMP customer ID — cookie consent banner (DECISION-002; Free Plan) |
 | `PUBLIC_POSTHOG_KEY` | 1 | Yes | PostHog project API key — product analytics + funnels (cookieless mode) |
 | `PUBLIC_POSTHOG_HOST` | 1 | Yes | PostHog Cloud host — `https://app.posthog.com` (DECISION-007) |
+| `PUBLIC_CLARITY_ID` | 1 | Yes | Microsoft Clarity project ID — heatmaps + session recordings (DECISION-001) |
 | `PUBLIC_RAISELY_CAMPAIGN_URL` | 1.5 | If fundraise page | Raisely peer-to-peer campaign link |
+
+**UTM campaign convention:** apply `utm_source` / `utm_medium` / `utm_campaign` / `utm_content` consistently on every outbound campaign link (newsletter, social, paid, QR) so GA4 and PostHog attribute traffic correctly. Full parameter taxonomy: [GROWTH-BRIEF §1](../briefs/GROWTH-BRIEF.md#1-analytics-setup). Example: `https://contentment.org/give/monthly?utm_source=instagram&utm_medium=social&utm_campaign=homeroom-launch&utm_content=story-card`.
 
 ### 6.2 Core integrations (server-only)
 
@@ -414,6 +417,7 @@ PUBLIC_GA_ID=
 PUBLIC_OSANO_CUSTOMER_ID=
 PUBLIC_POSTHOG_KEY=
 PUBLIC_POSTHOG_HOST=
+PUBLIC_CLARITY_ID=
 PUBLIC_RAISELY_CAMPAIGN_URL=
 
 # Server — core

@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import sentry from '@sentry/astro';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -37,6 +38,22 @@ function docsIndexDevPlugin() {
   };
 }
 
+// TICKET-080 (Analytics setup) — Sentry client-side error tracking (DECISION-006).
+// Only registered when SENTRY_DSN is actually set: with no DSN (today's real state),
+// the integration is omitted entirely so no Sentry code ships and the build can't
+// fail on it. This is a static site with no API routes yet, so client-side only —
+// no server instrumentation. Source map upload is disabled for now (no
+// SENTRY_AUTH_TOKEN/org/project configured); revisit once a Sentry project exists.
+const integrations = [];
+if (process.env.SENTRY_DSN) {
+  integrations.push(
+    sentry({
+      dsn: process.env.SENTRY_DSN,
+      sourcemaps: { disable: true },
+    }),
+  );
+}
+
 export default defineConfig({
   site: 'https://contentment.org',
   output: 'static',
@@ -46,6 +63,7 @@ export default defineConfig({
     '/story-board': '/story-board.html',
     '/story-board-feed-guide': '/story-board-feed-guide.html',
   },
+  integrations,
   vite: {
     plugins: [docsIndexDevPlugin()],
   },

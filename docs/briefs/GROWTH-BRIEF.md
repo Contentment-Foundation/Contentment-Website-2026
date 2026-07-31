@@ -67,6 +67,8 @@ Step 6: Returns from Keela (post-donation — track via UTM on Keela thank-you r
 | `utm_campaign` | `homeroom-launch` · `festival-2026` · `anniversary` · `school-outreach` · `[specific campaign name]` |
 | `utm_content` | `hero-cta` · `footer-cta` · `nav-pill` · `story-card` (for A/B variant labelling) |
 
+Example: `https://contentment.org/give/monthly?utm_source=instagram&utm_medium=social&utm_campaign=homeroom-launch&utm_content=story-card`
+
 ### Monthly analytics dashboard (set up in GA4 + PostHog)
 
 | Metric | Target (90 days) | Review cadence |

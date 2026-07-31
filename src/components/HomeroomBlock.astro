@@ -60,7 +60,7 @@
           <span>Add <strong data-fee>$2.56</strong> to help cover the processing fees</span>
         </label>
 
-        <button type="submit" class="donate-form__submit" disabled title="Donation checkout coming soon">Donate</button>
+        <button type="submit" id="homeroom-donate-cta" class="donate-form__submit" disabled title="Donation checkout coming soon">Donate</button>
       </form>
     </div>
 
@@ -69,11 +69,21 @@
 </section>
 
 <script>
+  import { trackEvent } from '../scripts/analytics.js';
+
   const form = document.getElementById('donate-form-dummy');
   if (form) {
     const feeEl = form.querySelector('[data-fee]');
     const otherWrap = form.querySelector('.donate-form__other');
     const otherInput = form.querySelector('input[name="custom-amount"]');
+
+    // TICKET-080: cta_homeroom_click — the button is disabled until the real Keela
+    // checkout URL lands (D-02, HC-030); wiring the listener now means tracking
+    // works the moment it's enabled, with no further changes needed here.
+    const donateCta = document.getElementById('homeroom-donate-cta');
+    donateCta?.addEventListener('click', () => {
+      trackEvent('cta_homeroom_click', { source: 'homepage_homeroom_block' });
+    });
 
     function feeFor(amount) {
       // Dummy estimate matching the Keela widget screenshot at $100 → $2.56
