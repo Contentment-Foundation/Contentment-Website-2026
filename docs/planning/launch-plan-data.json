@@ -1,15 +1,19 @@
 {
   "meta": {
     "title": "contentment.org — Launch Plan",
-    "version": "2026-07-30",
+    "version": "2026-07-31",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Jul 30 eve: Netlify preview (contentmentweb2.netlify.app) cut over to Astro dist — all 7 Phase 1 pages live for review. Footer Project docs restored. Homepage Slack review (HC-057) + mobile check requested. Events review-only (HC-072). Keela (D-02), /give routing (D-03), newsletter (D-19) still open. Hard go-live Aug 21."
+    "summary": "Jul 31: Netlify preview (contentmentweb2.netlify.app) serves all 7 Astro pages. Homepage polish: trustcue middots, dummy Homeroom donate form, mobile orbit bloom fix. New Sheet tab Review & Feedback for team QA. HC-057 homepage Slack + mobile review open. Events HC-072 review-only. Keela D-02, /give D-03, newsletter D-19 still open. Hard go-live Aug 21."
   },
   "overview": [
     [
       "Metric",
       "Value"
+    ],
+    [
+      "Team review tracker",
+      "Sheet tab Review & Feedback (RF-xxx). Preview: https://contentmentweb2.netlify.app"
     ],
     [
       "Design handoff deadline",
@@ -155,7 +159,7 @@
       "Dave",
       "Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/ — Netlify now publishes Astro dist; responsive audit done; awaiting HC-057 Slack + mobile review"
+      "https://contentmentweb2.netlify.app/ — Astro live. Trustcue middots + dummy Homeroom form + mobile orbit bloom fix (31 Jul). Awaiting HC-057 Slack + mobile review."
     ],
     [
       "Why Teacher Wellbeing",
@@ -326,23 +330,23 @@
       "Story Board prototype",
       "/story-board",
       "2",
-      "site/story-board.html",
+      "public/story-board.html",
       "Paused",
       "—",
       "—",
       "No",
-      "public/story-board.html → /story-board (ships in Astro public/ passthrough)"
+      "public/story-board.html → /story-board (Astro public/ passthrough)"
     ],
     [
       "Foundation Reach Map",
       "/foundation-reach-map",
       "2",
-      "site/foundation-reach-map.html",
+      "public/foundation-reach-map.html",
       "Paused",
       "—",
       "—",
       "No",
-      "public/foundation-reach-map.html → /foundation-reach-map (ships in Astro public/ passthrough)"
+      "public/foundation-reach-map.html → /foundation-reach-map (Astro public/ passthrough)"
     ]
   ],
   "designNotes": [
@@ -841,7 +845,7 @@
       "Sam",
       "Jul 27–28",
       "FEAT-001",
-      "All 7 Phase 1 content routes under src/pages/. Netlify preview publishes dist/ (cut over 30 Jul). Utility pages (privacy/terms/404) not started."
+      "All 7 Phase 1 content routes under src/pages/. Netlify preview publishes dist/ (cut over 30 Jul → contentmentweb2.netlify.app). Utility pages (privacy/terms/404) not started."
     ],
     [
       "FEAT-003",
@@ -859,7 +863,7 @@
       "Wire all nav and footer links",
       "1",
       "Must",
-      "Ready",
+      "In Progress",
       "Sam",
       "Jul 29",
       "FEAT-002",
@@ -885,7 +889,7 @@
       "Dave + Sam",
       "Jul 28–29",
       "FEAT-001, FEAT-002",
-      "Jul 29 — src/pages/index.astro + section components. Live on contentmentweb2.netlify.app. Responsive audit + drawer done 30 Jul. Awaiting Slack review (HC-057). Seams empty."
+      "Live on contentmentweb2.netlify.app. 31 Jul polish: hero trustcue middots, coded Homeroom donate placeholder (Keela pending D-02), mobile orbit bloom cap. Awaiting Slack review (HC-057)."
     ],
     [
       "FEAT-020",
@@ -951,7 +955,7 @@
       "Sam",
       "Jul 30–31",
       "FEAT-002",
-      "Jul 29 — Get Involved (Homeroom) at src/pages/give.astro. D-03 open (/give vs /give/monthly). Join/donate seams empty."
+      "Get Involved at src/pages/give.astro + homepage HomeroomBand dummy form (data-embed=keela-homeroom). Real Keela blocked on D-02 + D-03."
     ],
     [
       "FEAT-051",
@@ -1857,6 +1861,112 @@
       "Open",
       "Medium",
       "Jul 29 — placeholder until files are provided; does not block other Our Impact build work."
+    ]
+  ],
+  "reviewFeedback": [
+    [
+      "ID",
+      "Date",
+      "Reviewer",
+      "Page",
+      "Device",
+      "Severity",
+      "Status",
+      "Feedback",
+      "Owner",
+      "Resolution / Notes",
+      "Preview URL"
+    ],
+    [
+      "RF-001",
+      "2026-07-30",
+      "Team (Slack)",
+      "Home",
+      "Desktop",
+      "Medium",
+      "Done",
+      "Hero fold: \"325 partner schools\" separated by a vertical line — bring closer and use a dot separator.",
+      "Sam",
+      "Shipped 31 Jul — inline middot line: 10 years · 12 countries · 325 partner schools.",
+      "https://contentmentweb2.netlify.app/"
+    ],
+    [
+      "RF-002",
+      "2026-07-30",
+      "Mobile QA",
+      "Home",
+      "Mobile",
+      "High",
+      "Done",
+      "How Change Happens: bloom/glow washes over the last (purple) beat paragraph on mobile.",
+      "Sam",
+      "Shipped 31 Jul — capped mobile bloom; removed negative pull; graphic max-height.",
+      "https://contentmentweb2.netlify.app/#how"
+    ],
+    [
+      "RF-003",
+      "2026-07-30",
+      "Team",
+      "Home",
+      "Both",
+      "Medium",
+      "Done",
+      "Homeroom band still shows Keela screenshot placeholder — need interactive stand-in until URLs land.",
+      "Sam",
+      "Shipped 31 Jul — coded dummy donate form (data-embed=keela-homeroom). Real checkout still D-02/HC-030.",
+      "https://contentmentweb2.netlify.app/#homeroom"
+    ],
+    [
+      "RF-004",
+      "2026-07-30",
+      "All (HC-057)",
+      "Home",
+      "Both",
+      "Critical",
+      "Open",
+      "Homepage-first Slack review: content, nav, CTAs, Homeroom, footer. Drop screenshots + device in Slack thread.",
+      "Sam + team",
+      "Preview live. Log new issues as new RF-xxx rows on this tab.",
+      "https://contentmentweb2.netlify.app/"
+    ],
+    [
+      "RF-005",
+      "2026-07-30",
+      "All",
+      "Home",
+      "Mobile",
+      "High",
+      "Open",
+      "Homepage mobile pass (~390px / real phone): hero, nav drawer, orbit scroll, Homeroom form, footer.",
+      "Sam + team",
+      "Partial fixes already shipped (bloom, trustcue). Continue logging gaps here.",
+      "https://contentmentweb2.netlify.app/"
+    ],
+    [
+      "RF-006",
+      "2026-07-31",
+      "All",
+      "All Phase 1",
+      "Both",
+      "High",
+      "Open",
+      "Click-through review of About, Why, Our Impact, Schools, Events, Give after homepage sign-off.",
+      "Team",
+      "Use one row per issue (page + device). Preview base: https://contentmentweb2.netlify.app",
+      "https://contentmentweb2.netlify.app/"
+    ],
+    [
+      "RF-007",
+      "2026-07-31",
+      "Sam",
+      "Events",
+      "Both",
+      "High",
+      "Open",
+      "Events remains review-only until Dave second notes (HC-072) — flag any production-risk findings but do not treat as locked.",
+      "Dave → Sam",
+      "HC-072 still Open.",
+      "https://contentmentweb2.netlify.app/events"
     ]
   ]
 }

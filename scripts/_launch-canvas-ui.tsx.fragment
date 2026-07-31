@@ -103,6 +103,7 @@ export default function Phase1LaunchBoard() {
         options={[
           { value: "overview", label: "Overview (launch critical path)" },
           { value: "handoff", label: "Handoff checklist (open)" },
+          { value: "review", label: "Review & Feedback (open)" },
           { value: "tickets", label: "All tickets" },
           { value: "pages", label: "Pages + seams" },
           { value: "integrations", label: "Integrations + blockers" },
@@ -117,6 +118,10 @@ export default function Phase1LaunchBoard() {
         <Stat value={String(phase1Must.length)} label="Phase 1 Must" />
         <Stat value={String(blocked.length)} label="Must blocked" tone="warning" />
         <Stat value={String(hcCrit.length)} label="HC Critical open" tone="danger" />
+      </Grid>
+
+      <Grid columns={4} gap={12}>
+        <Stat value={String(COVERAGE.reviewOpen ?? REVIEW_OPEN.length)} label="Review feedback open" tone="warning" />
       </Grid>
 
       <Grid columns={4} gap={12}>
@@ -205,6 +210,21 @@ export default function Phase1LaunchBoard() {
             headers={["ID", "Section", "Item", "Owner", "Priority", "Notes"]}
             rows={hcCrit.map((r) => [...r])}
             rowTone={hcCrit.map(() => "danger" as const)}
+          />
+        </Stack>
+      ) : null}
+
+      
+      {show("review") ? (
+        <Stack gap={12}>
+          <H2>Open preview review feedback ({REVIEW_OPEN.length})</H2>
+          <Text size="small" tone="secondary">
+            Source: launch-plan-data.json reviewFeedback · Sheet tab Review & Feedback · Preview https://contentmentweb2.netlify.app/
+          </Text>
+          <Table
+            headers={["ID", "Date", "Reviewer", "Page", "Device", "Severity", "Status", "Feedback", "Owner"]}
+            rows={REVIEW_OPEN.map((r) => [...r])}
+            rowTone={REVIEW_OPEN.map((r) => (r[5] === "Critical" ? "danger" : r[5] === "High" ? "warning" : "info"))}
           />
         </Stack>
       ) : null}

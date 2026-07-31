@@ -213,6 +213,9 @@ def main() -> None:
     pri = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
     hc_open.sort(key=lambda r: (pri.get(r[6], 9), r[0]))
     hc_rows = [[r[0], r[1], r[2], r[4], r[6], r[7] or "—"] for r in hc_open]
+    rf = lp.get("reviewFeedback") or []
+    rf_open = [r for r in rf[1:] if len(r) > 6 and r[6] in ("Open", "In Progress")]
+    rf_rows = [[r[0], r[1], r[2], r[3], r[4], r[5], r[6], (r[7] if len(r) > 7 else ""), (r[8] if len(r) > 8 else "")] for r in rf_open]
     hc_status = Counter(r[5] for r in lp["handoffChecklist"][1:])
     hc_total = len(lp["handoffChecklist"]) - 1
     hc_crit = sum(1 for r in hc_rows if r[4] == "Critical")
@@ -288,6 +291,8 @@ const ALL_TICKETS: Ticket[] = [...LAUNCH_TICKETS, ...TRACKER_ONLY];
 
 {rows_ts("HC_OPEN", hc_rows)}
 
+{rows_ts("REVIEW_OPEN", rf_rows)}
+
 {rows_ts("EXTERNAL_BLOCKERS_FULL", ext)}
 
 {rows_ts("INTEGRATIONS", ints)}
@@ -328,6 +333,8 @@ const COVERAGE = {{
   phase2: {len(phase2)},
   seams: {len(seams)},
   emptySeams: {empty_seams},
+  reviewOpen: {len(rf_rows)},
+  reviewTotal: {max(len(rf) - 1, 0)},
 }};
 
 function statusTone(
