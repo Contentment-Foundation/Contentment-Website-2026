@@ -54,9 +54,7 @@ export const seams = {
     deck: '',
 
     /** School discovery form embed URL (TICKET-041 / D-04).
-     *  Resolved to Google Form + Slack integration. Form does not exist yet —
-     *  when created, paste the Google Form embed URL here. Consumers treat ''
-     *  as "not wired yet" and show a fallback message. */
-    discoveryFormUrl: '',
+     *  Google Form + Slack integration, live 31 Jul 2026. */
+    discoveryFormUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSe2xJASe8EgJ82CEp10y82PM9UPypby22JLyPdMDnFqBcr-qQ/viewform?embedded=true',
   },
 };

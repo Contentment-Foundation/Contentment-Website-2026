@@ -4,7 +4,7 @@
     "version": "2026-07-31",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Jul 31: RF-006 6/6 click-through done (About, Why, Our Impact, Schools, Give, Events review-only). Events still HC-072 review-only; RF-007 P1 mobile nav clip (\u2264380px) shipped; soft flags (title/chips/hero) for Dave. Homepage Done (HC-057). FEAT-081 (SEO), FEAT-011 (copy audit) Done. FEAT-080 (Analytics), FEAT-041 (school form), FEAT-070 (newsletter) scaffolded \u2014 all three blocked on a real external credential/resource, not code. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
+    "summary": "Jul 31: RF-006 6/6 click-through done (About, Why, Our Impact, Schools, Give, Events review-only). Events still HC-072 review-only; RF-007 P1 mobile nav clip (\u2264380px) shipped; soft flags (title/chips/hero) for Dave. Homepage Done (HC-057). FEAT-081 (SEO), FEAT-011 (copy audit), FEAT-041 (school form, Google Form live) Done. FEAT-080 (Analytics, HC-076) and FEAT-070 (newsletter, needs FEAT-101) still blocked on real credentials/hosting. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -951,11 +951,11 @@
       "School discovery form",
       "1",
       "Should",
-      "Blocked",
+      "Done",
       "Sam",
-      "Aug 5",
+      "31 Jul",
       "FEAT-040",
-      "31 Jul — scaffolded (seams.schools.discoveryFormUrl + iframe embed on /schools with a coming-soon fallback). Blocked on the Google Form itself being created — no code left once that lands."
+      "31 Jul — live: seams.schools.discoveryFormUrl wired to the real Google Form, embedded on /schools. Notification handled by Google Forms' own Slack integration."
     ],
     [
       "FEAT-050",

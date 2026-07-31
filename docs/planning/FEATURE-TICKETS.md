@@ -261,13 +261,13 @@ School leader journey page: wellbeing → achievement → proof → conversation
 **Description:**  
 Form on `/schools`: school name, contact name, email, role, country, message. Style with `.news input` patterns. Submit via **Flodesk form, Keela form, Raisely, or custom POST** to `/api/school-inquiry` (optional GCP). Honeypot spam field. Success/error states per Security doc.
 
-> **Status (31 Jul 2026):** Scaffolded per D-04 (Google Form + Slack, superseding this ticket's original Flodesk/Keela/Raisely/custom-POST options). `seams.schools.discoveryFormUrl` added (empty), `/schools` conditionally renders a Google Form iframe embed when it's set, an honest "coming soon, email us" fallback when not. **Blocked:** nobody has created the actual Google Form yet — that's the only remaining work, no more code needed once the URL exists.
+> **Status (31 Jul 2026):** Done. Scaffolded per D-04 (Google Form + Slack, superseding this ticket's original Flodesk/Keela/Raisely/custom-POST options), then wired live the same day — `seams.schools.discoveryFormUrl` now points at the real Google Form, embedded on `/schools`.
 
 **Acceptance criteria:**
-- [ ] Client validation on required fields — n/a under D-04, Google Forms handles its own validation
-- [ ] Successful submit shows thank-you message in voice & tone — n/a, Google Forms' own confirmation screen
-- [x] Failure shows fallback email somesh@contentment.org — shown whenever the form isn't wired yet
-- [ ] Notification email to partnerships team — n/a under D-04, uses Google Forms' native Slack notification instead
+- [x] Client validation on required fields — n/a under D-04, Google Forms handles its own validation
+- [x] Successful submit shows thank-you message in voice & tone — n/a, Google Forms' own confirmation screen
+- [x] Failure shows fallback email somesh@contentment.org — n/a now that the form is live; kept as the fallback if the URL is ever cleared
+- [x] Notification email to partnerships team — n/a under D-04, uses Google Forms' native Slack notification instead
 
 ---
 
@@ -565,3 +565,4 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | 2026-07-29/30 | Astro migration status added to TICKET-010/020/031/040/050/090/093 (all ported to `src/pages/` from Dave's Jul 29 handoff; see TRACKER.md for full detail). **TICKET-093 corrected**: was "About section (5 pages)," now "About Us page (v1 single page)" per D-05 (resolved 27 Jul) — the 5-sub-page framing was stale. TICKET-003 (mobile nav drawer) acceptance criteria all checked — done 30 Jul. |
 | 2026-07-31 | TICKET-081 (SEO baseline) done — all acceptance criteria checked. TICKET-080 (Analytics) scaffolded — all criteria checked except live pageviews on staging, blocked on real credentials (none exist yet). See TRACKER.md for the full FEAT-080/081 detail. |
 | 2026-07-31 | TICKET-011 (homepage copy audit) done. TICKET-041 (school form) scaffolded per D-04, blocked on the Google Form itself existing. TICKET-070 (newsletter) — `/updates` page built, form submission reverted back to a placeholder after an unverified direct-to-Flodesk-API implementation was caught in review (doesn't match this doc's own §6.2 spec, blocked on FEAT-101 for a real server route). See TRACKER.md for full detail. |
+| 2026-07-31 | TICKET-041 (school form) Done — the Google Form URL landed same-day, all acceptance criteria checked. |
