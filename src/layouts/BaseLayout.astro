@@ -7,9 +7,18 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogType?: string;
 }
 
-const { title, description = 'The Contentment Foundation — teacher and student wellbeing.' } = Astro.props;
+const {
+  title,
+  description = 'The Contentment Foundation — teacher and student wellbeing.',
+  ogImage = '/assets/logo_lockup_light.svg',
+  ogType = 'website',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -18,9 +27,26 @@ const { title, description = 'The Contentment Foundation — teacher and student
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
   <meta name="description" content={description}>
+  <link rel="canonical" href={canonicalURL}>
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content={ogType}>
+  <meta property="og:url" content={canonicalURL}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={new URL(ogImage, Astro.site)}>
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content={canonicalURL}>
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={new URL(ogImage, Astro.site)}>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=Varela+Round&family=Cedarville+Cursive&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <slot name="head" />
 </head>
 <body>

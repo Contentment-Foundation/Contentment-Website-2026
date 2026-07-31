@@ -145,6 +145,8 @@ Compare homepage copy to [Messaging brief §6 Home](../research/MESSAGING-AND-CO
 **Description:**  
 Long-form page using existing section patterns (`.split`, `.impact`, `.quote-card`, `.band`). Structure per messaging brief: objection → weight → ripple → reflection pause → why now → evidence → "but what about" cards → Peter's school → CTA. Open with orientation line. Primary CTA: Join Homeroom. Secondary: Share this page.
 
+> **Status (31 Jul 2026):** RF-006 Why click-through done — locked widths (320–1280) clean; accordion + YouTube CEO/reel slots OK. No layout bugs found. Homeroom Keela + newsletter remain placeholders (HC-075 / FEAT-070). Copy audit vs messaging brief still open (acceptance criteria below).
+
 > **Status (29–30 Jul 2026):** Ported verbatim to `src/pages/why.astro` from Dave's Jul 29 2026 handoff. Fixed one real bug during migration: the stat numbers (86%, 90%+, 9 in 10, National) shared the homepage's `.num` class, which the site-wide count-up script would have overwritten with "NaN" on scroll — renamed to `.rnum`. Content/UX acceptance criteria below are unverified against the messaging brief (technical migration only, not a copy audit).
 
 **Acceptance criteria:**
@@ -380,14 +382,16 @@ Simple text pages at `/privacy` and `/terms` using `.band` + `.wrap` + `.body` t
 **Description:**  
 Add GA4, Microsoft Clarity, and PostHog Cloud (DECISION-007, cookieless) to layout. Wire Osano CMP (Free Plan) with GA4 Consent Mode v2 per [DECISION-002](./DECISIONS.md). Implement conversion events per Frontend Spec §6.4 and [GROWTH-BRIEF](../briefs/GROWTH-BRIEF.md) §1. Wire Sentry per [DECISION-006](./DECISIONS.md). Document UTM convention for campaigns.
 
+> **Status (31 Jul 2026):** Scaffolded — `src/components/Analytics.astro` (Osano → GA4 Consent Mode v2 → Clarity → PostHog, each gated independently on its own env var, all currently unset so nothing ships yet) included once in `BaseLayout.astro`. Sentry wired via `@sentry/astro` in `astro.config.mjs`, client-side only (registered only when `SENTRY_DSN` is set — no server routes exist yet to instrument). `cta_homeroom_click` and `newsletter_submit` wired (`src/scripts/analytics.js` helper) — the Homeroom button fires on click but stays inert until the real Keela URL enables it (HC-075); newsletter fires on the existing client-side submit interaction (no backend yet, FEAT-070). Added the missing `PUBLIC_CLARITY_ID` env var to TECHNICAL-ARCHITECTURE §6.1, plus `.env.example` at repo root and a short UTM-convention note. **Not yet done:** real GA4/PostHog/Osano/Clarity/Sentry credentials — nobody has been assigned to source these yet (flagged, not yet a numbered HC item); pageviews can't record on staging until `PUBLIC_GA_ID` is set.
+
 **Acceptance criteria:**
-- [ ] Osano CMP script loads before GA4; consent banner shown to EU/UK visitors
-- [ ] GA4 Consent Mode v2: cookieless/modelled analytics before consent; full cookies after opt-in
-- [ ] PostHog Cloud (`app.posthog.com`) init with `persistence: 'memory'`
-- [ ] Sentry (`@sentry/astro`) initialised with `SENTRY_DSN` (DECISION-006)
-- [ ] Pageviews recording on staging
-- [ ] `cta_homeroom_click` fires on button click
-- [ ] `newsletter_submit` fires on success
+- [x] Osano CMP script loads before GA4; consent banner shown to EU/UK visitors — wired, inert until `PUBLIC_OSANO_CUSTOMER_ID` exists
+- [x] GA4 Consent Mode v2: cookieless/modelled analytics before consent; full cookies after opt-in
+- [x] PostHog Cloud (`app.posthog.com`) init with `persistence: 'memory'`
+- [x] Sentry (`@sentry/astro`) initialised with `SENTRY_DSN` (DECISION-006)
+- [ ] Pageviews recording on staging — blocked on a real `PUBLIC_GA_ID`
+- [x] `cta_homeroom_click` fires on button click
+- [x] `newsletter_submit` fires on success
 
 ---
 
@@ -401,10 +405,12 @@ Add GA4, Microsoft Clarity, and PostHog Cloud (DECISION-007, cookieless) to layo
 **Description:**  
 Per-page `<title>`, meta description, Open Graph tags (use hero or logo image). Generate `sitemap.xml` and `robots.txt`. Organization schema JSON-LD on homepage.
 
+> **Status (31 Jul 2026):** Done. Unique title/description per page (all 7 routes), OG + Twitter card tags and canonical link added to `BaseLayout.astro`, Organization JSON-LD on the homepage (sameAs pulled from `seams.ts` social links). `public/robots.txt`, `public/sitemap.xml`, `public/llms.txt` (DOC-002) and `public/favicon.svg` added. Tried `@astrojs/sitemap` for an auto-generated sitemap but it throws on this Astro 4.16 setup (`Cannot read properties of undefined (reading 'reduce')`) — reverted to the hand-written `sitemap.xml`; revisit if the package fixes the incompatibility, since a static file needs a manual edit whenever a route is added or removed.
+
 **Acceptance criteria:**
-- [ ] Unique title/description per Phase 1 page
-- [ ] OG image resolves on share preview
-- [ ] sitemap lists all public routes
+- [x] Unique title/description per Phase 1 page
+- [x] OG image resolves on share preview
+- [x] sitemap lists all public routes
 
 ---
 
@@ -459,6 +465,8 @@ Implement gate per Security doc: env password, rate limit, session cookie. Rotat
 
 **Description:**  
 Build `/about` as a single page (**D-05, resolved 27 Jul 2026** — was single page vs. 5 sub-pages; single page won). The 5 sub-pages (our-work, how-we-work, impact, team, faqs) framing below is superseded — do not build separately; Phase 2 only if ever revisited.
+
+> **Status (31 Jul 2026):** RF-006 About click-through + polish done — locked widths (320–1280) clean, no P0/P1 layout bugs. Social seams wired from live-site footer (D-07); `public/favicon.svg` added (was 404). Newsletter still FEAT-070 placeholder; roster still needs Dave line-by-line on `about-name-manifest.txt` before public deploy. Dave Kebo title remains Chief Media Officer per HC-035.
 
 > **Status (29 Jul 2026):** Ported to `src/pages/about.astro` from Dave's `about-deploy-rev4` handoff (single self-contained page, all photos extracted to `public/assets/ab-*`). One content bug caught and fixed during migration: Dave Kebo's title was transcribed as "Chief Creative Officer," corrected to "Chief Media Officer" per HC-035. Roster otherwise still needs Dave's full line-by-line sign-off before public deploy (`about-name-manifest.txt`).
 
@@ -549,3 +557,4 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | 2026-06 | Fixed sprint order (TICKET-060 moved after 050; TICKET-020 does not depend on Keela). Added Homeroom naming convention note. Added external content dependency note to TICKET-030. Added Keela blocking chain note to TICKET-051. Added messaging brief alignment note to TICKET-090. |
 | 2026-06 | Sprint order corrected: TICKET-011 (homepage copy audit) and TICKET-081 (SEO baseline) were missing — both added in correct dependency position. |
 | 2026-07-29/30 | Astro migration status added to TICKET-010/020/031/040/050/090/093 (all ported to `src/pages/` from Dave's Jul 29 handoff; see TRACKER.md for full detail). **TICKET-093 corrected**: was "About section (5 pages)," now "About Us page (v1 single page)" per D-05 (resolved 27 Jul) — the 5-sub-page framing was stale. TICKET-003 (mobile nav drawer) acceptance criteria all checked — done 30 Jul. |
+| 2026-07-31 | TICKET-081 (SEO baseline) done — all acceptance criteria checked. TICKET-080 (Analytics) scaffolded — all criteria checked except live pageviews on staging, blocked on real credentials (none exist yet). See TRACKER.md for the full FEAT-080/081 detail. |

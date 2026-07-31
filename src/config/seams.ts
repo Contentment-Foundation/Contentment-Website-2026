@@ -41,10 +41,11 @@ export const seams = {
   schoolPlatform: '',
 
   link: {
-    linkedin: '',
+    // D-07 resolved — live-site footer destinations (contentment.org, Jul 2026).
+    linkedin: 'https://www.linkedin.com/company/the-contentment-foundation',
     instagram: 'https://www.instagram.com/contentmentorg/',
-    facebook: '',
-    youtube: '',
+    facebook: 'https://www.facebook.com/contentment.org',
+    youtube: 'https://www.youtube.com/@thecontentmentfoundation',
   },
 
   schools: {

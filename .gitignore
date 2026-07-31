@@ -1,5 +1,8 @@
 .DS_Store
 
+# Claude Code agent worktrees (scratch, not project content)
+.claude/worktrees/
+
 # Astro (TICKET-002 multi-page migration)
 node_modules/
 dist/

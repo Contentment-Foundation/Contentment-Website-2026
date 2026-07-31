@@ -11,8 +11,28 @@ import Pillars from '../components/Pillars.astro';
 import HomeroomBlock from '../components/HomeroomBlock.astro';
 import DoorCards from '../components/DoorCards.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: 'The Contentment Foundation',
+  url: 'https://contentment.org',
+  logo: 'https://contentment.org/assets/logo_lockup_light.svg',
+  description: 'We equip teachers with evidenced wellbeing practices.',
+  foundingDate: '2016',
+  areaServed: 'Worldwide',
+  sameAs: [
+    'https://www.instagram.com/contentmentorg/',
+  ].filter(url => url), // Filter out empty social links
+};
 ---
-<BaseLayout title="The Contentment Foundation | When one teacher thrives, generations flourish">
+<BaseLayout
+  title="The Contentment Foundation"
+  description="We equip teachers with evidenced wellbeing practices. 325 schools. 12 countries. 86% of educators report real improvement. Join from $5/month."
+  ogImage="/assets/logo_lockup_light.svg"
+  ogType="organization"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
   <Hero />
   <WhySplit />
   <StatBand />

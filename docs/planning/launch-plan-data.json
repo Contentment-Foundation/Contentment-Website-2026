@@ -4,7 +4,7 @@
     "version": "2026-07-31",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Jul 31: Netlify preview (contentmentweb2.netlify.app) serves all 7 Astro pages. Homepage (FEAT-010) Done — polish shipped, HC-057 Slack + mobile review passed (Kristina sign-off) — cleared to build out remaining pages (RF-006). Events HC-072 review-only. Keela checkout URLs (HC-075, Lorna + Somesh escalating with Keela support) still open, blocks FEAT-060/give-monthly not the homepage. /give D-03, newsletter D-19 still open. Hard go-live Aug 21."
+    "summary": "Jul 31: RF-006 — About + Why QA/polish done (locked widths clean). About: social seams + favicon shipped. Next: Our Impact → Schools → Give → Events (review-only). Homepage Done (HC-057). FEAT-081 (SEO) Done; FEAT-080 (Analytics) scaffolded, no-op until real credentials land. Events HC-072 still open. Keela (HC-075) still blocks FEAT-060. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -170,7 +170,7 @@
       "Dave",
       "Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/why — Astro live on Netlify preview"
+      "https://contentmentweb2.netlify.app/why — Astro live. RF-006 Why QA pass 31 Jul (locked widths clean)."
     ],
     [
       "Our Impact",
@@ -225,7 +225,7 @@
       "Dave (rev4)",
       "TBD",
       "Yes",
-      "https://contentmentweb2.netlify.app/about — Astro live from Dave rev4 (D-05 single page)"
+      "https://contentmentweb2.netlify.app/about — Astro live. RF-006 About QA pass 31 Jul (320–1280 clean); social seams + favicon shipped. Roster still needs Dave line-by-line before public deploy."
     ],
     [
       "Privacy Policy",
@@ -867,7 +867,7 @@
       "Sam",
       "Jul 29",
       "FEAT-002",
-      "Internal page links + footer Project docs (/docs) wired. External donate/join/social still empty in seams.ts (HC-030/071, FEAT-005)."
+      "Internal page links + footer Project docs (/docs) wired. Social (LinkedIn/Instagram/Facebook/YouTube) wired 31 Jul from live-site footer (D-07). Donate/join still empty (HC-030/071/075, FEAT-005)."
     ],
     [
       "FEAT-005",
@@ -911,7 +911,7 @@
       "Sam",
       "Jul 29–30",
       "FEAT-001, FEAT-002",
-      "Jul 29 — ported to src/pages/why.astro from Dave why-wellbeing handoff. Needs QA + Slack after homepage."
+      "Jul 29 — ported to src/pages/why.astro from Dave why-wellbeing handoff. 31 Jul RF-006 QA pass (320–1280 clean; accordion + YT slots OK). Homeroom Keela + newsletter still placeholders (HC-075 / FEAT-070)."
     ],
     [
       "FEAT-030",
@@ -1017,22 +1017,22 @@
       "Analytics (GA4, Clarity, PostHog Cloud, Osano, Sentry)",
       "1",
       "Must",
-      "Open",
+      "In Progress",
       "Sam",
       "Aug 10–12",
       "FEAT-002",
-      "All analytics/observability decisions resolved"
+      "31 Jul — scaffolded (Analytics.astro, Sentry, cta_homeroom_click/newsletter_submit), all no-op until real credentials land. Nobody assigned yet to source GA4/PostHog/Osano/Clarity/Sentry IDs."
     ],
     [
       "FEAT-081",
       "SEO baseline",
       "1",
       "Should",
-      "Open",
+      "Done",
       "Sam",
-      "Aug 12–13",
+      "31 Jul",
       "FEAT-002",
-      "—"
+      "31 Jul — per-page title/description/OG/JSON-LD, robots.txt/sitemap.xml/llms.txt/favicon.svg shipped."
     ],
     [
       "FEAT-091",
@@ -1109,7 +1109,7 @@
       "Sam / Veron",
       "Aug 7 or FF",
       "FEAT-002",
-      "Jul 29 — ported to src/pages/about.astro from about-deploy-rev4 (D-05 single page; not 5 sub-pages)."
+      "Jul 29 — ported to src/pages/about.astro from about-deploy-rev4 (D-05 single page). 31 Jul RF-006 QA pass (locked widths clean); Pass-it-On + footer socials wired; favicon.svg added. Newsletter still FEAT-070; roster Dave sign-off still owed."
     ],
     [
       "FEAT-100",
@@ -2006,7 +2006,7 @@
       "Open",
       "Click-through review of About, Why, Our Impact, Schools, Events, Give after homepage sign-off.",
       "Team",
-      "Use one row per issue (page + device). Preview base: https://contentmentweb2.netlify.app",
+      "31 Jul — About + Why QA + polish done (no P0/P1 layout bugs on either). Next: Our Impact. Use one row per issue (page + device).",
       "https://contentmentweb2.netlify.app/"
     ],
     [

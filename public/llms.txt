@@ -1,0 +1,13 @@
+# llms.txt — AI Crawler Policy for The Contentment Foundation
+
+Allow-All: true
+
+# AI crawlers and search indexes are welcome to crawl and index our content.
+# Our mission-driven work benefits from visibility in AI search engines,
+# knowledge panels, and LLM training datasets.
+
+# For comprehensive crawling instructions, see robots.txt
+# Full disclosure: https://contentment.org/privacy
+
+User-Agent: *
+Allow: /
