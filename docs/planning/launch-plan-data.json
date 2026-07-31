@@ -1021,7 +1021,7 @@
       "Sam",
       "Aug 10\u201312",
       "FEAT-002",
-      "31 Jul \u2014 scaffolded (Analytics.astro, Sentry, cta_homeroom_click/newsletter_submit), all no-op until real credentials land. Nobody assigned yet to source GA4/PostHog/Osano/Clarity/Sentry IDs."
+      "31 Jul \u2014 scaffolded (Analytics.astro, Sentry, cta_homeroom_click/newsletter_submit), all no-op until real credentials land. Sam sourcing GA4/PostHog/Osano/Clarity/Sentry IDs (HC-076)."
     ],
     [
       "FEAT-081",
@@ -1959,6 +1959,16 @@
       "Open",
       "Critical",
       "Jul 31 \u2014 Finance-side deliverable behind D-02 (decision) and FEAT-060 (dev wiring ticket); blocks FEAT-060/FEAT-051 (/give/monthly), not FEAT-010 itself (page migration is done). Lorna and Somesh both engaging Keela support to escalate to a senior support exec, given the delay."
+    ],
+    [
+      "HC-076",
+      "Integrations",
+      "Live GA4 / PostHog / Osano / Clarity / Sentry IDs",
+      "FEAT-080 (Analytics) is fully scaffolded in src/components/Analytics.astro but every tool is a no-op until its real ID/key exists: PUBLIC_GA_ID, PUBLIC_POSTHOG_KEY/HOST, PUBLIC_OSANO_CUSTOMER_ID, PUBLIC_CLARITY_ID, SENTRY_DSN.",
+      "Sam",
+      "Open",
+      "Critical",
+      "31 Jul \u2014 Somesh (Sam) is personally sourcing all five credentials. Blocks the \"pageviews recording on staging\" acceptance criterion on FEAT-080; nothing else waits on this."
     ]
   ],
   "reviewFeedback": [
