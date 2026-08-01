@@ -389,7 +389,10 @@ p.body+p.body{margin-top:1.1em}
   .beat p{font-size:.98rem;line-height:1.45}
 }
 @media(prefers-reduced-motion:reduce){
-  /* A11y: no pin/scroll choreography — stack beats and freeze rings */
+  /* A11y: no pin/scroll choreography — stack beats and freeze rings.
+     RF-009: this is the "static ripple" some real phones show (OS Reduce Motion on) —
+     Chrome's device toolbar doesn't trigger this query, so desktop testing won't reproduce it;
+     use DevTools' Rendering tab to emulate prefers-reduced-motion instead. Not a bug. */
   .how-orbit{background:linear-gradient(180deg,var(--ob1) 0%,var(--ob2) 50%,var(--ob3) 100%)}
   .orbit-sticky{position:relative;height:auto;min-height:0;padding:64px 0;display:block}
   .orbit-scroll{display:none}

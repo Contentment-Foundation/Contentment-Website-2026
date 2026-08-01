@@ -10,6 +10,12 @@ export function initOrbit() {
   const beats = [...sec.querySelectorAll('.beat')];
   const N = beats.length;
   const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  // RF-009: if this looks "static"/non-animated on a real phone but fine on desktop
+  // (incl. Chrome's device toolbar), the phone almost certainly has an OS-level Reduce
+  // Motion / Remove Animations accessibility setting on — iOS Chrome runs on WebKit and
+  // honors it same as Safari. Device toolbar resizing does NOT flip this media feature;
+  // only DevTools' Rendering tab ("Emulate CSS media feature prefers-reduced-motion") does.
+  // This is the intended a11y fallback, not a bug — see RF-009 in the Review & Feedback sheet.
 
   const GROUNDS = ['var(--ob1)', 'var(--ob2)', 'var(--ob3)'];
   function setActive(i) {

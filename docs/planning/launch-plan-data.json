@@ -4,7 +4,7 @@
     "version": "2026-08-01",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Aug 1: RF-008 (Kristina) fixed — Our Impact/Why video lightbox was playing in a tiny frame; the modal <iframe> is injected via JS so it never picked up Astro's scoped CSS sizing, fixed with inline style (same pattern schools.astro already used). Jul 31: RF-006 6/6 click-through done (Events review-only). Events HC-072 still Open; RF-007 soft flags for Dave; light responsive audit logged (EVENTS-RESPONSIVE-AUDIT.md) — no new CSS. D-24 opened: Events email-capture destination (Flodesk vs Keela vs other) pending WoeiJing + Kristina (pairs FEAT-070 / D-19; do not wire). Homepage Done (HC-057). FEAT-081/011/041 Done. FEAT-080/070 blocked on credentials/hosting. Keela (HC-075) blocks FEAT-060. Handoff Day 0 = Jul 28 (not Jul 27). Sprint Jul 28–Aug 7. Hard go-live Aug 21 as scheduled."
+    "summary": "Aug 1: RF-009 closed — homepage ripple/orbit looked static on a real iPhone in Chrome; diagnosed as OS Reduce Motion (not a bug, not a deploy gap), reproduced via DevTools Rendering emulation, code comments added at the reduced-motion branches for the team. RF-008 (Kristina) fixed — Our Impact/Why video lightbox was playing in a tiny frame; the modal <iframe> is injected via JS so it never picked up Astro's scoped CSS sizing, fixed with inline style (same pattern schools.astro already used). Jul 31: RF-006 6/6 click-through done (Events review-only). Events HC-072 still Open; RF-007 soft flags for Dave; light responsive audit logged (EVENTS-RESPONSIVE-AUDIT.md) — no new CSS. D-24 opened: Events email-capture destination (Flodesk vs Keela vs other) pending WoeiJing + Kristina (pairs FEAT-070 / D-19; do not wire). Homepage Done (HC-057). FEAT-081/011/041 Done. FEAT-080/070 blocked on credentials/hosting. Keela (HC-075) blocks FEAT-060. Handoff Day 0 = Jul 28 (not Jul 27). Sprint Jul 28–Aug 7. Hard go-live Aug 21 as scheduled."
   },
   "overview": [
     [
@@ -2097,6 +2097,19 @@
       "Sam",
       "Fixed 1 Aug — the lightbox <iframe> is injected via JS innerHTML, so it never picked up Astro's scoped-style attribute; the CSS meant to size it to the modal (width/height:100%) silently never matched, so it fell back to the browser's ~300x150 default. Fixed by setting size inline on the iframe string (same pattern schools.astro already used). Same root cause found and fixed on /why too (not separately reported).",
       "https://contentmentweb2.netlify.app/our-impact"
+    ],
+    [
+      "RF-009",
+      "2026-08-01",
+      "Somesh",
+      "Home",
+      "Mobile",
+      "Low",
+      "Done",
+      "How Change Happens ripple/orbit shows static (no pin/scroll choreography) on a real iPhone 15 Pro + Chrome; looks perfect on desktop Chrome and Chrome's device toolbar mobile emulation.",
+      "Sam",
+      "Not a bug — diagnosed 1 Aug. Root cause: the device has iOS's Reduce Motion accessibility setting on; Chrome for iOS runs on WebKit and honors it, and orbit.js/global.css already intentionally fall back to a static stacked layout under prefers-reduced-motion (by design, per ACCESSIBILITY.md). Chrome's device toolbar/window resizing does not flip that media feature, which is why desktop testing looked fine — reproduced instead via DevTools Rendering tab \"Emulate CSS media feature prefers-reduced-motion: reduce\", which produced the identical static result. No code fix; left behavior as-is. Added comments at the reduced-motion branches in orbit.js and global.css so the team doesn't re-diagnose this from scratch next time.",
+      "https://contentmentweb2.netlify.app/#how"
     ]
   ]
 }
