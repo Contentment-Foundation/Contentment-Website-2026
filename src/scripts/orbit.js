@@ -52,8 +52,8 @@ export function initOrbit() {
     // bloom diameter grows with scroll: tight point -> wide soft disc.
     // On stacked mobile layout, cap well below the beat copy so the glow
     // doesn't wash over the last (purple) paragraph (Kristina / mobile QA).
-    const bloomMax = mobileOrbit.matches ? 300 : 760;
-    const bloomMin = mobileOrbit.matches ? 120 : 150;
+    const bloomMax = mobileOrbit.matches ? 280 : 760;
+    const bloomMin = mobileOrbit.matches ? 110 : 150;
     sec.style.setProperty('--bloom', lerp(bloomMin, bloomMax, prog).toFixed(0));
     // ease progress so the first beat advances sooner (kills the "frozen" dead-zone on entry)
     const eased = Math.pow(prog, 0.82);
