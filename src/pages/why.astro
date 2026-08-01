@@ -485,7 +485,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   function openLb(id: string) {
     if (!lbSlot || !lb) return;
-    lbSlot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0" title="Video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+    lbSlot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0" title="Video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
     lb.classList.add('open');
   }
   function closeLb() {
