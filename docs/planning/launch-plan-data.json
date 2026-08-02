@@ -628,7 +628,7 @@
     [
       "D-19",
       "Newsletter integration",
-      "Flodesk embed vs custom API",
+      "Flodesk embed vs custom API. 2 Aug — Somesh confirmed he has a working Flodesk API key plus the Flodesk MCP server (mcp.flodesk.com/mcp), and the Netlify adapter now allows a server route, so the custom-API path per TECHNICAL-ARCHITECTURE §6.2 is viable. Engineering to close.",
       "Engineering",
       "Open",
       "Newsletter ticket",
@@ -854,7 +854,7 @@
       "Sam",
       "Jul 28",
       "FEAT-001",
-      "All 7 Phase 1 content routes under src/pages/. Netlify preview publishes dist/ (cut over 30 Jul → contentmentweb2.netlify.app). Utility pages (privacy/terms/404) not started."
+      "All 7 Phase 1 content routes under src/pages/. Netlify preview publishes dist/ (cut over 30 Jul). 2 Aug — branded /404 shipped (src/pages/404.astro, noindex, reuses existing tokens + .anim). Astro switched static → hybrid with @astrojs/netlify@5.x adapter: every page still prerenders identically, this only unlocks /api/* routes for FEAT-070. privacy/terms still blocked on legal copy."
     ],
     [
       "FEAT-003",
@@ -1008,7 +1008,7 @@
       "Sam",
       "Aug 13–14",
       "FEAT-010",
-      "31 Jul — /updates page built (footer-linked, in sitemap.xml). Form submission stays a placeholder; reverted an unverified direct-to-Flodesk-API attempt. Real send needs a hosting adapter for a server route (FEAT-101), not just credentials. Events page capture slots also unwired — destination Flodesk vs Keela vs other is D-24 (Somesh asking WoeiJing + Kristina); pairs with D-19."
+      "2 Aug — UNBLOCKED on the hosting side: Astro now output:'hybrid' + @astrojs/netlify adapter, so the server-side /api/newsletter route specced in TECHNICAL-ARCHITECTURE §6.2 (server-only FLODESK_API_KEY) is now buildable. Remaining: close D-19 (provider) and land the Flodesk API key in .env + Netlify env vars. Somesh has Flodesk API access and the Flodesk MCP (mcp.flodesk.com/mcp). /updates page already built. Events capture slots still separately pending D-24."
     ],
     [
       "FEAT-071",

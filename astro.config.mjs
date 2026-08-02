@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import netlify from '@astrojs/netlify';
 import sentry from '@sentry/astro';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -56,7 +57,20 @@ if (process.env.SENTRY_DSN) {
 
 export default defineConfig({
   site: 'https://contentment.org',
-  output: 'static',
+  // TICKET-002 / FEAT-070 / FEAT-101 — 2 Aug 2026.
+  // 'hybrid' = every page still prerenders to static HTML exactly as before; a route
+  // only becomes server-rendered if it explicitly opts out with `export const
+  // prerender = false`. Nothing does today, so the built output is byte-for-byte the
+  // same static site — this purely unlocks the ability to add `/api/*` endpoints
+  // (FEAT-070's server-side newsletter route, per TECHNICAL-ARCHITECTURE §6.2, which
+  // needs the server-only FLODESK_API_KEY and so cannot be done client-side).
+  //
+  // Adapter is Netlify because Netlify is the host until go-live; production moves to
+  // Vercel at DNS cutover (FEAT-101), which is a one-line adapter swap to
+  // @astrojs/vercel plus the existing vercel.json. Pinned to @astrojs/netlify@5.x —
+  // 6.x requires Astro 5 and 8.x requires Astro 7; we are on Astro 4.16.
+  output: 'hybrid',
+  adapter: netlify(),
   // Only paths that are NOT also real files under public/ (those would be overwritten).
   redirects: {
     '/foundation-reach-map': '/foundation-reach-map.html',

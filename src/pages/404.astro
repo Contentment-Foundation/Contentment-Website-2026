@@ -1,0 +1,150 @@
+---
+// FEAT-002 (utility pages) — branded 404, 2 Aug 2026.
+// Netlify serves dist/404.html automatically for unmatched routes with a real 404
+// status, so no netlify.toml entry is needed. Styling reuses the existing token set
+// and the `.anim` reveal pattern — no new design language (see CLAUDE.md).
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// The routes worth offering someone who has landed nowhere. Deliberately the same
+// destinations as the main nav, minus anything gated or still placeholder.
+const DESTINATIONS = [
+  { href: '/', label: 'Home', blurb: 'Start from the beginning' },
+  { href: '/why', label: 'Why Teacher Wellbeing', blurb: 'The case for this work' },
+  { href: '/our-impact', label: 'Our Impact', blurb: 'Stories and results' },
+  { href: '/schools', label: 'For Schools', blurb: 'How we partner with you' },
+  { href: '/events', label: 'Events', blurb: "What's coming up" },
+  { href: '/give', label: 'Get Involved', blurb: 'Support a teacher' },
+];
+---
+<BaseLayout
+  title="Page Not Found | The Contentment Foundation"
+  description="That page doesn't exist — but there's plenty else here. Explore teacher wellbeing resources, impact stories, and ways to get involved."
+>
+  <!-- A 404 should never be indexed, and shouldn't advertise itself as canonical. -->
+  <meta slot="head" name="robots" content="noindex, follow" />
+
+  <section class="nf">
+    <div class="wrap nf-inner">
+      <p class="eyebrow anim">Error 404</p>
+      <h1 class="nf-title anim d1">This page wandered off.</h1>
+      <p class="nf-sub anim d2">
+        The link may be old, or the page may have moved. Nothing you did wrong &mdash;
+        let&rsquo;s get you somewhere useful.
+      </p>
+      <div class="nf-actions anim d3">
+        <a href="/" class="btn btn-primary">Back to home <span class="arrow">&rarr;</span></a>
+        <a href="/schools" class="btn btn-ghost">For schools</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band-tight nf-map">
+    <div class="wrap">
+      <h2 class="title anim">Or try one of these</h2>
+      <ul class="nf-grid">
+        {DESTINATIONS.map((d, i) => (
+          <li class={`anim d${Math.min(i + 1, 3)}`}>
+            <a href={d.href}>
+              <span class="nf-card-label">{d.label}</span>
+              <span class="nf-card-blurb">{d.blurb}</span>
+              <span class="nf-card-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="nf-help anim">
+        Still stuck? Email us at
+        <a href="mailto:hello@contentment.org">hello@contentment.org</a> and we&rsquo;ll point you the right way.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Shorter than the full-viewport .hero — a 404 shouldn't demand a whole screen
+     before the reader can see where to go next. Same gradient vocabulary as .hero. */
+  .nf {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(420px, 62vh, 620px);
+    padding: clamp(120px, 16vh, 180px) 0 clamp(56px, 8vh, 88px);
+    color: #fff;
+    overflow: hidden;
+    background:
+      radial-gradient(1200px 620px at 18% 8%, rgba(31, 175, 192, .34) 0%, rgba(31, 175, 192, 0) 62%),
+      linear-gradient(140deg, var(--deep) 0%, var(--deep2, #023a54) 46%, #01374f 100%);
+  }
+  .nf-inner { position: relative; z-index: 2; max-width: 760px; }
+  .nf .eyebrow { color: #9fe9f2; }
+  .nf-title {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(2.3rem, 5.4vw, 4.1rem);
+    line-height: 1.03;
+    letter-spacing: -.005em;
+    margin-top: 16px;
+    text-wrap: balance;
+  }
+  .nf-sub {
+    margin-top: 20px;
+    font-size: clamp(1.04rem, 1.4vw, 1.22rem);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, .9);
+    max-width: 48ch;
+  }
+  .nf-actions { margin-top: 32px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .nf-map .title { color: var(--deep); margin-bottom: 30px; }
+  .nf-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 0;
+  }
+  .nf-grid a {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 100%;
+    padding: 22px 24px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 10px 34px -26px rgba(2, 55, 79, .5);
+    transition: transform .28s cubic-bezier(.2, .8, .2, 1), box-shadow .28s, border-color .28s;
+  }
+  .nf-grid a:hover,
+  .nf-grid a:focus-visible {
+    transform: translateY(-4px);
+    border-color: var(--teal);
+    box-shadow: 0 20px 44px -26px rgba(2, 55, 79, .55);
+  }
+  .nf-card-label {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.12rem;
+    color: var(--deep);
+    line-height: 1.2;
+  }
+  .nf-card-blurb { font-size: .93rem; color: var(--slate); line-height: 1.45; }
+  .nf-card-arrow {
+    margin-top: auto;
+    padding-top: 10px;
+    color: var(--teal);
+    font-size: 1.05rem;
+    transition: transform .25s;
+  }
+  .nf-grid a:hover .nf-card-arrow { transform: translateX(4px); }
+
+  .nf-help { margin-top: 30px; font-size: 1rem; color: var(--slate); }
+  .nf-help a { color: var(--ocean); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .nf-help a:hover { color: var(--deep); }
+
+  @media (max-width: 900px) { .nf-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) {
+    .nf-grid { grid-template-columns: 1fr; }
+    .nf-actions .btn { width: 100%; justify-content: center; }
+  }
+</style>
