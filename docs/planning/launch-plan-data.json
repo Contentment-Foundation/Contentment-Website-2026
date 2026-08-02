@@ -1,10 +1,10 @@
 {
   "meta": {
     "title": "contentment.org — Launch Plan",
-    "version": "2026-08-01",
+    "version": "2026-08-02",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Aug 1: RF-009 closed — homepage ripple/orbit looked static on a real iPhone in Chrome; diagnosed as OS Reduce Motion (not a bug, not a deploy gap), reproduced via DevTools Rendering emulation, code comments added at the reduced-motion branches for the team. RF-008 (Kristina) fixed — Our Impact/Why video lightbox was playing in a tiny frame; the modal <iframe> is injected via JS so it never picked up Astro's scoped CSS sizing, fixed with inline style (same pattern schools.astro already used). Jul 31: RF-006 6/6 click-through done (Events review-only). Events HC-072 still Open; RF-007 soft flags for Dave; light responsive audit logged (EVENTS-RESPONSIVE-AUDIT.md) — no new CSS. D-24 opened: Events email-capture destination (Flodesk vs Keela vs other) pending WoeiJing + Kristina (pairs FEAT-070 / D-19; do not wire). Homepage Done (HC-057). FEAT-081/011/041 Done. FEAT-080/070 blocked on credentials/hosting. Keela (HC-075) blocks FEAT-060. Handoff Day 0 = Jul 28 (not Jul 27). Sprint Jul 28–Aug 7. Hard go-live Aug 21 as scheduled."
+    "summary": "Aug 2: Status update posted to Slack team channel in Nav's requested format (outcome / current state / target date / what I need from whom). All 7 Phase 1 pages built, mobile-responsive and live at contentmentweb2.netlify.app; RF-006 6/6 QA done; RF-008 (video lightbox) and RF-009 (ripple = OS Reduce Motion, not a bug) both closed. Five external inputs requested by Aug 3 with named owners: Keela checkout links (Lorna), Button/CTA inventory (Kristina), About roster sign-off + Events second notes (Dave), impact stories + photos (Comms/Programs), Events email-capture destination D-24 (WoeiJing + Kristina). Team pointed at /docs/dev-timeline for self-service status and the Sheet's Review & Feedback tab for feedback; other Sheet tabs now declared locked. Newsletter send still needs hosting adapter (FEAT-101). Aug 7 = build sprint end + final review window. Hard go-live Aug 21, on track."
   },
   "overview": [
     [
@@ -673,7 +673,7 @@
     [
       "D-24",
       "Events email-capture destination",
-      "Flodesk vs Keela vs other — Somesh to ask WoeiJing + Kristina. /events keeps three placeholder slots (newsletter-signup fold “Embed slot · tech to wire”; event-announcements in Why + Close “Want first access to all of it?”; festival-signup CTAs). Do NOT invent provider embeds until decided. Pairs with FEAT-070 / D-19 (sitewide newsletter).",
+      "Flodesk vs Keela vs other — asked of WoeiJing + Kristina in Slack 2 Aug, answer requested by Aug 3. /events keeps three placeholder slots (newsletter-signup fold “Embed slot · tech to wire”; event-announcements in Why + Close “Want first access to all of it?”; festival-signup CTAs). Do NOT invent provider embeds until decided. Pairs with FEAT-070 / D-19 (sitewide newsletter).",
       "Somesh → WoeiJing + Kristina",
       "Open",
       "Events capture wiring (FEAT-070 related)",
@@ -1206,14 +1206,14 @@
       "Button / CTA inventory",
       "Kristina (Miro board, page-by-page)",
       "FEAT-004, FEAT-005, analytics event wiring",
-      "End of week (Jul 28 week)",
+      "Aug 3 (asked in Slack 2 Aug)",
       "Sprint slows — CTAs stay href=# and tracking cannot be instrumented correctly"
     ],
     [
       "Live Keela checkout URLs",
-      "Finance",
+      "Lorna (Finance)",
       "FEAT-060, FEAT-051",
-      "Aug 14 (pre Aug 21 hard go-live)",
+      "Aug 3 (asked in Slack 2 Aug; was Aug 14)",
       "Cannot launch live donations"
     ],
     [
@@ -1269,8 +1269,15 @@
       "Events page — second round of team notes",
       "Dave",
       "FEAT-090 production build",
-      "Before /events is built off the Jul 29 drop",
+      "Aug 3 (asked in Slack 2 Aug)",
       "Current events-build is review-only; building to production early risks rework once notes land"
+    ],
+    [
+      "About Us roster sign-off (line-by-line)",
+      "Dave",
+      "FEAT-093 close-out",
+      "Aug 3 (asked in Slack 2 Aug)",
+      "/about cannot be marked final; page is otherwise built and QA'd"
     ],
     [
       "Keela / Homeroom join-flow choreography",
@@ -1437,7 +1444,7 @@
       "Kristina → Sam",
       "Open",
       "Critical",
-      "Jul 28 — Kristina delivers Miro board (page-by-page link mapping) by end of week. Still Critical for FEAT-005."
+      "Jul 28 — Kristina delivers Miro board (page-by-page link mapping) by end of week. Still Critical for FEAT-005. Aug 2 — re-asked of Kristina by name in the Slack team status update, requested by Aug 3."
     ],
     [
       "HC-010",
@@ -1967,7 +1974,7 @@
       "Lorna + Somesh",
       "Open",
       "Critical",
-      "Jul 31 — Finance-side deliverable behind D-02 (decision) and FEAT-060 (dev wiring ticket); blocks FEAT-060/FEAT-051 (/give/monthly), not FEAT-010 itself (page migration is done). Lorna and Somesh both engaging Keela support to escalate to a senior support exec, given the delay."
+      "Jul 31 — Finance-side deliverable behind D-02 (decision) and FEAT-060 (dev wiring ticket); blocks FEAT-060/FEAT-051 (/give/monthly), not FEAT-010 itself (page migration is done). Lorna and Somesh both engaging Keela support to escalate to a senior support exec. Aug 2 — re-asked of Lorna by name in the Slack team status update, requested by Aug 3."
     ],
     [
       "HC-076",
