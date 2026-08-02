@@ -1125,11 +1125,11 @@
       "Pre-launch QA",
       "1",
       "Must",
-      "Open",
+      "In Progress",
       "Sam",
       "Aug 13–14",
       "All must-haves",
-      "a11y, Lighthouse ≥85; Nav + WJ sign-off"
+      "2 Aug — AUDIT DONE (docs/planning/PRE-LAUNCH-QA-AUDIT.md): axe-core 4.12.1 + Lighthouse 13.4.1, 8 routes x desktop/mobile. Verdict 0/8 pass, but causes cluster: 1 Critical, 4 Serious, 6 Moderate, 3 Minor. Shared-chrome fixes clear most of it — no <main> landmark + no skip link (BaseLayout, 2 lines, fixes all 8); video-lightbox focus management (/schools is a real keyboard trap, WCAG 2.1.2 A — Escape handler exists but is on window, so it never fires once focus is in the cross-origin YouTube iframe); /events filter chips use role=tablist with aria-selected on plain buttons and no arrow keys; mobile perf 56-75 on all 8 (pure asset weight — zero TBT; unsized imgs, render-blocking fonts, base64 images). White-on-mint contrast fails AA and is already fixed on /events+/why but not homepage orbit or /give. Console clean: 0 JS errors / 0 failed requests across 16 loads. NOT yet done: screen-reader pass, text-over-image contrast (manual), Google Form iframe (cross-origin), Keela live test (HC-075)."
     ],
     [
       "FEAT-101",
