@@ -21,3 +21,10 @@ __pycache__/
 
 # Local Netlify folder
 .netlify
+
+# Secrets — real credential values (GA4/PostHog/Clarity/Osano/Sentry, Flodesk,
+# Keela, Slack webhooks…). Only .env.example, which holds key names and no
+# values, is tracked. Never commit a populated .env.
+.env
+.env.*
+!.env.example
