@@ -181,6 +181,8 @@ const ADVISORY = [
 </section>
 
 <script>
+  import { trackEvent } from '../scripts/analytics.js';
+
   // Empty-To mailto:? links often no-op in Chromium; prefer Web Share, else force mailto navigation.
   document.querySelectorAll<HTMLAnchorElement>('[data-share-email]').forEach((el) => {
     el.addEventListener('click', async (e) => {
@@ -194,12 +196,14 @@ const ADVISORY = [
       if (typeof navigator.share === 'function') {
         try {
           await navigator.share({ title: subject, text, url });
+          trackEvent('content_shared', { method: 'native_share', source: 'about_page' });
         } catch {
           /* user cancelled share sheet — leave quietly */
         }
         return;
       }
 
+      trackEvent('content_shared', { method: 'email', source: 'about_page' });
       window.location.href = href;
     });
   });
