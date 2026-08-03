@@ -4,7 +4,7 @@
     "version": "2026-08-03",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Aug 3: /give Homeroom Dreamer/Catalyst/Visionary tiers now selectable (joinTiers seam for per-tier Keela URLs). Aug 3 Nav priorities: (1) Conversion paths \u2014 Events festival Save-my-spot no longer routes to /give; RSVP/waitlist interim \u2192 #ev-signup email capture until seams.rsvp/Keela; Homeroom join stays /give; school enquiry = mailto #start; one-time/other-ways still # pending Lorna. (2) Homeroom offer \u2014 D-01 $25/$50/$100: killed remaining $5 entry copy on homepage InviteBand + meta; Give page tiers already $25/$50/$100; donate widgets match. Benefits still need Kristina/WJ editorial pass to unify Events access list vs Give benefit cards if desired. (3) PostHog wizard PR #1 triaged \u2014 kept its 6 new conversion events + vercel.json CSP, reverted the consent/cookie regression, env-var rename and unused dep (FEAT-080). STILL BLOCKED \u2014 Keela URLs HC-075/071; D-24 Flodesk; HC-005 Spread-the-movement. Go-live Aug 21."
+    "summary": "Aug 3: /give Homeroom Dreamer/Catalyst/Visionary tiers now selectable (joinTiers seam for per-tier Keela URLs). Aug 3 Nav priorities: (1) Conversion paths \u2014 Events festival Save-my-spot no longer routes to /give; RSVP/waitlist interim \u2192 #ev-signup email capture until seams.rsvp/Keela; Homeroom join stays /give; school enquiry = mailto #start; one-time/other-ways still # pending Lorna. (2) Homeroom offer \u2014 D-01 $25/$50/$100: killed remaining $5 entry copy on homepage InviteBand + meta; Give page tiers already $25/$50/$100; donate widgets match. Benefits still need Kristina/WJ editorial pass to unify Events access list vs Give benefit cards if desired. (3) PostHog wizard PR #1 triaged \u2014 kept its 6 new conversion events + vercel.json CSP, reverted the consent/cookie regression, env-var rename and unused dep (FEAT-080). (4) CSP now identical in netlify.toml + vercel.json (OPS-001/002); netlify had none at all, and vercel's was missing YouTube frame-src, which would have blanked every video embed at cutover. PUBLIC_GA_ID has landed (first of HC-076's five) \u2014 confirm it is set in Netlify's env, not just local. STILL BLOCKED \u2014 Keela URLs HC-075/071; D-24 Flodesk; HC-005 Spread-the-movement. Go-live Aug 21."
   },
   "overview": [
     [
@@ -1151,7 +1151,7 @@
       "Sam",
       "\u2014",
       "\u2014",
-      "Interim Netlify security headers ahead of the Vercel cutover (TECHNICAL-ARCHITECTURE \u00a79)."
+      "Interim Netlify security headers ahead of the Vercel cutover (TECHNICAL-ARCHITECTURE \u00a79). Aug 3 \u2014 CSP added; netlify.toml previously had none at all while vercel.json did, so the live host was the unprotected one. Policy now identical across both files."
     ],
     [
       "OPS-002",
@@ -1162,7 +1162,7 @@
       "Sam",
       "\u2014",
       "\u2014",
-      "Vercel security headers config, ready for the production cutover (FEAT-101)."
+      "Vercel security headers config, ready for the production cutover (FEAT-101). Aug 3 — CSP rewritten from a dist/ origin inventory: added YouTube frame-src (it would have blanked every video embed at cutover), Osano, Clarity connect, jsdelivr (map/story-board prototypes), GA4 regional ingest, Sentry ingest, form-action; dropped plausible.io, which DECISION-001 never chose."
     ],
     [
       "OPS-003",
