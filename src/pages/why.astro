@@ -382,16 +382,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .homeroom-panel{background:linear-gradient(160deg,var(--ocean) 0%,var(--deep) 62%,var(--deep2) 100%);position:relative;display:flex;align-items:center;padding:clamp(48px,5.5vw,92px) clamp(34px,5vw,84px);overflow:hidden}
   .homeroom-panel::before{content:"";position:absolute;width:620px;height:620px;border-radius:50%;border:1px solid rgba(255,255,255,.07);top:-220px;right:-200px;pointer-events:none;transform-origin:center;animation:rippleA 28s ease-in-out -3s infinite;will-change:transform,opacity}
   .homeroom-panel::after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;border:1px solid rgba(255,255,255,.05);bottom:-180px;right:-120px;pointer-events:none;transform-origin:center;animation:rippleB 30s ease-in-out -11s infinite;will-change:transform,opacity}
-  .homeroom-inner{position:relative;z-index:2;max-width:640px;width:100%}
+  .homeroom-inner{position:relative;z-index:2;max-width:640px;width:100%;--give-measure:52ch}
   .homeroom .eyebrow{color:#bfeef5}
   .homeroom-head h2{color:#fff;margin-top:14px}
-  .homeroom-head p{margin-top:18px;font-size:1.1rem;color:rgba(255,255,255,.92);max-width:52ch}
-  .keela-slot{margin-top:22px;position:relative;max-width:330px}
-  .legal{margin-top:16px;font-size:.8rem;line-height:1.5;color:rgba(255,255,255,.78);max-width:56ch}
+  .homeroom-head p{margin-top:18px;font-size:1.1rem;color:rgba(255,255,255,.92);max-width:var(--give-measure)}
+  /* Match form + legal to the head copy measure above */
+  #give .keela-slot{margin-top:22px;position:relative;max-width:var(--give-measure);width:100%}
+  .legal{margin-top:16px;font-size:.8rem;line-height:1.5;color:rgba(255,255,255,.78);max-width:var(--give-measure)}
   .homeroom-cta{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
   #give .homeroom-head p{margin-bottom:6px}
   #give .homeroom-cta{gap:38px;margin-top:34px}
-  #give .fine{max-width:34ch}
+  #give .fine{max-width:var(--give-measure)}
   @media(max-width:940px){
     .homeroom{grid-template-columns:1fr}
     .homeroom-img::after{background:linear-gradient(180deg,rgba(2,55,79,0) 70%,rgba(2,55,79,.45) 100%)}

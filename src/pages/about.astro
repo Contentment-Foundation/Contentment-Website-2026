@@ -8,13 +8,15 @@
 // Shared <Nav />/<Footer /> replace this page's own header/footer markup (deleted per
 // migration hard rules); nav/footer seams are wired centrally in src/config/seams.ts.
 //
-// Photos extracted to /public/assets (prefixed ab-) from
-// handoff/.../about-deploy-rev4/photos/ (already named per build_about.py's convention —
-// hero, Dan/Bhutan story photo, country-school story photo, and 24 headshots keyed by
-// slug) instead of decoding the inlined data-URIs. See final report for the mapping;
-// nothing was left inline as base64 — every image in this page matched a named source file.
+// Photos extracted to /public/assets from
+// handoff/.../about-deploy-rev4/photos/ — hero kept as about-hero-team-bali-july2025.jpg;
+// story photos + 24 headshots use ab- prefixes keyed by slug. Nothing left inline as base64.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { seams } from '../config/seams';
+
+const shareSubject = 'Thought of you. This is what teacher wellbeing looks like.';
+const shareBody = "Met an organization I think you'd like. Start here: https://www.contentment.org";
+const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${encodeURIComponent(shareBody)}`;
 
 const TEAM = [
   ['Navin Amarasuriya', 'Chief Executive Officer', 'navin-amarasuriya'],
@@ -54,7 +56,7 @@ const ADVISORY = [
 
 <!-- 1 HERO -->
 <section class="about-hero" id="top">
-  <div class="about-hero-bg" role="img" aria-label="The Contentment Foundation team, arms raised, on a Bali hilltop at dusk" style="background-image:url('/assets/ab-hero-bali5.jpg');background-position:50% 26%"></div>
+  <div class="about-hero-bg" role="img" aria-label="The Contentment Foundation team, arms raised, on a Bali hilltop at dusk" style="background-image:url('/assets/about-hero-team-bali-july2025.jpg');background-position:50% 26%"></div>
   <div class="about-hero-scrim" aria-hidden="true"></div>
   <div class="wrap about-hero-inner">
     <h1>We're the people<br>who look after the people<br>who look after&nbsp;kids.</h1>
@@ -76,7 +78,7 @@ const ADVISORY = [
       <a class="textlink anim d4" href="/why">Our answer lives here &rarr;</a>
     </div>
     <div class="story-photos">
-      <figure class="sphoto live anim"><img src="/assets/ab-dan-bhutan-2014.jpg" alt="Dan Cordaro holding a globe for a circle of schoolchildren outside a school in Eastern Bhutan"><figcaption>Dan teaching in Bhutan, 2014</figcaption></figure>
+      <figure class="sphoto live anim"><img src="/assets/ab-dan-bhutan-2014.jpg" alt="Dan Cordaro holding a globe for a circle of schoolchildren outside a school in Eastern Bhutan"><figcaption>Dan in Bhutan, 2014</figcaption></figure>
       <figure class="sphoto live anim d1"><img src="/assets/ab-story-country3.jpg" alt="A teacher and her young students standing together with hands on their hearts in a classroom"><figcaption>Hands on hearts. The Country School, Los Angeles, May 2025</figcaption></figure>
     </div>
   </div>
@@ -136,7 +138,10 @@ const ADVISORY = [
       <div class="ccard c-blue anim d2">
         <h3>Talk with Us</h3>
         <p>Question about our work, your school, a partnership, anything. Kristina and WoeiJing read every message and reply within the week.</p>
-        <a class="btn cbtn" href="mailto:hello@contentment.org">Email a real person &rarr;</a>
+        <div class="ccta">
+          <a class="btn cbtn" href="mailto:hello@contentment.org">Email a real person &rarr;</a>
+          <a class="cemail" href="mailto:hello@contentment.org">hello@contentment.org</a>
+        </div>
       </div>
       <div class="ccard c-sand anim d3">
         <h3>Pass it On</h3>
@@ -144,7 +149,7 @@ const ADVISORY = [
         <div class="crow">
           <a class="btn cbtn dark" href={seams.link.instagram || '#'} target="_blank" rel="noopener">Instagram</a>
           <a class="btn cbtn dark" href={seams.link.linkedin || '#'} target="_blank" rel="noopener">LinkedIn</a>
-          <a class="btn cbtn dark" href="mailto:?subject=Thought%20of%20you.%20This%20is%20what%20teacher%20wellbeing%20looks%20like.&body=Met%20an%20organization%20I%20think%20you%27d%20like.%20Start%20here%3A%20http%3A%2F%2Fwww.contentment.org">Email this to someone</a>
+          <a class="btn cbtn dark" href={shareMailto} data-share-email>Email this to someone</a>
         </div>
       </div>
     </div>
@@ -174,6 +179,31 @@ const ADVISORY = [
     </div>
   </div>
 </section>
+
+<script>
+  // Empty-To mailto:? links often no-op in Chromium; prefer Web Share, else force mailto navigation.
+  document.querySelectorAll<HTMLAnchorElement>('[data-share-email]').forEach((el) => {
+    el.addEventListener('click', async (e) => {
+      const href = el.getAttribute('href') || '';
+      const subject = 'Thought of you. This is what teacher wellbeing looks like.';
+      const text = "Met an organization I think you'd like. Start here: https://www.contentment.org";
+      const url = 'https://www.contentment.org';
+
+      e.preventDefault();
+
+      if (typeof navigator.share === 'function') {
+        try {
+          await navigator.share({ title: subject, text, url });
+        } catch {
+          /* user cancelled share sheet — leave quietly */
+        }
+        return;
+      }
+
+      window.location.href = href;
+    });
+  });
+</script>
 
 </BaseLayout>
 
@@ -252,6 +282,10 @@ const ADVISORY = [
   .cbtn:hover{background:var(--paper2)}
   .cbtn.dark{background:var(--deep2);color:#fff}
   .cbtn.dark:hover{background:var(--deep)}
+  .ccta{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+  .ccta .cbtn{width:100%}
+  .cemail{display:inline-block;text-align:center;font-size:.92rem;font-weight:500;color:rgba(255,255,255,.92);text-decoration:underline;text-underline-offset:3px}
+  .cemail:hover{color:#fff}
   .crow{display:flex;flex-wrap:wrap;gap:10px;width:100%}
   .crow .cbtn{flex:1 1 calc(50% - 5px);width:auto;font-size:.9rem;padding:11px 14px}
   .crow .cbtn:last-child{flex:1 1 100%}

@@ -1,10 +1,10 @@
 {
   "meta": {
     "title": "contentment.org — Launch Plan",
-    "version": "2026-08-02",
+    "version": "2026-08-03",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Aug 2: Status update posted to Slack team channel in Nav's requested format (outcome / current state / target date / what I need from whom). All 7 Phase 1 pages built, mobile-responsive and live at contentmentweb2.netlify.app; RF-006 6/6 QA done; RF-008 (video lightbox) and RF-009 (ripple = OS Reduce Motion, not a bug) both closed. Five external inputs requested by Aug 3 with named owners: Keela checkout links (Lorna), Button/CTA inventory (Kristina), About roster sign-off + Events second notes (Dave), impact stories + photos (Comms/Programs), Events email-capture destination D-24 (WoeiJing + Kristina). Team pointed at /docs/dev-timeline for self-service status and the Sheet's Review & Feedback tab for feedback; other Sheet tabs now declared locked. Newsletter send still needs hosting adapter (FEAT-101). Aug 7 = build sprint end + final review window. Hard go-live Aug 21, on track."
+    "summary": "Aug 3: CTA wiring pass on known destinations (without waiting on full Kristina Miro inventory). Sign In → school.contentment.org; Donate (nav/footer) falls back to /give until Keela URLs (HC-075); homepage hero → /why, Homeroom invite → /give, door cards Schools + Events wired (Spread-the-movement still TBD WJ); Get Involved hero Join Homeroom scrolls to #become; About polish (hero asset rename, Dan caption, Talk-with-Us email, share mailto). Why teacher reels fixed to fill 9:16 frames (shipped). Homeroom donate form measure matched to copy (Home 46ch / Why 52ch). Still open: Keela checkout (Lorna/HC-075), full Button/CTA inventory (HC-005), About roster Dave sign-off, D-24 email-capture. Aug 7 = build sprint end + final review window. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -159,7 +159,7 @@
       "Dave",
       "Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/ — Astro live. Trustcue middots + dummy Homeroom form + mobile orbit bloom fix (31 Jul). HC-057 Slack + mobile review passed (Kristina sign-off, 31 Jul)."
+      "https://contentmentweb2.netlify.app/ — Astro live. HC-057 passed 31 Jul. Aug 3 — hero CTA→/why; Join Homeroom invite→/give; door Schools/Events wired; Spread-the-movement TBD WJ; Homeroom donate form measure 46ch; Sign In + Donate chrome wired sitewide."
     ],
     [
       "Why Teacher Wellbeing",
@@ -170,7 +170,7 @@
       "Dave",
       "Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/why — Astro live. RF-006 Why QA pass 31 Jul (locked widths clean). 1 Aug — video lightbox sizing bug fixed (same root cause as RF-008 on Our Impact)."
+      "https://contentmentweb2.netlify.app/why — Astro live. RF-006 Why QA 31 Jul. 1 Aug lightbox fix. Aug 3 — teacher Shorts fill 9:16 reels; donate form measure matched to copy (52ch)."
     ],
     [
       "Our Impact",
@@ -214,7 +214,7 @@
       "Dave",
       "Low-Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/give — Homeroom at /give. RF-006 QA pass 31 Jul (locked widths clean; no code fixes). D-03 routing open; join/donate seams empty (HC-075)."
+      "https://contentmentweb2.netlify.app/give — Homeroom at /give. RF-006 QA 31 Jul. Aug 3 — hero Join Homeroom scrolls to #become. D-03 routing open; real join/donate seams empty (HC-075/071)."
     ],
     [
       "About Us",
@@ -225,7 +225,7 @@
       "Dave (rev4)",
       "TBD",
       "Yes",
-      "https://contentmentweb2.netlify.app/about — Astro live. RF-006 About QA pass 31 Jul (320–1280 clean); social seams + favicon shipped. Roster still needs Dave line-by-line before public deploy."
+      "https://contentmentweb2.netlify.app/about — Astro live. RF-006 About QA 31 Jul. Aug 3 — hero filename about-hero-team-bali-july2025.jpg; Dan caption tweak; Talk-with-Us email visible; share mailto fixed. Roster still needs Dave line-by-line before public deploy."
     ],
     [
       "Privacy Policy",
@@ -876,7 +876,7 @@
       "Sam",
       "Jul 29",
       "FEAT-002",
-      "Internal page links + footer Project docs (/docs) wired. Social (LinkedIn/Instagram/Facebook/YouTube) wired 31 Jul from live-site footer (D-07). Donate/join still empty (HC-030/071/075, FEAT-005)."
+      "Internal pages + /docs + socials (D-07) wired. Aug 3 — Sign In → https://school.contentment.org/; Donate nav/footer falls back to /give until seams.donate (HC-075); homepage CTAs: hero→/why, InviteBand→/give, door Schools→/schools + Events→/events (Spread the movement still # pending WJ). Real Keela join/donate still empty (HC-030/071/075). HC-005 inventory still Open — wired known destinations ahead of Miro."
     ],
     [
       "FEAT-005",
@@ -887,7 +887,7 @@
       "Kristina → Sam",
       "Before / during handoff — needed early in sprint",
       "—",
-      "Kristina is finalizing the inventory (Miro board, page-by-page) to hand off to Sam; Sam wires it once received. Critical for links + analytics/event tracking at speed. See HC-005."
+      "Kristina Miro inventory still owed (HC-005). Aug 3 — Sam wired known destinations without waiting: Sign In, Donate→/give fallback, homepage hero/invite/doors, Give hero→#become, About Talk-with-Us + share mailto. Remaining unknowns: Spread-the-movement door (WJ), Keela checkout URLs, Events RSVP/join seams."
     ],
     [
       "FEAT-010",
@@ -898,7 +898,7 @@
       "Dave + Sam",
       "Jul 28–29",
       "FEAT-001, FEAT-002",
-      "Live on contentmentweb2.netlify.app. 31 Jul polish: hero trustcue middots, coded Homeroom donate placeholder, mobile orbit bloom cap. Slack review passed 31 Jul (HC-057, Kristina). Live Keela checkout URL is tracked under FEAT-060/HC-075, not a blocker on this ticket."
+      "Live on contentmentweb2.netlify.app. Slack review passed 31 Jul (HC-057). Aug 3 — CTA wires: hero→/why, InviteBand→/give, doors Schools/Events; Homeroom form/note measure 46ch matching lead; Priscillah hr-card remains Dave designed graphic (no text-free asset). Live Keela still FEAT-060/HC-075."
     ],
     [
       "FEAT-011",
@@ -920,7 +920,7 @@
       "Sam",
       "Jul 29–30",
       "FEAT-001, FEAT-002",
-      "Jul 29 — ported to src/pages/why.astro from Dave why-wellbeing handoff. 31 Jul RF-006 QA pass (320–1280 clean; accordion + YT slots OK). Homeroom Keela + newsletter still placeholders (HC-075 / FEAT-070). 1 Aug — RF-008 root cause found here too (not separately reported) and fixed: lightbox iframe was rendering at browser-default size instead of filling the modal; fixed with inline sizing on the iframe string."
+      "Jul 29 — ported to src/pages/why.astro. 31 Jul RF-006 QA pass. 1 Aug — video lightbox sizing fixed (RF-008 pattern). Aug 3 — teacher reels (.vframe.vert) iframes fill 9:16 (missing absolute-fill CSS from Dave handoff); Homeroom donate form measure matched to head copy (52ch). Keela + newsletter still placeholders."
     ],
     [
       "FEAT-030",
@@ -975,7 +975,7 @@
       "Sam",
       "Jul 30–31",
       "FEAT-002",
-      "Get Involved at src/pages/give.astro + homepage HomeroomBand dummy form (data-embed=keela-homeroom). 31 Jul RF-006 QA pass (320–1280 clean; no code fixes). Real Keela blocked on D-02 + D-03 + HC-075."
+      "Get Involved at src/pages/give.astro. 31 Jul RF-006 QA pass. Aug 3 — hero Join Homeroom → #become (Dave original). Real Keela blocked on D-02 + D-03 + HC-075; in-fold Join Homeroom still seams.join."
     ],
     [
       "FEAT-051",
@@ -1118,7 +1118,7 @@
       "Sam / Veron",
       "Aug 7 or FF",
       "FEAT-002",
-      "Jul 29 — ported to src/pages/about.astro from about-deploy-rev4 (D-05 single page). 31 Jul RF-006 QA pass (locked widths clean); Pass-it-On + footer socials wired; favicon.svg added. Newsletter still FEAT-070; roster Dave sign-off still owed."
+      "Jul 29 — about.astro from about-deploy-rev4. 31 Jul RF-006 QA. Aug 3 — hero uses about-hero-team-bali-july2025.jpg (same bytes as prior ab-hero-bali5; hi-res swap still pending Dave); caption \"Dan in Bhutan, 2014\"; Talk with Us shows mailto + hello@contentment.org; Email-this-to-someone share/mailto hardened. Newsletter FEAT-070; roster Dave sign-off still owed."
     ],
     [
       "FEAT-100",
@@ -1444,7 +1444,7 @@
       "Kristina → Sam",
       "Open",
       "Critical",
-      "Jul 28 — Kristina delivers Miro board (page-by-page link mapping) by end of week. Still Critical for FEAT-005. Aug 2 — re-asked of Kristina by name in the Slack team status update, requested by Aug 3."
+      "Jul 28 — Kristina Miro by EOW. Aug 2 — re-asked by Aug 3. Aug 3 — inventory still Open; Sam wired known destinations in seams/Nav/Footer/homepage/give/about ahead of Miro. Still need WJ on Spread-the-movement door + any destinations only Kristina inventory would confirm."
     ],
     [
       "HC-010",

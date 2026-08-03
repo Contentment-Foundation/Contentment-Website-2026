@@ -84,10 +84,13 @@ Prototype menu button only exists at `≤940px` with no drawer. Implement full-s
 Replace `href="#"` and hash-only links with real routes per [Website Architecture](../research/WEBSITE-ARCHITECTURE.md). Footer Explore/Get Involved columns map to Phase 1 pages. Social links: LinkedIn, Instagram, YouTube URLs from comms team (use placeholders only if URLs not yet provided — document in README).
 
 **Acceptance criteria:**
-- [ ] No `href="#"` on nav items
-- [ ] Homeroom nav CTA → `/give/monthly`
-- [ ] Footer links resolve to correct routes or external social URLs
-- [ ] Hash links on homepage (`#why`, etc.) still work on `/` only
+- [x] No `href="#"` on primary nav items (internal routes wired)
+- [ ] Homeroom nav CTA → `/give/monthly` (interim: `/give` until D-03 / Keela)
+- [x] Footer links resolve to correct routes or external social URLs (D-07)
+- [x] Hash links on homepage (`#why`, etc.) still work on `/` only
+- [x] Aug 3 — Sign In → `school.contentment.org`; Donate → `/give` fallback; known homepage CTAs wired (Spread the movement still TBD WJ)
+
+> **Update (3 Aug 2026):** Wired known destinations ahead of Kristina's full Miro inventory (HC-005 still Open). Real Keela checkout/join remain empty (HC-075/071).
 
 ---
 

@@ -13,7 +13,8 @@
  * wired yet" and falls back to a safe default (usually '#').
  */
 export const seams = {
-  /** Keela checkout URL — blocked on Finance (D-02, HC-030). */
+  /** Keela checkout URL — blocked on Finance (D-02, HC-030).
+   *  Until set, Donate CTAs fall back to /give. */
   donate: '',
 
   /** Join / Homeroom "Support a teacher monthly" destination — blocked on the
@@ -38,7 +39,7 @@ export const seams = {
   rsvp: '',
 
   /** Sign-in link for the school platform. */
-  schoolPlatform: '',
+  schoolPlatform: 'https://school.contentment.org/',
 
   link: {
     // D-07 resolved — live-site footer destinations (contentment.org, Jul 2026).
