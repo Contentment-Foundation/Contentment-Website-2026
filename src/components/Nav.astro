@@ -13,6 +13,7 @@ const navLinks = [
 const homeroomHref = seams.join || '/give';
 const donateHref = seams.donate || '/give';
 const signInHref = seams.schoolPlatform || '#';
+const newTab = { target: '_blank', rel: 'noopener' } as const;
 ---
 <header id="hdr">
   <div class="wrap nav">
@@ -22,12 +23,12 @@ const signInHref = seams.schoolPlatform || '#';
     </a>
     <nav class="nav-links" aria-label="Main">
       {navLinks.map((link) => (
-        <a href={link.href}>{link.label}</a>
+        <a href={link.href} {...newTab}>{link.label}</a>
       ))}
     </nav>
     <div class="nav-right">
-      <a href={signInHref} class="signin">Sign In</a>
-      <a href={donateHref} class="nav-cta">Donate</a>
+      <a href={signInHref} class="signin" {...newTab}>Sign In</a>
+      <a href={donateHref} class="nav-cta" {...newTab}>Donate</a>
     </div>
     <button
       type="button"
@@ -48,13 +49,13 @@ const signInHref = seams.schoolPlatform || '#';
     </button>
     <div class="nav-drawer__links">
       {navLinks.map((link) => (
-        <a href={link.href}>{link.label}</a>
+        <a href={link.href} {...newTab}>{link.label}</a>
       ))}
     </div>
     <div class="nav-drawer__actions">
-      <a href={signInHref} class="nav-drawer__signin">Sign In</a>
-      <a href={homeroomHref} class="nav-drawer__cta nav-drawer__cta--homeroom">Join Homeroom</a>
-      <a href={donateHref} class="nav-drawer__cta nav-drawer__cta--donate">Donate</a>
+      <a href={signInHref} class="nav-drawer__signin" {...newTab}>Sign In</a>
+      <a href={homeroomHref} class="nav-drawer__cta nav-drawer__cta--homeroom" {...newTab}>Join Homeroom</a>
+      <a href={donateHref} class="nav-drawer__cta nav-drawer__cta--donate" {...newTab}>Donate</a>
     </div>
   </nav>
 </div>

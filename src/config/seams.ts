@@ -17,9 +17,8 @@ export const seams = {
    *  Until set, Donate CTAs fall back to /give. */
   donate: '',
 
-  /** Join / Homeroom "Support a teacher monthly" destination — blocked on the
-   *  Keela/Homeroom join-flow choreography (HC-071). Falls back to /give when empty. */
-  join: '',
+  /** Join / Homeroom destination. Until Keela join-flow (HC-071), route to /give. */
+  join: '/give',
 
   /** Get Involved "Prefer to give differently" → one-time gift flow. Blocked on
    *  HC-071 (Keela/Homeroom join-flow choreography), same as `join`. */
@@ -50,12 +49,16 @@ export const seams = {
   },
 
   schools: {
-    /** Partner-deck download (For Schools hero + closing section). Pending
-     *  Kristina's button/CTA inventory (HC-005). */
-    deck: '',
+    /** Partner-deck download (For Schools hero + closing section). */
+    deck: 'https://drive.google.com/file/d/1Q-Z0boIG6Nm1LuccmeYngK_SID1x_Ffm/view',
 
     /** School discovery form embed URL (TICKET-041 / D-04).
-     *  Google Form + Slack integration, live 31 Jul 2026. */
-    discoveryFormUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSe2xJASe8EgJ82CEp10y82PM9UPypby22JLyPdMDnFqBcr-qQ/viewform?embedded=true',
+     *  Google Form + Slack exists, but Kristina (Miro, 3 Aug 2026): hold embed for
+     *  Phase 2 — ship the simple /schools page first; re-integrate if people aren't
+     *  using the mailto / Start a Conversation path.
+     *  To restore embed, set to:
+     *  'https://docs.google.com/forms/d/e/1FAIpQLSe2xJASe8EgJ82CEp10y82PM9UPypby22JLyPdMDnFqBcr-qQ/viewform?embedded=true'
+     */
+    discoveryFormUrl: '',
   },
 };

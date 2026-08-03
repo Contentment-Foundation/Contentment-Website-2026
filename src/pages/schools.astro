@@ -41,7 +41,7 @@ import { seams } from '../config/seams';
       <p class="sub">Evidence-based wellbeing that starts with your educators and reaches every student.</p>
       <div class="hero-actions">
         <a href="#start" class="btn btn-primary">Start a Conversation <span class="arrow">&rarr;</span></a>
-        <a href={seams.schools.deck || '#'} class="btn btn-ghost">Download the partner deck</a>
+        <a href={seams.schools.deck || '#'} class="btn btn-ghost" target="_blank" rel="noopener">Download the partner deck</a>
       </div>
       <p class="credline">10 years of work across 12 countries, in partnership with schools, districts, and national systems.</p>
     </div>
@@ -353,7 +353,12 @@ import { seams } from '../config/seams';
   </div>
 </section>
 
-<!-- 12a · DISCOVERY FORM (TICKET-041 / D-04: Google Form + Slack) -->
+<!-- 12a · DISCOVERY FORM — Phase 2 hold (Kristina Miro, 3 Aug 2026):
+     "Let's put this on hold for phase 2. Let's test the simple page first and then
+     integrate it if we see that people are not using the form."
+     Form URL kept in seams.schools.discoveryFormUrl comment; re-enable by setting
+     the URL and uncommenting the block below. Close section (#start) is the launch CTA. -->
+{/*
 {seams.schools.discoveryFormUrl && (
   <section class="band discovery-form">
     <div class="wrap">
@@ -388,6 +393,7 @@ import { seams } from '../config/seams';
     </div>
   </section>
 )}
+*/}
 
 <!-- 13 · CLOSE -->
 <div class="wavetop" aria-hidden="true">
@@ -402,7 +408,7 @@ import { seams } from '../config/seams';
     <p class="ctag anim d1">The best partnerships start with a conversation, not a contract. Tell us where you are and what you are trying to build, and we will figure out the rest together.</p>
     <div class="close-cta anim d2">
       <a href="mailto:hello@contentment.org?subject=School%20partnership%20enquiry" class="btn btn-primary">Start a Conversation <span class="arrow">&rarr;</span></a>
-      <a href={seams.schools.deck || '#'} class="btn btn-ghost">Download the partner deck</a>
+      <a href={seams.schools.deck || '#'} class="btn btn-ghost" target="_blank" rel="noopener">Download the partner deck</a>
     </div>
     <p class="cmail anim d2">Or email <a href="mailto:hello@contentment.org">hello@contentment.org</a></p>
   </div>
@@ -723,7 +729,7 @@ import { seams } from '../config/seams';
   .matrix col.c-feat{background:rgba(31,175,192,.1)}
   .matrix thead th{vertical-align:top;text-align:left;padding:16px 16px 18px}
   .matrix thead th.rowhdr{width:26%}
-  .matrix .col-name{font-family:var(--display);font-weight:500;font-size:1.14rem;color:#fff;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .matrix .col-name{font-family:var(--display);font-weight:500;font-size:1.4rem;color:#fff;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .matrix .col-price{font-size:.86rem;color:#bfeef5;font-weight:600}
   .mostchosen{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--deep);background:var(--teal);padding:3px 8px;border-radius:999px}
   .matrix tbody .grouprow th{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#bfeef5;padding:16px 16px 8px;border-top:1px solid rgba(255,255,255,.16)}

@@ -162,7 +162,7 @@ import { seams } from '../config/seams';
       <p class="tier-note">Together with other monthly donors, each gift contributes to one fully trained educator each year and the students they reach.</p>
       <div class="homeroom-cta">
         <!-- SEAM: Keela join flow (Somesh). data-join is the single wiring hook. -->
-        <a href={seams.join || '#'} class="btn btn-primary" data-join="homeroom">Join Homeroom <span class="arrow">&rarr;</span></a>
+        <a href={seams.join.startsWith('http') ? seams.join : '#become'} class="btn btn-primary" data-join="homeroom" {...(seams.join.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>Join Homeroom <span class="arrow">&rarr;</span></a>
         <p class="taxline">Contentment Foundation is a 501(c)(3) nonprofit (EIN 47-5432756), and your contributions are tax-deductible to the extent permitted by law. Thank you for being part of this work.</p>
       </div>
     </div>
@@ -178,8 +178,8 @@ import { seams } from '../config/seams';
       <p class="body">You can make a one-time gift or explore other ways to be part of the movement. However you show up, it matters.</p>
     </div>
     <div class="gi-other-actions">
-      <a href={seams.giveOneTime || '#'} class="btn btn-primary" data-join="one-time">Make a one-time gift <span class="arrow">&rarr;</span></a>
-      <a href={seams.waysToGive || '#'} class="btn btn-outline" data-join="ways-to-give">Other ways to give</a>
+      <a href={seams.giveOneTime || '#'} class="btn btn-primary" data-join="one-time" target="_blank" rel="noopener">Make a one-time gift <span class="arrow">&rarr;</span></a>
+      <a href={seams.waysToGive || '#'} class="btn btn-outline" data-join="ways-to-give" target="_blank" rel="noopener">Other ways to give</a>
     </div>
   </div>
 </section>

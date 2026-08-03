@@ -26,9 +26,8 @@
 // choreography as data-join). Every gated CTA also keeps its verbatim data-event attribute
 // for THE CRITICAL SEAM (future return-trip redirect back to that event) — see the handoff
 // doc; nothing is wired to it yet, it's just carried through inert. The 3 email-capture
-// slots (data-embed="festival-signup" | "event-announcements" | "newsletter-signup") stay as
-// literal placeholders (FEAT-070 / D-19 / D-24). Destination (Flodesk vs Keela vs other) is
-// open — Somesh asking WoeiJing + Kristina; do NOT invent embeds until decided.
+// forms (data-embed="newsletter-signup" | "event-announcements") match Home/About/Why —
+// first name + email UI, client-side stub until Flodesk (FEAT-070 / D-19 / D-24).
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { seams } from '../config/seams';
 ---
@@ -53,7 +52,7 @@ import { seams } from '../config/seams';
       <aside class="ev-hero-card">
         <h2>Join The Contentment Festival 2026</h2>
         <p>November 13 &amp; 14. Held across time zones. No cost, no camera required, no experience needed. Just yourself!</p>
-        <a href={seams.join || '#'} class="btn btn-primary" data-join="hero">Save my free spot <span class="arrow">&rarr;</span></a>
+        <a href={seams.join || '/give'} class="btn btn-primary" data-join="hero" target="_blank" rel="noopener">Save my free spot <span class="arrow">&rarr;</span></a>
       </aside>
     </div>
   </div>
@@ -68,11 +67,15 @@ import { seams } from '../config/seams';
       <p class="ev-signup-sub">One-ish email a month, usually about a teacher, a tool or resource you can try, and events you can join.</p>
     </div>
     <div class="ev-signup-form">
-      <!-- D-24 / FEAT-070: provider TBD (Flodesk vs Keela vs other) — WoeiJing + Kristina. Placeholder only. -->
-      <div class="ev-capture-slot" data-embed="newsletter-signup" role="img" aria-label="Email signup coming soon">
-        <span class="ev-capture-label">Email capture</span>
-        <span class="ev-capture-sub">Embed slot &middot; tech to wire</span>
-      </div>
+      <!-- FEAT-070 / D-24: Flodesk later — same first-name + email stub as Home/About/Why. -->
+      <form class="ev-capture" data-embed="newsletter-signup">
+        <div class="ev-capture-row">
+          <input type="text" name="first_name" placeholder="First name" aria-label="First name" autocomplete="given-name">
+          <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Keep me in the loop</button>
+        <span class="ev-capture-fine">No noise. No spam. Leave whenever you want.</span>
+      </form>
     </div>
   </div>
 </section>
@@ -100,7 +103,7 @@ import { seams } from '../config/seams';
         <h2 class="title">What's coming up</h2>
         <p class="body">Some gatherings are open to everyone. Others are exclusively for educators and Homeroom members.</p>
       </div>
-      <a href={seams.join || '#'} class="btn btn-primary ev-up-join" data-join="upcoming">Join Homeroom <span class="arrow">&rarr;</span></a>
+      <a href={seams.join || '/give'} class="btn btn-primary ev-up-join" data-join="upcoming" target="_blank" rel="noopener">Join Homeroom <span class="arrow">&rarr;</span></a>
     </div>
 
     <div class="ev-filters" role="tablist" aria-label="Filter events">
@@ -123,7 +126,7 @@ import { seams } from '../config/seams';
           <h3>Contentment Festival</h3>
           <p class="ev-meta">November 13 &amp; 14, 2026 &middot; Virtual &middot; Free</p>
           <p class="ev-desc">Two hours, every time zone. Last year, nearly 100 people from a dozen countries paused together to breathe and practice. No cost, no experience needed.</p>
-          <a href={seams.rsvp || '#'} class="btn btn-primary ev-btn" data-rsvp="festival-virtual">Save my spot <span class="arrow">&rarr;</span></a>
+          <a href={seams.rsvp || '#'} class="btn btn-primary ev-btn" data-rsvp="festival-virtual" target="_blank" rel="noopener">Save my spot <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -137,7 +140,7 @@ import { seams } from '../config/seams';
           <h3>Contentment Festival 2026 &middot; IRL Near You</h3>
           <p class="ev-meta">November 13 &amp; 14, 2026 &middot; Worldwide &middot; Mixed free &amp; ticketed</p>
           <p class="ev-desc">The 10th anniversary celebration, everywhere at once.</p>
-          <a href={seams.rsvp || '#'} class="btn btn-primary ev-btn" data-embed="festival-signup" data-rsvp="festival-irl">Be first to know <span class="arrow">&rarr;</span></a>
+          <a href={seams.rsvp || '#'} class="btn btn-primary ev-btn" data-embed="festival-signup" data-rsvp="festival-irl" target="_blank" rel="noopener">Be first to know <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -152,7 +155,7 @@ import { seams } from '../config/seams';
           <p class="ev-meta">2027 &middot; Paid, limited places</p>
           <p class="ev-desc">Our signature week of renewal: reflection, nature, community, and practice. Last year welcomed 64 guests from 7 countries. Places are limited.</p>
           <p class="ev-note">Homeroom members receive first access and member pricing.</p>
-          <a href={seams.rsvp || '#'} class="btn btn-primary ev-btn" data-rsvp="bali-retreat">Join the waitlist <span class="arrow">&rarr;</span></a>
+          <a href={seams.rsvp || '#'} class="btn btn-primary ev-btn" data-rsvp="bali-retreat" target="_blank" rel="noopener">Join the waitlist <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -166,7 +169,7 @@ import { seams } from '../config/seams';
           <h3>Monthly Wellbeing Workshop</h3>
           <p class="ev-meta">Every month &middot; Virtual &middot; Included in membership</p>
           <p class="ev-desc">A guided 60 to 90 minutes with our wellbeing team: the same Four Pillars practices our teachers learn, offered to the people who support them.</p>
-          <a href={seams.join || '#'} class="btn btn-primary ev-btn" data-join="monthly-workshop">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={seams.join || '/give'} class="btn btn-primary ev-btn" data-join="monthly-workshop" target="_blank" rel="noopener">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -180,7 +183,7 @@ import { seams } from '../config/seams';
           <h3>Monthly Homeroom Sessions</h3>
           <p class="ev-meta">1 to 2 times per month &middot; Virtual &middot; Included in membership</p>
           <p class="ev-desc">Workshops, community gatherings, and guest speakers, all in one hour.</p>
-          <a href={seams.join || '#'} class="btn btn-primary ev-btn" data-join="homeroom-sessions">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={seams.join || '/give'} class="btn btn-primary ev-btn" data-join="homeroom-sessions" target="_blank" rel="noopener">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -194,7 +197,7 @@ import { seams } from '../config/seams';
           <h3>Community Town Hall</h3>
           <p class="ev-meta">Quarterly &middot; Virtual &middot; Included in membership</p>
           <p class="ev-desc">Our team and partner educators share what's working, what's hard, and what's next. Members ask anything.</p>
-          <a href={seams.join || '#'} class="btn btn-primary ev-btn" data-join="town-hall">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={seams.join || '/give'} class="btn btn-primary ev-btn" data-join="town-hall" target="_blank" rel="noopener">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -222,7 +225,7 @@ import { seams } from '../config/seams';
           <li>Front row seat to what our team is working on</li>
         </ul>
         <div class="ev-access-foot ev-access-foot-solo">
-          <a href={seams.join || '#'} class="btn btn-primary ev-access-cta" data-join="access-band">Join Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={seams.join || '/give'} class="btn btn-primary ev-access-cta" data-join="access-band" target="_blank" rel="noopener">Join Homeroom <span class="arrow">&rarr;</span></a>
         </div>
         <p class="ev-access-fine">Cancel anytime, no hard feelings. Your gift helps teachers access events like these on scholarship.</p>
         <p class="ev-access-legal">Contentment Foundation is a 501(c)(3) nonprofit (EIN 47-5432756), and your contributions are tax-deductible to the extent permitted by law. Thank you for being part of this work.</p>
@@ -243,11 +246,15 @@ import { seams } from '../config/seams';
         <p class="ev-why-promise">&ldquo;We're with you&rdquo; is the promise we make to every teacher. Our gatherings are where everyone gets to feel it.</p>
         <div class="ev-why-signup">
           <p class="ev-why-signup-lead">Be first to know when events and experiences are announced.</p>
-          <!-- FEAT-070 (Flodesk integration) not wired yet — placeholder slot. -->
-          <div class="ev-capture-slot ev-why-capture" data-embed="event-announcements" role="img" aria-label="Email signup coming soon">
-            <span class="ev-capture-label">Email capture</span>
-            <span class="ev-capture-sub">First name + email &middot; tech to wire</span>
-          </div>
+          <!-- FEAT-070 / D-24: Flodesk later — UI stub only. -->
+          <form class="ev-capture ev-capture--on-dark" data-embed="event-announcements">
+            <div class="ev-capture-row">
+              <input type="text" name="first_name" placeholder="First name" aria-label="First name" autocomplete="given-name">
+              <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Keep me posted</button>
+            <span class="ev-capture-fine">No noise. No spam. Leave whenever you want.</span>
+          </form>
         </div>
       </div>
     </div>
@@ -276,7 +283,7 @@ import { seams } from '../config/seams';
           <span class="ev-recap-place">Bali &middot; The Worldwide Wellbeing Retreat</span>
           <p>64 guests, 7 countries, 20 educators on member-funded scholarships, many never given a week for their own renewal in their whole careers. Mornings of practice, afternoons by the water, evenings in a circle.</p>
           <p class="ev-recap-hook">The next Wellbeing Worldwide Retreat is forming now.</p>
-          <a href={seams.rsvp || '#'} class="ev-recap-link" data-rsvp="bali-retreat">Join the waitlist <span class="arrow">&rarr;</span></a>
+          <a href={seams.rsvp || '#'} class="ev-recap-link" data-rsvp="bali-retreat" target="_blank" rel="noopener">Join the waitlist <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -286,7 +293,7 @@ import { seams } from '../config/seams';
           <span class="ev-recap-place">Mt Shasta &middot; Contentment Journey</span>
           <p>Twenty educators, community weavers, and wellbeing leaders in the foothills of a mountain, doing the radical thing: slowing down. Strangers on day one, a community by the last morning.</p>
           <p class="ev-recap-hook">Regional journeys continue in 2027.</p>
-          <a href={seams.rsvp || '#'} class="ev-recap-link" data-rsvp="regional-journey">Join the waitlist <span class="arrow">&rarr;</span></a>
+          <a href={seams.rsvp || '#'} class="ev-recap-link" data-rsvp="regional-journey" target="_blank" rel="noopener">Join the waitlist <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -297,7 +304,7 @@ import { seams } from '../config/seams';
           <p>200 school counselors trained across retreats woven into a national wellbeing strategy, and more than 90% said their burnout was directly addressed.</p>
           <blockquote class="ev-recap-quote">&ldquo;I can't wait to welcome myself back home, to a version of myself that feels whole, present and at peace.&rdquo;<cite>Retreat participant</cite></blockquote>
           <p class="ev-recap-hook">This is what your monthly gift makes possible.</p>
-          <a href={seams.join || '#'} class="ev-recap-link" data-join="recap-bhutan">Join Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={seams.join || '/give'} class="ev-recap-link" data-join="recap-bhutan" target="_blank" rel="noopener">Join Homeroom <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -333,16 +340,20 @@ import { seams } from '../config/seams';
       <div class="ev-close-primary anim">
         <h2 class="ev-close-title">Want first access to all of it?</h2>
         <p class="ev-close-body">Homeroom members never wait and receive priority booking on every experience and get access to members-only workshops - and join a global community.</p>
-        <a href={seams.join || '#'} class="btn btn-primary ev-close-btn" data-join="close">Join Homeroom <span class="arrow">&rarr;</span></a>
+        <a href={seams.join || '/give'} class="btn btn-primary ev-close-btn" data-join="close" target="_blank" rel="noopener">Join Homeroom <span class="arrow">&rarr;</span></a>
       </div>
       <aside class="ev-close-secondary anim">
         <h3>Just want to know what's coming?</h3>
         <p>Get event announcements in your inbox.</p>
-        <!-- D-24 / FEAT-070: provider TBD — placeholder only; do not invent Flodesk/Keela embeds. -->
-        <div class="ev-capture-slot" data-embed="event-announcements" role="img" aria-label="Email signup coming soon">
-          <span class="ev-capture-label">Email capture</span>
-          <span class="ev-capture-sub">Embed slot &middot; tech to wire</span>
-        </div>
+        <!-- FEAT-070 / D-24: Flodesk later — UI stub only. -->
+        <form class="ev-capture ev-capture--on-dark" data-embed="event-announcements">
+          <div class="ev-capture-row">
+            <input type="text" name="first_name" placeholder="First name" aria-label="First name" autocomplete="given-name">
+            <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
+          </div>
+          <button class="btn btn-primary" type="submit">Keep me posted</button>
+          <span class="ev-capture-fine">No noise. No spam. Leave whenever you want.</span>
+        </form>
       </aside>
     </div>
   </div>
@@ -370,9 +381,8 @@ import { seams } from '../config/seams';
   .ev-signup-inner{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(36px,5vw,72px);align-items:center}
   .ev-signup-lead{font-family:var(--display);font-weight:500;font-size:clamp(1.6rem,2.8vw,2.4rem);line-height:1.25;color:#1d1d1d;text-wrap:balance}
   .ev-signup-sub{margin-top:16px;font-size:clamp(1.02rem,1.3vw,1.18rem);line-height:1.55;color:#54bf98;font-weight:500;max-width:52ch}
-  .ev-signup-form .ev-capture-slot{min-height:150px;background:#fff;border:1px dashed var(--line)}
-  .ev-signup-form .ev-capture-label{color:var(--deep)}
-  .ev-signup-form .ev-capture-sub{color:var(--slate)}
+  .ev-signup-form .ev-capture{max-width:100%}
+  .ev-signup-form .ev-capture-fine{color:var(--slate)}
   @media(max-width:860px){
     .ev-signup-inner{grid-template-columns:1fr;gap:28px}
   }
@@ -438,11 +448,26 @@ import { seams } from '../config/seams';
     .ev-flagship-txt{max-width:100%}
   }
 
-  /* email capture seam (base look; ev-signup-form / ev-why-capture / ev-close-secondary
-     scope their own color overrides on top of this) */
-  .ev-capture-slot{position:relative;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;min-height:120px;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.3)}
-  .ev-capture-label{font-family:var(--display);font-weight:500;font-size:1.1rem;color:#fff}
-  .ev-capture-sub{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+  /* email capture forms — same fields as Home/About/Why; Flodesk later (FEAT-070 / D-24) */
+  .ev-capture{display:flex;flex-direction:column;gap:12px;width:100%;max-width:min(420px,100%)}
+  .ev-capture-row{display:flex;gap:12px;width:100%;min-width:0}
+  .ev-capture input{
+    flex:1 1 0;min-width:0;width:100%;
+    padding:.95em 1.1em;border-radius:12px;border:1.5px solid var(--line);
+    font-family:var(--body);font-size:1rem;background:#fff;color:var(--ink);transition:border-color .25s
+  }
+  .ev-capture input:focus{outline:none;border-color:var(--teal)}
+  .ev-capture .btn-primary{justify-content:center;width:100%;white-space:normal;text-align:center}
+  .ev-capture-fine{font-size:.84rem;color:var(--slate);opacity:.85}
+  .ev-capture--on-dark input{
+    background:rgba(255,255,255,.96);border-color:rgba(255,255,255,.35)
+  }
+  .ev-capture--on-dark .btn-primary{background:#fff;color:var(--deep)}
+  .ev-capture--on-dark .btn-primary:hover{background:#eafafc}
+  .ev-capture--on-dark .ev-capture-fine{color:rgba(255,255,255,.78);opacity:1}
+  @media(max-width:520px){
+    .ev-capture-row{flex-direction:column}
+  }
 
   /* 3. UPCOMING GRID */
   .ev-upcoming{background:var(--paper)}
@@ -557,7 +582,7 @@ import { seams } from '../config/seams';
   /* [Why we gather] WJ: inline email-subscription box, pooled left with the copy */
   .ev-why-signup{margin-top:30px;max-width:430px}
   .ev-why-signup-lead{font-family:var(--display);font-weight:500;font-size:1.15rem;line-height:1.35;color:#fff;margin-bottom:14px;text-shadow:0 1px 18px rgba(4,20,14,.7)}
-  .ev-why-capture{min-height:96px}
+  .ev-why-signup .ev-capture{max-width:100%}
   @media(max-width:860px){
     .ev-why{min-height:auto}
     .ev-why-media{background-position:56% 40%}
@@ -629,9 +654,7 @@ import { seams } from '../config/seams';
   .ev-close-secondary{align-self:end;background:rgba(2,48,68,.58);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:clamp(24px,2.2vw,32px);backdrop-filter:blur(12px);box-shadow:0 26px 70px -30px rgba(1,22,34,.85)}
   .ev-close-secondary h3{font-family:var(--display);font-weight:600;font-size:1.32rem;color:#fff;margin-bottom:8px}
   .ev-close-secondary>p{font-size:.96rem;color:rgba(255,255,255,.9);margin-bottom:20px}
-  .ev-close-secondary .ev-capture-slot{background:rgba(255,255,255,.1);border:1px dashed rgba(255,255,255,.4)}
-  .ev-close-secondary .ev-capture-label{color:#fff}
-  .ev-close-secondary .ev-capture-sub{color:rgba(255,255,255,.72)}
+  .ev-close-secondary .ev-capture{max-width:100%}
   @media(max-width:900px){
     .ev-close{min-height:auto}
     .ev-close-grid{grid-template-columns:1fr;gap:22px;padding-top:clamp(90px,20vh,160px);padding-bottom:clamp(36px,6vw,52px)}
@@ -660,7 +683,17 @@ import { seams } from '../config/seams';
   // from events.html's inline <script> (nav scroll-state, hero entrance, reveal-on-scroll are
   // already handled globally by BaseLayout's nav.js/animations.js).
   import { initEventFilters, initEventParallax, initEventVideos } from '../scripts/events.js';
+  import { trackEvent } from '../scripts/analytics.js';
   initEventFilters();
   initEventParallax();
   initEventVideos();
+
+  // FEAT-070: forms are UI-only until Flodesk — prevent navigation, fire analytics stub.
+  document.querySelectorAll('form.ev-capture').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const source = form.getAttribute('data-embed') || 'events_email_capture';
+      trackEvent('newsletter_submit', { source: `events_${source}` });
+    });
+  });
 </script>
