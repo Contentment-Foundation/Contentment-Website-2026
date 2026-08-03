@@ -4,7 +4,7 @@
     "version": "2026-08-03",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Aug 3: /give Homeroom Dreamer/Catalyst/Visionary tiers now selectable (joinTiers seam for per-tier Keela URLs). Aug 3 Nav priorities: (1) Conversion paths \u2014 Events festival Save-my-spot no longer routes to /give; RSVP/waitlist interim \u2192 #ev-signup email capture until seams.rsvp/Keela; Homeroom join stays /give; school enquiry = mailto #start; one-time/other-ways still # pending Lorna. (2) Homeroom offer \u2014 D-01 $25/$50/$100: killed remaining $5 entry copy on homepage InviteBand + meta; Give page tiers already $25/$50/$100; donate widgets match. Benefits still need Kristina/WJ editorial pass to unify Events access list vs Give benefit cards if desired. STILL BLOCKED \u2014 Keela URLs HC-075/071; D-24 Flodesk; HC-005 Spread-the-movement. Go-live Aug 21."
+    "summary": "Aug 3: /give Homeroom Dreamer/Catalyst/Visionary tiers now selectable (joinTiers seam for per-tier Keela URLs). Aug 3 Nav priorities: (1) Conversion paths \u2014 Events festival Save-my-spot no longer routes to /give; RSVP/waitlist interim \u2192 #ev-signup email capture until seams.rsvp/Keela; Homeroom join stays /give; school enquiry = mailto #start; one-time/other-ways still # pending Lorna. (2) Homeroom offer \u2014 D-01 $25/$50/$100: killed remaining $5 entry copy on homepage InviteBand + meta; Give page tiers already $25/$50/$100; donate widgets match. Benefits still need Kristina/WJ editorial pass to unify Events access list vs Give benefit cards if desired. (3) PostHog wizard PR #1 triaged \u2014 kept its 6 new conversion events + vercel.json CSP, reverted the consent/cookie regression, env-var rename and unused dep (FEAT-080). STILL BLOCKED \u2014 Keela URLs HC-075/071; D-24 Flodesk; HC-005 Spread-the-movement. Go-live Aug 21."
   },
   "overview": [
     [
@@ -1030,7 +1030,7 @@
       "Sam",
       "Aug 10\u201312",
       "FEAT-002",
-      "31 Jul \u2014 scaffolded (Analytics.astro, Sentry, cta_homeroom_click/newsletter_submit), all no-op until real credentials land. Sam sourcing GA4/PostHog/Osano/Clarity/Sentry IDs (HC-076)."
+      "31 Jul \u2014 scaffolded (Analytics.astro, Sentry, cta_homeroom_click/newsletter_submit), all no-op until real credentials land. Sam sourcing GA4/PostHog/Osano/Clarity/Sentry IDs (HC-076). Aug 3 \u2014 PostHog wizard PR #1 reduced to its 6 usable events (homeroom_join_interest, event_rsvp_interest, video_started, school_partner_inquiry_started, partner_deck_downloaded, content_shared) + vercel.json CSP; its cookie-setting/autocapture init, PUBLIC_POSTHOG_KEY\u2192PROJECT_TOKEN rename and unused posthog-js dep reverted (violated DECISION-002 cookieless / DECISION-007). Event contract now 8 events, still no-op until HC-076."
     ],
     [
       "FEAT-081",
