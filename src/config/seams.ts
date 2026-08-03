@@ -20,6 +20,14 @@ export const seams = {
   /** Join / Homeroom destination. Until Keela join-flow (HC-071), route to /give. */
   join: '/give',
 
+  /** Per-tier Keela checkout URLs (D-01 $25/$50/$100). Empty until HC-075/071.
+   *  When set, /give tier picker routes Join Homeroom to the selected tier URL. */
+  joinTiers: {
+    25: '',
+    50: '',
+    100: '',
+  },
+
   /** Get Involved "Prefer to give differently" → one-time gift flow. Blocked on
    *  HC-071 (Keela/Homeroom join-flow choreography), same as `join`. */
   giveOneTime: '',

@@ -4,7 +4,7 @@
     "version": "2026-08-03",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Aug 3 (pm): Schools partner deck Drive URL live; Google Form embed Phase 2 hold (Kristina Miro); pricing tier titles 1.4rem. Events \u2014 email-capture UI forms (first name+email stub, Flodesk later D-24/FEAT-070); Join Homeroom CTAs \u2192 /give (seams.join='/give' until Keela); See the stories \u2192 /our-impact. Sitewide content/nav text links open in new tab where they leave the page. STILL WAITING \u2014 Kristina HC-005 Miro inventory; WJ Spread-the-movement; WJ+Kristina D-24 provider; Lorna Keela HC-075/071. Aug 7 build-sprint end + final review. Hard go-live Aug 21."
+    "summary": "Aug 3: /give Homeroom Dreamer/Catalyst/Visionary tiers now selectable (joinTiers seam for per-tier Keela URLs). Aug 3 Nav priorities: (1) Conversion paths \u2014 Events festival Save-my-spot no longer routes to /give; RSVP/waitlist interim \u2192 #ev-signup email capture until seams.rsvp/Keela; Homeroom join stays /give; school enquiry = mailto #start; one-time/other-ways still # pending Lorna. (2) Homeroom offer \u2014 D-01 $25/$50/$100: killed remaining $5 entry copy on homepage InviteBand + meta; Give page tiers already $25/$50/$100; donate widgets match. Benefits still need Kristina/WJ editorial pass to unify Events access list vs Give benefit cards if desired. STILL BLOCKED \u2014 Keela URLs HC-075/071; D-24 Flodesk; HC-005 Spread-the-movement. Go-live Aug 21."
   },
   "overview": [
     [
@@ -466,7 +466,7 @@
     [
       "D-01",
       "Homeroom tier amounts",
-      "Resolved: $25/$50/$100 (was $5/$25/$100 vs $25/$50/$100)",
+      "Resolved: $25/$50/$100 (was $5/$25/$100 vs $25/$50/$100). Aug 3: homepage entry copy aligned to $25 (was still saying $5).",
       "Leadership / Finance",
       "Resolved",
       "\u2014",
@@ -876,7 +876,7 @@
       "Sam",
       "Jul 29",
       "FEAT-002",
-      "Internal pages + /docs + socials (D-07). Aug 3 \u2014 Sign In \u2192 school.contentment.org; Donate\u2192/give until Keela; homepage hero\u2192/why, InviteBand\u2192/give, doors Schools/Events; seams.join='/give'. Content/footer/nav text links use target=_blank when leaving the page. Spread the movement still # (WJ). HC-005 Open."
+      "Aug 3 Nav conversion-path pass: Events RSVP/waitlist \u2192 #ev-signup (not /give); Join Homeroom \u2192 /give; Donate \u2192 /give interim; school Start a Conversation \u2192 mailto; partner deck live. Dead: giveOneTime/waysToGive #, Spread the movement #, Flodesk stubs. HC-005 Open."
     ],
     [
       "FEAT-005",
@@ -898,7 +898,7 @@
       "Dave + Sam",
       "Jul 28\u201329",
       "FEAT-001, FEAT-002",
-      "Live on contentmentweb2.netlify.app. Slack review passed 31 Jul (HC-057). Aug 3 \u2014 CTA wires: hero\u2192/why, InviteBand\u2192/give, doors Schools/Events; Homeroom form/note measure 46ch matching lead; Priscillah hr-card remains Dave designed graphic (no text-free asset). Live Keela still FEAT-060/HC-075."
+      "Live on contentmentweb2.netlify.app. Slack review passed 31 Jul (HC-057). Aug 3 \u2014 CTA wires: hero\u2192/why, InviteBand\u2192/give, doors Schools/Events; Homeroom form/note measure 46ch matching lead; Priscillah hr-card remains Dave designed graphic (no text-free asset). Live Keela still FEAT-060/HC-075. Aug 3 \u2014 InviteBand Homeroom entry $25/mo (D-01)."
     ],
     [
       "FEAT-011",
@@ -909,7 +909,7 @@
       "Sam",
       "31 Jul",
       "FEAT-010",
-      "31 Jul \u2014 Four Pillars fixed to verbatim brief wording, Homeroom CTA fixed to \"Join Homeroom, from $5/month\". No banned words found elsewhere."
+      "31 Jul Four Pillars + Homeroom CTA. Aug 3 \u2014 D-01 copy: InviteBand + homepage meta $5\u2192$25/month (HC-041). Give tiers already $25/$50/$100 Dreamer/Catalyst/Visionary."
     ],
     [
       "FEAT-020",
@@ -975,7 +975,7 @@
       "Sam",
       "Jul 30\u201331",
       "FEAT-002",
-      "Get Involved at src/pages/give.astro. 31 Jul RF-006 QA pass. Aug 3 \u2014 hero Join Homeroom \u2192 #become (Dave original). Real Keela blocked on D-02 + D-03 + HC-075; in-fold Join Homeroom still seams.join."
+      "Get Involved at src/pages/give.astro. 31 Jul RF-006 QA pass. Aug 3 \u2014 hero Join Homeroom \u2192 #become (Dave original). Real Keela blocked on D-02 + D-03 + HC-075; in-fold Join Homeroom still seams.join. Aug 3 \u2014 Become section tiers selectable; seams.joinTiers ready for Keela."
     ],
     [
       "FEAT-051",
@@ -1085,7 +1085,7 @@
       "Sam",
       "Aug 6\u20137",
       "FEAT-002",
-      "Jul 29 port; HC-072 review-only. 31 Jul RF-006/007. Aug 3 \u2014 replaced Email-capture placeholders with first-name+email forms (Flodesk later FEAT-070/D-24); Join Homeroom/Unlock\u2192/give; See the stories\u2192/our-impact. RSVP seams still empty."
+      "Aug 3 \u2014 Save my free spot / RSVP / waitlist no longer use seams.join\u2192/give (Nav). Interim destination #ev-signup until seams.rsvp. Join Homeroom/Unlock still /give. HC-072 review-only."
     ],
     [
       "FEAT-032",
@@ -1691,7 +1691,7 @@
       "Dave + Sam",
       "Confirmed",
       "High",
-      "Confirmed \u2014 D-01 $25/$50/$100 (Kristina). Sam still audits CTA copy during build to match."
+      "Confirmed \u2014 D-01 $25/$50/$100 (Kristina). Aug 3 Sam: homepage InviteBand + meta updated $5\u2192$25; Give tiers + donate chips already matched. Still audit any stray $5 in briefs/docs; benefits language Events vs Give may still differ (Nav Homeroom proposition ask)."
     ],
     [
       "HC-050",

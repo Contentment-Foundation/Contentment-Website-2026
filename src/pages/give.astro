@@ -18,6 +18,15 @@
 // This builds the single page Dave shipped at the one route Nav.astro already links to.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { seams } from '../config/seams';
+
+const joinFallback = seams.join || '/give';
+const tierUrls = {
+  25: seams.joinTiers?.[25] || '',
+  50: seams.joinTiers?.[50] || '',
+  100: seams.joinTiers?.[100] || '',
+};
+const defaultTierHref = tierUrls[100] || (joinFallback.startsWith('http') ? joinFallback : '#become');
+const defaultTierExternal = defaultTierHref.startsWith('http');
 ---
 <BaseLayout
   title="Get Involved — The Contentment Foundation"
@@ -136,33 +145,47 @@ import { seams } from '../config/seams';
       <h2 class="become-title">Join <span class="script">Homeroom</span></h2>
       <p class="become-body">You believe that when one teacher thrives, generations flourish. You also care to see wellbeing as the foundation of schools, not just a nice-to-have. When you give monthly, you join Homeroom: people around the world who keep showing up for teachers, month after month.</p>
       <p class="become-sub">Ready to join? Choose your monthly giving level and become part of Homeroom today.</p>
-      <div class="tiers">
-        <div class="tier tier-1">
+      <div
+        class="tiers"
+        role="radiogroup"
+        aria-label="Monthly giving level"
+        data-join-fallback={joinFallback}
+        data-tier-25={tierUrls[25]}
+        data-tier-50={tierUrls[50]}
+        data-tier-100={tierUrls[100]}
+      >
+        <button type="button" class="tier tier-1" role="radio" aria-checked="false" data-amount="25" data-tier="dreamer">
           <span class="amt">$25<span>/mo</span></span>
           <div class="tcopy">
             <span class="tname">Dreamer</span>
             <span class="tdesc">Helps train an educator each year.</span>
           </div>
-        </div>
-        <div class="tier tier-2">
+        </button>
+        <button type="button" class="tier tier-2" role="radio" aria-checked="false" data-amount="50" data-tier="catalyst">
           <span class="amt">$50<span>/mo</span></span>
           <div class="tcopy">
             <span class="tname">Catalyst</span>
             <span class="tdesc">Helps bring this training to a classroom community.</span>
           </div>
-        </div>
-        <div class="tier tier-3">
+        </button>
+        <button type="button" class="tier tier-3 is-selected" role="radio" aria-checked="true" data-amount="100" data-tier="visionary">
           <span class="amt">$100<span>/mo</span></span>
           <div class="tcopy">
             <span class="tname">Visionary</span>
             <span class="tdesc">Helps scale training across teams of educators.</span>
           </div>
-        </div>
+        </button>
       </div>
       <p class="tier-note">Together with other monthly donors, each gift contributes to one fully trained educator each year and the students they reach.</p>
       <div class="homeroom-cta">
-        <!-- SEAM: Keela join flow (Somesh). data-join is the single wiring hook. -->
-        <a href={seams.join.startsWith('http') ? seams.join : '#become'} class="btn btn-primary" data-join="homeroom" {...(seams.join.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>Join Homeroom <span class="arrow">&rarr;</span></a>
+        <!-- SEAM: Keela join flow — href updates from selected tier when joinTiers URLs land. -->
+        <a
+          href={defaultTierHref}
+          class="btn btn-primary"
+          data-join="homeroom"
+          data-selected-amount="100"
+          {...(defaultTierExternal ? { target: '_blank', rel: 'noopener' } : {})}
+        >Join Homeroom <span class="arrow">&rarr;</span></a>
         <p class="taxline">Contentment Foundation is a 501(c)(3) nonprofit (EIN 47-5432756), and your contributions are tax-deductible to the extent permitted by law. Thank you for being part of this work.</p>
       </div>
     </div>
@@ -550,4 +573,70 @@ import { seams } from '../config/seams';
     .gi-other .title{font-size:clamp(1.85rem,8vw,2.4rem)}
   }
 
+
+  /* selectable Homeroom tiers */
+  .become-split .tier{cursor:pointer;text-align:left;font:inherit;width:100%;appearance:none;-webkit-appearance:none;position:relative}
+  .become-split .tier:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+  .become-split .tier.is-selected{
+    box-shadow:0 0 0 2px currentColor, 0 10px 28px -18px rgba(2,55,79,.35);
+    transform:translateX(5px);
+  }
+  .become-split .tier-1.is-selected{box-shadow:0 0 0 2px var(--v-deep), 0 10px 28px -18px rgba(2,55,79,.35)}
+  .become-split .tier-2.is-selected{box-shadow:0 0 0 2px var(--v-teal2), 0 10px 28px -18px rgba(2,55,79,.35)}
+  .become-split .tier-3.is-selected{box-shadow:0 0 0 2px var(--v-mint2), 0 10px 28px -18px rgba(2,55,79,.35)}
+
 </style>
+
+<script>
+  import { trackEvent } from '../scripts/analytics.js';
+
+  const group = document.querySelector('.become-split .tiers');
+  const cta = document.querySelector('.become-split [data-join="homeroom"]');
+  if (group && cta) {
+    const tiers = [...group.querySelectorAll('.tier')];
+    const fallback = group.getAttribute('data-join-fallback') || '/give';
+    const urlFor = (amount) =>
+      group.getAttribute(`data-tier-${amount}`) || '';
+
+    function selectTier(btn) {
+      tiers.forEach((t) => {
+        const on = t === btn;
+        t.classList.toggle('is-selected', on);
+        t.setAttribute('aria-checked', on ? 'true' : 'false');
+      });
+      const amount = btn.getAttribute('data-amount') || '100';
+      cta.setAttribute('data-selected-amount', amount);
+      const tierUrl = urlFor(amount);
+      const href = tierUrl || (fallback.startsWith('http') ? fallback : '#become');
+      cta.setAttribute('href', href);
+      if (href.startsWith('http')) {
+        cta.setAttribute('target', '_blank');
+        cta.setAttribute('rel', 'noopener');
+      } else {
+        cta.removeAttribute('target');
+        cta.removeAttribute('rel');
+      }
+    }
+
+    tiers.forEach((btn) => {
+      btn.addEventListener('click', () => selectTier(btn));
+      btn.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        e.preventDefault();
+        const i = tiers.indexOf(btn);
+        const next = e.key === 'ArrowDown'
+          ? tiers[(i + 1) % tiers.length]
+          : tiers[(i - 1 + tiers.length) % tiers.length];
+        next.focus();
+        selectTier(next);
+      });
+    });
+
+    cta.addEventListener('click', () => {
+      trackEvent('cta_homeroom_click', {
+        source: 'give_become',
+        amount: cta.getAttribute('data-selected-amount') || '100',
+      });
+    });
+  }
+</script>

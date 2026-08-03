@@ -30,6 +30,14 @@
 // first name + email UI, client-side stub until Flodesk (FEAT-070 / D-19 / D-24).
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { seams } from '../config/seams';
+const rsvpHref = seams.rsvp || '#ev-signup';
+const rsvpAttrs = /^https?:\/\//.test(rsvpHref)
+  ? { target: '_blank', rel: 'noopener' }
+  : {};
+const joinHref = seams.join || '/give';
+const joinAttrs = /^https?:\/\//.test(joinHref)
+  ? { target: '_blank', rel: 'noopener' }
+  : {};
 ---
 <BaseLayout
   title="Events &amp; Experiences — TCF"
@@ -52,7 +60,7 @@ import { seams } from '../config/seams';
       <aside class="ev-hero-card">
         <h2>Join The Contentment Festival 2026</h2>
         <p>November 13 &amp; 14. Held across time zones. No cost, no camera required, no experience needed. Just yourself!</p>
-        <a href={seams.join || '/give'} class="btn btn-primary" data-join="hero" target="_blank" rel="noopener">Save my free spot <span class="arrow">&rarr;</span></a>
+        <a href={rsvpHref} {...rsvpAttrs} class="btn btn-primary" data-rsvp="festival-hero">Save my free spot <span class="arrow">&rarr;</span></a>
       </aside>
     </div>
   </div>
@@ -60,7 +68,7 @@ import { seams } from '../config/seams';
 
 <!-- 1b. EMAIL CAPTURE FOLD (added per team notes — reverses an earlier "no email in the
      hero flow" decision). This is the THIRD email capture on this page. -->
-<section class="ev-signup">
+<section class="ev-signup" id="ev-signup">
   <div class="wrap ev-signup-inner">
     <div class="ev-signup-txt">
       <p class="ev-signup-lead">Join thousands of supporters building a more compassionate and calm world.</p>
@@ -103,7 +111,7 @@ import { seams } from '../config/seams';
         <h2 class="title">What's coming up</h2>
         <p class="body">Some gatherings are open to everyone. Others are exclusively for educators and Homeroom members.</p>
       </div>
-      <a href={seams.join || '/give'} class="btn btn-primary ev-up-join" data-join="upcoming" target="_blank" rel="noopener">Join Homeroom <span class="arrow">&rarr;</span></a>
+      <a href={joinHref} {...joinAttrs} class="btn btn-primary ev-up-join" data-join="upcoming">Join Homeroom <span class="arrow">&rarr;</span></a>
     </div>
 
     <div class="ev-filters" role="tablist" aria-label="Filter events">
@@ -126,7 +134,7 @@ import { seams } from '../config/seams';
           <h3>Contentment Festival</h3>
           <p class="ev-meta">November 13 &amp; 14, 2026 &middot; Virtual &middot; Free</p>
           <p class="ev-desc">Two hours, every time zone. Last year, nearly 100 people from a dozen countries paused together to breathe and practice. No cost, no experience needed.</p>
-          <a href={seams.rsvp || '#'} class="btn btn-primary ev-btn" data-rsvp="festival-virtual" target="_blank" rel="noopener">Save my spot <span class="arrow">&rarr;</span></a>
+          <a href={rsvpHref} {...rsvpAttrs} class="btn btn-primary ev-btn" data-rsvp="festival-virtual">Save my spot <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -140,7 +148,7 @@ import { seams } from '../config/seams';
           <h3>Contentment Festival 2026 &middot; IRL Near You</h3>
           <p class="ev-meta">November 13 &amp; 14, 2026 &middot; Worldwide &middot; Mixed free &amp; ticketed</p>
           <p class="ev-desc">The 10th anniversary celebration, everywhere at once.</p>
-          <a href={seams.rsvp || '#'} class="btn btn-primary ev-btn" data-embed="festival-signup" data-rsvp="festival-irl" target="_blank" rel="noopener">Be first to know <span class="arrow">&rarr;</span></a>
+          <a href={rsvpHref} {...rsvpAttrs} class="btn btn-primary ev-btn" data-embed="festival-signup" data-rsvp="festival-irl">Be first to know <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -155,7 +163,7 @@ import { seams } from '../config/seams';
           <p class="ev-meta">2027 &middot; Paid, limited places</p>
           <p class="ev-desc">Our signature week of renewal: reflection, nature, community, and practice. Last year welcomed 64 guests from 7 countries. Places are limited.</p>
           <p class="ev-note">Homeroom members receive first access and member pricing.</p>
-          <a href={seams.rsvp || '#'} class="btn btn-primary ev-btn" data-rsvp="bali-retreat" target="_blank" rel="noopener">Join the waitlist <span class="arrow">&rarr;</span></a>
+          <a href={rsvpHref} {...rsvpAttrs} class="btn btn-primary ev-btn" data-rsvp="bali-retreat">Join the waitlist <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -169,7 +177,7 @@ import { seams } from '../config/seams';
           <h3>Monthly Wellbeing Workshop</h3>
           <p class="ev-meta">Every month &middot; Virtual &middot; Included in membership</p>
           <p class="ev-desc">A guided 60 to 90 minutes with our wellbeing team: the same Four Pillars practices our teachers learn, offered to the people who support them.</p>
-          <a href={seams.join || '/give'} class="btn btn-primary ev-btn" data-join="monthly-workshop" target="_blank" rel="noopener">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={joinHref} {...joinAttrs} class="btn btn-primary ev-btn" data-join="monthly-workshop">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -183,7 +191,7 @@ import { seams } from '../config/seams';
           <h3>Monthly Homeroom Sessions</h3>
           <p class="ev-meta">1 to 2 times per month &middot; Virtual &middot; Included in membership</p>
           <p class="ev-desc">Workshops, community gatherings, and guest speakers, all in one hour.</p>
-          <a href={seams.join || '/give'} class="btn btn-primary ev-btn" data-join="homeroom-sessions" target="_blank" rel="noopener">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={joinHref} {...joinAttrs} class="btn btn-primary ev-btn" data-join="homeroom-sessions">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -197,7 +205,7 @@ import { seams } from '../config/seams';
           <h3>Community Town Hall</h3>
           <p class="ev-meta">Quarterly &middot; Virtual &middot; Included in membership</p>
           <p class="ev-desc">Our team and partner educators share what's working, what's hard, and what's next. Members ask anything.</p>
-          <a href={seams.join || '/give'} class="btn btn-primary ev-btn" data-join="town-hall" target="_blank" rel="noopener">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={joinHref} {...joinAttrs} class="btn btn-primary ev-btn" data-join="town-hall">Unlock with Homeroom <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -225,7 +233,7 @@ import { seams } from '../config/seams';
           <li>Front row seat to what our team is working on</li>
         </ul>
         <div class="ev-access-foot ev-access-foot-solo">
-          <a href={seams.join || '/give'} class="btn btn-primary ev-access-cta" data-join="access-band" target="_blank" rel="noopener">Join Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={joinHref} {...joinAttrs} class="btn btn-primary ev-access-cta" data-join="access-band">Join Homeroom <span class="arrow">&rarr;</span></a>
         </div>
         <p class="ev-access-fine">Cancel anytime, no hard feelings. Your gift helps teachers access events like these on scholarship.</p>
         <p class="ev-access-legal">Contentment Foundation is a 501(c)(3) nonprofit (EIN 47-5432756), and your contributions are tax-deductible to the extent permitted by law. Thank you for being part of this work.</p>
@@ -283,7 +291,7 @@ import { seams } from '../config/seams';
           <span class="ev-recap-place">Bali &middot; The Worldwide Wellbeing Retreat</span>
           <p>64 guests, 7 countries, 20 educators on member-funded scholarships, many never given a week for their own renewal in their whole careers. Mornings of practice, afternoons by the water, evenings in a circle.</p>
           <p class="ev-recap-hook">The next Wellbeing Worldwide Retreat is forming now.</p>
-          <a href={seams.rsvp || '#'} class="ev-recap-link" data-rsvp="bali-retreat" target="_blank" rel="noopener">Join the waitlist <span class="arrow">&rarr;</span></a>
+          <a href={rsvpHref} {...rsvpAttrs} class="ev-recap-link" data-rsvp="bali-retreat">Join the waitlist <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -293,7 +301,7 @@ import { seams } from '../config/seams';
           <span class="ev-recap-place">Mt Shasta &middot; Contentment Journey</span>
           <p>Twenty educators, community weavers, and wellbeing leaders in the foothills of a mountain, doing the radical thing: slowing down. Strangers on day one, a community by the last morning.</p>
           <p class="ev-recap-hook">Regional journeys continue in 2027.</p>
-          <a href={seams.rsvp || '#'} class="ev-recap-link" data-rsvp="regional-journey" target="_blank" rel="noopener">Join the waitlist <span class="arrow">&rarr;</span></a>
+          <a href={rsvpHref} {...rsvpAttrs} class="ev-recap-link" data-rsvp="regional-journey">Join the waitlist <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -304,7 +312,7 @@ import { seams } from '../config/seams';
           <p>200 school counselors trained across retreats woven into a national wellbeing strategy, and more than 90% said their burnout was directly addressed.</p>
           <blockquote class="ev-recap-quote">&ldquo;I can't wait to welcome myself back home, to a version of myself that feels whole, present and at peace.&rdquo;<cite>Retreat participant</cite></blockquote>
           <p class="ev-recap-hook">This is what your monthly gift makes possible.</p>
-          <a href={seams.join || '/give'} class="ev-recap-link" data-join="recap-bhutan" target="_blank" rel="noopener">Join Homeroom <span class="arrow">&rarr;</span></a>
+          <a href={joinHref} {...joinAttrs} class="ev-recap-link" data-join="recap-bhutan">Join Homeroom <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -324,7 +332,7 @@ import { seams } from '../config/seams';
           <span class="ev-recap-place">Singapore &middot; Tea and Contentment</span>
           <p>A morning of silence, slowing down, and the art of mindfully drinking tea with members and friends of the Foundation.</p>
           <p class="ev-recap-hook">Festival 2026 brings a gathering like this to a city near you.</p>
-          <a href="#" class="ev-recap-link" data-embed="festival-signup">Be first to know <span class="arrow">&rarr;</span></a>
+          <a href="#ev-signup" class="ev-recap-link" data-embed="festival-signup">Be first to know <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -340,7 +348,7 @@ import { seams } from '../config/seams';
       <div class="ev-close-primary anim">
         <h2 class="ev-close-title">Want first access to all of it?</h2>
         <p class="ev-close-body">Homeroom members never wait and receive priority booking on every experience and get access to members-only workshops - and join a global community.</p>
-        <a href={seams.join || '/give'} class="btn btn-primary ev-close-btn" data-join="close" target="_blank" rel="noopener">Join Homeroom <span class="arrow">&rarr;</span></a>
+        <a href={joinHref} {...joinAttrs} class="btn btn-primary ev-close-btn" data-join="close">Join Homeroom <span class="arrow">&rarr;</span></a>
       </div>
       <aside class="ev-close-secondary anim">
         <h3>Just want to know what's coming?</h3>
