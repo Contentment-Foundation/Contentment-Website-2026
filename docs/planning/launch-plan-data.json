@@ -4,7 +4,7 @@
     "version": "2026-08-03",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Aug 3: CTA wiring pass on known destinations (without waiting on full Kristina Miro inventory). Sign In → school.contentment.org; Donate (nav/footer) falls back to /give until Keela URLs (HC-075); homepage hero → /why, Homeroom invite → /give, door cards Schools + Events wired (Spread-the-movement still TBD WJ); Get Involved hero Join Homeroom scrolls to #become; About polish (hero asset rename, Dan caption, Talk-with-Us email, share mailto). Why teacher reels fixed to fill 9:16 frames (shipped). Homeroom donate form measure matched to copy (Home 46ch / Why 52ch). Still open: Keela checkout (Lorna/HC-075), full Button/CTA inventory (HC-005), About roster Dave sign-off, D-24 email-capture. Aug 7 = build sprint end + final review window. Hard go-live Aug 21."
+    "summary": "Aug 3: CTA wiring pass on known destinations (without waiting on full Kristina Miro inventory). Sign In → school.contentment.org; Donate (nav/footer) falls back to /give until Keela URLs (HC-075); homepage hero → /why, Homeroom invite → /give, door cards Schools + Events wired; Get Involved hero Join Homeroom scrolls to #become; About polish (hero asset, Dan caption, Talk-with-Us email, share mailto). Why teacher reels fill 9:16; Homeroom form measure matched to copy (Home 46ch / Why 52ch). STILL WAITING — Kristina: full Button/CTA Miro inventory (HC-005/FEAT-005); WJ: Spread-the-movement door destination; WJ+Kristina: D-24 Events email-capture provider; Lorna: Keela checkout (HC-075) + join-flow (HC-071). Aug 7 = build sprint end + final review window. Hard go-live Aug 21."
   },
   "overview": [
     [
@@ -673,7 +673,7 @@
     [
       "D-24",
       "Events email-capture destination",
-      "Flodesk vs Keela vs other — asked of WoeiJing + Kristina in Slack 2 Aug, answer requested by Aug 3. /events keeps three placeholder slots (newsletter-signup fold “Embed slot · tech to wire”; event-announcements in Why + Close “Want first access to all of it?”; festival-signup CTAs). Do NOT invent provider embeds until decided. Pairs with FEAT-070 / D-19 (sitewide newsletter).",
+      "Flodesk vs Keela vs other — asked of WoeiJing + Kristina in Slack 2 Aug (answer requested by Aug 3; still Open as of Aug 3 CTA sync). /events keeps three placeholder slots (newsletter-signup fold; event-announcements in Why + Close; festival-signup CTAs). Do NOT invent provider embeds until decided. Pairs with FEAT-070 / D-19.",
       "Somesh → WoeiJing + Kristina",
       "Open",
       "Events capture wiring (FEAT-070 related)",
@@ -1203,11 +1203,18 @@
       "Sprint starts on homepage once assets land; logo SVG blocks Dave finalize"
     ],
     [
-      "Button / CTA inventory",
-      "Kristina (Miro board, page-by-page)",
+      "Button / CTA inventory (remaining)",
+      "Kristina (Miro) + WJ (Spread the movement door)",
       "FEAT-004, FEAT-005, analytics event wiring",
-      "Aug 3 (asked in Slack 2 Aug)",
-      "Sprint slows — CTAs stay href=# and tracking cannot be instrumented correctly"
+      "Aug 3 asked (Slack 2 Aug) — still Open",
+      "Aug 3 — known CTAs wired ahead of Miro (Sign In→school.contentment.org; Donate→/give fallback; homepage hero/invite/doors Schools+Events; Give hero→#become; About mailto/share). Still waiting: full page-by-page Miro inventory (Kristina); homepage Spread-the-movement destination (WJ); analytics event map once inventory lands. Keela checkout/join remain HC-075/071."
+    ],
+    [
+      "Homepage door — Spread the movement destination",
+      "WJ (WoeiJing)",
+      "FEAT-004 / FEAT-005 (third door card)",
+      "Open — flagged Aug 3",
+      "Card CTA stays href=# until WJ finalises destination (share flow / social / other)."
     ],
     [
       "Live Keela checkout URLs",
@@ -1284,7 +1291,7 @@
       "Lorna / Kristina",
       "FEAT-051, FEAT-060, Events gated-CTA wiring",
       "Before those CTAs can be wired and tested",
-      "Gated buttons on Events + Get Involved stay href=# beyond basic nav"
+      "Events RSVP + Get Involved join/tier buttons still empty. Aug 3 chrome wired Donate→/give and page nav; does not unblock real Keela checkout."
     ]
   ],
   "phase2Deferred": [
