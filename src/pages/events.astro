@@ -704,4 +704,21 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
       trackEvent('newsletter_submit', { source: `events_${source}` });
     });
   });
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-join]').forEach((link) => {
+    link.addEventListener('click', () => {
+      trackEvent('homeroom_join_interest', {
+        source: 'events_page',
+        placement: link.dataset.join || 'unknown',
+      });
+    });
+  });
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-rsvp]').forEach((link) => {
+    link.addEventListener('click', () => {
+      trackEvent('event_rsvp_interest', {
+        event_key: link.dataset.rsvp || 'unknown',
+      });
+    });
+  });
 </script>

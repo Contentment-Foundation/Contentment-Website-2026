@@ -1,3 +1,5 @@
+import { trackEvent } from './analytics.js';
+
 // Events page — filter chips, full-bleed parallax, and click-to-play YouTube.
 // Ported verbatim from Dave's Jul 29 2026 handoff — see
 // handoff/2026-07-29-dave-pages/5_EVENTS/events-kit-2026-07-28-page2r4/events.html's inline
@@ -81,6 +83,10 @@ export function initEventVideos() {
       f.allowFullscreen = true;
       el.appendChild(f);
       el.classList.add('playing');
+      trackEvent('video_started', {
+        page_section: 'events_recap',
+        video_id: id,
+      });
     }
     el.addEventListener('click', play);
     el.addEventListener('keydown', (e) => {

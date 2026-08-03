@@ -40,8 +40,8 @@ import { seams } from '../config/seams';
       <h1><span class="nowrap">When teachers flourish,</span> <span class="script">everything in a school changes for the better.</span></h1>
       <p class="sub">Evidence-based wellbeing that starts with your educators and reaches every student.</p>
       <div class="hero-actions">
-        <a href="#start" class="btn btn-primary">Start a Conversation <span class="arrow">&rarr;</span></a>
-        <a href={seams.schools.deck || '#'} class="btn btn-ghost" target="_blank" rel="noopener">Download the partner deck</a>
+        <a href="#start" class="btn btn-primary" data-school-inquiry-source="hero">Start a Conversation <span class="arrow">&rarr;</span></a>
+        <a href={seams.schools.deck || '#'} class="btn btn-ghost" target="_blank" rel="noopener" data-partner-deck-source="hero">Download the partner deck</a>
       </div>
       <p class="credline">10 years of work across 12 countries, in partnership with schools, districts, and national systems.</p>
     </div>
@@ -407,8 +407,8 @@ import { seams } from '../config/seams';
     <h2 class="title anim d1">Let&#8217;s explore the right partnership</h2>
     <p class="ctag anim d1">The best partnerships start with a conversation, not a contract. Tell us where you are and what you are trying to build, and we will figure out the rest together.</p>
     <div class="close-cta anim d2">
-      <a href="mailto:hello@contentment.org?subject=School%20partnership%20enquiry" class="btn btn-primary">Start a Conversation <span class="arrow">&rarr;</span></a>
-      <a href={seams.schools.deck || '#'} class="btn btn-ghost" target="_blank" rel="noopener">Download the partner deck</a>
+      <a href="mailto:hello@contentment.org?subject=School%20partnership%20enquiry" class="btn btn-primary" data-school-inquiry-source="close">Start a Conversation <span class="arrow">&rarr;</span></a>
+      <a href={seams.schools.deck || '#'} class="btn btn-ghost" target="_blank" rel="noopener" data-partner-deck-source="close">Download the partner deck</a>
     </div>
     <p class="cmail anim d2">Or email <a href="mailto:hello@contentment.org">hello@contentment.org</a></p>
   </div>
@@ -827,6 +827,19 @@ import { seams } from '../config/seams';
   // Note: the source page's click-to-expand interactive ripple script (selectRing/.rrings)
   // and the window.SEAMS resolver are dropped — that markup isn't used on this page (see
   // .fsr instead), and seam URLs are now resolved server-side via src/config/seams.ts.
+  import { trackEvent } from '../scripts/analytics.js';
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-school-inquiry-source]').forEach((link) => {
+    link.addEventListener('click', () => {
+      trackEvent('school_partner_inquiry_started', { source: link.dataset.schoolInquirySource || 'unknown' });
+    });
+  });
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-partner-deck-source]').forEach((link) => {
+    link.addEventListener('click', () => {
+      trackEvent('partner_deck_downloaded', { source: link.dataset.partnerDeckSource || 'unknown' });
+    });
+  });
 
   const lb = document.getElementById('lb');
   const lbSlot = document.getElementById('lbSlot');
