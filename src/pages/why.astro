@@ -336,7 +336,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .wn-videos .reels{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:720px;margin:0 auto}
   .vframe{position:relative;border-radius:16px;overflow:hidden;cursor:pointer;background:#02374f;box-shadow:0 0 0 1px rgba(255,255,255,.14), 0 10px 30px -6px rgba(0,0,0,.55), 0 0 44px -8px rgba(95,203,214,.35);transition:box-shadow .3s, transform .3s}
   .vframe:hover{box-shadow:0 0 0 1px rgba(255,255,255,.32), 0 16px 40px -8px rgba(0,0,0,.6), 0 0 60px -6px rgba(95,203,214,.65);transform:translateY(-4px)}
+  .vframe.is-playing,.vframe.is-playing:hover{transform:none;cursor:default}
   .vframe.vert{aspect-ratio:9/16}
+  /* Fill the 9:16 frame so Shorts/vertical embeds don't collapse to landscape letterbox */
+  .vframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
   .vframe .poster{position:absolute;inset:0;background-size:cover;background-position:center}
   .vframe .vscrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,40,58,.15),rgba(2,40,58,.55))}
   .vframe .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.93);display:grid;place-items:center;transition:box-shadow .3s,background .3s}
@@ -496,10 +499,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   // data-inline reels play in place (one click, playsinline stops iOS hijacking to fullscreen).
   function playInline(el: HTMLElement) {
     const id = el.dataset.yt;
-    el.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1" title="Teacher video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+    el.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1" title="Teacher video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
     el.removeAttribute('role');
     el.removeAttribute('tabindex');
     el.style.cursor = 'default';
+    el.classList.add('is-playing');
   }
   document.querySelectorAll<HTMLElement>('[data-yt]').forEach((el) => {
     const go = () => (el.dataset.inline ? playInline(el) : openLb(el.dataset.yt as string));
