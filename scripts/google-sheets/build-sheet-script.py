@@ -32,9 +32,27 @@ def main() -> int:
     )
 
     original = OUT_FILE.read_text()
-    updated, count = BLOCK_RE.subn(block, original, count=1)
+    # Replacement MUST be a callable. Passing `block` as a plain string makes
+    # re.subn expand backslash escapes in it, so every "\n" inside the JSON
+    # (backslash + n) became a real newline and split the JS literal across
+    # lines — invalid JavaScript, silently. That broke EMBEDDED_DATA the first
+    # time a note contained a line break (4 Aug 2026); "\\" and "\g" would
+    # corrupt it too. A lambda disables escape processing entirely.
+    updated, count = BLOCK_RE.subn(lambda _match: block, original, count=1)
     if count != 1:
         print("Could not find BEGIN_EMBEDDED_DATA / END_EMBEDDED_DATA markers.")
+        return 1
+
+    # Guard: the embedded literal must stay on ONE line and round-trip as JSON.
+    # EMBEDDED_DATA is the Sheet's offline fallback, so a corrupt literal only
+    # surfaces when GitHub is unreachable — exactly when it is needed most.
+    if "\n" in embedded:
+        print("ERROR: embedded literal contains raw newlines — refusing to write.")
+        return 1
+    try:
+        json.loads(embedded)
+    except ValueError as exc:
+        print(f"ERROR: embedded literal is not valid JSON ({exc}) — refusing to write.")
         return 1
 
     OUT_FILE.write_text(updated)
