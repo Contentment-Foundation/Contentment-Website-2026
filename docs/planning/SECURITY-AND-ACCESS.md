@@ -260,6 +260,7 @@ if (!isNew) return new Response('Already processed', { status: 200 });
 - [ ] Rate limiting on all `/api/*` routes via @upstash/ratelimit (see TECHNICAL-ARCHITECTURE.md §10)
 - [ ] All external links (Google Drive docs, social profiles, third-party sites) include `rel="noopener noreferrer"` — prevents opened pages accessing our window context
 - [ ] Google Drive brief links confirmed as view-only / Anyone with the link (no edit access)
+- [ ] **Internal project docs off public production** — remove Footer “Project docs” (`/docs`) and any other public links; stop publishing `public/docs` / skip `copy-docs.sh` on the production build; remove or 404 `/docs*` host redirects. Keep `docs/` in the private GitHub repo for the team — not crawlable or linkable on contentment.org (FEAT-101 / HC-077)
 
 ---
 
@@ -282,3 +283,4 @@ if (!isNew) return new Response('Already processed', { status: 200 });
 | 2026-06 | Initial security & access document. |
 | 2026-06 | Updated to confirmed stack: Flodesk replaces Mailchimp throughout; GCP Cloud SQL replaces Supabase (§4 renamed, access rules updated); Vercel edge middleware replaces Netlify for Homeroom gate (§2); Raisely added to admin roles and data table; form error handling updated to reference GCP/provider fallback instead of Formspree. |
 | 2026-06 | Added: webhook idempotency pattern (§7b), CSP to pre-launch checklist, transactional email and rate-limiting checklist items, link to DECISIONS.md. |
+| 2026-08-04 | Pre-launch checklist: unpublish internal `/docs` hub + Footer “Project docs” at production cutover (repo keeps `docs/`; public site must not). |

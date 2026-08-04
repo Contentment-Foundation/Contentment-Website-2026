@@ -5,36 +5,64 @@
  * Internal page-to-page nav does NOT live here — Astro's file-based routing
  * handles that natively (see Nav.astro / Footer.astro, which link straight to
  * /why, /our-impact, etc.). This file only holds things that are genuine
- * external/business decisions, not yet resolved as of the Jul 29 2026 handoff:
- * Keela donate URL, the join-flow destination, and social links pending
- * Kristina's button/CTA inventory (HC-005 / FEAT-005).
+ * external/business decisions. As of 4 Aug 2026: Keela General Donation Form is
+ * live (see `keela` + `donate`); still pending — per-tier Homeroom `joinTiers`,
+ * India region, join-flow / RSVP choreography, and Kristina's button inventory
+ * (HC-005 / FEAT-005).
  *
  * Leave a value '' until it's confirmed; every consumer treats '' as "not
  * wired yet" and falls back to a safe default (usually '#').
  */
 export const seams = {
-  /** Keela checkout URL — blocked on Finance (D-02, HC-030).
-   *  Until set, Donate CTAs fall back to /give. */
-  donate: '',
+  /**
+   * Keela Forms — master org + embeds.
+   * 4 Aug 2026: shipping **General Donation Form** (give-usa) for all regions
+   * except India (deferred). Per-tier Homeroom checkout URLs still TBD — when
+   * those land, fill joinTiers and keep this as the general / one-time path.
+   */
+  keela: {
+    /** Org ID for the site-wide master script (BaseLayout <head>). */
+    orgId: 'CBbknhqovLi8DNEzW',
+    /** Interim site-wide donation form — use everywhere we had a donate widget. */
+    generalDonationForm: {
+      name: 'General Donation Form',
+      embedSrc: 'https://give-usa.keela.co/embed/MnqZFksL49Ym3M8Ho',
+    },
+  },
 
-  /** Join / Homeroom destination. Until Keela join-flow (HC-071), route to /give. */
-  join: '/give',
+  /** Donate CTAs → Get Involved Join Homeroom fold (`#become`). */
+  donate: '/getinvolved#become',
 
-  /** Per-tier Keela checkout URLs (D-01 $25/$50/$100). Empty until HC-075/071.
-   *  When set, /give tier picker routes Join Homeroom to the selected tier URL. */
+  /** Join / Homeroom destination. Until Keela join-flow (HC-071), route to /getinvolved. */
+  join: '/getinvolved',
+
+  /**
+   * Homepage Keela form deep-link for a Homeroom monthly amount.
+   * Used by /getinvolved Join Homeroom when joinTiers URLs are empty.
+   * KeelaDonateForm reads `amount` + `frequency` and forwards them to the embed iframe.
+   */
+  homeroomDonateUrl(amount: 25 | 50 | 100 | string = 100): string {
+    const n = String(amount);
+    const allowed = n === '25' || n === '50' || n === '100' ? n : '100';
+    return `/?amount=${allowed}&frequency=monthly#homeroom`;
+  },
+
+  /** Per-tier Keela checkout URLs (D-01 $25/$50/$100). Empty until per-tier
+   *  Homeroom products land — meantime /getinvolved Join Homeroom uses homeroomDonateUrl().
+   *  When set, /getinvolved tier picker routes Join Homeroom to the selected tier URL. */
   joinTiers: {
     25: '',
     50: '',
     100: '',
   },
 
-  /** Get Involved "Prefer to give differently" → one-time gift flow. Blocked on
-   *  HC-071 (Keela/Homeroom join-flow choreography), same as `join`. */
-  giveOneTime: '',
+  /** Get Involved "Prefer to give differently" → one-time gift.
+   *  Interim: same General Donation Form (supports one-time + monthly). */
+  giveOneTime: '/#homeroom',
 
-  /** Get Involved "Prefer to give differently" → other Keela giving options.
-   *  Owner: Lorna — destination still an open question per HC-071/D-03. */
-  waysToGive: '',
+  /** Get Involved "Prefer to give differently" → other options.
+   *  Kristina (Aug 2026): "Other ways to give" → Email us → hello@contentment.org. */
+  waysToGive: 'mailto:hello@contentment.org',
 
   /** Events RSVP destinations (festival-virtual, festival-irl, bali-retreat).
    *  Blocked on HC-071, same Keela/Homeroom join-flow choreography as `join`.

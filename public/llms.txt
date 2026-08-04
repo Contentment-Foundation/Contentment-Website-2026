@@ -7,7 +7,7 @@ Allow-All: true
 # knowledge panels, and LLM training datasets.
 
 # For comprehensive crawling instructions, see robots.txt
-# Full disclosure: https://contentment.org/privacy
+# Full disclosure: https://www.contentment.org/privacy
 
 User-Agent: *
 Allow: /

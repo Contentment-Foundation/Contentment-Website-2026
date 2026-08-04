@@ -128,11 +128,13 @@ const ADVISORY = [
       <div class="ccard c-green anim d1">
         <h3>Get the Newsletter</h3>
         <p>Join thousands of supporters building a more compassionate and calm world. One-ish email a month, usually about a teacher, a tool or resource you can try and experiences you can join.</p>
-        <!-- FEAT-070 (Flodesk integration) not wired yet — placeholder submit, matches Home's NewsletterForm. -->
-        <form onsubmit="return false" data-embed="newsletter">
-          <input type="text" placeholder="First name" aria-label="First name">
-          <input type="email" placeholder="Email address" aria-label="Email address">
+        <!-- FEAT-070: → Flodesk segment "www.contentment.org" (FLODESK_SEGMENT_WWW). -->
+        <form data-newsletter="about_page">
+          <input type="text" name="first_name" placeholder="First name" aria-label="First name" autocomplete="given-name">
+          <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
+          <input type="text" name="company" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button class="btn cbtn" type="submit">Keep me in the loop</button>
+          <p class="nl-status" data-newsletter-status role="status" aria-live="polite"></p>
         </form>
       </div>
       <div class="ccard c-blue anim d2">
@@ -182,6 +184,10 @@ const ADVISORY = [
 
 <script>
   import { trackEvent } from '../scripts/analytics.js';
+  import { initNewsletterForms } from '../scripts/newsletter.js';
+
+  // FEAT-070 — "Keep me in the loop" → Flodesk segment "www.contentment.org".
+  initNewsletterForms();
 
   // Empty-To mailto:? links often no-op in Chromium; prefer Web Share, else force mailto navigation.
   document.querySelectorAll<HTMLAnchorElement>('[data-share-email]').forEach((el) => {

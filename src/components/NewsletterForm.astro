@@ -1,36 +1,57 @@
-<section class="band-tight news">
-  <div class="wrap news-inner">
-    <div class="anim">
-      <h2 class="title">Stories from the Classroom to your inbox</h2>
-      <p class="body">Wellbeing tools you can actually use, real stories from educators, and the occasional thing that makes the week a little lighter.</p>
+---
+// FEAT-070 — Flodesk-wired newsletter form.
+//
+// `source` picks the Flodesk segment server-side (see SEGMENT_ENV_BY_SOURCE in
+// src/lib/flodesk.js) AND is stored as a custom field, so one segment can still
+// be broken down by which form the person used. It must match a KNOWN_SOURCES
+// value or the server rejects the submit.
+//
+// `bare` renders just the form, for callers that already supply their own
+// <section class="news"> + heading (that's /updates — before this prop it nested
+// a second .news section inside the first and showed two headings).
+interface Props {
+  source?: string;
+  bare?: boolean;
+}
+
+const { source = 'homepage_newsletter_band', bare = false } = Astro.props;
+---
+
+{bare ? (
+  <form class="anim d1" data-newsletter={source}>
+    <div class="row">
+      <input type="text" placeholder="First name" aria-label="First name" name="first_name" autocomplete="given-name">
+      <input type="email" placeholder="Email address" aria-label="Email address" name="email" autocomplete="email" required>
     </div>
-    <!-- FEAT-070 (Flodesk integration) not wired yet — placeholder submit, matches Dave's handoff. -->
-    <form class="anim d1" id="newsletter-form">
-      <div class="row">
-        <input type="text" placeholder="First name" aria-label="First name" name="first_name">
-        <input type="email" placeholder="Email address" aria-label="Email address" name="email" required>
+    {/* Honeypot — hidden from people, irresistible to bots. Server no-ops if filled. */}
+    <input type="text" name="company" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn btn-primary" type="submit">Subscribe</button>
+    <span class="fine">No noise. No spam. Leave whenever you want.</span>
+    <p class="nl-status" data-newsletter-status role="status" aria-live="polite"></p>
+  </form>
+) : (
+  <section class="band-tight news">
+    <div class="wrap news-inner">
+      <div class="anim">
+        <h2 class="title">Stories from the Classroom to your inbox</h2>
+        <p class="body">Wellbeing tools you can actually use, real stories from educators, and the occasional thing that makes the week a little lighter.</p>
       </div>
-      <button class="btn btn-primary" type="submit">Subscribe</button>
-      <span class="fine">No noise. No spam. Leave whenever you want.</span>
-    </form>
-  </div>
-</section>
+      <form class="anim d1" data-newsletter={source}>
+        <div class="row">
+          <input type="text" placeholder="First name" aria-label="First name" name="first_name" autocomplete="given-name">
+          <input type="email" placeholder="Email address" aria-label="Email address" name="email" autocomplete="email" required>
+        </div>
+        {/* Honeypot — hidden from people, irresistible to bots. Server no-ops if filled. */}
+        <input type="text" name="company" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn btn-primary" type="submit">Subscribe</button>
+        <span class="fine">No noise. No spam. Leave whenever you want.</span>
+        <p class="nl-status" data-newsletter-status role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+)}
 
 <script>
-  import { trackEvent } from '../scripts/analytics.js';
-
-  // TICKET-080: newsletter_submit. No backend/Flodesk wiring yet (FEAT-070) — the
-  // form still doesn't POST anywhere, so "success" today means the client-side
-  // submit interaction itself, matching the existing placeholder behaviour.
-  //
-  // FEAT-070 note: TECHNICAL-ARCHITECTURE §6.2 specs a server-side /api/newsletter
-  // route (FLODESK_API_KEY, server-only) as the intended integration, which needs a
-  // hosting adapter this static build doesn't have yet (FEAT-101). Wire the real
-  // submission there once that lands, rather than calling Flodesk's API directly
-  // from the browser with an unauthenticated request.
-  const form = document.getElementById('newsletter-form');
-  form?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    trackEvent('newsletter_submit', { source: 'homepage_newsletter_band' });
-  });
+  import { initNewsletterForms } from '../scripts/newsletter.js';
+  initNewsletterForms();
 </script>

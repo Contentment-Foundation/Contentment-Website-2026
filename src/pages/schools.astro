@@ -190,25 +190,25 @@ import { seams } from '../config/seams';
       <div class="arc-col anim d1">
         <div class="arc-step">01 · Leadership</div>
         <div class="arc-label">It starts with leadership</div>
-        <blockquote>As a new administrator, I now pause and take a breath before responding. That moment of calm lets me think more clearly, approach issues with confidence, and model the composure I want to inspire in others. It has strengthened my leadership.</blockquote>
+        <blockquote>&#8220;As a new administrator, I now pause and take a breath before responding. That moment of calm lets me think more clearly, approach issues with confidence, and model the composure I want to inspire in others. It has strengthened my leadership.&#8221;</blockquote>
         <cite>Kalikolehua Goo, Academic Director, Kawaikini Public Charter School, Hawai&#699;i</cite>
       </div>
       <div class="arc-col anim d2">
         <div class="arc-step">02 · Teacher</div>
         <div class="arc-label">It grounds the teacher</div>
-        <blockquote>Mindfulness became a turning point. Instead of reacting immediately, I learned to pause and respond calmly. This small shift changed the classroom atmosphere. I became calmer, more patient, and more present with my students.</blockquote>
+        <blockquote>&#8220;Mindfulness became a turning point. Instead of reacting immediately, I learned to pause and respond calmly. This small shift changed the classroom atmosphere. I became calmer, more patient, and more present with my students.&#8221;</blockquote>
         <cite>Tashi Rabten, Changangkha Middle Secondary School, Bhutan</cite>
       </div>
       <div class="arc-col anim d3">
         <div class="arc-step">03 · Classroom</div>
         <div class="arc-label">It reaches the classroom</div>
-        <blockquote>Before the Four Pillars training, I mostly focused on completing lessons. After, I realized students also need emotional support, positive relationships, and a sense of purpose. I started beginning class with a short check-in, and it created a more supportive classroom environment.</blockquote>
+        <blockquote>&#8220;Before the Four Pillars training, I mostly focused on completing lessons. After, I realized students also need emotional support, positive relationships, and a sense of purpose. I started beginning class with a short check-in, and it created a more supportive classroom environment.&#8221;</blockquote>
         <cite>Mwamvua Wadi Khamis, Social Innovation Academy, Uganda</cite>
       </div>
       <div class="arc-col anim d4">
         <div class="arc-step">04 · Whole school</div>
         <div class="arc-label">It changes the whole school</div>
-        <blockquote>Our school used to feel like a pressure cooker. Within months, laughter replaced tension. Teachers smiled more. The school felt alive again.</blockquote>
+        <blockquote>&#8220;Our school used to feel like a pressure cooker. Within months, laughter replaced tension. Teachers smiled more. The school felt alive again.&#8221;</blockquote>
         <cite>Peter Ogondi Ogola, Head of Guidance, St. Gregory Koru Girls High School, Kenya</cite>
       </div>
     </div>
@@ -254,7 +254,7 @@ import { seams } from '../config/seams';
       <h2 class="anim d1">Choose the right pathway</h2>
       <p class="psub anim d1">Start with one educator, one school, or a whole network.</p>
     </div>
-    <p class="scroll-hint">Scroll the table sideways to compare all three paths &rarr;</p>
+    <p class="scroll-hint">Scroll sideways to compare paths — row labels stay put &rarr;</p>
     <div class="matrix-scroll anim d1">
       <table class="matrix">
         <caption class="visually-hidden">Comparison of the One Educator, One School, and A Whole Network pathways</caption>
@@ -729,6 +729,15 @@ import { seams } from '../config/seams';
   .matrix col.c-feat{background:rgba(31,175,192,.1)}
   .matrix thead th{vertical-align:top;text-align:left;padding:16px 16px 18px}
   .matrix thead th.rowhdr{width:26%}
+  /* Freeze the "what you get" column while pathway columns scroll horizontally */
+  .matrix thead th.rowhdr,
+  .matrix tbody th.rname,
+  .matrix tfoot th.rowhdr{
+    position:sticky;left:0;z-index:3;
+    background:var(--deep);
+    box-shadow:10px 0 16px -12px rgba(0,0,0,.55);
+  }
+  .matrix tbody th.rname{min-width:11.5rem;max-width:16rem}
   .matrix .col-name{font-family:var(--display);font-weight:500;font-size:1.4rem;color:#fff;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .matrix .col-price{font-size:.86rem;color:#bfeef5;font-weight:600}
   .mostchosen{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--deep);background:var(--teal);padding:3px 8px;border-radius:999px}
@@ -742,7 +751,7 @@ import { seams } from '../config/seams';
   .matrix td.feat,.matrix th.feat{background:rgba(31,175,192,.1)}
   .matrix tfoot td,.matrix tfoot th{padding:14px 16px 8px;vertical-align:top;border-top:1px solid rgba(255,255,255,.16)}
   .matrix tfoot .bestfor{font-size:.82rem;color:rgba(255,255,255,.82);line-height:1.4;margin-bottom:12px;min-height:2.4em}
-  .matrix tfoot .btn{width:100%;justify-content:center}
+  .matrix tfoot .btn{width:100%;justify-content:center;text-align:center;white-space:normal}
   .matrix tfoot .btn-primary{background:#fff;color:var(--deep)}
   .matrix tfoot .btn-primary:hover{background:#eafafc}
   .matrix tfoot .btn-ghost{border-color:rgba(255,255,255,.5)}
@@ -828,6 +837,7 @@ import { seams } from '../config/seams';
   // and the window.SEAMS resolver are dropped — that markup isn't used on this page (see
   // .fsr instead), and seam URLs are now resolved server-side via src/config/seams.ts.
   import { trackEvent } from '../scripts/analytics.js';
+  import { youtubeIframeHtml } from '../scripts/youtube-embed.js';
 
   document.querySelectorAll<HTMLAnchorElement>('[data-school-inquiry-source]').forEach((link) => {
     link.addEventListener('click', () => {
@@ -847,8 +857,10 @@ import { seams } from '../config/seams';
 
   function openLb(id: string, list?: string) {
     if (!lbSlot || !lb) return;
-    const listParam = list ? '&list=' + list : '';
-    lbSlot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0' + listParam + '" title="Video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="width:100%;height:100%;border:0;border-radius:14px"></iframe>';
+    lbSlot.innerHTML = youtubeIframeHtml(id, {
+      list,
+      style: 'width:100%;height:100%;border:0;border-radius:14px;display:block',
+    });
     lb.classList.add('open');
   }
   function closeLb() {

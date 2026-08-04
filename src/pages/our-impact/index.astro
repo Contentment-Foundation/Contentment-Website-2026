@@ -79,7 +79,7 @@ import { seams } from '../../config/seams';
       </div>
       <div class="mag-lead-text">
         <p class="lede"><strong class="lede-open">It started with a single school in Thimphu in 2019.</strong> Not a government mandate, not a national rollout, just one circle of educators willing to sit together and ask: what does it feel like to be well?</p>
-        <p>That question changed everything. ELC (Educating for Lifelong Citizenship) High School became a lighthouse school, a place where wellbeing isn&#8217;t delivered at certain hours but lived throughout the culture. From there the work spread, from one school to 50 across a valley, to annual national retreats for roughly 200 counselors, and into Bhutan&#8217;s National School Health and Wellbeing Strategy.</p>
+        <p>That question changed everything. ELC (Educating for Lifelong Citizenship) High School became a lighthouse school, a place where wellbeing isn&#8217;t delivered at certain hours but lived throughout the culture. From there the work grew, from one school to 50 across a valley, to annual retreats with school counselors nationwide.</p>
       </div>
     </div>
 
@@ -348,9 +348,9 @@ import { seams } from '../../config/seams';
     <span class="eyebrow">Be part of the story</span>
     <h2>Every story here began with a <span class="cursive">supported teacher</span></h2>
     <p>When you give monthly, you stand behind the educators carrying this work forward, in North America, Bhutan, Kenya, Hawai&#699;i, and beyond.</p>
-    <!-- Homeroom / Keela join flow. Falls back to /give while HC-071 (Keela/Homeroom join-flow
+    <!-- Homeroom / Keela join flow. Falls back to /getinvolved while HC-071 (Keela/Homeroom join-flow
          choreography) is unresolved, matching seams.ts's own documented fallback for `join`. -->
-    <a href={seams.join || '/give'} class="btn-give" target="_blank" rel="noopener">Become a monthly giver</a>
+    <a href={seams.join || '/getinvolved'} class="btn-give" target="_blank" rel="noopener">Become a monthly giver</a>
   </div>
 </section>
 
@@ -501,6 +501,8 @@ import { seams } from '../../config/seams';
   .region .wrap{max-width:1180px}
   .region-photo{position:relative;border-radius:20px;overflow:hidden;
      aspect-ratio:21/9;box-shadow:var(--shadow);margin-bottom:8px}
+  .region-photo img{position:absolute;inset:0;width:100%;height:100%;
+     object-fit:cover;object-position:center 42%;display:block}
   .region-eyebrow{color:var(--ocean)}
   /* big, unmistakable region section headers */
   .region-header{font:600 clamp(2.4rem,5vw,3.6rem)/1.02 var(--display);
@@ -888,6 +890,7 @@ import { seams } from '../../config/seams';
   // this page's own inline <script> in the source handoff (nav scroll, hero entrance,
   // reveal-on-scroll, count-up are already handled globally by BaseLayout's
   // animations.js/nav.js).
+  import { youtubeIframeHtml } from '../../scripts/youtube-embed.js';
 
   // Our Impact: nav pinned white — the hero ground here is light green/white, not dark,
   // so the header must render in its scrolled (white-bar) state even at the very top of
@@ -907,8 +910,7 @@ import { seams } from '../../config/seams';
       lb.classList.add('open');
       return;
     }
-    const listParam = list ? ('&list=' + list) : '';
-    lbSlot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0' + listParam + '" title="Video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"></iframe>';
+    lbSlot.innerHTML = youtubeIframeHtml(id, { list });
     lb.classList.add('open');
   }
   function closeLb() {

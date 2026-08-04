@@ -626,10 +626,11 @@ Run in sequence. `hello@contentment.org` email must not be interrupted during cu
 | 1 | 72h before | Reduce all DNS TTLs to 60 seconds at current registrar |
 | 2 | 48h before | Add domain to Vercel project → Settings → Domains; verify SSL auto-provisions |
 | 3 | 24h before | Full smoke test on Vercel preview URL — all routes, forms, Keela links |
+| 3b | Before cutover build | **Unpublish internal project docs from the public site** (HC-077): remove Footer “Project docs” → `/docs`; stop `copy-docs.sh` / do not ship `public/docs` in the production build; drop or 404 `/docs*` redirects in `netlify.toml` / `vercel.json`. Leave `docs/` in the private repo — team-only, not publicly reachable on contentment.org |
 | 4 | Cutover | Set A record to `76.76.21.21` (Vercel) or CNAME to `cname.vercel-dns.com` for apex domain |
 | 5 | Cutover | **Verify MX records unchanged** — Google Workspace email must continue routing |
 | 6 | Cutover | Confirm HTTPS loads within 5 minutes (Vercel auto-provisions Let's Encrypt) |
-| 7 | +15 min | Smoke test https://contentment.org — homepage, /why, /give/monthly, Keela CTA |
+| 7 | +15 min | Smoke test https://contentment.org — homepage, /why, /getinvolved, Keela CTA; confirm `/docs` and `/docs/*` return 404 (or equivalent) and are absent from sitemap |
 | 8 | +1 hour | Submit sitemap.xml in Google Search Console; check for crawl errors |
 | 9 | +24h | Restore DNS TTLs to 3600 seconds |
 | 10 | +30 days | Decommission old site once backlink traffic has migrated |
@@ -689,3 +690,4 @@ Per [DECISION-006](./DECISIONS.md) — hybrid stack, signed off Somesh Bhardwaj,
 | 2026-06 | Added: Astro config spec (§8), vercel.json with CSP (§9), rate limiting with @upstash/ratelimit (§10), GitHub Actions CI/CD pipeline (§11), DNS cutover runbook (§12), updated performance and observability sections. DECISIONS.md created for 6 open choices. |
 | 2026-06 | §6 env vars consolidated: Upstash, Resend, Slack, Zoom, Keela webhook, Google Workspace — single canonical table. Recommendations recorded in DECISIONS 001–004. |
 | 2026-07 | Astro vs. static-partials fork closed — Anik confirmed static/SSG output with serverless scoped to `/api` (5 Jul 2026), matching the §8 `astro.config.mjs` spec already in this doc. Astro 4.x is confirmed for TICKET-002. |
+| 2026-08-04 | §12 cutover: step 3b — unpublish `/docs` hub + Footer “Project docs” at production go-live; docs remain in private repo only. |

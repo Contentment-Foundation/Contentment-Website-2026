@@ -16,8 +16,8 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'NGO',
   name: 'The Contentment Foundation',
-  url: 'https://contentment.org',
-  logo: 'https://contentment.org/assets/logo_lockup_light.svg',
+  url: 'https://www.contentment.org',
+  logo: 'https://www.contentment.org/assets/logo_lockup_light.svg',
   description: 'We equip teachers with evidenced wellbeing practices.',
   foundingDate: '2016',
   areaServed: 'Worldwide',
@@ -43,5 +43,6 @@ const organizationSchema = {
   <Pillars />
   <HomeroomBlock />
   <DoorCards />
-  <NewsletterForm />
+  <!-- FEAT-070: → Flodesk segment "www.contentment.org" (FLODESK_SEGMENT_WWW). -->
+  <NewsletterForm source="homepage_newsletter_band" />
 </BaseLayout>

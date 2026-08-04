@@ -25,16 +25,30 @@
 // festival-virtual/festival-irl/bali-retreat — blocked on HC-071, same Keela/Homeroom
 // choreography as data-join). Every gated CTA also keeps its verbatim data-event attribute
 // for THE CRITICAL SEAM (future return-trip redirect back to that event) — see the handoff
-// doc; nothing is wired to it yet, it's just carried through inert. The 3 email-capture
-// forms (data-embed="newsletter-signup" | "event-announcements") match Home/About/Why —
-// first name + email UI, client-side stub until Flodesk (FEAT-070 / D-19 / D-24).
+// doc; nothing is wired to it yet, it's just carried through inert.
+//
+// FEAT-070 (4 Aug 2026) — email capture is LIVE on this page. The `data-newsletter`
+// (forms) / `data-capture` (link CTAs) source is what picks the Flodesk segment, so
+// keep them distinct even where the copy is identical:
+//   events_signup        top capture fold          → EVENTS (D-24, unconfirmed)
+//   events_why_gather    "Why we gather"           → WWW
+//   events_announcements closing aside             → WWW
+//   festival_signup      hero "Save my free spot"  → FESTIVAL
+//   bali_waitlist        Bali recap link           → WWW
+//   regional_waitlist    Regional recap link       → WWW
+//   recap_be_first       recap "Be first to know"  → WWW
+// The four link CTAs share ONE <CaptureModal /> — it reads copy + source off the
+// trigger's data-capture-* attributes at open time. They keep data-rsvp so HC-071
+// can reclaim them. The 3 remaining .ev-btn CTAs in the Upcoming grid are still
+// plain #ev-signup scroll links — not yet assigned a segment.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CaptureModal from '../components/CaptureModal.astro';
 import { seams } from '../config/seams';
 const rsvpHref = seams.rsvp || '#ev-signup';
 const rsvpAttrs = /^https?:\/\//.test(rsvpHref)
   ? { target: '_blank', rel: 'noopener' }
   : {};
-const joinHref = seams.join || '/give';
+const joinHref = seams.join || '/getinvolved';
 const joinAttrs = /^https?:\/\//.test(joinHref)
   ? { target: '_blank', rel: 'noopener' }
   : {};
@@ -60,7 +74,14 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
       <aside class="ev-hero-card">
         <h2>Join The Contentment Festival 2026</h2>
         <p>November 13 &amp; 14. Held across time zones. No cost, no camera required, no experience needed. Just yourself!</p>
-        <a href={rsvpHref} {...rsvpAttrs} class="btn btn-primary" data-rsvp="festival-hero">Save my free spot <span class="arrow">&rarr;</span></a>
+        <!-- FEAT-070: opens CaptureModal → Flodesk segment "Contentment Festival".
+             Keeps data-rsvp so the HC-071 seam can take this button back over later. -->
+        <a
+          href="#capture-modal"
+          class="btn btn-primary"
+          data-capture="festival_signup"
+          data-rsvp="festival-hero"
+        >Save my free spot <span class="arrow">&rarr;</span></a>
       </aside>
     </div>
   </div>
@@ -75,14 +96,17 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
       <p class="ev-signup-sub">One-ish email a month, usually about a teacher, a tool or resource you can try, and events you can join.</p>
     </div>
     <div class="ev-signup-form">
-      <!-- FEAT-070 / D-24: Flodesk later — same first-name + email stub as Home/About/Why. -->
-      <form class="ev-capture" data-embed="newsletter-signup">
+      <!-- FEAT-070: → FLODESK_SEGMENT_EVENTS (falls back to FLODESK_SEGMENT_DEFAULT
+           until the events segment is confirmed — D-24). -->
+      <form class="ev-capture" data-newsletter="events_signup">
         <div class="ev-capture-row">
           <input type="text" name="first_name" placeholder="First name" aria-label="First name" autocomplete="given-name">
           <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
         </div>
+        <input type="text" name="company" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button class="btn btn-primary" type="submit">Keep me in the loop</button>
         <span class="ev-capture-fine">No noise. No spam. Leave whenever you want.</span>
+        <p class="nl-status" data-newsletter-status role="status" aria-live="polite"></p>
       </form>
     </div>
   </div>
@@ -254,14 +278,18 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
         <p class="ev-why-promise">&ldquo;We're with you&rdquo; is the promise we make to every teacher. Our gatherings are where everyone gets to feel it.</p>
         <div class="ev-why-signup">
           <p class="ev-why-signup-lead">Be first to know when events and experiences are announced.</p>
-          <!-- FEAT-070 / D-24: Flodesk later — UI stub only. -->
-          <form class="ev-capture ev-capture--on-dark" data-embed="event-announcements">
+          <!-- FEAT-070: → Flodesk segment "www.contentment.org" (FLODESK_SEGMENT_WWW).
+               Kept as its own source (not merged with the closing aside) so the two
+               "Keep me posted" boxes stay independently re-pointable. -->
+          <form class="ev-capture ev-capture--on-dark" data-newsletter="events_why_gather">
             <div class="ev-capture-row">
               <input type="text" name="first_name" placeholder="First name" aria-label="First name" autocomplete="given-name">
               <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
             </div>
+            <input type="text" name="company" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
             <button class="btn btn-primary" type="submit">Keep me posted</button>
             <span class="ev-capture-fine">No noise. No spam. Leave whenever you want.</span>
+            <p class="nl-status" data-newsletter-status role="status" aria-live="polite"></p>
           </form>
         </div>
       </div>
@@ -270,9 +298,8 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
 </section>
 
 <!-- 6. WHERE WE'VE ALREADY BEEN. Static by design request — no scroll-reveal .anim.
-     Bali is a click-to-play YouTube video, ~57% width, background-size:contain (not cover)
-     so the full video frame stays visible rather than being cropped — deliberate, preserved
-     exactly. -->
+     Bali is a click-to-play YouTube tile in a 16:9 cover frame (same pattern as
+     Schools / Our Impact video frames). -->
 <section class="band ev-recaps">
   <div class="wrap">
     <div class="ev-recaps-head">
@@ -291,7 +318,17 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
           <span class="ev-recap-place">Bali &middot; The Worldwide Wellbeing Retreat</span>
           <p>64 guests, 7 countries, 20 educators on member-funded scholarships, many never given a week for their own renewal in their whole careers. Mornings of practice, afternoons by the water, evenings in a circle.</p>
           <p class="ev-recap-hook">The next Wellbeing Worldwide Retreat is forming now.</p>
-          <a href={rsvpHref} {...rsvpAttrs} class="ev-recap-link" data-rsvp="bali-retreat">Join the waitlist <span class="arrow">&rarr;</span></a>
+          <!-- FEAT-070: opens CaptureModal → Flodesk segment "www.contentment.org". -->
+          <a
+            href="#capture-modal"
+            class="ev-recap-link"
+            data-capture="bali_waitlist"
+            data-capture-eyebrow="Bali Retreat"
+            data-capture-title="Join the waitlist"
+            data-capture-lead="Leave your details and we'll let you know the moment places open up."
+            data-capture-submit="Join the waitlist"
+            data-rsvp="bali-retreat"
+          >Join the waitlist <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -301,7 +338,17 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
           <span class="ev-recap-place">Mt Shasta &middot; Contentment Journey</span>
           <p>Twenty educators, community weavers, and wellbeing leaders in the foothills of a mountain, doing the radical thing: slowing down. Strangers on day one, a community by the last morning.</p>
           <p class="ev-recap-hook">Regional journeys continue in 2027.</p>
-          <a href={rsvpHref} {...rsvpAttrs} class="ev-recap-link" data-rsvp="regional-journey">Join the waitlist <span class="arrow">&rarr;</span></a>
+          <!-- FEAT-070: opens CaptureModal → Flodesk segment "www.contentment.org". -->
+          <a
+            href="#capture-modal"
+            class="ev-recap-link"
+            data-capture="regional_waitlist"
+            data-capture-eyebrow="Regional Journeys"
+            data-capture-title="Join the waitlist"
+            data-capture-lead="Leave your details and we'll let you know the moment places open up."
+            data-capture-submit="Join the waitlist"
+            data-rsvp="regional-journey"
+          >Join the waitlist <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -332,7 +379,16 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
           <span class="ev-recap-place">Singapore &middot; Tea and Contentment</span>
           <p>A morning of silence, slowing down, and the art of mindfully drinking tea with members and friends of the Foundation.</p>
           <p class="ev-recap-hook">Festival 2026 brings a gathering like this to a city near you.</p>
-          <a href="#ev-signup" class="ev-recap-link" data-embed="festival-signup">Be first to know <span class="arrow">&rarr;</span></a>
+          <!-- FEAT-070: opens CaptureModal → Flodesk segment "www.contentment.org". -->
+          <a
+            href="#capture-modal"
+            class="ev-recap-link"
+            data-capture="recap_be_first"
+            data-capture-eyebrow="Contentment Festival"
+            data-capture-title="Be first to know"
+            data-capture-lead="Leave your details and we'll tell you as soon as the next gathering is announced."
+            data-capture-submit="Be first to know"
+          >Be first to know <span class="arrow">&rarr;</span></a>
         </div>
       </article>
 
@@ -353,19 +409,24 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
       <aside class="ev-close-secondary anim">
         <h3>Just want to know what's coming?</h3>
         <p>Get event announcements in your inbox.</p>
-        <!-- FEAT-070 / D-24: Flodesk later — UI stub only. -->
-        <form class="ev-capture ev-capture--on-dark" data-embed="event-announcements">
+        <!-- FEAT-070: → Flodesk segment "www.contentment.org" (FLODESK_SEGMENT_WWW). -->
+        <form class="ev-capture ev-capture--on-dark" data-newsletter="events_announcements">
           <div class="ev-capture-row">
             <input type="text" name="first_name" placeholder="First name" aria-label="First name" autocomplete="given-name">
             <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
           </div>
+          <input type="text" name="company" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button class="btn btn-primary" type="submit">Keep me posted</button>
           <span class="ev-capture-fine">No noise. No spam. Leave whenever you want.</span>
+          <p class="nl-status" data-newsletter-status role="status" aria-live="polite"></p>
         </form>
       </aside>
     </div>
   </div>
 </section>
+
+<!-- FEAT-070: one shared capture modal serving every [data-capture] CTA on this page. -->
+<CaptureModal />
 
 </BaseLayout>
 
@@ -449,8 +510,11 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
   .ev-flagship-body{margin-top:24px;font-size:clamp(1.02rem,1.3vw,1.2rem);line-height:1.6;color:rgba(255,255,255,.94);max-width:60ch;text-shadow:0 1px 18px rgba(1,26,40,.7)}
   .ev-flagship-note{margin-top:18px;font-style:italic;font-family:var(--display);color:#bfeef5!important;text-shadow:0 1px 16px rgba(1,26,40,.6)}
   @media(max-width:900px){
-    .ev-flagship{min-height:auto}
-    .ev-flagship-grid{grid-template-columns:1fr;gap:24px;padding-top:clamp(120px,26vh,220px);padding-bottom:clamp(40px,6vw,64px)}
+    /* Keep the tall image band; place copy higher with even padding (not a huge sky gap) */
+    .ev-flagship{min-height:clamp(640px,92vh,900px)}
+    .ev-flagship-media{background-position:center 58%}
+    .ev-flagship-content{align-items:flex-start}
+    .ev-flagship-grid{grid-template-columns:1fr;gap:24px;padding-top:clamp(72px,11vh,100px);padding-bottom:clamp(48px,6vh,72px)}
     .ev-flagship-title{white-space:normal;font-size:clamp(2rem,7.5vw,3rem)}
     .ev-flagship-script{white-space:normal}
     .ev-flagship-txt{max-width:100%}
@@ -592,10 +656,14 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
   .ev-why-signup-lead{font-family:var(--display);font-weight:500;font-size:1.15rem;line-height:1.35;color:#fff;margin-bottom:14px;text-shadow:0 1px 18px rgba(4,20,14,.7)}
   .ev-why-signup .ev-capture{max-width:100%}
   @media(max-width:860px){
-    .ev-why{min-height:auto}
-    .ev-why-media{background-position:56% 40%}
-    .ev-why-content::before{background:linear-gradient(to top,rgba(60,42,14,.94) 0%,rgba(90,64,24,.66) 44%,rgba(120,86,30,.4) 100%)}
-    .ev-why-grid{padding-top:clamp(280px,44vh,420px);padding-bottom:clamp(48px,7vw,72px)}
+    /* Keep the tall photo band; place copy with even padding (was ~44vh empty above) */
+    .ev-why{min-height:clamp(560px,82vh,780px)}
+    .ev-why-media{background-position:56% 42%}
+    .ev-why-content{align-items:flex-start}
+    .ev-why-content::before{background:
+      linear-gradient(to bottom,rgba(60,42,14,.82) 0%,rgba(74,52,18,.72) 42%,rgba(90,64,24,.62) 100%),
+      linear-gradient(95deg,rgba(74,52,18,.88) 0%,rgba(120,86,30,.5) 58%,rgba(233,184,91,.16) 100%)}
+    .ev-why-grid{padding-top:clamp(72px,11vh,100px);padding-bottom:clamp(56px,8vh,88px)}
     .ev-why-txt{max-width:100%}
   }
 
@@ -614,17 +682,15 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
   /* Bali FEATURE card: full color-on-blue, image-led. Canonical brand-green gradient
      (same ramp as .impact/.doors sitewide) so white text sits on an already-approved combo. */
   .ev-recap:first-child{grid-column:1 / -1;flex-direction:row;align-items:stretch;background:linear-gradient(155deg,var(--green) 0%,#3C8E74 100%);border:1px solid rgba(255,255,255,.5)}
-  .ev-recap:first-child .ev-recap-media{flex:1.5;min-height:0;align-self:stretch}
-  .ev-recap:first-child .ev-recap-video{aspect-ratio:16/9}
-  .ev-recap:first-child .ev-recap-body{flex:1;justify-content:center}
+  .ev-recap:first-child .ev-recap-media{flex:1.5 1 0;min-width:0;align-self:center;width:100%;aspect-ratio:16/9}
+  .ev-recap:first-child .ev-recap-body{flex:1;min-width:0;justify-content:center}
   .ev-recap:first-child .ev-recap-place{color:#eaf6e8}
   .ev-recap:first-child .ev-recap-body>p{color:rgba(255,255,255,.92)}
   .ev-recap:first-child .ev-recap-hook{color:#fff!important}
   .ev-recap:first-child .ev-recap-link{color:#fff}
   .ev-recap-media{aspect-ratio:16/10;background-size:cover;background-position:center}
-  /* click-to-play YouTube tile: YT thumbnail poster (background-size:contain — deliberate,
-     keeps the full video frame visible rather than cropping it) + play button */
-  .ev-recap-video{position:relative;cursor:pointer;background-color:#012230;background-image:url("https://i.ytimg.com/vi/CoZ_J51AfNc/maxresdefault.jpg");background-size:contain;background-position:center;background-repeat:no-repeat}
+  /* click-to-play YouTube tile — 16:9 cover frame, matches site video framework */
+  .ev-recap-video{position:relative;overflow:hidden;cursor:pointer;background-color:#012230;background-image:url("https://i.ytimg.com/vi/CoZ_J51AfNc/maxresdefault.jpg");background-size:cover;background-position:center;background-repeat:no-repeat;aspect-ratio:16/9}
   .ev-recap-video::after{content:"";position:absolute;inset:0;background:rgba(1,26,40,.18);transition:background .3s}
   .ev-recap-video:hover::after,.ev-recap-video:focus-visible::after{background:rgba(1,26,40,.06)}
   .ev-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:72px;height:auto;transition:transform .3s,filter .3s;filter:drop-shadow(0 6px 20px rgba(1,20,30,.5))}
@@ -632,7 +698,8 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
   .ev-play svg{width:100%;height:auto;display:block}
   .ev-play-bg{fill:#023047;opacity:.92;transition:fill .3s,opacity .3s}
   .ev-recap-video:hover .ev-play-bg{fill:#e02f2f;opacity:1}
-  .ev-recap-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .ev-recap-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+  .ev-recap-video.playing{background-image:none}
   .ev-recap-video.playing::after,.ev-recap-video.playing .ev-play{display:none}
   .ev-recap-video:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
   .ev-recap-body{padding:30px 32px 32px;display:flex;flex-direction:column;justify-content:center}
@@ -676,7 +743,7 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
   @media(max-width:760px){
     .ev-recap-grid{grid-template-columns:1fr}
     .ev-recap:first-child{flex-direction:column}
-    .ev-recap:first-child .ev-recap-media{min-height:0;aspect-ratio:16/10}
+    .ev-recap:first-child .ev-recap-media{flex:none;width:100%;aspect-ratio:16/9}
   }
   @media(max-width:620px){
     .ev-grid{grid-template-columns:1fr}
@@ -691,19 +758,17 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
   // from events.html's inline <script> (nav scroll-state, hero entrance, reveal-on-scroll are
   // already handled globally by BaseLayout's nav.js/animations.js).
   import { initEventFilters, initEventParallax, initEventVideos } from '../scripts/events.js';
+  import { initNewsletterForms } from '../scripts/newsletter.js';
   import { trackEvent } from '../scripts/analytics.js';
   initEventFilters();
   initEventParallax();
   initEventVideos();
 
-  // FEAT-070: forms are UI-only until Flodesk — prevent navigation, fire analytics stub.
-  document.querySelectorAll('form.ev-capture').forEach((form) => {
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const source = form.getAttribute('data-embed') || 'events_email_capture';
-      trackEvent('newsletter_submit', { source: `events_${source}` });
-    });
-  });
+  // FEAT-070: capture forms now POST to /api/newsletter → Flodesk. The shared
+  // handler owns preventDefault, the request, the inline success/error state and
+  // the `newsletter_submit` event (which now fires on a confirmed subscribe, not
+  // on the click). The festival modal binds its own form in the component.
+  initNewsletterForms();
 
   document.querySelectorAll<HTMLAnchorElement>('[data-join]').forEach((link) => {
     link.addEventListener('click', () => {

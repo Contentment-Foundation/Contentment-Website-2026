@@ -37,8 +37,10 @@ header.scrolled .brand img{height:47px}
 .nav-links{display:flex;align-items:center;gap:26px;font-size:.9rem;font-weight:500}
 .nav-links>a,.drop>button{color:rgba(255,255,255,.94);transition:color .3s;position:relative;background:none;border:none;font:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:6px 0}
 header.scrolled .nav-links>a,header.scrolled .drop>button{color:var(--navlink)}
-.nav-links>a::after,.drop>button::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--teal);transition:width .3s}
+.nav-links>a::after,.drop>button::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:#fff;transition:width .3s,background .3s}
 .nav-links>a:hover::after,.drop:hover>button::after,.drop:focus-within>button::after{width:100%}
+.nav-links>a[aria-current="page"]::after{width:100%}
+header.scrolled .nav-links>a::after,header.scrolled .drop>button::after{background:var(--btnblue)}
 .drop{position:relative}
 .drop .chev{width:9px;height:9px;transition:transform .25s}
 .drop:hover .chev,.drop:focus-within .chev{transform:rotate(180deg)}
@@ -95,9 +97,11 @@ header.scrolled .menu-btn span{background:var(--navlink)}
   border-bottom:1px solid rgba(255,255,255,.12);position:relative
 }
 .nav-drawer__links a::after{
-  content:"";position:absolute;left:0;bottom:14px;width:0;height:2px;background:var(--teal);transition:width .3s
+  content:"";position:absolute;left:0;bottom:14px;width:0;height:2px;background:#fff;transition:width .3s
 }
 .nav-drawer__links a:hover::after,.nav-drawer__links a:focus-visible::after{width:100%}
+.nav-drawer__links a[aria-current="page"]::after{width:100%}
+.nav-drawer__links a[aria-current="page"]{font-weight:600}
 .nav-drawer__actions{margin-top:auto;display:flex;flex-direction:column;gap:12px;padding-top:28px}
 .nav-drawer__signin{font-size:.94rem;font-weight:500;color:rgba(255,255,255,.9);text-align:center;padding:6px 0}
 .nav-drawer__signin:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
@@ -437,7 +441,7 @@ p.body+p.body{margin-top:1.1em}
 
 /* ---------- FOUR PILLARS - full-bleed image w/ interactive words overlay ---------- */
 .pillars{position:relative;min-height:88vh;display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:var(--deep)}
-.pillars-bg{position:absolute;inset:-6% 0;background-size:cover;background-position:center 38%;will-change:transform}
+.pillars-bg{position:absolute;inset:-6% 0;background-size:cover;background-position:50% 38%;will-change:transform}
 .pillars::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(36,118,143,.5) 0%,rgba(36,118,143,.22) 26%,rgba(36,118,143,.6) 64%,rgba(36,118,143,.95) 100%)}
 .pillars-inner{position:relative;z-index:2;width:100%;padding:clamp(48px,8vw,90px) 0}
 .pillars-inner .eyebrow{color:#bfeef5}
@@ -473,65 +477,9 @@ p.body+p.body{margin-top:1.1em}
 .hr-widget{max-width:var(--hr-measure);width:100%;margin-inline:0}
 .hr-note{font-size:.78rem;line-height:1.5;color:var(--slate);opacity:.8;max-width:var(--hr-measure)}
 
-/* Dummy Keela donation form — coded stand-in until real embed (D-02, HC-030). */
-.donate-form{
-  background:#fff;border-radius:14px;padding:22px 20px 18px;
-  box-shadow:0 18px 44px -20px rgba(2,55,79,.38);
-  border:1px solid rgba(2,55,79,.06);
-  display:flex;flex-direction:column;gap:14px;font-family:var(--body);
-}
-.donate-form__title{font-size:1.15rem;font-weight:700;color:var(--ink);margin:0;line-height:1.25}
-.donate-form__desc{font-size:.82rem;line-height:1.45;color:var(--slate);margin:0}
-.donate-form__fieldset{border:0;padding:0;margin:0;min-width:0;display:flex;flex-direction:column;gap:8px}
-.donate-form__label{font-size:.88rem;font-weight:700;color:var(--ink);padding:0;float:none}
-.donate-form__row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.donate-form__row[aria-label="Amount"]{grid-template-columns:repeat(3,1fr)}
-.donate-form__chip{
-  appearance:none;-webkit-appearance:none;
-  background:#fff;border:1.5px solid #c5d0d6;border-radius:8px;
-  padding:.65em .5em;font:inherit;font-size:.88rem;font-weight:500;
-  color:#4a6a78;cursor:pointer;text-align:center;
-  transition:background .15s,border-color .15s,color .15s;
-}
-.donate-form__chip:hover{border-color:#9aabb4}
-.donate-form__chip.is-selected{background:#dce6e9;border-color:#c5d0d6;color:#3d5a68}
-.donate-form__chip:focus-visible{outline:2px solid var(--ocean);outline-offset:2px}
-.donate-form__chip--full{width:100%}
-.donate-form__other{display:flex;align-items:center;gap:6px;border:1.5px solid #c5d0d6;border-radius:8px;padding:.55em .75em;background:#fff}
-.donate-form__other[hidden]{display:none!important}
-.donate-form__other-prefix{color:#4a6a78;font-weight:500}
-.donate-form__other input{
-  flex:1;border:0;background:transparent;font:inherit;font-size:.88rem;color:var(--ink);
-  min-width:0;padding:0;
-}
-.donate-form__other input:focus{outline:none}
-.donate-form__other input::-webkit-outer-spin-button,
-.donate-form__other input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.donate-form__other input[type=number]{-moz-appearance:textfield;appearance:textfield}
-.donate-form__check{
-  display:flex;align-items:flex-start;gap:10px;font-size:.84rem;line-height:1.4;
-  color:var(--ink);cursor:pointer;
-}
-.donate-form__check input{
-  appearance:none;-webkit-appearance:none;flex-shrink:0;
-  width:18px;height:18px;margin-top:1px;border:1.5px solid #9aabb4;border-radius:4px;
-  background:#fff;cursor:pointer;position:relative;
-}
-.donate-form__check input:checked{background:var(--ocean);border-color:var(--ocean)}
-.donate-form__check input:checked::after{
-  content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;
-  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
-}
-.donate-form__check input:focus-visible{outline:2px solid var(--ocean);outline-offset:2px}
-.donate-form__check strong{font-weight:700}
-.donate-form__submit{
-  appearance:none;-webkit-appearance:none;width:100%;margin-top:4px;
-  background:var(--btnblue);color:#fff;border:0;border-radius:10px;
-  padding:.95em 1em;font:inherit;font-size:1rem;font-weight:700;
-  cursor:not-allowed;opacity:.92;
-}
-.donate-form__submit:not(:disabled){cursor:pointer;opacity:1}
-.donate-form__submit:not(:disabled):hover{background:#00a0d2}
+/* Keela General Donation Form embed (cdn.keela.co + give-usa.keela.co). */
+.keela-embed-wrap{width:100%}
+.keela-embed-form{width:100%;min-height:320px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* KENYA voice band - thin interstitial, image LEFT / text RIGHT, turquoise */
@@ -554,11 +502,8 @@ p.body+p.body{margin-top:1.1em}
   .voice-img{min-height:280px;order:-1}
   .voice-img::after{background:linear-gradient(0deg,rgba(2,40,58,.4) 0%,rgba(2,40,58,0) 30%)}
 }
-/* WJ: tiers + button replaced by the Keela widget.
-   PLACEHOLDER: .donate-form in HomeroomBlock is a coded stand-in until the real embed.
-   data-embed="keela-homeroom" is the seam for tech. */
-.keela-slot{margin:28px 0 18px;max-width:380px}
-.keela-slot img{width:100%;height:auto;border-radius:14px;box-shadow:0 20px 50px -22px rgba(2,55,79,.4)}
+/* WJ: tiers + button replaced by the Keela widget. */
+.keela-slot{margin:28px 0 18px;max-width:min(100%,420px);width:100%}
 .keela-note{font-size:.82rem;line-height:1.55;color:var(--slate);opacity:.85;max-width:52ch}
 .homeroom-more{display:inline-flex;align-items:center;gap:.5em;margin-top:20px;font-weight:600;font-size:.95rem;color:var(--btnblue);border-bottom:1.5px solid rgba(0,144,190,.3);padding-bottom:2px;transition:border-color .25s,gap .25s}
 .homeroom-more:hover{border-color:var(--btnblue);gap:.8em}
@@ -601,6 +546,25 @@ p.body+p.body{margin-top:1.1em}
 .news input:focus{outline:none;border-color:var(--teal)}
 .news .btn-primary{justify-content:center;width:100%;max-width:100%;white-space:normal;text-align:center}
 .news .fine{font-size:.84rem;color:var(--slate);opacity:.8}
+
+/* ---------- NEWSLETTER STATE (FEAT-070) ---------- */
+/* Shared by every email-capture form: homepage/updates NewsletterForm, About,
+   Why, the three Events .ev-capture forms and the Festival modal. Deliberately
+   token-based and unstyled-until-populated so it adds no visual weight to any of
+   those layouts until there is actually something to say. */
+
+/* Honeypot. Off-screen rather than display:none — some bots skip hidden inputs,
+   and aria-hidden + tabindex="-1" already keep it away from AT and keyboards. */
+.nl-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+
+.nl-status{font-size:.86rem;line-height:1.45;margin:0;min-height:0}
+.nl-status:empty{display:none}
+.nl-status[data-tone="error"]{color:#b3261e}
+.nl-status[data-tone="success"]{color:var(--deep);font-weight:600}
+/* On the dark Events bands and inside the blue-ish panels, the light-ground
+   colours above go muddy — lift both states to something legible. */
+.ev-capture--on-dark .nl-status[data-tone="error"]{color:#ffd5d0}
+.ev-capture--on-dark .nl-status[data-tone="success"]{color:#fff}
 
 /* ---------- FOOTER ---------- */
 /* V: footer -> #0090be. NOTE: this ground is light. All footer text raised to full
@@ -663,6 +627,11 @@ footer .wrap{position:relative;z-index:1}
   .news form{margin-left:0;max-width:100%}
   .news .row{flex-direction:column}
   .news .title,.news p{max-width:100%;overflow-wrap:break-word}
+  /* Four Pillars: as viewport narrows, cover crops more — ease focal point toward the teacher */
+  .pillars-bg{background-position:65% 38%}
+}
+@media(max-width:760px){
+  .pillars-bg{background-position:74% 38%}
 }
 @media(max-width:560px){
   .wrap{padding:0 22px}
@@ -698,6 +667,8 @@ footer .wrap{position:relative;z-index:1}
   .nav-cta{font-size:.82rem;padding:.5em 1.15em}
   .nav-drawer__cta{font-size:.88rem;padding:.72em 1.3em}
   .pgrid{grid-template-columns:1fr}
+  /* Four Pillars: pin crop to the male teacher + kids on the right (not center kids) */
+  .pillars-bg{background-position:82% 38%}
   /* Door cards: full-width vertical stack; shorter photos so three cards fit the scroll */
   .door-grid{grid-template-columns:minmax(0,1fr);gap:16px}
   .door{flex-direction:column}

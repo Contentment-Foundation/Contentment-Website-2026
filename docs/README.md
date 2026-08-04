@@ -78,6 +78,8 @@ Matching `*-BRIEF.md` files in `docs/briefs/` are the markdown source of each br
 
 Live preview (Netlify, interim): https://contentmentweb2.netlify.app/docs
 
+**Production cutover (FEAT-101 / HC-077):** do **not** publish the `/docs` hub on contentment.org. Remove the Footer “Project docs” link, stop `copy-docs.sh` / `public/docs` in the production build, and 404 `/docs*`. Sources stay in this private repo for the team.
+
 Production target: Vercel → `contentment.org` — see [research/WEBSITE-ARCHITECTURE.md](./research/WEBSITE-ARCHITECTURE.md) and [planning/TECHNICAL-ARCHITECTURE.md](./planning/TECHNICAL-ARCHITECTURE.md).
 
 All `.md` files remain in the private GitHub repo only — do not upload to public Google Drive.

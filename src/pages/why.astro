@@ -6,6 +6,7 @@
 // Shared <Nav />/<Footer /> replace this page's own header/footer markup (deleted per
 // migration hard rules); nav/footer seams are wired centrally in src/config/seams.ts.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import KeelaDonateForm from '../components/KeelaDonateForm.astro';
 ---
 <BaseLayout
   title="Why Teacher Wellbeing Matters — TCF"
@@ -147,57 +148,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <h2 class="title">Tend to the teacher, and you reach every child.</h2>
         <p>Since 2016, the 11,925 educators we have walked alongside have carried this work to more than 409,000 students. Certifying one educator costs about $1,200 over a year.</p>
       </div>
-      <!-- Coded stand-in donate form, same pattern as Home's HomeroomBlock, until the real
-           Keela checkout URLs land (D-02, HC-030) and the Keela/Homeroom join-flow
-           choreography (HC-071). data-embed="keela-homeroom" is the tech seam. -->
-      <div class="keela-slot anim" data-embed="keela-homeroom">
-        <form class="donate-form" id="why-donate-form-dummy" aria-label="Choose donation amount" onsubmit="return false">
-          <h3 class="donate-form__title">Choose Amount</h3>
-          <p class="donate-form__desc">Your gift sends ripples of wellbeing to the teachers and children around the world.</p>
-
-          <fieldset class="donate-form__fieldset">
-            <legend class="donate-form__label">Frequency</legend>
-            <div class="donate-form__row" role="group" aria-label="Frequency">
-              <button type="button" class="donate-form__chip" data-group="frequency" data-value="one-time" aria-pressed="false">One-Time</button>
-              <button type="button" class="donate-form__chip is-selected" data-group="frequency" data-value="monthly" aria-pressed="true">Monthly</button>
-            </div>
-          </fieldset>
-
-          <fieldset class="donate-form__fieldset">
-            <legend class="donate-form__label">Amount (USD)</legend>
-            <div class="donate-form__row" role="group" aria-label="Amount">
-              <button type="button" class="donate-form__chip" data-group="amount" data-value="25" aria-pressed="false">$25</button>
-              <button type="button" class="donate-form__chip" data-group="amount" data-value="50" aria-pressed="false">$50</button>
-              <button type="button" class="donate-form__chip is-selected" data-group="amount" data-value="100" aria-pressed="true">$100</button>
-            </div>
-            <button type="button" class="donate-form__chip donate-form__chip--full" data-group="amount" data-value="other" aria-pressed="false">$Other</button>
-            <label class="donate-form__other" hidden>
-              <span class="sr-only">Custom amount</span>
-              <span class="donate-form__other-prefix" aria-hidden="true">$</span>
-              <input type="number" name="custom-amount" min="1" step="1" placeholder="Enter amount" inputmode="numeric">
-            </label>
-          </fieldset>
-
-          <fieldset class="donate-form__fieldset">
-            <legend class="donate-form__label">I am donating as</legend>
-            <div class="donate-form__row" role="group" aria-label="Donor type">
-              <button type="button" class="donate-form__chip is-selected" data-group="donor" data-value="individual" aria-pressed="true">Individual</button>
-              <button type="button" class="donate-form__chip" data-group="donor" data-value="company" aria-pressed="false">Company</button>
-            </div>
-          </fieldset>
-
-          <label class="donate-form__check">
-            <input type="checkbox" name="dedicate">
-            <span>I would like to dedicate this gift.</span>
-          </label>
-
-          <label class="donate-form__check">
-            <input type="checkbox" name="cover-fees" checked>
-            <span>Add <strong data-fee>$2.56</strong> to help cover the processing fees</span>
-          </label>
-
-          <button type="submit" id="why-homeroom-donate-cta" class="donate-form__submit" disabled title="Donation checkout coming soon">Donate</button>
-        </form>
+      <!-- Keela General Donation Form (seams.keela.generalDonationForm). India + per-tier deferred. -->
+      <div class="keela-slot anim">
+        <KeelaDonateForm source="why_homeroom_block" />
       </div>
       <div class="homeroom-cta anim d1">
         <span class="fine">Cancel anytime. Gifts are unrestricted.</span>
@@ -214,13 +167,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h2 class="title">Something <span class="script">meaningful</span> for your inbox.</h2>
       <p class="body">Here you'll discover open-hearted stories, useful wellbeing practices, and invitations to help build a more caring future for education. No spam, no noise.</p>
     </div>
-    <!-- FEAT-070 (Flodesk integration) not wired yet — placeholder submit, matches Home's NewsletterForm. -->
-    <form class="anim d1" onsubmit="return false">
+    <!-- FEAT-070: → Flodesk segment "www.contentment.org" (FLODESK_SEGMENT_WWW). -->
+    <form class="anim d1" data-newsletter="why_page">
       <div class="row">
-        <input type="text" placeholder="First name" aria-label="First name">
-        <input type="email" placeholder="Email address" aria-label="Email address">
+        <input type="text" name="first_name" placeholder="First name" aria-label="First name" autocomplete="given-name">
+        <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
       </div>
+      <input type="text" name="company" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button class="btn btn-primary news-btn" type="submit">Send me something meaningful</button>
+      <p class="nl-status" data-newsletter-status role="status" aria-live="polite"></p>
     </form>
   </div>
 </section>
@@ -419,7 +374,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   // Page-specific behaviour not covered by src/scripts/*: accordion + video lightbox/inline-play.
   // Ported verbatim from why-wellbeing.html's inline <script> (nav scroll, hero entrance, reveal-on-
   // scroll, count-up are already handled globally by BaseLayout's animations.js/nav.js).
-  import { trackEvent } from '../scripts/analytics.js';
+  import { initNewsletterForms } from '../scripts/newsletter.js';
+  import { youtubeIframeHtml, createYoutubeIframe } from '../scripts/youtube-embed.js';
+
+  // FEAT-070 — "Send me something meaningful" → Flodesk segment "www.contentment.org".
+  initNewsletterForms();
 
   document.querySelectorAll('.qa-item').forEach((item) => {
     const b = item.querySelector('.qa-q');
@@ -429,67 +388,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
   });
 
-  // Coded stand-in donate form — same logic as Home's HomeroomBlock, disabled submit
-  // until the real Keela checkout URL lands (D-02, HC-030).
-  const donateForm = document.getElementById('why-donate-form-dummy');
-  if (donateForm) {
-    const feeEl = donateForm.querySelector('[data-fee]');
-    const otherWrap = donateForm.querySelector('.donate-form__other');
-    const otherInput = donateForm.querySelector<HTMLInputElement>('input[name="custom-amount"]');
-
-    const donateCta = document.getElementById('why-homeroom-donate-cta');
-    donateCta?.addEventListener('click', () => {
-      trackEvent('cta_homeroom_click', { source: 'why_homeroom_block' });
-    });
-
-    function feeFor(amount: number) {
-      return (Math.round(amount * 0.0256 * 100) / 100).toFixed(2);
-    }
-
-    function selectedAmount() {
-      const chip = donateForm!.querySelector('[data-group="amount"].is-selected');
-      if (!chip) return 100;
-      if (chip.getAttribute('data-value') === 'other') {
-        const n = Number(otherInput?.value);
-        return Number.isFinite(n) && n > 0 ? n : 0;
-      }
-      return Number(chip.getAttribute('data-value')) || 100;
-    }
-
-    function updateFee() {
-      const amt = selectedAmount();
-      if (feeEl) feeEl.textContent = amt > 0 ? `$${feeFor(amt)}` : '$—';
-    }
-
-    donateForm.querySelectorAll('.donate-form__chip').forEach((chip) => {
-      chip.addEventListener('click', () => {
-        const group = chip.getAttribute('data-group');
-        donateForm.querySelectorAll(`.donate-form__chip[data-group="${group}"]`).forEach((c) => {
-          c.classList.remove('is-selected');
-          c.setAttribute('aria-pressed', 'false');
-        });
-        chip.classList.add('is-selected');
-        chip.setAttribute('aria-pressed', 'true');
-
-        if (group === 'amount') {
-          const isOther = chip.getAttribute('data-value') === 'other';
-          if (otherWrap) (otherWrap as HTMLElement).hidden = !isOther;
-          if (isOther) otherInput?.focus();
-          updateFee();
-        }
-      });
-    });
-
-    otherInput?.addEventListener('input', updateFee);
-  }
-
   const lb = document.getElementById('lb');
   const lbSlot = document.getElementById('lbSlot');
   const lbClose = document.getElementById('lbClose');
 
   function openLb(id: string) {
     if (!lbSlot || !lb) return;
-    lbSlot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0" title="Video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
+    lbSlot.innerHTML = youtubeIframeHtml(id);
     lb.classList.add('open');
   }
   function closeLb() {
@@ -500,7 +405,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   // data-inline reels play in place (one click, playsinline stops iOS hijacking to fullscreen).
   function playInline(el: HTMLElement) {
     const id = el.dataset.yt;
-    el.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1" title="Teacher video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
+    if (!id) return;
+    el.replaceChildren(createYoutubeIframe(id, { title: 'Teacher video' }));
     el.removeAttribute('role');
     el.removeAttribute('tabindex');
     el.style.cursor = 'default';

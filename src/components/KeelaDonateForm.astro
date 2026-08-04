@@ -1,0 +1,86 @@
+---
+/**
+ * Keela General Donation Form embed.
+ * Interim site-wide form (all regions except India) until per-tier Homeroom
+ * checkout URLs land. Source of truth: seams.keela.generalDonationForm.
+ *
+ * Optional URL presets (from /getinvolved Join Homeroom):
+ *   /?amount=25|50|100&frequency=monthly#homeroom
+ * Keela's loader only appends embedId, so we rewrite the iframe src after it mounts.
+ */
+import { seams } from '../config/seams';
+
+interface Props {
+  /** Analytics source label, e.g. homepage_homeroom_block */
+  source?: string;
+  class?: string;
+}
+
+const { source = 'keela_donate_form', class: className = '' } = Astro.props;
+const embedSrc = seams.keela.generalDonationForm.embedSrc;
+const formName = seams.keela.generalDonationForm.name;
+---
+{embedSrc && (
+  <div
+    class:list={['keela-embed-wrap', className]}
+    data-embed="keela-homeroom"
+    data-keela-form={formName}
+    data-analytics-source={source}
+    data-keela-base={embedSrc}
+  >
+    <div class="keela-embed-form" data-src={embedSrc}>
+      <div class="keela-loading"><div></div><div></div><div></div><div></div></div>
+    </div>
+  </div>
+)}
+
+<script>
+  const ALLOWED = new Set(['25', '50', '100']);
+
+  function presetFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const amount = params.get('amount') || '';
+    if (!ALLOWED.has(amount)) return null;
+    const frequency = (params.get('frequency') || 'monthly').toLowerCase();
+    return { amount, frequency: frequency === 'one-time' || frequency === 'onetime' ? 'one-time' : 'monthly' };
+  }
+
+  function applyPreset(iframe, preset) {
+    try {
+      const url = new URL(iframe.src);
+      // Primary keys + alternates Keela/form builders sometimes honor
+      url.searchParams.set('amount', preset.amount);
+      url.searchParams.set('donationAmount', preset.amount);
+      url.searchParams.set('frequency', preset.frequency);
+      url.searchParams.set('interval', preset.frequency === 'monthly' ? 'monthly' : 'once');
+      const next = url.toString();
+      if (iframe.src !== next) iframe.src = next;
+      iframe.dataset.keelaPresetApplied = preset.amount;
+    } catch (_) {
+      /* ignore malformed src */
+    }
+  }
+
+  function watchEmbed(wrap) {
+    const preset = presetFromUrl();
+    if (!preset || !wrap) return;
+
+    wrap.dataset.selectedAmount = preset.amount;
+    wrap.dataset.selectedFrequency = preset.frequency;
+
+    const applyToChild = () => {
+      const iframe = wrap.querySelector('iframe[data-embed-id], iframe');
+      if (iframe?.src && iframe.dataset.keelaPresetApplied !== preset.amount) {
+        applyPreset(iframe, preset);
+      }
+    };
+
+    applyToChild();
+    const obs = new MutationObserver(applyToChild);
+    obs.observe(wrap, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
+    // Stop watching once applied + visible, or after a short window
+    window.setTimeout(() => obs.disconnect(), 15000);
+  }
+
+  document.querySelectorAll('.keela-embed-wrap[data-keela-base]').forEach(watchEmbed);
+</script>

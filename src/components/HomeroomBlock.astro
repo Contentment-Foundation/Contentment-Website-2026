@@ -1,9 +1,10 @@
 ---
 /**
  * Homeroom band — homepage.
- * PLACEHOLDER: coded dummy donation form until Keela checkout URLs land (D-02, HC-030).
- * data-embed="keela-homeroom" is the seam for the real embed.
+ * Keela General Donation Form embed (seams.keela.generalDonationForm).
+ * India region + per-tier Homeroom checkout URLs deferred.
  */
+import KeelaDonateForm from './KeelaDonateForm.astro';
 ---
 <section class="band homeroom" id="homeroom">
   <div class="hr-card">
@@ -14,116 +15,10 @@
     <h2 class="anim d1">Pull up a seat and join us.</h2>
     <p class="lead anim d2">Homeroom is our community of monthly supporters. You fund the training and coaching that make change like Priscillah's possible, and you get a front-row seat to it.</p>
 
-    <div class="hr-widget anim d3" data-embed="keela-homeroom">
-      <form class="donate-form" id="donate-form-dummy" aria-label="Choose donation amount" onsubmit="return false">
-        <h3 class="donate-form__title">Choose Amount</h3>
-        <p class="donate-form__desc">Your gift sends ripples of wellbeing to the teachers and children around the world.</p>
-
-        <fieldset class="donate-form__fieldset">
-          <legend class="donate-form__label">Frequency</legend>
-          <div class="donate-form__row" role="group" aria-label="Frequency">
-            <button type="button" class="donate-form__chip" data-group="frequency" data-value="one-time" aria-pressed="false">One-Time</button>
-            <button type="button" class="donate-form__chip is-selected" data-group="frequency" data-value="monthly" aria-pressed="true">Monthly</button>
-          </div>
-        </fieldset>
-
-        <fieldset class="donate-form__fieldset">
-          <legend class="donate-form__label">Amount (USD)</legend>
-          <div class="donate-form__row" role="group" aria-label="Amount">
-            <button type="button" class="donate-form__chip" data-group="amount" data-value="25" aria-pressed="false">$25</button>
-            <button type="button" class="donate-form__chip" data-group="amount" data-value="50" aria-pressed="false">$50</button>
-            <button type="button" class="donate-form__chip is-selected" data-group="amount" data-value="100" aria-pressed="true">$100</button>
-          </div>
-          <button type="button" class="donate-form__chip donate-form__chip--full" data-group="amount" data-value="other" aria-pressed="false">$Other</button>
-          <label class="donate-form__other" hidden>
-            <span class="sr-only">Custom amount</span>
-            <span class="donate-form__other-prefix" aria-hidden="true">$</span>
-            <input type="number" name="custom-amount" min="1" step="1" placeholder="Enter amount" inputmode="numeric">
-          </label>
-        </fieldset>
-
-        <fieldset class="donate-form__fieldset">
-          <legend class="donate-form__label">I am donating as</legend>
-          <div class="donate-form__row" role="group" aria-label="Donor type">
-            <button type="button" class="donate-form__chip is-selected" data-group="donor" data-value="individual" aria-pressed="true">Individual</button>
-            <button type="button" class="donate-form__chip" data-group="donor" data-value="company" aria-pressed="false">Company</button>
-          </div>
-        </fieldset>
-
-        <label class="donate-form__check">
-          <input type="checkbox" name="dedicate">
-          <span>I would like to dedicate this gift.</span>
-        </label>
-
-        <label class="donate-form__check">
-          <input type="checkbox" name="cover-fees" checked>
-          <span>Add <strong data-fee>$2.56</strong> to help cover the processing fees</span>
-        </label>
-
-        <button type="submit" id="homeroom-donate-cta" class="donate-form__submit" disabled title="Donation checkout coming soon">Donate</button>
-      </form>
+    <div class="hr-widget anim d3">
+      <KeelaDonateForm source="homepage_homeroom_block" />
     </div>
 
     <p class="hr-note anim d4">The Contentment Foundation is a 501(c)(3) nonprofit (EIN 47-5432756). Contributions are tax-deductible to the extent permitted by law.</p>
   </div>
 </section>
-
-<script>
-  import { trackEvent } from '../scripts/analytics.js';
-
-  const form = document.getElementById('donate-form-dummy');
-  if (form) {
-    const feeEl = form.querySelector('[data-fee]');
-    const otherWrap = form.querySelector('.donate-form__other');
-    const otherInput = form.querySelector('input[name="custom-amount"]');
-
-    // TICKET-080: cta_homeroom_click — the button is disabled until the real Keela
-    // checkout URL lands (D-02, HC-030); wiring the listener now means tracking
-    // works the moment it's enabled, with no further changes needed here.
-    const donateCta = document.getElementById('homeroom-donate-cta');
-    donateCta?.addEventListener('click', () => {
-      trackEvent('cta_homeroom_click', { source: 'homepage_homeroom_block' });
-    });
-
-    function feeFor(amount) {
-      // Dummy estimate matching the Keela widget screenshot at $100 → $2.56
-      return (Math.round(amount * 0.0256 * 100) / 100).toFixed(2);
-    }
-
-    function selectedAmount() {
-      const chip = form.querySelector('[data-group="amount"].is-selected');
-      if (!chip) return 100;
-      if (chip.getAttribute('data-value') === 'other') {
-        const n = Number(otherInput?.value);
-        return Number.isFinite(n) && n > 0 ? n : 0;
-      }
-      return Number(chip.getAttribute('data-value')) || 100;
-    }
-
-    function updateFee() {
-      const amt = selectedAmount();
-      if (feeEl) feeEl.textContent = amt > 0 ? `$${feeFor(amt)}` : '$—';
-    }
-
-    form.querySelectorAll('.donate-form__chip').forEach((chip) => {
-      chip.addEventListener('click', () => {
-        const group = chip.getAttribute('data-group');
-        form.querySelectorAll(`.donate-form__chip[data-group="${group}"]`).forEach((c) => {
-          c.classList.remove('is-selected');
-          c.setAttribute('aria-pressed', 'false');
-        });
-        chip.classList.add('is-selected');
-        chip.setAttribute('aria-pressed', 'true');
-
-        if (group === 'amount') {
-          const isOther = chip.getAttribute('data-value') === 'other';
-          if (otherWrap) otherWrap.hidden = !isOther;
-          if (isOther) otherInput?.focus();
-          updateFee();
-        }
-      });
-    });
-
-    otherInput?.addEventListener('input', updateFee);
-  }
-</script>

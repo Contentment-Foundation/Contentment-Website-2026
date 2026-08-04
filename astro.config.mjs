@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import netlify from '@astrojs/netlify';
 import sentry from '@sentry/astro';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -56,27 +55,28 @@ if (process.env.SENTRY_DSN) {
 }
 
 export default defineConfig({
-  site: 'https://contentment.org',
-  // TICKET-002 / FEAT-070 / FEAT-101 — 2 Aug 2026.
-  // 'hybrid' = every page still prerenders to static HTML exactly as before; a route
-  // only becomes server-rendered if it explicitly opts out with `export const
-  // prerender = false`. Nothing does today, so the built output is byte-for-byte the
-  // same static site — this purely unlocks the ability to add `/api/*` endpoints
-  // (FEAT-070's server-side newsletter route, per TECHNICAL-ARCHITECTURE §6.2, which
-  // needs the server-only FLODESK_API_KEY and so cannot be done client-side).
+  site: 'https://www.contentment.org',
+  // TICKET-002 / FEAT-070 / FEAT-101 — 3 Aug 2026. Was `output: 'hybrid'` + the
+  // Netlify adapter (2 Aug) to unlock `/api/*` for FEAT-070's newsletter route.
+  // Reverted to pure static: no route ever set `prerender = false`, so hybrid bought
+  // us nothing shipped while deploying a live SSR function, an edge middleware and an
+  // `/_image` endpoint — a runtime attack surface carrying 5 open Dependabot alerts
+  // (Host-header SSRF, X-Forwarded-Host reflection, sharp/libvips) that no page used.
+  // Verified: static output is file-for-file identical to the hybrid build minus
+  // `_redirects`, which netlify.toml already covers.
   //
-  // Adapter is Netlify because Netlify is the host until go-live; production moves to
-  // Vercel at DNS cutover (FEAT-101), which is a one-line adapter swap to
-  // @astrojs/vercel plus the existing vercel.json. Pinned to @astrojs/netlify@5.x —
-  // 6.x requires Astro 5 and 8.x requires Astro 7; we are on Astro 4.16.
-  output: 'hybrid',
-  adapter: netlify(),
-  // Only paths that are NOT also real files under public/ (those would be overwritten).
-  redirects: {
-    '/foundation-reach-map': '/foundation-reach-map.html',
-    '/story-board': '/story-board.html',
-    '/story-board-feed-guide': '/story-board-feed-guide.html',
-  },
+  // No `redirects` block on purpose. Without an adapter Astro stops emitting
+  // `dist/_redirects` and writes meta-refresh FILES instead, hardcoded to absolute
+  // `site` URLs — and a real file beats a non-forced netlify.toml rewrite, so
+  // /foundation-reach-map on the Netlify preview would bounce visitors to production
+  // contentment.org. All three prototype routes live in netlify.toml instead (200
+  // rewrites). Same trap as the docs/* note above; don't reintroduce either list here.
+  //
+  // Restoring server routes: Astro 5 REMOVES `output: 'hybrid'` and folds per-route
+  // `prerender = false` into `'static'`, so after the Astro 4→7 migration this line
+  // stays as-is and you only re-add an adapter (@astrojs/vercel@11 for FEAT-101, which
+  // peers on astro@^7 — same upgrade, so do them together).
+  output: 'static',
   integrations,
   vite: {
     plugins: [docsIndexDevPlugin()],

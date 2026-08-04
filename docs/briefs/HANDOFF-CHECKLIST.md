@@ -42,6 +42,7 @@
 | Events page — second round of team notes | Dave | Before /events production build (**HC-072**) |
 | Annual Report PDFs (2019–2024) | Somesh | Our Impact page PDF section (**HC-074**) |
 | Live Keela checkout URLs per tier ($25/$50/$100) for Homeroom donate button | Lorna + Somesh | Blocks FEAT-060/FEAT-051 (**HC-075**, Critical — splits the URL deliverable out from D-02/FEAT-060). Both escalating with Keela support for a senior support exec. |
+| Unpublish Project docs at production cutover | Somesh | Before contentment.org go-live (**HC-077** / FEAT-101): remove Footer “Project docs”; stop public `/docs*` routes; keep `docs/` in private repo only |
 
 ## Received Jul 29
 

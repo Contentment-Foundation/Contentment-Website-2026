@@ -1,4 +1,5 @@
 import { trackEvent } from './analytics.js';
+import { createYoutubeIframe } from './youtube-embed.js';
 
 // Events page — filter chips, full-bleed parallax, and click-to-play YouTube.
 // Ported verbatim from Dave's Jul 29 2026 handoff — see
@@ -76,12 +77,8 @@ export function initEventVideos() {
     function play() {
       if (el.classList.contains('playing')) return;
       const id = el.dataset.yt;
-      const f = document.createElement('iframe');
-      f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1';
-      f.title = 'Video';
-      f.allow = 'autoplay; encrypted-media; picture-in-picture';
-      f.allowFullscreen = true;
-      el.appendChild(f);
+      // www.youtube.com (not nocookie) — avoids YouTube bot/sign-in wall on embeds
+      el.appendChild(createYoutubeIframe(id, { modest: true }));
       el.classList.add('playing');
       trackEvent('video_started', {
         page_section: 'events_recap',

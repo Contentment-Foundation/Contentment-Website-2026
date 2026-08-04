@@ -1,0 +1,18 @@
+---
+/**
+ * Keela Forms master code — once in <head> (BaseLayout).
+ * Required before any .keela-embed-form mounts. Org + form IDs live in seams.ts.
+ */
+import { seams } from '../config/seams';
+
+const orgId = seams.keela.orgId;
+---
+{orgId && (
+  <>
+    <link rel="stylesheet" href="https://cdn.keela.co/forms/keela-forms.min.css" type="text/css">
+    <script async type="text/javascript" src="https://cdn.keela.co/forms/keela-forms.min.js"></script>
+    <script is:inline define:vars={{ orgId }}>
+      window.Keela = { id: orgId };
+    </script>
+  </>
+)}

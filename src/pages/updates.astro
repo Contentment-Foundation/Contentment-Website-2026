@@ -27,7 +27,10 @@ import NewsletterForm from '../components/NewsletterForm.astro';
       <h2 class="title">Wellbeing for educators, curated by us.</h2>
       <p class="body">Practical tools you can actually use, real stories from educators working in classrooms today, and the occasional thing that makes the week feel a little lighter.</p>
     </div>
-    <NewsletterForm />
+    <!-- `bare`: this page supplies its own .news section + heading above, so the
+         component must not render a second one (it used to, producing a nested
+         section and two headings). -->
+    <NewsletterForm source="updates_page" bare />
   </div>
 </section>
 

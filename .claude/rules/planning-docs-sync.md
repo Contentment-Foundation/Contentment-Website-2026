@@ -1,44 +1,107 @@
-# Planning docs sync (commit hygiene)
+# Planning docs sync (commit / push hygiene)
 
-Not every commit needs planning updates. **Code-only** UI/CSS/copy fixes → ship code only.
+Not every commit needs planning updates. **Code-only** UI/CSS/copy/layout polish → ship **code only**.
 
-When **status, scope, schedule, or team-facing truth** changes, sync the planning layer before/with the commit.
+When **status, scope, schedule, routes/slugs, CTA wiring, or team-facing truth** changes — sync the planning layer **before or with the commit**, and include the same updates when **pushing**.
 
-## Source of truth (edit these)
+## Always (source of truth)
 
-| Priority | File | Touch when |
-|----------|------|------------|
-| 1 | `docs/planning/launch-plan-data.json` | Ticket / HC / decision / page / date / summary |
-| 2 | `docs/planning/TRACKER.md` | Same progress + append changelog row |
-| 3 | `src/config/seams.ts` | Real CTA/URL values land |
+Edit these first whenever truth changed:
 
-## Full sync chain (after JSON/TRACKER edits)
+| # | File | Touch when |
+|---|------|------------|
+| 1 | `docs/planning/launch-plan-data.json` | Ticket / HC / decision / page / route / date / summary / seams narrative |
+| 2 | `docs/planning/TRACKER.md` | Same progress + **append a changelog row** |
+| 3 | `src/config/seams.ts` | Real CTA / URL / form values land (or change) |
+
+## Full sync chain (after JSON / TRACKER edits)
 
 ```bash
 python3 scripts/google-sheets/build-sheet-script.py   # → LaunchPlanSheet.gs EMBEDDED_JSON
 python3 scripts/refresh-launch-canvas.py              # → local canvas (not in git)
 ```
 
-Then remind the human: push JSON, re-paste `.gs` if needed, Sheet menu **Launch Plan → Refresh from source**.
+Then remind the human:
 
-## Sometimes (milestones only)
+1. Push the planning commit.
+2. Re-paste `scripts/google-sheets/LaunchPlanSheet.gs` into Apps Script if the Sheet uses the embedded copy.
+3. Sheet menu **Launch Plan → Refresh from source** (or **Force reseed live tabs** when HC/live tabs must match JSON).
 
-- `docs/planning/FEATURE-TICKETS.md`, `DECISIONS.md`, `ACCESSIBILITY.md` — scope/spec actually changed
-- `docs/briefs/HANDOFF-CHECKLIST.md` — meeting outcomes (Sheet is live HC tracker)
-- `docs/briefs/DEV-TIMELINE.html`, `dev-timelinev2.html` — schedule or FEAT status narrative
-- Stakeholder `docs/briefs/*-BRIEF.html` — only if non-eng readers need the update
+## Also update when the change touches them (commit/push checklist)
+
+Walk this list on every status-worthy commit. Update what applies; skip what does not.
+
+### Planning specs (`docs/planning/`)
+
+| File | Update when |
+|------|-------------|
+| `FEATURE-TICKETS.md` | Acceptance criteria, ticket title/scope, or FEAT status narrative changed |
+| `DECISIONS.md` | Decision opened / closed / wording changed |
+| `ACCESSIBILITY.md` | a11y requirements or patterns changed |
+| `SECURITY-AND-ACCESS.md` | Security / access / CSP / auth notes changed |
+| `TECHNICAL-ARCHITECTURE.md` | Stack, hosting, routing, or architecture milestone |
+| `FRONTEND-SPECIFICATION.md` | Locked UI / component contract changed |
+| `PRD.md` | Product scope / MVP boundaries changed |
+| `README.md` (planning) | Index / how-to for the planning set changed |
+| Page audits (`HOMEPAGE-RESPONSIVE-AUDIT.md`, `GIVE-RESPONSIVE-AUDIT.md`, `EVENTS-RESPONSIVE-AUDIT.md`, `OUR-IMPACT-RESPONSIVE-AUDIT.md`, `PRE-LAUNCH-QA-AUDIT.md`, …) | Audit findings or fix status for that page |
+
+### Briefs & timelines (`docs/briefs/`) — stakeholder / schedule records
+
+| File | Update when |
+|------|-------------|
+| `DEV-TIMELINE.html` | Sprint dates, go-live, or FEAT status narrative |
+| `dev-timelinev2.html` | Same (keep both timeline HTMLs aligned) |
+| `HANDOFF-CHECKLIST.md` | Meeting outcomes / HC items that briefs still mirror (Sheet is live HC tracker) |
+| `TEAM-BRIEF.md` + `TEAM-BRIEF.html` | Team-facing status that non-eng readers need |
+| `TECH-BRIEF.md` + `TECH-BRIEF.html` | Technical narrative for stakeholders |
+| `GROWTH-BRIEF.md` + `GROWTH-BRIEF.html` | Analytics / SEO / growth narrative |
+| `AUTOMATION-BRIEF.md` + `AUTOMATION-BRIEF.html` | Automation / ops narrative |
+
+After editing `docs/*.html` or brief HTML sources that feed `/docs/*`, refresh local preview if needed:
+
+```bash
+./scripts/copy-docs.sh
+```
+
+(`public/docs/` and `site/docs/` are generated — do not hand-edit.)
+
+**Production cutover (FEAT-101 / HC-077):** before contentment.org go-live, unpublish the internal docs hub — remove Footer “Project docs”, stop shipping `public/docs` / skip `copy-docs.sh` on the production build, and 404 `/docs*`. Keep `docs/` in the private repo. Preview Netlify may keep `/docs` until cutover.
+
+### Code wiring that is also “truth”
+
+| File | Update when |
+|------|-------------|
+| `src/config/seams.ts` | Destinations, Keela, forms, social, donate/join |
+| `public/sitemap.xml` | Public routes added/renamed/removed |
+| `netlify.toml` / `vercel.json` | Redirects, headers, CSP that match new routes |
+
+## Quick matrix
+
+| Change | Update |
+|--------|--------|
+| Visual / CSS / copy tweak only | Code only |
+| Ticket done / HC flipped / decision closed | JSON + TRACKER → `.gs` → canvas → Sheet refresh; + FEATURE-TICKETS / DECISIONS if wording changed |
+| Route / slug rename (e.g. `/give` → `/getinvolved`) | JSON + TRACKER + seams + sitemap + host redirects + FEATURE-TICKETS notes; timelines/briefs if they still show the old path |
+| Sprint / go-live / schedule narrative | JSON + TRACKER + **both** timeline HTMLs (+ TEAM/TECH briefs if stakeholders need it) |
+| Deploy / architecture milestone | JSON + TRACKER changelog (+ TECHNICAL-ARCHITECTURE / TECH-BRIEF if useful) |
+| CTA / Keela / form wiring | seams + JSON/TRACKER (+ GROWTH/TECH brief if stakeholder-visible) |
+
+## Commit & push expectations
+
+When the user asks to **commit** and/or **push** a status-worthy change:
+
+1. Confirm planning files above are updated (or explicitly note “code-only, no planning”).
+2. Run `build-sheet-script.py` (and canvas refresh when JSON changed).
+3. Include planning + generated `.gs` in the commit when they changed.
+4. On push, remind: Sheet **Refresh from source** / **Force reseed** as needed.
 
 ## Do not commit / do not hand-edit
 
 - Canvas output under `~/.cursor/projects/.../canvases/` — regenerate only
 - `public/docs/`, `site/docs/`, `dist/` — build output
 - Don't rewrite `LaunchPlanSheet.gs` by hand — use `build-sheet-script.py`
+- Don't edit only the HTML brief and skip the `.md` twin (or vice versa) when both exist — keep pairs aligned
 
-## Quick matrix
+## Keep rules mirrored
 
-| Change | Update |
-|--------|--------|
-| Visual/CSS/copy tweak | Code only |
-| Ticket done / HC flipped / decision closed | JSON + TRACKER → `.gs` → canvas → Sheet refresh |
-| Sprint / go-live narrative | + timeline HTML (+ briefs if stakeholders need it) |
-| Deploy / architecture milestone | + TRACKER changelog (+ FEATURE-TICKETS note if useful) |
+This file and `.cursor/rules/planning-docs-sync.mdc` must stay **content-aligned**. Edit both when changing the policy.

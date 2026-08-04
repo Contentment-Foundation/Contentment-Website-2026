@@ -11,6 +11,34 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# FEAT-070 — newsletter → Flodesk. A host-native function, NOT an Astro API route:
+# astro.config.mjs stays `output: 'static'` with no adapter on purpose (3 Aug — the
+# SSR adapter was removed over unused runtime attack surface). This gives us
+# server-side FLODESK_API_KEY handling without bringing any of that back.
+# Set FLODESK_API_KEY + FLODESK_SEGMENT_* in Site settings → Environment variables.
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Public path matches the Vercel twin (api/newsletter.js), so the client posts to
+# /api/newsletter on both hosts and src/scripts/newsletter.js needs no host check.
+[[redirects]]
+  from = "/api/newsletter"
+  to = "/.netlify/functions/newsletter"
+  status = 200
+  force = true
+
+# Get Involved slug: /give → /getinvolved (keep old bookmarks working)
+[[redirects]]
+  from = "/give"
+  to = "/getinvolved"
+  status = 301
+
+[[redirects]]
+  from = "/give/*"
+  to = "/getinvolved"
+  status = 301
+
 # Security headers — interim Netlify config (migrate to Vercel in TICKET-002)
 [[headers]]
   for = "/*"
@@ -35,13 +63,15 @@
     #                        injected by JS) and a missing frame-src silently
     #                        renders an empty box rather than erroring
     #   docs.google.com      school discovery form iframe (FEAT-041, Phase 2)
+    #   cdn.keela.co         Keela Forms master CSS/JS (FEAT-060)
+    #   *.keela.co           Keela donate embed iframe + API (give-usa.keela.co)
     #   *.ingest*.sentry.io  Sentry, once SENTRY_DSN lands (DECISION-006)
     # 'unsafe-inline' is required: Astro `is:inline` blocks, the gtag bootstrap and
     # the Osano snippet are all inline. img-src stays a broad `https:` on purpose —
     # images come from ytimg, filesusr, pexels and Wix, and the exfil risk from an
     # image URL is low enough that enumerating them isn't worth the breakage.
     # frame-ancestors is deliberately absent, matching the X-Frame-Options note above.
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cmp.osano.com https://www.clarity.ms https://*.clarity.ms https://*.posthog.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cmp.osano.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.clarity.ms https://*.clarity.ms https://*.posthog.com https://cmp.osano.com https://api.flodesk.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://docs.google.com https://*.flodesk.com https://*.keela.co https://*.raisely.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self';"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cmp.osano.com https://www.clarity.ms https://*.clarity.ms https://*.posthog.com https://cdn.jsdelivr.net https://cdn.keela.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cmp.osano.com https://cdn.keela.co; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.clarity.ms https://*.clarity.ms https://*.posthog.com https://cmp.osano.com https://api.flodesk.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.keela.co; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://docs.google.com https://*.flodesk.com https://*.keela.co https://*.raisely.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https://*.keela.co;"
 
 # Docs hub + briefs (source: docs/*.html, copied at build)
 [[redirects]]

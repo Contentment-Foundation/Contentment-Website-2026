@@ -76,7 +76,8 @@ Prototype routes (also in `netlify.toml`): `/foundation-reach-map`, `/story-boar
 ## Gotchas — read before editing
 
 - **`site/docs/` is gitignored and generated.** Edit brief sources in `docs/` only, then run
-  `./scripts/copy-docs.sh` to refresh the local preview.
+  `./scripts/copy-docs.sh` to refresh the local preview. **At production cutover (FEAT-101 / HC-077):**
+  remove Footer “Project docs”, stop publishing `/docs*` on contentment.org; keep `docs/` in the private repo only.
 - After editing `site/index.html`, regenerate `contentment-home.html` if the single-file build is still needed.
 - Links use **relative paths** so the site works over `file://` and a local server.
 - `prefers-reduced-motion` is respected throughout — keep any new animations gated the same way.
@@ -134,7 +135,22 @@ Config: `~/.cursor/mcp.json` (global — applies to all Cursor projects). Restar
 - **Day-to-day page work → `src/` (Astro).** Routes under `src/pages/`; shared chrome in `src/components/`; tokens/CSS in `src/styles/`. Netlify publishes `dist/` from `npm run build`. `site/` is the superseded Phase 1 prototype — don't edit it for production.
 - Match existing tokens, fonts, and the `.anim` reveal pattern — don't introduce a new design language.
 - When in doubt about scope or architecture, check `docs/planning/` before acting.
-- **Planning sync:** follow `.claude/rules/planning-docs-sync.md` (mirrored in `.cursor/rules/planning-docs-sync.mdc`). Code-only UI fixes don't need JSON/TRACKER/canvas; ticket/HC/decision/deploy status changes do — update `launch-plan-data.json` + `TRACKER.md`, then run `build-sheet-script.py` + `refresh-launch-canvas.py`.
+- **Planning sync:** follow `.claude/rules/planning-docs-sync.md` (mirrored in `.cursor/rules/planning-docs-sync.mdc`). Code-only UI fixes don't need planning. Status / route / CTA / schedule / decision changes do — update `launch-plan-data.json` + `TRACKER.md`, run `build-sheet-script.py` + `refresh-launch-canvas.py`, and walk the rule's full checklist (FEATURE-TICKETS / DECISIONS / timelines / briefs / sitemap / redirects) for anything that applies. On commit/push of status-worthy work, include those updates and remind: Sheet **Launch Plan → Refresh from source** (or Force reseed).
+
+## Recent work attribution (read before editing)
+
+Engineering owner for the live Astro site and launch-plan sync is **Somesh Bhardwaj** (`Dev-Somesh` in git; somesh@contentment.org). When TRACKER / JSON notes say **Aug 4 (Somesh)** (or similar dated Somesh tags), treat those as Somesh-directed changes — do not reattribute to Dave, Kristina, or another agent without evidence.
+
+**4 Aug 2026 session (Somesh), still relevant:**
+
+| Area | What landed |
+|------|-------------|
+| `/getinvolved` | Donate split `#donate` — `public/assets/gi-donate-photo.jpg` + `KeelaDonateForm` (same General Donation Form as homepage); one-time gift → `#donate` |
+| Nav | Current-page underline via `aria-current="page"` — white on transparent header, `--btnblue` when scrolled; desktop + drawer |
+| `/schools` | Wellbeing-lead photo replaced at `public/assets/fs-Jadielsm.jpg` (same path) |
+| Cutover checklist | **HC-077** — unpublish Footer “Project docs” + public `/docs*` at contentment.org go-live; keep `docs/` in private repo |
+
+Authoritative changelog: `docs/planning/TRACKER.md`. Sheet source: `docs/planning/launch-plan-data.json`.
 
 ## Contact
 

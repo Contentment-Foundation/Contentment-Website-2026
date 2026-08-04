@@ -90,7 +90,8 @@ Replace `href="#"` and hash-only links with real routes per [Website Architectur
 - [x] Hash links on homepage (`#why`, etc.) still work on `/` only
 - [x] Aug 3 — Sign In → `school.contentment.org`; Donate → `/give` fallback; known homepage CTAs wired (Spread the movement still TBD WJ)
 
-> **Update (3 Aug 2026):** Wired known destinations ahead of Kristina's full Miro inventory (HC-005 still Open). Real Keela checkout/join remain empty (HC-075/071).
+> **Update (3 Aug 2026):** Wired known destinations ahead of Kristina's full Miro inventory (HC-005 still Open).
+> **Update (4 Aug 2026):** Donate → `/#homeroom` (Keela General Donation Form live). `giveOneTime` → `/#homeroom`. Per-tier Homeroom join + Events RSVP seams still open (HC-075/071).
 
 ---
 
@@ -129,6 +130,8 @@ Port entire homepage from `site/index.html` to index route. All sections: hero, 
 Compare homepage copy to [Messaging brief §6 Home](../research/MESSAGING-AND-COPY.md). Update headlines/subheads only where brief specifies different copy. Do not change layout. Ensure orientation line, three beats, and proof stats match Section 8 exactly.
 
 > **Status (31 Jul 2026):** Done. Fixed Four Pillars definitions to verbatim brief wording (`Pillars.astro`) and the Homeroom CTA to "Join Homeroom, from $5/month" (`InviteBand.astro`). Everything else already matched. One item flagged, not fixed: `HomeroomBlock.astro`'s dummy donate form has `data-group="donor"` — banned-word cleanup deferred to whoever wires the real Keela form (FEAT-060), since that file is mid-flight on another ticket.
+>
+> **Update (4 Aug 2026):** Dummy donate form (and `data-group="donor"`) replaced by Keela General Donation Form embed — flag closed.
 
 **Acceptance criteria:**
 - [x] Stats: 325 schools, 12 countries, 11,925 educators, 409,625+ students, 86%
@@ -151,6 +154,8 @@ Compare homepage copy to [Messaging brief §6 Home](../research/MESSAGING-AND-CO
 Long-form page using existing section patterns (`.split`, `.impact`, `.quote-card`, `.band`). Structure per messaging brief: objection → weight → ripple → reflection pause → why now → evidence → "but what about" cards → Peter's school → CTA. Open with orientation line. Primary CTA: Join Homeroom. Secondary: Share this page.
 
 > **Status (31 Jul 2026):** RF-006 Why click-through done — locked widths (320–1280) clean; accordion + YouTube CEO/reel slots OK. No layout bugs found. Homeroom Keela + newsletter remain placeholders (HC-075 / FEAT-070). Copy audit vs messaging brief still open (acceptance criteria below).
+>
+> **Update (4 Aug 2026):** Keela General Donation Form live in give band. Newsletter still placeholder (FEAT-070).
 
 > **Status (29–30 Jul 2026):** Ported verbatim to `src/pages/why.astro` from Dave's Jul 29 2026 handoff. Fixed one real bug during migration: the stat numbers (86%, 90%+, 9 in 10, National) shared the homepage's `.num` class, which the site-wide count-up script would have overwritten with "NaN" on scroll — renamed to `.rnum`. Content/UX acceptance criteria below are unverified against the messaging brief (technical migration only, not a copy audit).
 
@@ -291,6 +296,8 @@ Form on `/schools`: school name, contact name, email, role, country, message. St
 Five "seats" per messaging brief using door-card or tier patterns: Homeroom, school, spread, events, educators. Each seat has mechanism line. Homeroom featured first.
 
 > **Status (31 Jul 2026):** RF-006 Give click-through done — locked widths (320–1280) clean; no code fixes. Ported to `src/pages/give.astro` (Get Involved / Homeroom monthly-giving content) from Dave's Jul 29 handoff. D-03/HC-031 (`/give` vs `/give` + `/give/monthly`) still open — single page at `/give` only. Join/give-one-time/ways-to-give seams empty pending Lorna/Keela (HC-075).
+>
+> **Update (4 Aug 2026):** `giveOneTime` → `/#homeroom` (General Donation Form). Join Homeroom tiers deep-link to homepage form with selected amount (`seams.homeroomDonateUrl`). `joinTiers` + `waysToGive` still empty.
 
 **Acceptance criteria:**
 - [ ] Five seats in correct order
@@ -325,15 +332,21 @@ Full Homeroom page per messaging brief: homeroom metaphor, $5 reframe, tiers, fo
 |-------|-------|
 | **Priority** | must-have |
 | **Dependencies** | Keela URLs from finance |
+| **Status** | 🟡 In Progress (4 Aug 2026) |
 
 **Description:**  
 Wire all Homeroom CTAs to Keela hosted checkout via env vars. Support tiers $5, $25, $100. Add `data-analytics="cta_homeroom_click"` on buttons. Preserve UTM params in redirect URLs where Keela allows.
 
+> **Update (4 Aug 2026):** Interim path shipped — **General Donation Form** (Keela org `CBbknhqovLi8DNEzW`, embed `https://give-usa.keela.co/embed/MnqZFksL49Ym3M8Ho`) for all regions except India (deferred). Master script in `KeelaScripts.astro` (BaseLayout `<head>`); embed in `KeelaDonateForm.astro` on homepage Homeroom + `/why` give band. Recorded in `seams.keela`. Donate CTAs → `/#homeroom`; `giveOneTime` → same. CSP allows `cdn.keela.co` + `*.keela.co`. **Aug 4 follow-on:** `/give` Join Homeroom tiers deep-link to `/?amount=25|50|100&frequency=monthly#homeroom` (`seams.homeroomDonateUrl`); form forwards those params onto the Keela iframe. **Still open:** per-tier Homeroom `joinTiers` hosted URLs, India region, live test transaction, `/give/monthly` routing (D-03).
+
 **Acceptance criteria:**
-- [ ] Nav, hero, homeroom section, `/give/monthly` all link to live Keela
-- [ ] No remaining `#` on donation CTAs
-- [ ] Env vars documented in `.env.example`
+- [x] Homepage Homeroom + `/why` donate widgets use live Keela embed (General Donation Form)
+- [x] Donate nav/footer no longer `#` — points to `/#homeroom`
+- [ ] Per-tier Homeroom `joinTiers` wired on `/give` Join Homeroom
+- [ ] India region form (deferred)
+- [ ] Env vars documented in `.env.example` (tier URLs — when per-tier products land)
 - [ ] Test transaction completed in Keela sandbox/staging
+- [ ] `/give/monthly` (or D-03 equivalent) linked once routing lands
 
 ---
 
@@ -531,6 +544,7 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 - [ ] https://contentment.org loads homepage
 - [ ] All Phase 1 routes work on production
 - [ ] Preview branch deploys work for future PRs
+- [ ] Internal project docs are **not** publicly accessible: Footer “Project docs” removed; production build does not publish `public/docs` / does not run `copy-docs.sh` into the deploy artifact; `/docs` and `/docs/*` 404 (or equivalent) on contentment.org; `docs/` sources stay in the private GitHub repo only (HC-077)
 
 ---
 
@@ -572,3 +586,5 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | 2026-07-31 | TICKET-011 (homepage copy audit) done. TICKET-041 (school form) scaffolded per D-04, blocked on the Google Form itself existing. TICKET-070 (newsletter) — `/updates` page built, form submission reverted back to a placeholder after an unverified direct-to-Flodesk-API implementation was caught in review (doesn't match this doc's own §6.2 spec, blocked on FEAT-101 for a real server route). See TRACKER.md for full detail. |
 | 2026-07-31 | TICKET-041 (school form) Done — the Google Form URL landed same-day, all acceptance criteria checked. |
 | 2026-08-03 | TICKET-041 → Scheduled Phase 2. Kristina Miro: hold Google Form embed; test simple `/schools` page first. Embed commented off; seam URL cleared (retained in comment). |
+| 2026-08-04 | TICKET-101 — acceptance: unpublish internal `/docs` + Footer “Project docs” at production cutover (repo keeps docs; public site must not). |
+| 2026-08-04 | Somesh — `/getinvolved` `#donate` split (Keela General Donation Form + `gi-donate-photo.jpg`); Nav `aria-current` underline; `/schools` `fs-Jadielsm.jpg` photo swap. See TRACKER changelog. |

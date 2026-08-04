@@ -1,0 +1,257 @@
+---
+// FEAT-070 — shared email-capture modal for CTAs that have no destination yet.
+//
+// Several Events CTAs are links, not forms, and their RSVP/join destination is
+// still blocked on HC-071 (seams.rsvp is empty, so they dead-ended at #ev-signup).
+// Rather than leave them inert, they now open this modal and the address goes to
+// Flodesk. ONE instance serves every trigger on the page — copy and destination
+// are read off the trigger element at open time.
+//
+// Wiring a CTA:
+//   <a href="#capture-modal"
+//      data-capture="bali_waitlist"                 <- REQUIRED: must be a
+//                                                      KNOWN_SOURCES value in
+//                                                      src/lib/flodesk.js, and
+//                                                      it picks the segment
+//      data-capture-eyebrow="Bali Retreat"
+//      data-capture-title="Join the waitlist"
+//      data-capture-lead="…"
+//      data-capture-submit="Join the waitlist">
+//
+// Every data-capture-* is optional and falls back to the festival defaults below.
+// Dialog behaviour (focus trap, Escape, backdrop, scroll lock) mirrors the mobile
+// nav drawer in src/scripts/nav.js — see ACCESSIBILITY.md.
+---
+
+<div class="fs-modal" id="capture-modal" aria-hidden="true">
+  <div class="fs-modal__backdrop" data-fs-close></div>
+  <div class="fs-modal__panel" role="dialog" aria-modal="true" aria-labelledby="fs-modal-title">
+    <button type="button" class="fs-modal__close" data-fs-close aria-label="Close">&#215;</button>
+    <p class="fs-modal__eyebrow" data-capture-eyebrow>Contentment Festival</p>
+    <h2 class="fs-modal__title" id="fs-modal-title" data-capture-title>Save your free spot</h2>
+    <p class="fs-modal__lead" data-capture-lead>Pop your details in and we'll send you the joining details, plus a heads-up the moment the full programme is announced.</p>
+
+    <form class="fs-modal__form" data-newsletter="festival_signup">
+      <input type="text" name="first_name" placeholder="First name" aria-label="First name" autocomplete="given-name">
+      <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required>
+      <!-- Honeypot — hidden from people, irresistible to bots. -->
+      <input type="text" name="company" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn btn-primary" type="submit" data-capture-submit>Save my free spot</button>
+      <span class="fs-modal__fine">No noise. No spam. Leave whenever you want.</span>
+      <p class="nl-status" data-newsletter-status role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+
+<style>
+  .fs-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+  }
+  .fs-modal.open { display: block; }
+
+  .fs-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 55, 79, 0.55);
+    backdrop-filter: blur(3px);
+  }
+
+  .fs-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(92vw, 460px);
+    margin: 12vh auto 0;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: var(--paper);
+    border-radius: 20px;
+    padding: 2.2rem 1.9rem 1.9rem;
+    box-shadow: 0 30px 70px -20px rgba(2, 55, 79, 0.5);
+    animation: fs-rise 0.32s ease both;
+  }
+
+  @keyframes fs-rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Respect the site-wide motion contract (CLAUDE.md). */
+  @media (prefers-reduced-motion: reduce) {
+    .fs-modal__panel { animation: none; }
+  }
+
+  .fs-modal__close {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.9rem;
+    background: none;
+    border: 0;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--deep);
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    border-radius: 8px;
+  }
+  .fs-modal__close:hover { opacity: 0.7; }
+
+  .fs-modal__eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ocean);
+    margin-bottom: 0.5rem;
+  }
+
+  .fs-modal__title {
+    font-family: var(--display, 'Newsreader', serif);
+    color: var(--deep);
+    font-size: clamp(1.5rem, 4vw, 1.95rem);
+    line-height: 1.15;
+    margin-bottom: 0.6rem;
+  }
+
+  .fs-modal__lead {
+    color: var(--ink);
+    opacity: 0.85;
+    font-size: 0.95rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .fs-modal__form { display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .fs-modal__form input[type='text'],
+  .fs-modal__form input[type='email'] {
+    width: 100%;
+    padding: 0.85em 1.1em;
+    border-radius: 999px;
+    border: 1px solid rgba(2, 78, 112, 0.22);
+    background: #fff;
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+  .fs-modal__form input:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 1px;
+  }
+
+  .fs-modal__form .btn { width: 100%; }
+
+  .fs-modal__fine {
+    font-size: 0.78rem;
+    opacity: 0.7;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .fs-modal__panel { margin-top: 8vh; padding: 2rem 1.3rem 1.6rem; }
+  }
+</style>
+
+<script>
+  import { initNewsletterForms } from '../scripts/newsletter.js';
+
+  const modal = document.getElementById('capture-modal');
+  const panel = modal?.querySelector('.fs-modal__panel');
+  const form = modal?.querySelector('form[data-newsletter]');
+
+  if (modal && panel && form) {
+    // The form is in the DOM from the start (just hidden), so bind it once here.
+    // newsletter.js reads data-newsletter at SUBMIT time, which is what lets one
+    // form serve several triggers.
+    initNewsletterForms(modal);
+
+    const eyebrowEl = modal.querySelector('[data-capture-eyebrow]');
+    const titleEl = modal.querySelector('[data-capture-title]');
+    const leadEl = modal.querySelector('[data-capture-lead]');
+    const submitEl = modal.querySelector('[data-capture-submit]');
+    const statusEl = modal.querySelector('[data-newsletter-status]');
+
+    // Festival defaults, captured before anything overwrites them.
+    const defaults = {
+      source: form.getAttribute('data-newsletter'),
+      eyebrow: eyebrowEl?.textContent,
+      title: titleEl?.textContent,
+      lead: leadEl?.textContent,
+      submit: submitEl?.textContent,
+    };
+
+    let lastFocus = null;
+
+    const focusable = () => [...panel.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]):not([tabindex="-1"])',
+    )];
+
+    /** Reset submitted state — the same modal may be reopened for a different CTA. */
+    function reset() {
+      form.dataset.state = '';
+      if (statusEl) {
+        statusEl.textContent = '';
+        statusEl.dataset.tone = '';
+      }
+      form.querySelectorAll('input').forEach((input) => { input.disabled = false; });
+      form.reset();
+    }
+
+    function open(trigger) {
+      const data = trigger.dataset;
+      form.setAttribute('data-newsletter', data.capture || defaults.source);
+      if (eyebrowEl) eyebrowEl.textContent = data.captureEyebrow || defaults.eyebrow;
+      if (titleEl) titleEl.textContent = data.captureTitle || defaults.title;
+      if (leadEl) leadEl.textContent = data.captureLead || defaults.lead;
+      if (submitEl) submitEl.textContent = data.captureSubmit || defaults.submit;
+      reset();
+
+      lastFocus = document.activeElement;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('nav-open'); // shared scroll lock (global.css)
+      const first = focusable()[0];
+      if (first) first.focus();
+    }
+
+    function close() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('nav-open');
+      if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+    }
+
+    document.querySelectorAll('[data-capture]').forEach((trigger) => {
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault();
+        open(trigger);
+      });
+    });
+
+    modal.querySelectorAll('[data-fs-close]').forEach((el) => {
+      el.addEventListener('click', close);
+    });
+
+    addEventListener('keydown', (e) => {
+      if (!modal.classList.contains('open')) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const els = focusable();
+      if (!els.length) return;
+      const first = els[0];
+      const last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+  }
+</script>
