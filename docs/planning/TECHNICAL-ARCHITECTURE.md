@@ -326,7 +326,7 @@ Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../brie
 | `PUBLIC_KEELA_TIER_25_URL` | 1 | Yes | Keela hosted checkout — $25/month tier |
 | `PUBLIC_KEELA_TIER_100_URL` | 1 | Yes | Keela hosted checkout — $100/month tier |
 | `PUBLIC_GA_ID` | 1 | Yes | Google Analytics 4 measurement ID (existing account — primary analytics) |
-| `PUBLIC_OSANO_CUSTOMER_ID` | 1 | Yes | Osano CMP customer ID — cookie consent banner (DECISION-002; Free Plan) |
+| `PUBLIC_COOKIEBOT_ID` | 1 | Yes | Cookiebot CMP ID (`data-cbid` on `uc.js`) — cookie consent banner (DECISION-002; replaced Osano 4 Aug 2026) |
 | `PUBLIC_POSTHOG_KEY` | 1 | Yes | PostHog project API key — product analytics + funnels (cookieless mode) |
 | `PUBLIC_POSTHOG_HOST` | 1 | Yes | PostHog Cloud host — `https://app.posthog.com` (DECISION-007) |
 | `PUBLIC_CLARITY_ID` | 1 | Yes | Microsoft Clarity project ID — heatmaps + session recordings (DECISION-001) |
@@ -414,7 +414,7 @@ PUBLIC_KEELA_TIER_5_URL=
 PUBLIC_KEELA_TIER_25_URL=
 PUBLIC_KEELA_TIER_100_URL=
 PUBLIC_GA_ID=
-PUBLIC_OSANO_CUSTOMER_ID=
+PUBLIC_COOKIEBOT_ID=
 PUBLIC_POSTHOG_KEY=
 PUBLIC_POSTHOG_HOST=
 PUBLIC_CLARITY_ID=

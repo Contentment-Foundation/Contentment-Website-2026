@@ -58,7 +58,7 @@ Each decision below is a blocker for at least one TICKET. **Recommended options 
 
 | Component | Choice |
 |-----------|--------|
-| **Consent management platform (CMP)** | **Osano Free Plan** ($0/month — 1 domain, 1 user, up to 5,000 monthly visitors; sufficient for contentment.org launch traffic) |
+| **Consent management platform (CMP)** | **Cookiebot** — `uc.js` with `data-cbid`, `data-blockingmode="manual"`. Superseded Osano Free 4 Aug 2026 (see amendment below) |
 | **GA4** | [Consent Mode v2](https://developers.google.com/tag-platform/security/guides/consent?hl=en) — analytics fire in cookieless/modelled state before consent; full cookies only after opt-in |
 | **PostHog** | Cookieless init: `persistence: 'memory'` (no PostHog cookies) |
 
@@ -66,19 +66,40 @@ Each decision below is a blocker for at least one TICKET. **Recommended options 
 
 | Region | Regulation | How we comply |
 |--------|------------|---------------|
-| **EU** | GDPR + ePrivacy Directive | Osano CMP; no non-essential cookies before consent; GA4 Consent Mode v2 |
-| **UK** | UK GDPR + PECR | Same as EU — Osano geo-targets EU/UK visitors |
+| **EU** | GDPR + ePrivacy Directive | Cookiebot CMP; no non-essential cookies before consent; GA4 Consent Mode v2 |
+| **UK** | UK GDPR + PECR | Same as EU — Cookiebot geo-targets EU/UK visitors |
 | **US (California)** | CCPA/CPRA | Privacy policy disclosure of analytics tools; link to cookie preferences |
-| **Rest of world** | Best practice | Privacy policy + Osano cookie preferences link in footer |
+| **Rest of world** | Best practice | Privacy policy + Cookiebot cookie preferences link in footer |
 
 **UI requirements:**
-- Osano script in `BaseLayout` (loads before GA4 gtag)
-- Footer: **Privacy Policy** · **Cookie Preferences** (Osano re-open) · optional **Osano partner badge** on `/privacy`
+- Cookiebot `uc.js` first script in `<head>` (loads before GA4 gtag) — rendered by `Analytics.astro` via `BaseLayout`
+- Footer: **Privacy Policy** · **Cookie Preferences** (Cookiebot Privacy Trigger re-open) on `/privacy`
 - `/privacy`: compliance table above + per-tool disclosures (GA4 cookies, Clarity session data, PostHog cookieless events)
 
 - [x] Signed off — option chosen: **Osano Free + GA4 Consent Mode v2 + cookieless PostHog**
 - [x] Signed off by: **Somesh Bhardwaj**
 - [x] Date: 14 July 2026
+
+**Amendment — 4 Aug 2026: CMP vendor changed Osano → Cookiebot.** Somesh's call; the rest of
+the decision (GA4 Consent Mode v2, cookieless PostHog) is unchanged, so this supersedes the
+vendor only, not the mechanism. Consequences recorded rather than left implicit:
+
+- `PUBLIC_OSANO_CUSTOMER_ID` → **`PUBLIC_COOKIEBOT_ID`**, renamed in the same pass across
+  `Analytics.astro`, `.env`, `.env.example`, TECHNICAL-ARCHITECTURE §6.1 and this file.
+- **`data-blockingmode="manual"`, not `"auto"`.** Auto mode rewrites recognised tracker
+  `<script>` tags to `type="text/plain"` until consent, which would risk blocking our own
+  inline `gtag('consent','default')` call — the thing this decision depends on — and would
+  block PostHog, which is cookieless under DECISION-007 and needs no consent.
+- **Cookiebot's built-in "Google Consent Mode" feature must stay disabled** in the dashboard.
+  It emits its own `gtag('consent', …)` calls, which would race ours.
+- Consent signal shape differs: Cookiebot exposes booleans on `window.Cookiebot.consent`
+  (`statistics` → `analytics_storage`, `marketing` → the `ad_*` signals) and fires
+  `CookiebotOnConsentReady` / `OnAccept` / `OnDecline`, versus Osano's single
+  `osano-cm-consent-saved` event with a string enum.
+- CSP updated in **both** `netlify.toml` and `vercel.json` (kept byte-identical):
+  `cmp.osano.com` replaced by `consent.cookiebot.com` (script + style) and
+  `consentcdn.cookiebot.com` (script, connect, **frame** — Cookiebot renders the banner in an
+  iframe, which Osano did not require). Without this the banner would have been CSP-blocked.
 
 ---
 
@@ -278,7 +299,7 @@ PUBLIC_POSTHOG_HOST=https://app.posthog.com
 | #   | Decision                     | Status          | Date        | Chosen                                                                 | Signed off by        |
 | --- | ---------------------------- | --------------- | ----------- | ---------------------------------------------------------------------- | -------------------- |
 | 001 | Primary analytics tool       | **Resolved**    | 3 Jul 2026  | GA4 + Clarity + Bing Webmaster + PostHog (Plausible dropped)           | Anik Ghosh (review)  |
-| 002 | Cookie consent mechanism   | **Resolved**    | 14 Jul 2026 | Osano Free + GA4 Consent Mode v2 + cookieless PostHog                  | Somesh Bhardwaj      |
+| 002 | Cookie consent mechanism   | **Resolved**    | 14 Jul 2026 | Cookiebot + GA4 Consent Mode v2 + cookieless PostHog (CMP was Osano until 4 Aug 2026) | Somesh Bhardwaj      |
 | 003 | Transactional email provider | **Resolved**  | 14 Jul 2026 | SendGrid (existing paid plan); Resend/AWS/Nodemailer as alternatives   | Somesh Bhardwaj      |
 | 004 | Rate limiting implementation | **Resolved**    | 14 Jul 2026 | @upstash/ratelimit + Upstash Redis                                     | Somesh Bhardwaj      |
 | 005 | Image optimization approach  | **Resolved**    | 14 Jul 2026 | Astro `<Image />` (`astro:assets`)                                     | Somesh Bhardwaj      |

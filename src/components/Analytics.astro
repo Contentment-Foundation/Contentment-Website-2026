@@ -2,7 +2,7 @@
 /**
  * Analytics.astro — TICKET-080 (Analytics setup).
  *
- * Single self-contained analytics/consent bundle: Osano CMP, GA4 (gtag.js) with
+ * Single self-contained analytics/consent bundle: Cookiebot CMP, GA4 (gtag.js) with
  * Consent Mode v2, Microsoft Clarity, and PostHog Cloud (cookieless).
  *
  * Every piece checks its OWN env var independently and renders nothing if that
@@ -12,19 +12,41 @@
  * nothing at all: no script tags, no console errors.
  *
  * Tool stack + reasoning: docs/planning/DECISIONS.md DECISION-001 (tool
- * stack), DECISION-002 (Osano + GA4 Consent Mode v2 + cookieless PostHog),
+ * stack), DECISION-002 (CMP + GA4 Consent Mode v2 + cookieless PostHog),
  * DECISION-007 (PostHog Cloud). Env var reference: TECHNICAL-ARCHITECTURE §6.1.
+ *
+ * CMP vendor changed Osano -> Cookiebot on 4 Aug 2026; PUBLIC_OSANO_CUSTOMER_ID was
+ * renamed to PUBLIC_COOKIEBOT_ID across code, .env.example, TECHNICAL-ARCHITECTURE
+ * §6.1, DECISIONS.md and launch-plan-data.json in the same pass — deliberately all at
+ * once, since partial renames are what broke FLODESK_FORM_ID (31 Jul) and
+ * PUBLIC_POSTHOG_KEY (3 Aug).
  */
 const GA_ID = import.meta.env.PUBLIC_GA_ID;
-const OSANO_CUSTOMER_ID = import.meta.env.PUBLIC_OSANO_CUSTOMER_ID;
+const COOKIEBOT_ID = import.meta.env.PUBLIC_COOKIEBOT_ID;
 const POSTHOG_KEY = import.meta.env.PUBLIC_POSTHOG_KEY;
 const POSTHOG_HOST = import.meta.env.PUBLIC_POSTHOG_HOST || 'https://app.posthog.com';
 const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
 ---
-{OSANO_CUSTOMER_ID && (
-  <!-- Osano CMP — must load before GA4 gtag (DECISION-002). Renders the consent
-       banner for EU/UK visitors and re-opens via the footer "Cookie Preferences" link. -->
-  <script async src={`https://cmp.osano.com/${OSANO_CUSTOMER_ID}/osano.js`}></script>
+{COOKIEBOT_ID && (
+  <!-- Cookiebot CMP — must be the FIRST script in <head> (vendor requirement), which
+       holds because BaseLayout renders <Analytics /> with no script above it and this
+       block is first in this file. Renders the consent banner + Privacy Trigger.
+
+       data-blockingmode="manual", NOT "auto", per the 4 Aug decision. Auto mode
+       rewrites recognised tracker <script> tags to type="text/plain" until consent,
+       which would (a) risk blocking our own inline gtag('consent','default') script and
+       break the Consent Mode v2 model DECISION-002 is built on, and (b) block PostHog,
+       which is cookieless by design and needs no consent under DECISION-007. In manual
+       mode Cookiebot renders the banner and reports consent; the gating below stays the
+       single source of truth. -->
+  <script
+    id="Cookiebot"
+    src="https://consent.cookiebot.com/uc.js"
+    data-cbid={COOKIEBOT_ID}
+    data-blockingmode="manual"
+    type="text/javascript"
+    is:inline
+  ></script>
 )}
 
 {GA_ID && (
@@ -81,17 +103,30 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
   </script>
 )}
 
-{OSANO_CUSTOMER_ID && (
+{COOKIEBOT_ID && (
   <script is:inline>
-    // Osano -> Consent Mode bridge, driving BOTH GA4 and Clarity off one banner event.
+    // Cookiebot -> Consent Mode bridge, driving BOTH GA4 and Clarity off one banner.
     // Gated on the CMP rather than on GA4: this listener used to live inside the GA4
     // block, which meant that with GA4 unset there was no path to upgrade Clarity off
     // denied at all. Each tool is updated only if it actually loaded, so either can be
-    // switched off independently. Event name/detail shape per Osano's CMP API.
-    window.addEventListener('osano-cm-consent-saved', function (event) {
-      const consent = (event && event.detail) || {};
-      const analyticsGranted = consent.ANALYTICS === 'ACCEPT' ? 'granted' : 'denied';
-      const marketingGranted = consent.MARKETING === 'ACCEPT' ? 'granted' : 'denied';
+    // switched off independently.
+    //
+    // Cookiebot exposes consent as booleans on window.Cookiebot.consent
+    // (necessary / preferences / statistics / marketing) rather than Osano's
+    // event.detail string enum. Category mapping: statistics -> analytics_storage,
+    // marketing -> the three ad_* signals.
+    //
+    // Three events, all needed: OnConsentReady fires on every page load for a visitor
+    // who already chose (the common case — without it a returning visitor stays denied
+    // for the whole session), while OnAccept/OnDecline fire on a fresh interaction.
+    //
+    // NOTE: Cookiebot's own "Google Consent Mode" feature must stay DISABLED in the
+    // dashboard. It emits its own gtag('consent','default'/'update') calls, which would
+    // race the ones in this file and silently override whichever loses.
+    function applyCookiebotConsent() {
+      const consent = (window.Cookiebot && window.Cookiebot.consent) || {};
+      const analyticsGranted = consent.statistics ? 'granted' : 'denied';
+      const marketingGranted = consent.marketing ? 'granted' : 'denied';
 
       if (typeof window.gtag === 'function') {
         window.gtag('consent', 'update', {
@@ -108,7 +143,23 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
           ad_Storage: marketingGranted,
         });
       }
-    });
+    }
+
+    window.addEventListener('CookiebotOnConsentReady', applyCookiebotConsent);
+    window.addEventListener('CookiebotOnAccept', applyCookiebotConsent);
+    window.addEventListener('CookiebotOnDecline', applyCookiebotConsent);
+
+    // Defensive: uc.js is deliberately the FIRST script in <head>, so for a returning
+    // visitor with cached consent Cookiebot can resolve and dispatch OnConsentReady
+    // while uc.js is still executing — before the listeners above exist. That visitor
+    // would then sit at default-denied for the whole page despite having accepted.
+    // Applying current state once on init closes that race; it is idempotent, since
+    // re-sending the same consent values is a no-op for both gtag and clarity.
+    // NOT verified locally: Cookiebot fires no events on an unregistered domain, so
+    // this path needs a check on the real deploy (see HC-076).
+    if (window.Cookiebot && window.Cookiebot.consent && window.Cookiebot.consent.method) {
+      applyCookiebotConsent();
+    }
   </script>
 )}
 
