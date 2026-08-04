@@ -117,7 +117,8 @@ body.nav-open{overflow:hidden}
 
 /* ---------- HERO (full-bleed, responsive cover) ---------- */
 .hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;color:#fff;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.32);animation:heroZoom 10s ease-out forwards}
+/* Match Get Involved: subtle zoom — start near end state, almost imperceptible (Dave Aug 3) */
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.06);animation:heroZoom 18s ease-out forwards;will-change:transform}
 .hero-bg.mob{display:none}
 @keyframes heroZoom{to{transform:scale(1)}}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg, rgba(85,191,152,.97) 0%, rgba(85,191,152,.34) 14%, rgba(85,191,152,0) 28%),linear-gradient(105deg,rgba(2,40,58,.86) 0%,rgba(2,46,66,.6) 32%,rgba(2,46,66,.12) 58%,rgba(2,46,66,.04) 100%)}
@@ -642,7 +643,7 @@ footer .wrap{position:relative;z-index:1}
     background-size:cover;
     background-position:center 26%;
     transform:scale(1.06);
-    animation:heroZoom 10s ease-out forwards;
+    animation:heroZoom 18s ease-out forwards;
   }
   /* narrow viewport: hold Marla, and fade the paper down the frame rather than across it */
   .invite-bg{background-position:86% 30%}
