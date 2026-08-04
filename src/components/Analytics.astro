@@ -82,6 +82,8 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
       overflow-y: auto !important;
       font-size: 0.85rem !important;
       border-radius: 10px !important;
+      /* Stock padding is 24px, i.e. 48px of pure vertical chrome. */
+      padding: 12px !important;
     }
     /* Branding block: 208px tall on desktop, driven by a 90x90 logo. Scaled, not
        removed — free-tier terms require the attribution. */
@@ -93,6 +95,13 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
     #CybotCookiebotDialogPoweredbyCybot,
     #CybotCookiebotDialogPoweredbyLink { max-height: 20px !important; }
     #CybotCookiebotDialogHeader { padding: 0.4rem 0.6rem !important; }
+    /* Desktop's real driver: this wrapper measured 191x189, which stretched the
+       header column to 202px and dragged the whole flex row with it — the body
+       content only needs ~157px. Capping it is what actually shrinks desktop. */
+    #CybotCookiebotDialogHeaderLogosWrapper {
+      max-height: 28px !important;
+      height: auto !important;
+    }
     #CybotCookiebotDialogBodyContentTitle {
       font-size: 0.95rem !important;
       margin-bottom: 0.25rem !important;
