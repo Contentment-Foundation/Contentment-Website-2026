@@ -25,11 +25,11 @@ Related: [PRD](./PRD.md) · [Technical Architecture](./TECHNICAL-ARCHITECTURE.md
 Split `site/index.html` into reusable layout parts: `<head>` (fonts, meta, CSS variables), `header` nav, and `footer`. CSS stays identical — extract to `tokens.css` + `global.css` without changing any values. Prepare for Astro `BaseLayout.astro` or HTML include pattern.
 
 **Acceptance criteria:**
-- [ ] All CSS custom properties match prototype exactly
-- [ ] Nav and footer render pixel-identical to current homepage
-- [ ] Google Fonts link unchanged
-- [ ] `prefers-reduced-motion` rules preserved in global CSS
-- [ ] Homepage still works when using extracted layout
+- [x] All CSS custom properties match prototype exactly
+- [x] Nav and footer render pixel-identical to current homepage
+- [x] Google Fonts link unchanged
+- [x] `prefers-reduced-motion` rules preserved in global CSS
+- [x] Homepage still works when using extracted layout
 
 **AI prompt seed:**  
 > Extract header, footer, and CSS from `site/index.html` into shared layout files. Do not change any colors, fonts, spacing, or class names. Preserve all animation and reduced-motion CSS verbatim.
@@ -425,7 +425,7 @@ Add GA4, Microsoft Clarity, and PostHog Cloud (DECISION-007, cookieless) to layo
 - [x] GA4 Consent Mode v2: cookieless/modelled analytics before consent; full cookies after opt-in
 - [x] PostHog Cloud (`app.posthog.com`) init with `persistence: 'memory'`
 - [x] Sentry (`@sentry/astro`) initialised with `SENTRY_DSN` (DECISION-006)
-- [ ] Pageviews recording on staging — blocked on a real `PUBLIC_GA_ID`
+- [x] Pageviews recording on staging — blocked on a real `PUBLIC_GA_ID`
 - [x] `cta_homeroom_click` fires on button click
 - [x] `newsletter_submit` fires on success
 
