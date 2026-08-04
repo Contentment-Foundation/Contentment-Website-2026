@@ -334,6 +334,14 @@ Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../brie
 
 **UTM campaign convention:** apply `utm_source` / `utm_medium` / `utm_campaign` / `utm_content` consistently on every outbound campaign link (newsletter, social, paid, QR) so GA4 and PostHog attribute traffic correctly. Full parameter taxonomy: [GROWTH-BRIEF §1](../briefs/GROWTH-BRIEF.md#1-analytics-setup). Example: `https://contentment.org/give/monthly?utm_source=instagram&utm_medium=social&utm_campaign=homeroom-launch&utm_content=story-card`.
 
+**Gotcha — `SENTRY_DSN` is not read from `.env`.** The `PUBLIC_*` vars above are consumed via
+`import.meta.env` inside `.astro` components, and Astro/Vite loads `.env` for those. `SENTRY_DSN` is
+different: it is read via `process.env` in `astro.config.mjs` (the integration is only registered when
+it is set), and **`.env` does not populate `process.env`** for the config file. Putting it in `.env`
+alone silently ships no Sentry code. Netlify and Vercel inject env vars into the build process, so
+production and preview are unaffected — this only bites local testing. To test locally:
+`SENTRY_DSN=... npm run build`. Verified 4 Aug 2026 (HC-076).
+
 ### 6.2 Core integrations (server-only)
 
 | Variable | Phase | Required | Description |
