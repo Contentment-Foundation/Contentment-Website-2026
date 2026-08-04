@@ -4,7 +4,7 @@
     "version": "2026-08-04",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Aug 4 (Somesh): /getinvolved donate split (#donate) — photo + Keela General Donation Form (same embed as homepage; asset public/assets/gi-donate-photo.jpg); one-time gift → #donate. Nav current-page underline (white on transparent header, --btnblue on scrolled white bar; aria-current=page desktop+drawer). /schools wellbeing-lead photo replaced (public/assets/fs-Jadielsm.jpg). HC-077 docs-unpublish at cutover logged. Aug 4: HC-077 / FEAT-101 — at production cutover unpublish internal /docs hub + Footer 'Project docs' (docs stay in private repo only). Aug 4: Get Involved URL slug → `/getinvolved` (was `/give`); `src/pages/getinvolved.astro`; seams.join/donate + Nav/Footer/sitemap; `/give` 301→`/getinvolved` (Netlify + Vercel). Aug 4: /give Join Homeroom ($25/$50/$100) → homepage Keela form with selected amount (`/?amount=N&frequency=monthly#homeroom`, seams.homeroomDonateUrl). Aug 4: Keela General Donation Form live (give-usa embed MnqZFksL49Ym3M8Ho, org CBbknhqovLi8DNEzW) on homepage Homeroom + /why give band; master script in BaseLayout; Donate CTAs → /#homeroom; giveOneTime → same. India region + per-tier Homeroom joinTiers still deferred. CSP allows cdn.keela.co + *.keela.co. Aug 3: /give Homeroom Dreamer/Catalyst/Visionary tiers now selectable (joinTiers seam for per-tier Keela URLs). Aug 3 Nav priorities: (1) Conversion paths — Events festival Save-my-spot no longer routes to /give; RSVP/waitlist interim → #ev-signup email capture until seams.rsvp/Keela; Homeroom join stays /give; school enquiry = mailto #start; one-time/other-ways still # pending Lorna. (2) Homeroom offer — D-01 $25/$50/$100: killed remaining $5 entry copy on homepage InviteBand + meta; Give page tiers already $25/$50/$100; donate widgets match. Benefits still need Kristina/WJ editorial pass to unify Events access list vs Give benefit cards if desired. (3) PostHog wizard PR #1 triaged — kept its 6 new conversion events + vercel.json CSP, reverted the consent/cookie regression, env-var rename and unused dep (FEAT-080). (4) CSP now identical in netlify.toml + vercel.json (OPS-001/002); netlify had none at all, and vercel's was missing YouTube frame-src, which would have blanked every video embed at cutover. PUBLIC_GA_ID has landed (first of HC-076's five) — confirm it is set in Netlify's env, not just local. STILL BLOCKED — Keela URLs HC-075/071; D-24 Flodesk; HC-005 Spread-the-movement. Go-live Aug 21."
+    "summary": "Aug 4 (Somesh): /updates segment CONFIRMED -> \"www.contentment.org\". Double opt-in verified ON in the Flodesk account, so FLODESK_DOUBLE_OPTIN=true is now set explicitly and the success copy says \"check your inbox to confirm\" (leaving it unset would have shown \"You're in\" while a confirmation click was still pending). optin_ip + optin_timestamp sent as the EU/US consent trail. PAGE-RECORD AUDIT: pages shipped without reaching Kristina's review list were invisible to the team, so nobody could advise on them. /404 was recorded \"Not started\" but shipped 2 Aug (corrected). /updates, /404, /story-board and /foundation-reach-map now carry an explicit PURPOSE statement and a NEEDS TEAM REVIEW flag; the two prototype routes are noted as publicly reachable on the preview even though their design work is paused. Aug 4 (Somesh): FEAT-070 Flodesk newsletter LIVE — custom forms POST to a host-native /api/newsletter function (netlify/functions/newsletter.mjs + api/newsletter.js, shared core src/lib/flodesk.js), NOT an Astro SSR route, so astro.config.mjs stays output:'static' and the 3 Aug security revert holds. FLODESK_API_KEY is server-only; segment IDs come from env. 11 capture points wired across 5 pages. Per Kristina's Miro CTA suggestions, 8 go to segment \"www.contentment.org\" (home bottom CTA, /about, /why, and on /events: Why-we-gather, closing aside, both Join-the-waitlist recap links, recap Be-first-to-know); the /events hero Save-my-free-spot opens a shared CaptureModal -> \"Contentment Festival\". STILL PENDING Kristina + WoeiJing: /updates form, /events top capture fold, and the 3 Upcoming-grid CTAs (Save my spot / Be first to know / Join the waitlist) which still just scroll to #ev-signup. Interim FLODESK_SEGMENT_DEFAULT -> www.contentment.org so unconfirmed forms still land somewhere mailed. Double opt-in left to the Flodesk account setting (FLODESK_DOUBLE_OPTIN unset). newsletter_submit now fires on a CONFIRMED subscribe, not on click. Aug 4 (Somesh): /getinvolved donate split (#donate) — photo + Keela General Donation Form (same embed as homepage; asset public/assets/gi-donate-photo.jpg); one-time gift → #donate. Nav current-page underline (white on transparent header, --btnblue on scrolled white bar; aria-current=page desktop+drawer). /schools wellbeing-lead photo replaced (public/assets/fs-Jadielsm.jpg). HC-077 docs-unpublish at cutover logged. Aug 4: HC-077 / FEAT-101 — at production cutover unpublish internal /docs hub + Footer 'Project docs' (docs stay in private repo only). Aug 4: Get Involved URL slug → `/getinvolved` (was `/give`); `src/pages/getinvolved.astro`; seams.join/donate + Nav/Footer/sitemap; `/give` 301→`/getinvolved` (Netlify + Vercel). Aug 4: /give Join Homeroom ($25/$50/$100) → homepage Keela form with selected amount (`/?amount=N&frequency=monthly#homeroom`, seams.homeroomDonateUrl). Aug 4: Keela General Donation Form live (give-usa embed MnqZFksL49Ym3M8Ho, org CBbknhqovLi8DNEzW) on homepage Homeroom + /why give band; master script in BaseLayout; Donate CTAs → /#homeroom; giveOneTime → same. India region + per-tier Homeroom joinTiers still deferred. CSP allows cdn.keela.co + *.keela.co. Aug 3: /give Homeroom Dreamer/Catalyst/Visionary tiers now selectable (joinTiers seam for per-tier Keela URLs). Aug 3 Nav priorities: (1) Conversion paths — Events festival Save-my-spot no longer routes to /give; RSVP/waitlist interim → #ev-signup email capture until seams.rsvp/Keela; Homeroom join stays /give; school enquiry = mailto #start; one-time/other-ways still # pending Lorna. (2) Homeroom offer — D-01 $25/$50/$100: killed remaining $5 entry copy on homepage InviteBand + meta; Give page tiers already $25/$50/$100; donate widgets match. Benefits still need Kristina/WJ editorial pass to unify Events access list vs Give benefit cards if desired. (3) PostHog wizard PR #1 triaged — kept its 6 new conversion events + vercel.json CSP, reverted the consent/cookie regression, env-var rename and unused dep (FEAT-080). (4) CSP now identical in netlify.toml + vercel.json (OPS-001/002); netlify had none at all, and vercel's was missing YouTube frame-src, which would have blanked every video embed at cutover. PUBLIC_GA_ID has landed (first of HC-076's five) — confirm it is set in Netlify's env, not just local. STILL BLOCKED — Keela URLs HC-075/071; D-24 Flodesk; HC-005 Spread-the-movement. Go-live Aug 21."
   },
   "overview": [
     [
@@ -258,18 +258,18 @@
       "Sam",
       "Low",
       "No",
-      "31 Jul — src/pages/updates.astro live, linked from Footer Explore. Uses NewsletterForm (still a placeholder submit — FEAT-070)."
+      "PURPOSE: the standalone newsletter signup page — the destination for 'subscribe' links that need a real page rather than an inline form (Footer Explore column, sitemap). 31 Jul — src/pages/updates.astro live. 4 Aug — form WIRED to Flodesk (FEAT-070) via <NewsletterForm source=\"updates_page\" bare />; segment CONFIRMED by Somesh 4 Aug → \"www.contentment.org\". The `bare` prop was added because the page supplied its own .news section + heading and was rendering a nested duplicate section with two headings — fixed. NEEDS TEAM REVIEW: built without ever reaching Kristina's page list, so its copy and framing have had no non-engineering review."
     ],
     [
       "404 page",
       "/404",
       "1",
       "—",
-      "Not started",
+      "Astro built",
       "—",
       "Low",
       "No",
-      "Branded error page"
+      "PURPOSE: branded error page shown for any unmatched URL — keeps someone who mistypes or follows a dead link inside the site instead of bouncing. STATUS CORRECTION (4 Aug): this row said 'Not started' but the page SHIPPED 2 Aug — src/pages/404.astro, `noindex, follow`, short brand-gradient hero and 6 destination cards, reusing existing tokens and .anim (no new design language). Netlify serves dist/404.html automatically. Verified in-browser at 1280 and 390px. NEEDS TEAM REVIEW: never went through Kristina's page list — the 6 destination cards and the copy have had no non-engineering review."
     ],
     [
       "Individual impact story",
@@ -335,7 +335,7 @@
       "—",
       "—",
       "No",
-      "public/story-board.html → /story-board (Astro public/ passthrough)"
+      "PURPOSE: Somesh's Story Board prototype — a feed-style way to browse programme stories, built to test the format before committing homepage space to it. public/story-board.html → /story-board (netlify.toml 200 rewrite). NOTE: 'Paused' refers to the DESIGN work; the route is PUBLICLY REACHABLE on the preview right now. Not linked from any nav, so it is only findable if you know the URL."
     ],
     [
       "Foundation Reach Map",
@@ -346,7 +346,7 @@
       "—",
       "—",
       "No",
-      "public/foundation-reach-map.html → /foundation-reach-map (Astro public/ passthrough)"
+      "PURPOSE: Somesh's Foundation Reach Map prototype — flat D3 + TopoJSON world map with a pin card per served country, intended for the homepage once approved. public/foundation-reach-map.html → /foundation-reach-map (netlify.toml 200 rewrite). NOTE: 'Paused' refers to the DESIGN work; the route is PUBLICLY REACHABLE on the preview right now. Not linked from any nav."
     ]
   ],
   "designNotes": [
@@ -628,9 +628,9 @@
     [
       "D-19",
       "Newsletter integration",
-      "Flodesk embed vs custom API. 2 Aug — Somesh confirmed he has a working Flodesk API key plus the Flodesk MCP server (mcp.flodesk.com/mcp), and the Netlify adapter now allows a server route, so the custom-API path per TECHNICAL-ARCHITECTURE §6.2 is viable. Engineering to close.",
+      "Flodesk embed vs custom API. 2 Aug — Somesh confirmed he has a working Flodesk API key plus the Flodesk MCP server (mcp.flodesk.com/mcp), and the Netlify adapter now allows a server route, so the custom-API path per TECHNICAL-ARCHITECTURE §6.2 is viable. Engineering to close. RESOLVED 4 Aug — custom API path chosen and shipped, but via a HOST-NATIVE function (netlify/functions + api/) rather than an Astro SSR route, so no adapter and no reintroduced SSR attack surface. Flodesk API contract verified against developers.flodesk.com before writing any code (the 31 Jul revert was caused by an unverified contract).",
       "Engineering",
-      "Open",
+      "Resolved",
       "Newsletter ticket",
       "Medium"
     ],
@@ -673,7 +673,7 @@
     [
       "D-24",
       "Events email-capture destination",
-      "Flodesk vs Keela vs other — asked of WoeiJing + Kristina in Slack 2 Aug (answer requested by Aug 3; still Open as of Aug 3 CTA sync). /events keeps three placeholder slots (newsletter-signup fold; event-announcements in Why + Close; festival-signup CTAs). Do NOT invent provider embeds until decided. Pairs with FEAT-070 / D-19. Aug 3: Events UI forms shipped (first name+email stub); provider still open (Flodesk vs Keela vs other).",
+      "Flodesk vs Keela vs other — asked of WoeiJing + Kristina in Slack 2 Aug (answer requested by Aug 3; still Open as of Aug 3 CTA sync). /events keeps three placeholder slots (newsletter-signup fold; event-announcements in Why + Close; festival-signup CTAs). Do NOT invent provider embeds until decided. Pairs with FEAT-070 / D-19. Aug 3: Events UI forms shipped (first name+email stub); provider still open (Flodesk vs Keela vs other). Aug 4 — PARTIALLY RESOLVED. Provider is Flodesk (D-19 closed). Kristina's Miro board CTA suggestions assigned segments for 8 of 11 capture points: \"www.contentment.org\" for the /events Why-we-gather box, the closing aside, both Join-the-waitlist recap links and recap Be-first-to-know; \"Contentment Festival\" for the hero Save-my-free-spot modal. STILL OPEN, pending Kristina + WoeiJing: (1) /events top capture fold, (2) /updates page form, (3) the 3 Upcoming-grid CTAs — Save my spot (festival-virtual), Be first to know (festival-irl), Join the waitlist (bali-retreat) — which still only scroll to #ev-signup and have no segment. Interim: FLODESK_SEGMENT_DEFAULT points at www.contentment.org so unconfirmed forms still reach a mailed list rather than creating unsegmented subscribers.",
       "Somesh → WoeiJing + Kristina",
       "Open",
       "Events capture wiring (FEAT-070 related)",
@@ -708,8 +708,8 @@
       "Yes",
       "Flodesk embed or API key",
       "Comms + Sam",
-      "Open",
-      "Footer + /updates + Events capture"
+      "In Progress",
+      "4 Aug — LIVE via host-native /api/newsletter (Netlify fn + Vercel fn, shared src/lib/flodesk.js). 11 capture points: home, /about, /why, /updates, /events x4 forms + 4 modal CTAs. Segments env-driven; www.contentment.org + Contentment Festival confirmed. Pending: 3 Upcoming-grid CTAs + /updates + Events top fold (Kristina/WoeiJing); live submit test; rate limiting."
     ],
     [
       "School discovery form",
@@ -1004,11 +1004,11 @@
       "Newsletter integration (Flodesk)",
       "1",
       "Must",
-      "Blocked",
+      "In Progress",
       "Sam",
       "Aug 13–14",
       "FEAT-010",
-      "3 Aug — RE-BLOCKED on the hosting side: the 2 Aug hybrid+adapter switch was reverted to output:'static' (security — it deployed an unused SSR surface with 5 open Dependabot alerts), so the server-side /api/newsletter route specced in TECHNICAL-ARCHITECTURE §6.2 (server-only FLODESK_API_KEY) is NOT buildable again. Astro 5 removes 'hybrid' and folds per-route prerender=false into 'static', so the Astro 4→7 migration restores this by re-adding an adapter only — pair it with FEAT-101 (@astrojs/vercel@11 peers on astro@^7). Remaining: close D-19 (provider) and land the Flodesk API key in .env + Netlify env vars. Somesh has Flodesk API access and the Flodesk MCP (mcp.flodesk.com/mcp). /updates page already built. Events capture slots still separately pending D-24. Aug 3 — Events page ships matching newsletter UI stubs (3 forms); still no Flodesk POST."
+      "4 Aug — SHIPPED (unblocked without the adapter). The §6.2 server-side path is now a HOST-NATIVE function, not an Astro route: netlify/functions/newsletter.mjs (preview) + api/newsletter.js (Vercel target) over one shared core, src/lib/flodesk.js. astro.config.mjs stays output:'static' — the 3 Aug security revert is untouched and FEAT-101 is NO LONGER a blocker for this ticket. FLODESK_API_KEY stays server-only; Flodesk contract verified against developers.flodesk.com (Basic auth base64('KEY:'); POST /v1/subscribers then POST /v1/subscribers/{email}/segments). netlify.toml rewrites /api/newsletter -> the function so both hosts share one public path. 11 capture points across home, /about, /why, /updates, /events; honeypot + inline aria-live success/error; 4 Events link-CTAs share one <CaptureModal />. Segment per form comes from SEGMENT_ENV_BY_SOURCE (env-driven IDs, never hardcoded). Segment assignments per Kristina's Miro CTA suggestions. STILL PENDING Kristina + WoeiJing: /updates form, /events top capture fold, and the 3 Upcoming-grid CTAs. Not yet done: live end-to-end submit test, rate limiting (UPSTASH_* unset), Vercel-side verification at cutover."
     ],
     [
       "FEAT-071",

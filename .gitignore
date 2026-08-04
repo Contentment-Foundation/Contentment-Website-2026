@@ -22,6 +22,10 @@ __pycache__/
 # Local Netlify folder
 .netlify
 
+# Written by `netlify dev` when it sets up the Edge Functions environment.
+# Local tooling artifact, not project content — we ship no edge functions.
+deno.lock
+
 # Secrets — real credential values (GA4/PostHog/Clarity/Osano/Sentry, Flodesk,
 # Keela, Slack webhooks…). Only .env.example, which holds key names and no
 # values, is tracked. Never commit a populated .env.

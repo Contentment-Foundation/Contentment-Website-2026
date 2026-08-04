@@ -363,12 +363,24 @@ Wire all Homeroom CTAs to Keela hosted checkout via env vars. Support tiers $5, 
 Connect homepage newsletter form and build `/updates` standalone page. Integrate with **Flodesk** (embed or `/api/newsletter` → Flodesk API). Remove `onsubmit="return false"`.
 
 > **Status (31 Jul 2026):** `/updates` page built (linked from Footer Explore, in `sitemap.xml`). The form-submission piece is still the placeholder stub — a first pass wired a direct client-side `fetch` to Flodesk's API, but that doesn't match this doc's own §6.2 spec (server-side `/api/newsletter` using `FLODESK_API_KEY`, server-only) and isn't a verified Flodesk API contract, so it was reverted rather than ship something likely to break. Real submission needs a hosting adapter (FEAT-101) before a server route can exist — blocked on that, not on Flodesk credentials alone.
+>
+> **Update (4 Aug 2026) — shipped; §6.2 Option B, via a host-native function.** The "needs a hosting adapter first" framing above was too narrow. §6.2 requires a *server-side* home for `FLODESK_API_KEY` — it does not require that home to be an Astro route. `netlify/functions/newsletter.mjs` (preview) and `api/newsletter.js` (Vercel target) share one core, `src/lib/flodesk.js`; `netlify.toml` rewrites `/api/newsletter` → the function so both hosts expose the same path. **`astro.config.mjs` stays `output: 'static'` with no adapter**, so the 3 Aug security revert holds and **FEAT-101 no longer blocks this ticket**.
+>
+> API contract verified against developers.flodesk.com before writing code — Basic auth `base64('KEY:')`, `POST /v1/subscribers`, then `POST /v1/subscribers/{email}/segments` (the authoritative segment attach; an upsert alone won't re-segment an existing subscriber). That unverified-contract failure is exactly what caused the 31 Jul revert.
+>
+> **11 capture points** across home, `/about`, `/why`, `/updates`, `/events` — honeypot, inline `aria-live` success/error, and one shared `<CaptureModal />` serving the 4 Events link-CTAs. Segment IDs are env-driven (`SEGMENT_ENV_BY_SOURCE` → `FLODESK_SEGMENT_*`, listed by `scripts/flodesk-segments.mjs`), never hardcoded. Assignments came from **Kristina's Miro board CTA suggestions**: 8 → `www.contentment.org`; `/events` hero Save-my-free-spot → `Contentment Festival`.
+>
+> **Still pending Kristina + WoeiJing (D-24):** `/updates` form, `/events` top capture fold, and the 3 Upcoming-grid CTAs (Save my spot / Be first to know / Join the waitlist) which still only scroll to `#ev-signup`. Interim `FLODESK_SEGMENT_DEFAULT` → `www.contentment.org`.
+>
+> **Not yet done:** live end-to-end submit test; rate limiting (`UPSTASH_*` unset — the endpoint is public behind only a honeypot); Vercel-side verification at cutover. **Behaviour change:** `newsletter_submit` now fires on a confirmed subscribe rather than on click (TICKET-080).
 
 **Acceptance criteria:**
-- [ ] Form submits successfully to email provider — blocked on FEAT-101 (hosting adapter for a server route)
+- [x] Form submits successfully to email provider — `/api/newsletter` → Flodesk (`src/lib/flodesk.js`); **live end-to-end submit still untested**
 - [x] Inline validation for email format — `required` + `type="email"` on the input
-- [ ] Success and error messages on-brand — depends on the real submission path landing first
+- [x] Success and error messages on-brand — `.nl-status` in `global.css`, `role="status"` + `aria-live="polite"`, tone-styled for light and dark bands
 - [x] `/updates` page live with orientation line
+- [ ] Remaining CTA→segment assignments confirmed (D-24 — Kristina + WoeiJing)
+- [ ] Rate limiting on the public endpoint (`UPSTASH_*`)
 
 ---
 
