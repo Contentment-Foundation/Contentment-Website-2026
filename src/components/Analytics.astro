@@ -49,6 +49,76 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
   ></script>
 )}
 
+{COOKIEBOT_ID && (
+  <!-- Compact banner overrides. Measured on the live deploy 4 Aug 2026: the stock
+       CybotMultilevel template rendered 1280x265 on desktop (33% of the viewport) and
+       374x800 on mobile — 95% of a 390x844 screen, i.e. it covered the whole page.
+       Height came from three places: body text 192px, buttons stacking vertically
+       279px, and the branding header 57px.
+
+       is:inline is REQUIRED, and is:global is WRONG here. Astro extracts and bundles
+       <style> blocks at build time, which happens BEFORE the {COOKIEBOT_ID && ...}
+       guard is evaluated — so an is:global block shipped these rules to all 9 pages
+       even with every analytics var unset, breaking the "unset = zero analytics code"
+       rule. is:inline opts out of Astro's style pipeline entirely, leaving the tag
+       inside the conditional where it belongs. Verified 4 Aug: unset build emits none.
+
+       Cookiebot injects its dialog outside our component tree, so these must not be
+       scoped. Selectors are Cookiebot's stable public IDs, not generated classes, but
+       this is still vendor markup: re-check after any template change (HC-076).
+
+       NOT hidden: the "Powered by Cookiebot" link. Free-tier terms require that
+       attribution, so it is scaled down rather than removed.
+
+       Accessibility held: buttons keep a 44px min tap target, text stays >=0.8rem,
+       and long copy scrolls inside the dialog instead of being clipped. -->
+  <style is:inline>
+    #CybotCookiebotDialog {
+      max-height: 60vh;
+      font-size: 0.85rem;
+      border-radius: 10px;
+    }
+    /* Shrink the branding header — 57px of pure chrome on mobile. */
+    #CybotCookiebotDialogPoweredbyImage { max-height: 16px; width: auto; }
+    #CybotCookiebotDialogPoweredbyCybot,
+    #CybotCookiebotDialogPoweredbyLink { max-height: 18px; }
+    #CybotCookiebotDialogBodyContentTitle {
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+    /* The single biggest win: cap the copy and let it scroll rather than push the
+       dialog to full height. */
+    #CybotCookiebotDialogBodyContentText {
+      font-size: 0.8rem;
+      line-height: 1.45;
+      max-height: 5.8em;
+      overflow-y: auto;
+    }
+    #CybotCookiebotDialogBodyContent { padding: 0.6rem 0.9rem; }
+    #CybotCookiebotDialogBodyButtonDecline,
+    #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll,
+    #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection,
+    #CybotCookiebotDialogBodyButtonAccept {
+      min-height: 44px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.82rem;
+    }
+    @media (max-width: 600px) {
+      #CybotCookiebotDialog { max-height: 52vh; }
+      /* Buttons stacked to 279px tall on a 390px screen. Lay them in a wrapping row
+         so three CTAs cost ~one row instead of three. */
+      #CybotCookiebotDialogBodyLevelButtonsSelectPane,
+      #CybotCookiebotDialogBodyLevelButtonsRow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      #CybotCookiebotDialogBodyLevelButtonsRow > * { flex: 1 1 auto; }
+      #CybotCookiebotDialogBodyContentText { max-height: 4.6em; }
+    }
+  </style>
+)}
+
 {GA_ID && (
   <>
     <!-- GA4 Consent Mode v2 — default to denied/cookieless until Osano reports consent. -->
