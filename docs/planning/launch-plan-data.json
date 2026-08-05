@@ -574,7 +574,7 @@
     [
       "D-13",
       "Cookie consent",
-      "Osano Free + GA4 Consent Mode v2 + cookieless PostHog — Anik looped in for a second opinion per Kristina",
+      "Cookiebot + GA4 Consent Mode v2 + cookieless PostHog. CMP vendor changed Osano -> Cookiebot on 4 Aug 2026 (DECISION-002 amendment) — only the vendor changed, the mechanism did not. Cookiebot runs data-blockingmode='manual' with a CUSTOM banner (sources in docs/cookiebot/), and its own Google Consent Mode feature stays disabled so it cannot race our gtag consent calls.",
       "Somesh Bhardwaj",
       "Resolved",
       "—",
@@ -728,18 +728,18 @@
       "Partial",
       "GA4 property ID",
       "Sam",
-      "Open",
-      "Wire in Aug 10–14 review sprint; Osano CMP + Consent Mode v2"
+      "In Progress",
+      "Cookiebot CMP + GA4 Consent Mode v2 (Osano dropped 4 Aug). Credentials landed and verified live 4-5 Aug — GA4 /g/collect 204, Clarity r.clarity.ms 204. Not the Aug 10-14 window any more; this shipped early. See HC-076."
     ],
     [
-      "Cookie consent banner (Osano)",
+      "Cookie consent banner (Cookiebot)",
       "1",
       "0.5-1 day",
       "No",
       "Consent copy (site-wide banner text; /privacy page itself now Phase 2)",
       "Sam + Legal",
-      "Ready",
-      "D-13 signed off — Osano Free Plan; Anik looped in for a second opinion per Kristina"
+      "In Progress",
+      "D-13 / DECISION-002. Osano replaced by Cookiebot 4 Aug 2026. LIVE and verified on contentmentweb2.netlify.app: custom banner (390x155 mobile / 900x90 desktop, vs 374x800 for Cookiebot's stock template), consent bridge flips GA4 gcs G100 -> G111 at HTTP 204. Consent method is EXPLICIT. Remaining: free tier allows ONE domain — must move to www.contentment.org at DNS cutover or the banner silently no-ops; and the cookie declaration needs a rescan, it currently lists only Necessary."
     ],
     [
       "PostHog",
@@ -749,7 +749,7 @@
       "PostHog Cloud API key",
       "Sam",
       "Ready",
-      "DECISION-007 — app.posthog.com, cookieless mode"
+      "DECISION-007 — PostHog Cloud, cookieless (persistence: 'memory'). Project is on the US region: https://us.i.posthog.com (the key 404s on EU). DECISION-007 and ARCH 6.1 still say app.posthog.com, which remains an alias onto US — proposed doc correction pending sign-off."
     ],
     [
       "SEO baseline",
@@ -788,8 +788,8 @@
       "No",
       "SENTRY_DSN",
       "Sam",
-      "Ready",
-      "DECISION-006 hybrid stack"
+      "In Progress",
+      "DECISION-006 hybrid stack. SENTRY_DSN landed 4 Aug and VERIFIED LIVE: an uncaught browser error produced 4x POST to the ingest envelope endpoint, HTTP 200. Note SENTRY_DSN is read via process.env in astro.config.mjs, so a local .env value ships nothing — see ARCH 6."
     ],
     [
       "Event RSVP API",
@@ -1023,7 +1023,7 @@
     ],
     [
       "FEAT-080",
-      "Analytics (GA4, Clarity, PostHog Cloud, Osano, Sentry)",
+      "Analytics (GA4, Clarity, PostHog Cloud, Cookiebot CMP, Sentry)",
       "1",
       "Must",
       "Done",
@@ -1162,7 +1162,7 @@
       "Sam",
       "—",
       "—",
-      "Vercel security headers config, ready for the production cutover (FEAT-101). Aug 3 — CSP rewritten from a dist/ origin inventory: added YouTube frame-src (it would have blanked every video embed at cutover), Osano, Clarity connect, jsdelivr (map/story-board prototypes), GA4 regional ingest, Sentry ingest, form-action; dropped plausible.io, which DECISION-001 never chose."
+      "Vercel security headers config, ready for the production cutover (FEAT-101). Aug 3 — CSP rewritten from a dist/ origin inventory: added YouTube frame-src (it would have blanked every video embed at cutover), Osano, Clarity connect, jsdelivr (map/story-board prototypes), GA4 regional ingest, Sentry ingest, form-action; dropped plausible.io, which DECISION-001 never chose. Aug 4 — cmp.osano.com REPLACED in both netlify.toml and vercel.json (kept byte-identical) by consent.cookiebot.com (script + style) and consentcdn.cookiebot.com (script, connect, and frame — Cookiebot renders its banner in an iframe, which Osano never required). Without the frame-src entry the banner would have been CSP-blocked outright. Verified live: no CSP violations on / or /privacy."
     ],
     [
       "OPS-003",
@@ -1806,12 +1806,12 @@
     [
       "HC-066",
       "Sam ownership",
-      "Analytics + SEO + Osano",
+      "Analytics + SEO + Cookiebot CMP",
       "GA4, Clarity, PostHog, cookie consent — decisions already resolved.",
       "Sam",
       "Ready",
       "High",
-      "Analytics stack decisions already resolved (GA4 + Clarity + PostHog + Osano). Wire in Aug 10–14 review sprint — not a handoff blocker."
+      "Analytics stack decisions resolved (GA4 + Clarity + PostHog + Cookiebot; Osano dropped 4 Aug). Shipped and verified live 4-5 Aug rather than waiting for the Aug 10-14 window — see HC-076."
     ],
     [
       "HC-067",
@@ -1986,12 +1986,12 @@
     [
       "HC-076",
       "Integrations",
-      "Live GA4 / PostHog / Osano / Clarity / Sentry IDs",
+      "Live GA4 / PostHog / Cookiebot / Clarity / Sentry IDs",
       "FEAT-080 (Analytics) is fully scaffolded in src/components/Analytics.astro but every tool is a no-op until its real ID/key exists: PUBLIC_GA_ID, PUBLIC_POSTHOG_KEY/HOST, PUBLIC_COOKIEBOT_ID, PUBLIC_CLARITY_ID, SENTRY_DSN.",
       "Sam",
       "In Progress",
       "Critical",
-      "PLANNED: source + wire the 5 live analytics credentials so FEAT-080 stops being a no-op.\n\nDONE (4 Aug):\n• All 5 sourced and set in Netlify env vars (SENTRY_DSN confirmed added by Sam 4 Aug): GA4, PostHog key/host (US), Clarity, Cookiebot, Sentry.\n• CMP switched Osano -> Cookiebot. PUBLIC_OSANO_CUSTOMER_ID -> PUBLIC_COOKIEBOT_ID, renamed in one pass across code, .env, .env.example, ARCH 6.1, DECISIONS, this JSON.\n• Verified live on the wire: GA4 /g/collect 204 (en=page_view); Clarity r.clarity.ms/collect 204; Sentry envelope 200 x4; Cookiebot banner + consent bridge (GA4 gcs G100 -> G111).\n• PostHog NOT verified by us: init is correct (persistence 'memory') but no capture request is observable from an automated browser. Sam confirms events in the dashboard — recorded on his evidence.\n• BUG FIXED — PostHog stub never set __SV / posthog._i, so array.js ignored our config and fell back to localStorage+cookie. The DECISION-002/007 cookieless guarantee was cosmetic.\n• BUG FIXED — CSP allowed Osano only. Cookiebot also needs consentcdn on frame-src (its banner is an iframe) or it is silently blocked.\n• GOTCHA — SENTRY_DSN is read via process.env, which .env does NOT populate. A local .env alone ships zero Sentry code. PUBLIC_* vars are unaffected (import.meta.env).\n\nREMAINING:\n• Cookiebot deferred by Sam (4 Aug): config still under development and expected to change — do NOT treat current behaviour as final; full re-check required before launch.\n• Cookiebot free tier = 1 domain (now contentmentweb2.netlify.app). Must move to www.contentment.org at cutover or the banner silently no-ops.\n• Keep Cookiebot's own Google Consent Mode DISABLED — it races our gtag consent calls.\n• Resolve the test issue \"HC-076 Sentry verification error\" in Sentry (created by verification, not a real bug).\n\n5 AUG UPDATE:\n• Custom Cookiebot banner LIVE. Stock CybotMultilevel dialog no longer mounts; Cookiebot calls our cfShowCookieBanner/cfHideCookieBanner. Sources version-controlled in docs/cookiebot/ (banner.html, banner.css, banner.js) rather than living only in the vendor dashboard.\n• Banner size: 390x155 mobile / 900x90 desktop, from 374x800 (95% of a phone screen) and 1280x265 stock. ~90 lines of !important CSS that fought the vendor dialog were deleted as dead weight.\n• /privacy SHIPPED (partial, and says so on the page). Hosts the live Cookiebot declaration + a working Cookie Preferences trigger (Cookiebot.renew()). Fixes two real defects: the banner previously linked to a 404, and Cookiebot's standard copy promised withdrawal 'from the Cookie Declaration on our website' when neither existed. Legal copy (D-08/FEAT-071, Lorna + Finance/Legal) drops into a marked section; the cookie half needs no rework.\n• Consent Mode signal set completed: functionality_storage + personalization_storage (denied by default, now upgraded from Cookiebot's 'preferences' category), security_storage granted, ads_data_redaction true, url_passthrough false. Verified live: gcd moved 13p3p3p3p5l1 -> 13r3r3r3r5l1 alongside gcs G100 -> G111.\n• Cookiebot's own Google Consent Mode is NOT enabled (it is opt-in by pasting their snippet, which we deliberately did not) — so no competing gtag consent calls. GTM is not used and is not needed; gtag.js loads directly.\n• ACTION ON SAM: run a Cookiebot rescan (Cookies & Reports). The declaration currently lists only 'Necessary (4)' — the scan predates GA4/Clarity going live, so it understates what the site actually sets."
+      "PLANNED: source + wire the 5 live analytics credentials so FEAT-080 stops being a no-op.\n\nDONE (4 Aug):\n• All 5 sourced and set in Netlify env vars (SENTRY_DSN confirmed added by Sam 4 Aug): GA4, PostHog key/host (US), Clarity, Cookiebot, Sentry.\n• CMP switched Osano -> Cookiebot. PUBLIC_OSANO_CUSTOMER_ID -> PUBLIC_COOKIEBOT_ID, renamed in one pass across code, .env, .env.example, ARCH 6.1, DECISIONS, this JSON.\n• Verified live on the wire: GA4 /g/collect 204 (en=page_view); Clarity r.clarity.ms/collect 204; Sentry envelope 200 x4; Cookiebot banner + consent bridge (GA4 gcs G100 -> G111).\n• PostHog NOT verified by us: init is correct (persistence 'memory') but no capture request is observable from an automated browser. Sam confirms events in the dashboard — recorded on his evidence.\n• BUG FIXED — PostHog stub never set __SV / posthog._i, so array.js ignored our config and fell back to localStorage+cookie. The DECISION-002/007 cookieless guarantee was cosmetic.\n• BUG FIXED — CSP allowed Osano only. Cookiebot also needs consentcdn on frame-src (its banner is an iframe) or it is silently blocked.\n• GOTCHA — SENTRY_DSN is read via process.env, which .env does NOT populate. A local .env alone ships zero Sentry code. PUBLIC_* vars are unaffected (import.meta.env).\n\nREMAINING:\n• Cookiebot deferred by Sam (4 Aug): config still under development and expected to change — do NOT treat current behaviour as final; full re-check required before launch.\n• Cookiebot free tier = 1 domain (now contentmentweb2.netlify.app). Must move to www.contentment.org at cutover or the banner silently no-ops.\n• Keep Cookiebot's own Google Consent Mode DISABLED — it races our gtag consent calls.\n• Resolve the test issue \"HC-076 Sentry verification error\" in Sentry (created by verification, not a real bug).\n\n5 AUG UPDATE:\n• Custom Cookiebot banner LIVE. Stock CybotMultilevel dialog no longer mounts; Cookiebot calls our cfShowCookieBanner/cfHideCookieBanner. Sources version-controlled in docs/cookiebot/ (banner.html, banner.css, banner.js) rather than living only in the vendor dashboard.\n• Banner size: 390x155 mobile / 900x90 desktop, from 374x800 (95% of a phone screen) and 1280x265 stock. ~90 lines of !important CSS that fought the vendor dialog were deleted as dead weight.\n• /privacy SHIPPED (partial, and says so on the page). Hosts the live Cookiebot declaration + a working Cookie Preferences trigger (Cookiebot.renew()). Fixes two real defects: the banner previously linked to a 404, and Cookiebot's standard copy promised withdrawal 'from the Cookie Declaration on our website' when neither existed. Legal copy (D-08/FEAT-071, Lorna + Finance/Legal) drops into a marked section; the cookie half needs no rework.\n• Consent Mode signal set completed: functionality_storage + personalization_storage (denied by default, now upgraded from Cookiebot's 'preferences' category), security_storage granted, ads_data_redaction true, url_passthrough false. Verified live: gcd moved 13p3p3p3p5l1 -> 13r3r3r3r5l1 alongside gcs G100 -> G111.\n• Cookiebot's own Google Consent Mode is NOT enabled (it is opt-in by pasting their snippet, which we deliberately did not) — so no competing gtag consent calls. GTM is not used and is not needed; gtag.js loads directly.\n• ACTION ON SAM: run a Cookiebot rescan (Cookies & Reports). The declaration currently lists only 'Necessary (4)' — the scan predates GA4/Clarity going live, so it understates what the site actually sets.\n• 5 Aug: Sentry test issue 'HC-076 Sentry verification error' RESOLVED by Sam. Cookiebot rescan running — declaration listed only Necessary (4) beforehand. If the scan still misses GA4/Clarity cookies, add them by hand (_ga, _ga_* and _clck, _clsk under Statistics): our custom banner means Cookiebot's crawler has no dialog it recognises to click, so it may never observe consent-gated cookies. PostHog needs no entry — cookieless by design per DECISION-007."
     ],
     [
       "HC-077",
