@@ -88,6 +88,9 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
       right: 0 !important;
       transform: none !important;
       margin: 0 auto !important;
+      /* Cookiebot pins min-width to the viewport (measured 1280px on desktop),
+         which beats max-width and kept this a full-width slab. */
+      min-width: 0 !important;
       max-width: 860px !important;
       max-height: 40vh !important;
       overflow-y: auto !important;
@@ -146,24 +149,27 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
       padding: 0.5rem 0.9rem !important;
       font-size: 0.82rem !important;
     }
-    /* "Allow all" and "Deny" measured 323x44 each, stacked — two full rows plus a
-       gap. Side by side costs one row and keeps both equally prominent, which is
-       the fairness requirement. */
-    #CybotCookiebotDialogBodyLevelButtonsTable,
-    #CybotCookiebotDialogBodyLevelButtonsRow {
-      display: flex !important;
+    /* "Allow all" and "Deny" were 44px each stacked = 88px. Side by side costs one
+       row and keeps both equally prominent, which is the fairness requirement.
+       They live in #CybotCookiebotDialogBodyButtons (flex column / column-reverse),
+       NOT in BodyLevelButtonsTable — targeting the latter did nothing. */
+    #CybotCookiebotDialogBodyButtons,
+    #CybotCookiebotDialogBodyButtonsWrapper {
       flex-direction: row !important;
       flex-wrap: wrap !important;
       gap: 0.4rem !important;
+      align-items: center !important;
       width: 100% !important;
     }
     #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll,
     #CybotCookiebotDialogBodyButtonDecline {
-      flex: 1 1 auto !important;
+      flex: 1 1 0 !important;
       width: auto !important;
-      min-width: 120px !important;
+      min-width: 110px !important;
       margin: 0 !important;
     }
+    /* Fader/scroll chrome adds ~64px of empty gradient we do not need at this size. */
+    #CybotCookiebotFader { display: none !important; }
     @media (max-width: 600px) {
       #CybotCookiebotDialog {
         max-height: 34vh !important;
