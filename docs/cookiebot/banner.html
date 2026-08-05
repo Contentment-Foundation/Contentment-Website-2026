@@ -1,0 +1,50 @@
+<div id="cfCookieBar" role="dialog" aria-modal="false" aria-label="Cookie consent" hidden>
+  <div class="cf-cb-inner">
+    <div class="cf-cb-copy">
+      <p class="cf-cb-title">We use cookies</p>
+      <p class="cf-cb-text">
+        We use cookies to understand how the site is used and to improve it.
+        Nothing non-essential runs until you choose.
+        <a href="/privacy" class="cf-cb-link">Privacy&nbsp;Policy</a>
+      </p>
+    </div>
+
+    <div class="cf-cb-actions">
+      <button type="button" id="cfCbCustomise" class="cf-cb-btn cf-cb-btn-quiet"
+              aria-expanded="false" aria-controls="cfCbPanel">Customise</button>
+      <button type="button" id="cfCbDecline" class="cf-cb-btn cf-cb-btn-outline">Decline</button>
+      <button type="button" id="cfCbAccept" class="cf-cb-btn cf-cb-btn-primary">Accept all</button>
+    </div>
+  </div>
+
+  <!-- Granular categories. Explicit consent: every optional box starts UNCHECKED. -->
+  <div id="cfCbPanel" class="cf-cb-panel" hidden>
+    <ul class="cf-cb-cats">
+      <li>
+        <label>
+          <input type="checkbox" checked disabled>
+          <span><strong>Necessary</strong> — required for the site to work. Always on.</span>
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" id="cfCbPreferences">
+          <span><strong>Preferences</strong> — remembers your settings.</span>
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" id="cfCbStatistics">
+          <span><strong>Statistics</strong> — anonymous usage analytics.</span>
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" id="cfCbMarketing">
+          <span><strong>Marketing</strong> — measuring campaigns.</span>
+        </label>
+      </li>
+    </ul>
+    <button type="button" id="cfCbSave" class="cf-cb-btn cf-cb-btn-primary cf-cb-save">Save my choices</button>
+  </div>
+</div>

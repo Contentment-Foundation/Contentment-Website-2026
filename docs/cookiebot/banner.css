@@ -1,0 +1,117 @@
+/* Contentment Foundation — custom Cookiebot banner.
+   Compact bottom bar. Site tokens with hex fallbacks, since this CSS is injected
+   by Cookiebot and must stand alone if tokens.css has not applied yet. */
+
+#cfCookieBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2147483600;
+  margin: 0 auto;
+  max-width: 900px;
+  background: #fff;
+  color: var(--deep, #024E70);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -8px 30px -12px rgba(2, 40, 58, .38);
+  border: 1px solid rgba(2, 78, 112, .12);
+  border-bottom: 0;
+  padding: 12px 16px;
+}
+#cfCookieBar[hidden] { display: none; }
+
+.cf-cb-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.cf-cb-copy { flex: 1 1 300px; min-width: 0; }
+.cf-cb-title {
+  font-family: Newsreader, Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 2px;
+}
+.cf-cb-text { font-size: .8rem; line-height: 1.45; margin: 0; }
+.cf-cb-link { color: var(--ocean, #0080B0); text-decoration: underline; }
+
+.cf-cb-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 44px min tap target on every control. Decline is the same size and weight as
+   Accept — under explicit consent, refusing must be as easy as agreeing. */
+.cf-cb-btn {
+  min-height: 44px;
+  padding: .55em 1.15em;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .25s, color .25s, transform .25s;
+}
+.cf-cb-btn-primary { background: var(--btnblue, #0090bd); color: #fff; }
+.cf-cb-btn-primary:hover { background: #00a0d2; transform: translateY(-1px); }
+.cf-cb-btn-outline {
+  background: #fff;
+  color: var(--deep, #024E70);
+  border-color: rgba(2, 78, 112, .45);
+}
+.cf-cb-btn-outline:hover { background: rgba(2, 78, 112, .06); transform: translateY(-1px); }
+.cf-cb-btn-quiet {
+  background: transparent;
+  color: var(--ocean, #0080B0);
+  text-decoration: underline;
+  padding-left: .5em;
+  padding-right: .5em;
+}
+.cf-cb-btn:focus-visible {
+  outline: 3px solid var(--teal, #1FAFC0);
+  outline-offset: 2px;
+}
+
+.cf-cb-panel {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(2, 78, 112, .14);
+  max-height: 34vh;
+  overflow-y: auto;
+}
+.cf-cb-panel[hidden] { display: none; }
+.cf-cb-cats { list-style: none; margin: 0 0 10px; padding: 0; }
+.cf-cb-cats li { margin: 0 0 6px; }
+.cf-cb-cats label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: .78rem;
+  line-height: 1.4;
+  cursor: pointer;
+  min-height: 28px;
+}
+.cf-cb-cats input { margin-top: 2px; width: 17px; height: 17px; flex: none; }
+.cf-cb-cats input:disabled + span { opacity: .72; }
+.cf-cb-save { width: auto; }
+
+@media (max-width: 600px) {
+  #cfCookieBar { padding: 10px 12px; border-radius: 12px 12px 0 0; }
+  .cf-cb-inner { gap: 10px; }
+  .cf-cb-text { font-size: .76rem; }
+  .cf-cb-actions { width: 100%; }
+  /* Decline and Accept share one row; Customise sits inline before them. */
+  .cf-cb-actions .cf-cb-btn-outline,
+  .cf-cb-actions .cf-cb-btn-primary { flex: 1 1 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cf-cb-btn { transition: none; }
+  .cf-cb-btn:hover { transform: none; }
+}

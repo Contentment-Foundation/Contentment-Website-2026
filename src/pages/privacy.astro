@@ -1,0 +1,149 @@
+---
+/**
+ * /privacy — FEAT-071 / D-08.
+ *
+ * Deliberately a PARTIAL page, and it says so on the page itself. The full legal
+ * policy (controller identity, lawful basis, retention, data-subject rights) is
+ * owned by Lorna / Finance+Legal and is still an open ticket. Nothing here is
+ * presented as that policy.
+ *
+ * What it DOES ship today is the part engineering actually knows and that the
+ * cookie consent depends on:
+ *   - the live Cookiebot cookie declaration (auto-generated from their scan)
+ *   - a working "Cookie Preferences" trigger so consent can be withdrawn, which
+ *     is what makes the banner's withdrawal promise true
+ *   - an honest list of the analytics tools that run and what each stores
+ *
+ * Until this existed the consent banner linked to a 404, and the standard
+ * Cookiebot copy ("you can at any time change or withdraw your consent from the
+ * Cookie Declaration on our website") was simply false.
+ *
+ * When legal copy lands, drop it into the marked section — the cookie half needs
+ * no rework.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const COOKIEBOT_ID = import.meta.env.PUBLIC_COOKIEBOT_ID;
+---
+<BaseLayout
+  title="Privacy and Cookies — The Contentment Foundation"
+  description="How The Contentment Foundation uses cookies and analytics, and how to change or withdraw your consent at any time."
+>
+
+<section class="hero hero-short" id="top">
+  <div class="hero-inner wrap">
+    <div class="hero-content">
+      <h1 class="hero-q">
+        <span class="l1 anim">Privacy &amp; cookies.</span>
+      </h1>
+    </div>
+  </div>
+</section>
+
+<section class="band-tight">
+  <div class="wrap prose">
+
+    <div class="anim notice" role="note">
+      <p><strong>Our full privacy policy is being finalised.</strong> The complete
+      legal text — including how we handle personal data, how long we keep it and
+      your rights over it — is in review and will be published here. In the
+      meantime, everything below about cookies and analytics is accurate and
+      current, and your consent choices work today.</p>
+      <p>Questions in the meantime: <a href="mailto:hello@contentment.org">hello@contentment.org</a></p>
+    </div>
+
+    <h2 class="title anim">Your cookie choices</h2>
+    <p class="body anim">
+      We ask before setting anything that isn't strictly necessary. You can change
+      your mind at any time — nothing is permanent.
+    </p>
+    {COOKIEBOT_ID && (
+      <p class="anim">
+        <button type="button" id="cfCookiePrefs" class="btn btn-primary">Cookie preferences</button>
+      </p>
+    )}
+
+    <h2 class="title anim">What we use, and why</h2>
+    <p class="body anim">
+      We use a small number of tools to understand how the site is used so we can
+      improve it. We don't sell data, and we don't run advertising.
+    </p>
+    <ul class="body anim plain-list">
+      <li><strong>Google Analytics 4</strong> — how many people visit and which pages
+        they read. Runs in Google's cookieless consent mode until you accept, so no
+        analytics cookies are set beforehand.</li>
+      <li><strong>Microsoft Clarity</strong> — anonymised heatmaps and session
+        replays showing where people get stuck. Also held in a consent-denied,
+        cookieless state until you accept.</li>
+      <li><strong>PostHog</strong> — product analytics. Configured cookieless
+        permanently: it keeps nothing between page loads and sets no cookies at all.</li>
+      <li><strong>Sentry</strong> — error monitoring, so we hear about broken pages.
+        Records technical error details, not browsing behaviour.</li>
+      <li><strong>Cookiebot</strong> — records your consent choice itself. Strictly
+        necessary, which is why it works before you choose.</li>
+    </ul>
+
+    <h2 class="title anim">Cookie declaration</h2>
+    <p class="body anim">
+      This list is generated automatically from a scan of the site, so it stays
+      accurate as things change.
+    </p>
+    {COOKIEBOT_ID ? (
+      <div class="anim cookie-declaration">
+        <script
+          id="CookieDeclaration"
+          src={`https://consent.cookiebot.com/${COOKIEBOT_ID}/cd.js`}
+          type="text/javascript"
+          async
+          is:inline
+        ></script>
+      </div>
+    ) : (
+      <p class="body anim"><em>The cookie declaration appears here once consent
+      management is configured.</em></p>
+    )}
+
+    <!-- ============================================================
+         LEGAL COPY GOES HERE when Lorna / Finance+Legal deliver it
+         (D-08 / FEAT-071). Expected sections: who we are and how to
+         contact us; what personal data we collect and why; lawful
+         basis; who we share it with; retention periods; your rights
+         and how to exercise them; international transfers; complaints.
+         Remove the .notice block above once this lands.
+         ============================================================ -->
+
+  </div>
+</section>
+
+{COOKIEBOT_ID && (
+  <script is:inline>
+    // Re-opens the consent banner. Cookiebot.renew() is the documented API and
+    // works with our custom banner, since Cookiebot calls cfShowCookieBanner().
+    document.getElementById('cfCookiePrefs')?.addEventListener('click', function () {
+      if (window.Cookiebot && typeof window.Cookiebot.renew === 'function') {
+        window.Cookiebot.renew();
+      }
+    });
+  </script>
+)}
+
+<style>
+  .hero-short { min-height: 46vh; }
+  .prose { max-width: 68ch; }
+  .prose h2 { margin-top: 2.2rem; }
+  .prose p { margin-bottom: 1rem; }
+  .notice {
+    background: rgba(31, 175, 192, .08);
+    border-left: 4px solid var(--teal);
+    border-radius: 8px;
+    padding: 1rem 1.15rem;
+    margin-bottom: 2rem;
+  }
+  .notice p { margin-bottom: .6rem; }
+  .notice p:last-child { margin-bottom: 0; }
+  .plain-list { padding-left: 1.15rem; }
+  .plain-list li { margin-bottom: .6rem; }
+  .cookie-declaration { margin-top: 1rem; overflow-x: auto; }
+</style>
+
+</BaseLayout>

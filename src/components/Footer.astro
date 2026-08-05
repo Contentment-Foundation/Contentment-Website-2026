@@ -30,6 +30,7 @@ const isCurrent = (href: string) => pathname === href.replace(/\/$/, '');
         <a href="/why">Why Teacher Wellbeing</a>
         <a href="/our-impact">Our Impact</a>
         <a href="/updates" aria-current={isCurrent('/updates') ? 'page' : undefined}>Updates</a>
+        <a href="/privacy" aria-current={isCurrent('/privacy') ? 'page' : undefined}>Privacy &amp; cookies</a>
         <!-- /docs stays unmarked on purpose: it is a public/ directory index served by a
              netlify.toml rewrite, not an Astro route, so no built page's pathname equals it. -->
         <a href="/docs">Project docs</a>
