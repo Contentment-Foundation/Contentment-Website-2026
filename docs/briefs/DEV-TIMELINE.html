@@ -207,7 +207,7 @@
     </div>
     <div class="meta">
       <strong>As of 5 Aug 2026</strong><br>
-      Handoff Day 0 = <strong>Jul 28</strong> (not Jul 27). Sprint Jul 28–Aug 7; hard go-live <strong>Aug 21 as scheduled</strong>. All 7 routes Astro-live; RF-006 6/6 QA; RF-008 + RF-009 closed; FEAT-001/003/010/011/080/081 Done. <strong>Analytics + consent are LIVE</strong> — all 5 HC-076 credentials landed (GA4, PostHog, Clarity, Cookiebot, Sentry); Cookiebot replaced Osano as the CMP on 4 Aug. Flodesk newsletter shipped; Keela general donation form wired. <strong>Still waiting on the team:</strong> Button/CTA inventory (Kristina, HC-005), per-tier Keela + join-flow (Lorna/Kristina, HC-075/071), About roster + Events notes (Dave), impact stories (Comms/Programs, FEAT-030), Events email destination (WJ + Kristina, D-24).<br>
+      Handoff Day 0 = <strong>Jul 28</strong> (not Jul 27). Sprint Jul 28–Aug 7; hard go-live <strong>Aug 21 as scheduled</strong>. All 7 routes Astro-live; RF-006 6/6 QA; RF-008 + RF-009 closed; FEAT-001/003/010/011/080/081 Done. <strong>Analytics + consent are LIVE</strong> — all 5 HC-076 credentials landed (GA4, PostHog, Clarity, Cookiebot, Sentry); Cookiebot replaced Cookiebot as the CMP on 4 Aug. Flodesk newsletter shipped; Keela general donation form wired. <strong>Still waiting on the team:</strong> Button/CTA inventory (Kristina, HC-005), per-tier Keela + join-flow (Lorna/Kristina, HC-075/071), About roster + Events notes (Dave), impact stories (Comms/Programs, FEAT-030), Events email destination (WJ + Kristina, D-24).<br>
       Source: Kristina's Gantt · <code>launch-plan-data.json</code> · <code>TRACKER.md</code>
     </div>
   </div>
@@ -296,7 +296,7 @@
         <tr><td><strong>Copy: Finalize</strong></td><td>K, WJ, Nav</td><td><span class="tag tag-done">✓ Done</span></td><td>Phase 1 copy locked for handoff; FEAT-011 audit Done 31 Jul</td></tr>
         <tr><td><strong>Astro vs. static-partials</strong> build decision</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>—</td></tr>
         <tr><td><strong>Analytics stack</strong> — GA4 + PostHog + Clarity</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>—</td></tr>
-        <tr><td><strong>Cookie consent</strong> (DECISION-002) — Osano Free + GA4 Consent Mode v2</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
+        <tr><td><strong>Cookie consent</strong> (DECISION-002) — Cookiebot + GA4 Consent Mode v2</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
         <tr><td><strong>Transactional email</strong> (DECISION-003) — SendGrid, existing paid plan</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
         <tr><td><strong>Rate limiting</strong> (DECISION-004) — Upstash Redis</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
         <tr><td><strong>Image optimization</strong> (DECISION-005) — Astro &lt;Image /&gt;</td><td>Sam</td><td><span class="tag tag-approved">✔ Resolved</span></td><td>Signed off 14 Jul</td></tr>
@@ -833,9 +833,9 @@
           <tr><td class="id">FEAT-100</td><td>Bug fixes from Aug 7 review, cross-browser + mobile polish</td><td><span class="tag tag-progress">● In progress</span></td><td>Scope depends on review findings</td></tr>
           <tr><td>—</td><td>Mobile UI/UX pass (RF-006)</td><td><span class="tag tag-progress">● In progress</span></td><td>31 Jul — locked-width QA done on all 7 pages; Aug 10–14 is polish, not first pass</td></tr>
           <tr><td class="id">FEAT-071</td><td>Privacy + Terms pages</td><td><span class="tag tag-done">✓ Moved to Phase 2</span></td><td>Open ticket per Somesh/Kristina — does not block Aug 21 Phase 1 hard go-live (D-08)</td></tr>
-          <tr><td class="id">FEAT-080</td><td>Analytics — GA4 + Clarity + PostHog Cloud + Osano + Sentry</td><td><span class="tag tag-done">✓ Done</span></td><td>Aug 4 — CLOSED 7/7: last criterion ('pageviews recording on staging') verified — contentmentweb2.netlify.app serves the real gtag tag G-0GBRRW2MCL, Cookiebot…</td></tr>
+          <tr><td class="id">FEAT-080</td><td>Analytics — GA4 + Clarity + PostHog Cloud + Cookiebot CMP + Sentry</td><td><span class="tag tag-done">✓ Done</span></td><td>Aug 4 — CLOSED 7/7: last criterion ('pageviews recording on staging') verified — contentmentweb2.netlify.app serves the real gtag tag G-0GBRRW2MCL, Cookiebot…</td></tr>
           <tr><td class="id">FEAT-081</td><td>SEO baseline — meta, OG, sitemap, favicon</td><td><span class="tag tag-done">✓ Done</span></td><td>31 Jul — per-page title/description/OG/JSON-LD, robots.txt/sitemap.xml/llms.txt/favicon.svg shipped.</td></tr>
-          <tr><td>—</td><td>Cookie consent banner (Osano)</td><td><span class="tag tag-progress">● In progress</span></td><td>Bundled in Analytics.astro; activates when Osano ID lands (HC-076)</td></tr>
+          <tr><td>—</td><td>Cookie consent banner (Cookiebot)</td><td><span class="tag tag-progress">● In progress</span></td><td>Bundled in Analytics.astro; activates when Cookiebot ID lands (HC-076)</td></tr>
           <tr><td>—</td><td><strong>Final approval — Nav + WJ review and sign off</strong></td><td><span class="tag tag-signoff">✎ Pending sign-off</span></td><td>Unlocks DNS cutover — nothing ships without this</td></tr>
           <tr><td class="id">FEAT-041</td><td>Google Form with embedded link from website</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>31 Jul — school discovery form live on <code>/schools</code></td></tr>
           <tr><td>—</td><td>Website Change Request Form &amp; SOP</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Owner: K — post-launch change-request process</td></tr>

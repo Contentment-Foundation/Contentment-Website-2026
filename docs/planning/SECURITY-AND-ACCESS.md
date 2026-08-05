@@ -102,33 +102,33 @@ Publish `/privacy` before launch covering these flows.
 
 | Region | Regulation | How contentment.org complies |
 |--------|------------|------------------------------|
-| **European Union** | GDPR + ePrivacy Directive | **Osano** consent management platform (CMP); no non-essential cookies before opt-in; **GA4 Consent Mode v2** (cookieless/modelled analytics pre-consent) |
-| **United Kingdom** | UK GDPR + PECR | Same as EU — Osano geo-targets UK visitors with consent banner |
-| **United States (California)** | CCPA / CPRA | Privacy policy discloses analytics vendors and data categories; **Cookie Preferences** link in footer (Osano) |
+| **European Union** | GDPR + ePrivacy Directive | **Cookiebot** consent management platform (CMP); no non-essential cookies before opt-in; **GA4 Consent Mode v2** (cookieless/modelled analytics pre-consent) |
+| **United Kingdom** | UK GDPR + PECR | Same as EU — Cookiebot geo-targets UK visitors with consent banner |
+| **United States (California)** | CCPA / CPRA | Privacy policy discloses analytics vendors and data categories; **Cookie Preferences** link in footer (Cookiebot) |
 | **Rest of world** | Best practice | Privacy policy + cookie preferences; minimal data collection |
 
 **Tools & cookie behaviour:**
 
 | Tool | Cookies? | Consent required? | Disclose in `/privacy` |
 |------|----------|-------------------|------------------------|
-| **Osano CMP** | Sets consent-state cookie | N/A — manages consent | Yes — CMP provider, purpose, [Osano privacy policy](https://www.osano.com/legal/privacy-policy) |
+| **Cookiebot CMP** | Sets consent-state cookie | N/A — manages consent | Yes — CMP provider, purpose, [Cookiebot privacy policy](https://www.osano.com/legal/privacy-policy) |
 | **GA4** | Yes (`_ga`, `_gid`) after consent | Yes (EU/UK) | Yes — Google Analytics, retention, [Google privacy policy](https://policies.google.com/privacy) |
 | **Microsoft Clarity** | First-party session only | No banner — disclose only | Yes — heatmaps/session replay, no personal data sold |
 | **PostHog** | No — `persistence: 'memory'` | No | Yes — cookieless event analytics |
 
 **Site UI requirements (FEAT-071, FEAT-080):**
 
-1. **Osano Free Plan** script in `BaseLayout` — loads **before** GA4 gtag; 1 domain, up to 5,000 monthly visitors (sufficient for launch).
-2. **Footer** on every page: link to `/privacy`, **Cookie Preferences** (Osano re-open), Terms.
+1. **Cookiebot** script in `BaseLayout` — loads **before** GA4 gtag; 1 domain, up to 5,000 monthly visitors (sufficient for launch).
+2. **Footer** on every page: link to `/privacy`, **Cookie Preferences** (Cookiebot re-open), Terms.
 3. **`/privacy` page** must include:
    - Regulatory compliance table (above)
    - Per-tool disclosures with links to vendor privacy policies
-   - Optional **Osano partner badge** / CMP attribution (Osano provides embeddable badge for privacy page)
+   - Optional **Cookiebot partner badge** / CMP attribution (Cookiebot provides embeddable badge for privacy page)
    - Last updated date
-4. **GA4 Consent Mode v2** default: analytics storage denied until Osano fires consent grant.
+4. **GA4 Consent Mode v2** default: analytics storage denied until Cookiebot fires consent grant.
 5. **PostHog** init: `posthog.init(key, { persistence: 'memory', ... })` — no PostHog cookies.
 
-**Pre-launch check:** Verify banner appears for EU/UK test IP (or Osano preview mode); verify GA4 DebugView shows consent states; verify PostHog does not set cookies in browser devtools.
+**Pre-launch check:** Verify banner appears for EU/UK test IP (or Cookiebot preview mode); verify GA4 DebugView shows consent states; verify PostHog does not set cookies in browser devtools.
 
 ### 5.2 How compliance content reaches production
 
@@ -141,9 +141,9 @@ Planning docs (`SECURITY-AND-ACCESS.md` §5.1, `DECISIONS.md`) define **what** m
 | 3 | Astro page built at `src/pages/privacy.astro` — shared layout, `.band` + `.wrap` + `.body` typography per FRONTEND-SPEC | Sam | FEAT-071 |
 | 4 | Legal copy stored in repo: inline in `.astro` **or** `src/content/legal/privacy.md` imported at build time (Markdown → static HTML) | Sam | FEAT-071 |
 | 5 | Same pattern for `/terms` at `src/pages/terms.astro` | Sam | FEAT-071 |
-| 6 | Footer on every page: **Privacy Policy** · **Terms** · **Cookie Preferences** (Osano re-open) | Sam | FEAT-004 |
-| 7 | Osano CMP script + GA4 Consent Mode v2 wired in `BaseLayout` before analytics scripts | Sam | FEAT-080 |
-| 8 | Optional Osano partner badge / CMP attribution embedded on `/privacy` | Sam | FEAT-071 |
+| 6 | Footer on every page: **Privacy Policy** · **Terms** · **Cookie Preferences** (Cookiebot re-open) | Sam | FEAT-004 |
+| 7 | Cookiebot CMP script + GA4 Consent Mode v2 wired in `BaseLayout` before analytics scripts | Sam | FEAT-080 |
+| 8 | Optional Cookiebot partner badge / CMP attribution embedded on `/privacy` | Sam | FEAT-071 |
 | 9 | `vercel build` → static HTML → deploy on merge to `main` → live at `https://contentment.org/privacy` | CI/CD | FEAT-101 |
 
 **Visitor-facing URL:** `https://contentment.org/privacy` (and `/terms`) — standard Astro static routes on Vercel, same as every other page. No separate CMS or PDF for launch; legal updates go through a repo PR + redeploy until Sanity migration (Phase 1.5) if editors need self-service.

@@ -336,7 +336,7 @@
       <span class="c-gray">│</span>          <span class="c-gray">├──</span> <span class="c-teal">Keela</span>       <span class="c-gray">redirect to hosted checkout (no API from browser)</span><span class="c-gray">  │</span><br>
       <span class="c-gray">│</span>          <span class="c-gray">├──</span> <span class="c-teal">Flodesk</span>     <span class="c-gray">embed  OR  Vercel Fn → Flodesk API</span><span class="c-gray">              │</span><br>
       <span class="c-gray">│</span>          <span class="c-gray">├──</span> <span class="c-teal">Raisely</span>     <span class="c-gray">embed / campaign link</span><span class="c-gray">                           │</span><br>
-      <span class="c-gray">│</span>          <span class="c-gray">├──</span> <span class="c-teal">Analytics</span>   <span class="c-gray">GA4 + Clarity + PostHog (Osano CMP)</span><span class="c-gray">       │</span><br>
+      <span class="c-gray">│</span>          <span class="c-gray">├──</span> <span class="c-teal">Analytics</span>   <span class="c-gray">GA4 + Clarity + PostHog (Cookiebot CMP)</span><span class="c-gray">       │</span><br>
       <span class="c-gray">│</span>          <span class="c-gray">└──</span> <span class="c-yellow">Vercel Fn</span>   <span class="c-gray">/api/* — custom form POST (rate-limited)</span><span class="c-gray">         │</span><br>
       <span class="c-gray">│</span>                <span class="c-gray">└──</span> <span class="c-green">GCP Cloud SQL</span>  <span class="c-gray">Phase 2+ only — school leads, member auth</span><span class="c-gray">  │</span><br>
       <span class="c-gray">└─────────────────────────────────────────────────────────────────────┘</span>
@@ -360,7 +360,7 @@
           <tr><td><strong>Fundraise</strong></td><td>Raisely</td><td>Embed or <code>PUBLIC_RAISELY_CAMPAIGN_URL</code></td></tr>
           <tr><td><strong>Database</strong></td><td>GCP Cloud SQL</td><td>Phase 2+ — skip if Flodesk/Keela/Raisely suffice</td></tr>
           <tr><td><strong>CMS</strong></td><td>JSON → Sanity</td><td>Phase 1: JSON/markdown. Phase 1.5: Sanity</td></tr>
-          <tr><td><strong>Analytics</strong></td><td>GA4 + Clarity + PostHog</td><td>DECISION-001; Osano CMP (DECISION-002, Somesh Bhardwaj)</td></tr>
+          <tr><td><strong>Analytics</strong></td><td>GA4 + Clarity + PostHog</td><td>DECISION-001; Cookiebot CMP (DECISION-002, Somesh Bhardwaj)</td></tr>
           <tr><td><strong>Rate limit</strong></td><td>Upstash Redis</td><td><code>@upstash/ratelimit</code> — DECISION-004, Somesh Bhardwaj</td></tr>
           <tr><td><strong>Observability</strong></td><td>Slack + Sentry + Vercel + PostHog</td><td>DECISION-006 hybrid stack, Somesh Bhardwaj</td></tr>
           <tr><td><strong>Transactional email</strong></td><td>SendGrid</td><td>Existing paid plan (DECISION-003, Somesh Bhardwaj)</td></tr>
@@ -506,12 +506,12 @@ Requires GCP <span class="c-teal">homeroom_members</span> table
       <thead><tr><th>#</th><th>Decision</th><th>Chosen</th><th>Signed off by</th><th>Date</th></tr></thead>
       <tbody>
         <tr><td>001</td><td>Primary analytics</td><td><strong>GA4 + Clarity + PostHog + Bing</strong></td><td>Anik Ghosh</td><td>3 Jul 2026</td></tr>
-        <tr><td>002</td><td>Cookie consent</td><td><strong>Osano Free + GA4 Consent Mode v2 + cookieless PostHog</strong></td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
+        <tr><td>002</td><td>Cookie consent</td><td><strong>Cookiebot + GA4 Consent Mode v2 + cookieless PostHog (CMP was Cookiebot until 4 Aug 2026)</strong></td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
         <tr><td>003</td><td>Transactional email</td><td><strong>SendGrid</strong> (existing paid plan)</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
         <tr><td>004</td><td>Rate limiting</td><td><strong>@upstash/ratelimit</strong> + Upstash Redis</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
         <tr><td>005</td><td>Image optimization</td><td>Astro &lt;Image /&gt; (<code>astro:assets</code>)</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
         <tr><td>006</td><td>Observability</td><td>Hybrid: Slack + Sentry + Vercel logs + PostHog</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
-        <tr><td>007</td><td>PostHog hosting</td><td>PostHog Cloud (<code>app.posthog.com</code>)</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
+        <tr><td>007</td><td>PostHog hosting</td><td>PostHog Cloud (<code>us.i.posthog.com</code>)</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
       </tbody>
     </table>
   </section>
@@ -529,7 +529,7 @@ Requires GCP <span class="c-teal">homeroom_members</span> table
         <span class="env-key">PUBLIC_KEELA_TIER_25_URL</span><span class="env-eq">=</span><span class="env-empty">         </span><span class="env-comment"> ← from finance</span><br>
         <span class="env-key">PUBLIC_KEELA_TIER_100_URL</span><span class="env-eq">=</span><span class="env-empty">        </span><span class="env-comment"> ← from finance</span><br>
         <span class="env-key">PUBLIC_GA_ID</span><span class="env-eq">=</span><span class="env-empty">                 </span><span class="env-comment"> DECISION-001</span><br>
-        <span class="env-key">PUBLIC_OSANO_CUSTOMER_ID</span><span class="env-eq">=</span><span class="env-empty">    </span><span class="env-comment"> DECISION-002</span><br>
+        <span class="env-key">PUBLIC_COOKIEBOT_ID</span><span class="env-eq">=</span><span class="env-empty">    </span><span class="env-comment"> DECISION-002</span><br>
         <span class="env-key">PUBLIC_RAISELY_CAMPAIGN_URL</span><span class="env-eq">=</span><span class="env-empty">      </span>
         <div class="env-section"># Server — core (Vercel env, never in repo)</div>
         <span class="env-key">FLODESK_API_KEY</span><span class="env-eq">=</span><span class="env-empty">                  </span><br>
@@ -703,7 +703,7 @@ Requires GCP <span class="c-teal">homeroom_members</span> table
     <div class="docs-ref">
       <div class="doc-card">
         <h4>Open Technical Decisions</h4>
-        <p>GA4 + Osano CMP, SendGrid, Upstash — see DECISIONS.md for sign-off status</p>
+        <p>GA4 + Cookiebot CMP, SendGrid, Upstash — see DECISIONS.md for sign-off status</p>
         <code>planning/DECISIONS.md</code>
       </div>
       <div class="doc-card">

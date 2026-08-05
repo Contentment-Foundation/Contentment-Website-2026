@@ -326,9 +326,9 @@ Automation detail (webhook handlers, Slack payloads): [AUTOMATION-BRIEF](../brie
 | `PUBLIC_KEELA_TIER_25_URL` | 1 | Yes | Keela hosted checkout — $25/month tier |
 | `PUBLIC_KEELA_TIER_100_URL` | 1 | Yes | Keela hosted checkout — $100/month tier |
 | `PUBLIC_GA_ID` | 1 | Yes | Google Analytics 4 measurement ID (existing account — primary analytics) |
-| `PUBLIC_COOKIEBOT_ID` | 1 | Yes | Cookiebot CMP ID (`data-cbid` on `uc.js`) — cookie consent banner (DECISION-002; replaced Osano 4 Aug 2026) |
+| `PUBLIC_COOKIEBOT_ID` | 1 | Yes | Cookiebot CMP ID (`data-cbid` on `uc.js`) — cookie consent banner (DECISION-002; replaced Cookiebot 4 Aug 2026) |
 | `PUBLIC_POSTHOG_KEY` | 1 | Yes | PostHog project API key — product analytics + funnels (cookieless mode) |
-| `PUBLIC_POSTHOG_HOST` | 1 | Yes | PostHog Cloud host — `https://app.posthog.com` (DECISION-007) |
+| `PUBLIC_POSTHOG_HOST` | 1 | Yes | PostHog Cloud host — `https://us.i.posthog.com` (US region; `us.i.posthog.com` is an alias onto it. DECISION-007 predates PostHog’s regional hosts) |
 | `PUBLIC_CLARITY_ID` | 1 | Yes | Microsoft Clarity project ID — heatmaps + session recordings (DECISION-001) |
 | `PUBLIC_RAISELY_CAMPAIGN_URL` | 1.5 | If fundraise page | Raisely peer-to-peer campaign link |
 

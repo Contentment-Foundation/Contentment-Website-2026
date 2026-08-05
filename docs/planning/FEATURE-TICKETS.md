@@ -399,9 +399,9 @@ Simple text pages at `/privacy` and `/terms` using `.band` + `.wrap` + `.body` t
 - [ ] Linked from footer on every page
 - [ ] Cover newsletter, analytics, Keela, form data per Security doc
 - [ ] Cookie & privacy compliance section: EU/UK/US regulatory table (GDPR, PECR, CCPA) per SECURITY-AND-ACCESS §5.1
-- [ ] Per-tool disclosures: Osano CMP, GA4, Microsoft Clarity, PostHog (cookieless), SendGrid (transactional email)
-- [ ] Footer includes **Cookie Preferences** link (Osano re-open)
-- [ ] Osano partner badge or CMP attribution on `/privacy` if available from Osano dashboard
+- [ ] Per-tool disclosures: Cookiebot CMP, GA4, Microsoft Clarity, PostHog (cookieless), SendGrid (transactional email)
+- [ ] Footer includes **Cookie Preferences** link (Cookiebot re-open)
+- [ ] Cookiebot CMP attribution on `/privacy` (free tier requires the "Powered by Cookiebot" mark)
 - [ ] Legal team sign-off on copy
 
 ---
@@ -416,14 +416,14 @@ Simple text pages at `/privacy` and `/terms` using `.band` + `.wrap` + `.body` t
 | **Dependencies** | TICKET-002 |
 
 **Description:**  
-Add GA4, Microsoft Clarity, and PostHog Cloud (DECISION-007, cookieless) to layout. Wire Osano CMP (Free Plan) with GA4 Consent Mode v2 per [DECISION-002](./DECISIONS.md). Implement conversion events per Frontend Spec §6.4 and [GROWTH-BRIEF](../briefs/GROWTH-BRIEF.md) §1. Wire Sentry per [DECISION-006](./DECISIONS.md). Document UTM convention for campaigns.
+Add GA4, Microsoft Clarity, and PostHog Cloud (DECISION-007, cookieless) to layout. Wire Cookiebot CMP (Free Plan) with GA4 Consent Mode v2 per [DECISION-002](./DECISIONS.md). Implement conversion events per Frontend Spec §6.4 and [GROWTH-BRIEF](../briefs/GROWTH-BRIEF.md) §1. Wire Sentry per [DECISION-006](./DECISIONS.md). Document UTM convention for campaigns.
 
-> **Status (31 Jul 2026):** Scaffolded — `src/components/Analytics.astro` (Osano → GA4 Consent Mode v2 → Clarity → PostHog, each gated independently on its own env var, all currently unset so nothing ships yet) included once in `BaseLayout.astro`. Sentry wired via `@sentry/astro` in `astro.config.mjs`, client-side only (registered only when `SENTRY_DSN` is set — no server routes exist yet to instrument). `cta_homeroom_click` and `newsletter_submit` wired (`src/scripts/analytics.js` helper) — the Homeroom button fires on click but stays inert until the real Keela URL enables it (HC-075); newsletter fires on the existing client-side submit interaction (no backend yet, FEAT-070). Added the missing `PUBLIC_CLARITY_ID` env var to TECHNICAL-ARCHITECTURE §6.1, plus `.env.example` at repo root and a short UTM-convention note. **Not yet done:** real GA4/PostHog/Osano/Clarity/Sentry credentials — nobody has been assigned to source these yet (flagged, not yet a numbered HC item); pageviews can't record on staging until `PUBLIC_GA_ID` is set.
+> **Status (5 Aug 2026):** **Live and verified.** All five HC-076 credentials landed and are set in Netlify. Verified on the wire against contentmentweb2.netlify.app: **GA4** `/g/collect` → 204 (`en=page_view`), **Clarity** `r.clarity.ms/collect` → 204, **Sentry** ingest envelope → 200 ×4 from a real uncaught error, and the **Cookiebot** consent bridge flipping GA4 from `gcs=G100` to **`gcs=G111`** on accept. **PostHog is the one exception** — it initialises correctly (`persistence: 'memory'`, config 200) but no capture request was ever observable from an automated browser; Sam confirms events arriving in the PostHog dashboard, so it is recorded on his evidence, not ours. **Two real bugs fixed on the way:** the hand-rolled PostHog stub never set `__SV`/`_i`, so `array.js` discarded our config and silently fell back to `localStorage+cookie` — the DECISION-002/007 cookieless guarantee was cosmetic; and the CSP allowlisted `cmp.osano.com` only, so the new CMP would have been blocked outright (Cookiebot needs `consentcdn.cookiebot.com` on **frame-src** — its banner is an iframe, which Osano never required). **CMP vendor changed Osano → Cookiebot** (DECISION-002 amendment) running `data-blockingmode="manual"` with a **custom banner** whose sources live in `docs/cookiebot/`; that took the banner from 374x800 on a 390px phone (95% of the screen) to **390x155**. Consent method is **explicit**. Consent Mode signal set completed (`functionality_storage`, `personalization_storage`, `security_storage`, `ads_data_redaction`, `url_passthrough`). **Still open:** Cookiebot's free tier allows one domain — it must move to `www.contentment.org` at DNS cutover or the banner silently no-ops.
 
 **Acceptance criteria:**
-- [x] Osano CMP script loads before GA4; consent banner shown to EU/UK visitors — wired, inert until `PUBLIC_OSANO_CUSTOMER_ID` exists
+- [x] Cookiebot CMP script loads before GA4; consent banner shown to EU/UK visitors — wired, inert until `PUBLIC_COOKIEBOT_ID` exists
 - [x] GA4 Consent Mode v2: cookieless/modelled analytics before consent; full cookies after opt-in
-- [x] PostHog Cloud (`app.posthog.com`) init with `persistence: 'memory'`
+- [x] PostHog Cloud (`us.i.posthog.com`; `us.i.posthog.com` is an alias) init with `persistence: 'memory'`
 - [x] Sentry (`@sentry/astro`) initialised with `SENTRY_DSN` (DECISION-006)
 - [x] Pageviews recording on staging — blocked on a real `PUBLIC_GA_ID`
 - [x] `cta_homeroom_click` fires on button click

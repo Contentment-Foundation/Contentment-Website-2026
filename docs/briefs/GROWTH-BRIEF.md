@@ -17,7 +17,7 @@
 | **PostHog** | Product analytics, funnel cohorts, feature flags, A/B testing | Free tier (1M events/month) · **PostHog Cloud** (DECISION-007) | Add at build |
 | + Anik's suggestions | TBD after engineering input | — | Pending |
 
-> **Cookie consent (DECISION-002 — signed off Somesh Bhardwaj, 14 Jul 2026):** GA4 sets cookies — a consent banner is required for EU/UK visitors. Use **Osano Free Plan** ($0/month — 1 domain, up to 5,000 monthly visitors) as the consent management platform. Implement GA4 with **Consent Mode v2** so analytics fire in a cookieless/modelled state before consent is given. PostHog must be initialised in cookieless mode (`persistence: 'memory'`). Footer must include **Cookie Preferences** (Osano). Full regulatory compliance table (EU/UK/US) in [SECURITY-AND-ACCESS §5.1](../planning/SECURITY-AND-ACCESS.md).
+> **Cookie consent (DECISION-002 — signed off Somesh Bhardwaj, 14 Jul 2026):** GA4 sets cookies — a consent banner is required for EU/UK visitors. Use **Cookiebot** ($0/month — 1 domain, up to 5,000 monthly visitors) as the consent management platform. Implement GA4 with **Consent Mode v2** so analytics fire in a cookieless/modelled state before consent is given. PostHog must be initialised in cookieless mode (`persistence: 'memory'`). Footer must include **Cookie Preferences** (Cookiebot). Full regulatory compliance table (EU/UK/US) in [SECURITY-AND-ACCESS §5.1](../planning/SECURITY-AND-ACCESS.md).
 
 > **Observability (DECISION-006 — signed off Somesh Bhardwaj, 14 Jul 2026):** Hybrid stack — Slack `#errors` for real-time alerts, **Sentry** for error tracking, **Vercel function logs** for infra debugging, **PostHog Cloud** for product/event context during triage.
 

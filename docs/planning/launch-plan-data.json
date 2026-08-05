@@ -230,13 +230,13 @@
     [
       "Privacy Policy",
       "/privacy",
-      "1.5 or 2",
+      "1 (partial)",
       "—",
-      "Not started",
-      "—",
-      "Low",
+      "Astro built",
+      "Sam",
+      "Low-Medium",
       "No",
-      "Open ticket — under process. Phase 1.5 or Phase 2 TBD. Does not block Aug 21 Phase 1 hard go-live."
+      "https://contentmentweb2.netlify.app/privacy — LIVE 5 Aug. PURPOSE: hosts the live Cookiebot cookie declaration and the Cookie Preferences trigger, which is what makes the consent banner's withdrawal promise true. Before this the banner linked to a 404. Ships the cookie half only, and says so on the page: branded hero, status note, per-tool accordion (GA4, Clarity, PostHog, Sentry, Cookiebot), regional compliance table from DECISION-002, and the auto-generated declaration (now Necessary 4 / Statistics 11 / Marketing 7 after the 5 Aug rescan). STILL OWED: the legal text itself — controller identity, lawful basis, retention, data-subject rights, transfers, complaints — from Lorna + Finance/Legal per D-08. It drops into a marked section in privacy.astro; the cookie half needs no rework. NEEDS TEAM REVIEW: built without reaching Kristina's page list."
     ],
     [
       "Terms of Use",
@@ -247,7 +247,7 @@
       "—",
       "Low",
       "No",
-      "Open ticket — under process. Phase 1.5 or Phase 2 TBD. Does not block Aug 21 Phase 1 hard go-live."
+      "Open ticket — under process. Phase 1.5 or Phase 2 TBD. Does not block Aug 21. NOTE: /privacy shipped 5 Aug as a partial (cookie half only); /terms has no equivalent and remains entirely not started."
     ],
     [
       "Newsletter signup",

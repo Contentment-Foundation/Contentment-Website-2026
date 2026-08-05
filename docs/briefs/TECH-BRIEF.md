@@ -25,7 +25,7 @@ Browser
         ├── Keela          — donations (redirect link, no API)
         ├── Flodesk        — newsletter (embed or Vercel fn → Flodesk API)
         ├── Raisely        — fundraise (embed/link)
-        ├── Analytics      — GA4 + Clarity + PostHog (Osano CMP for consent)
+        ├── Analytics      — GA4 + Clarity + PostHog (Cookiebot CMP for consent)
         └── Vercel Fn      — custom forms (optional) → GCP Cloud SQL (Phase 2+)
 ```
 
@@ -45,11 +45,11 @@ Browser
 | **Database** | GCP Cloud SQL (PostgreSQL) | Phase 2+ — only if custom forms or member auth need it |
 | **CMS** | Markdown + JSON in repo | Phase 1 · migrate to Sanity at Phase 1.5 when editors need self-service |
 | **Analytics** | GA4 + Microsoft Clarity + PostHog | See DECISION-001; Plausible dropped; GA4 = primary (existing account) |
-| **Cookie consent** | Osano Free + GA4 Consent Mode v2 | DECISION-002 — signed off Somesh Bhardwaj, 14 Jul 2026 |
+| **Cookie consent** | Cookiebot + GA4 Consent Mode v2 | DECISION-002 — signed off Somesh Bhardwaj, 14 Jul 2026 |
 | **Rate limiting** | @upstash/ratelimit + Upstash Redis | 5 req / 15 min / IP on all `/api/*` — DECISION-004 — signed off Somesh Bhardwaj, 14 Jul 2026 |
 | **Image optimization** | Astro `<Image />` (`astro:assets`) | Build-time WebP + srcset — DECISION-005 — signed off Somesh Bhardwaj, 14 Jul 2026 |
 | **Observability** | Hybrid: Slack `#errors` + Sentry + Vercel logs + PostHog | DECISION-006 — signed off Somesh Bhardwaj, 14 Jul 2026 |
-| **PostHog hosting** | PostHog Cloud (`app.posthog.com`) | DECISION-007 — signed off Somesh Bhardwaj, 14 Jul 2026 |
+| **PostHog hosting** | PostHog Cloud (`us.i.posthog.com`; `us.i.posthog.com` is an alias) | DECISION-007 — signed off Somesh Bhardwaj, 14 Jul 2026 |
 | **Transactional email** | SendGrid (existing paid plan) | School inquiry notifications, magic links — DECISION-003 — signed off Somesh Bhardwaj, 14 Jul 2026 |
 | **Homeroom gate** | Vercel Edge Middleware | Phase 2 — shared password → rotating cookie; magic link if >500 members |
 | **Version control** | Git + GitHub | Vercel auto-deploys `main` to production; PR branches → preview URLs |
@@ -285,7 +285,7 @@ PUBLIC_KEELA_TIER_5_URL=           # Keela $5/mo checkout — from finance
 PUBLIC_KEELA_TIER_25_URL=          # Keela $25/mo checkout
 PUBLIC_KEELA_TIER_100_URL=         # Keela $100/mo checkout
 PUBLIC_GA_ID=                      # GA4 measurement ID — existing account (DECISION-001)
-PUBLIC_OSANO_CUSTOMER_ID=          # Osano CMP — cookie consent (DECISION-002)
+PUBLIC_COOKIEBOT_ID=          # Cookiebot CMP — cookie consent (DECISION-002)
 PUBLIC_POSTHOG_KEY=                # PostHog project API key (DECISION-001)
 PUBLIC_POSTHOG_HOST=               # PostHog host URL
 PUBLIC_RAISELY_CAMPAIGN_URL=       # Fundraise page link
@@ -350,7 +350,7 @@ Run a full backlink audit before DNS cutover to capture all old WordPress URLs.
 - [ ] Keela links use official hosted checkout URLs only
 - [ ] All form POSTs go to HTTPS endpoints
 - [ ] Honeypot field on every custom form (hidden from users, checked server-side)
-- [ ] Osano CMP + GA4 Consent Mode v2 wired; PostHog Cloud cookieless (`persistence: 'memory'`) — DECISION-002, DECISION-007
+- [ ] Cookiebot CMP + GA4 Consent Mode v2 wired; PostHog Cloud cookieless (`persistence: 'memory'`) — DECISION-002, DECISION-007
 - [ ] Sentry (`@sentry/astro`) wired with `SENTRY_DSN` (DECISION-006)
 - [ ] Slack `#errors` webhook on all `/api/*` catch blocks (DECISION-006)
 - [ ] Cookie Preferences link in footer; compliance copy in `/privacy` (SECURITY-AND-ACCESS §5.1)
@@ -423,12 +423,12 @@ Full detail in `docs/planning/DECISIONS.md`.
 | # | Decision | Chosen | Signed off by | Date |
 |---|----------|--------|---------------|------|
 | DECISION-001 | Primary analytics | GA4 + Clarity + Bing Webmaster + PostHog | Anik Ghosh (engineering review) | 3 Jul 2026 |
-| DECISION-002 | Cookie consent | Osano Free + GA4 Consent Mode v2 + cookieless PostHog | **Somesh Bhardwaj** | 14 Jul 2026 |
+| DECISION-002 | Cookie consent | Cookiebot + GA4 Consent Mode v2 + cookieless PostHog (CMP was Cookiebot until 4 Aug 2026) | **Somesh Bhardwaj** | 14 Jul 2026 |
 | DECISION-003 | Transactional email | SendGrid (existing paid plan); Resend/AWS/Nodemailer as fallbacks | **Somesh Bhardwaj** | 14 Jul 2026 |
 | DECISION-004 | Rate limiting | @upstash/ratelimit + Upstash Redis | **Somesh Bhardwaj** | 14 Jul 2026 |
 | DECISION-005 | Image optimization | Astro `<Image />` (`astro:assets`) | **Somesh Bhardwaj** | 14 Jul 2026 |
 | DECISION-006 | Observability | Hybrid: Slack `#errors` + Sentry + Vercel logs + PostHog diagnostics | **Somesh Bhardwaj** | 14 Jul 2026 |
-| DECISION-007 | PostHog hosting | PostHog Cloud (`app.posthog.com`) | **Somesh Bhardwaj** | 14 Jul 2026 |
+| DECISION-007 | PostHog hosting | PostHog Cloud (`us.i.posthog.com`; `us.i.posthog.com` is an alias) | **Somesh Bhardwaj** | 14 Jul 2026 |
 | — | Build tool | Astro 4.x static output | Anik Ghosh | 5 Jul 2026 |
 
 ---
