@@ -17,7 +17,16 @@
   box-shadow: 0 -8px 30px -12px rgba(2, 40, 58, .38);
   border: 1px solid rgba(2, 78, 112, .12);
   border-bottom: 0;
-  padding: 12px 16px;
+  /* Safe-area padding is load-bearing, not cosmetic. The action buttons are the
+     LAST thing in the bar, so at bottom:0 they land exactly under the iPhone home
+     indicator and Safari's bottom toolbar — visible in a desktop emulator, hidden
+     on a real handset. env() falls back to 0px everywhere else. */
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  /* Never taller than the visible viewport. dvh excludes the browser chrome that
+     vh wrongly includes on iOS; vh is the fallback for older engines. */
+  max-height: 80vh;
+  max-height: 80dvh;
+  overflow-y: auto;
 }
 #cfCookieBar[hidden] { display: none; }
 
@@ -102,13 +111,20 @@
 .cf-cb-save { width: auto; }
 
 @media (max-width: 600px) {
-  #cfCookieBar { padding: 10px 12px; border-radius: 12px 12px 0 0; }
+  #cfCookieBar {
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    border-radius: 12px 12px 0 0;
+  }
   .cf-cb-inner { gap: 10px; }
   .cf-cb-text { font-size: .76rem; }
   .cf-cb-actions { width: 100%; }
   /* Decline and Accept share one row; Customise sits inline before them. */
   .cf-cb-actions .cf-cb-btn-outline,
   .cf-cb-actions .cf-cb-btn-primary { flex: 1 1 0; }
+  /* Order matters on a phone: put the actions FIRST so they are nearest the
+     thumb and can never be the part that scrolls out of reach. */
+  .cf-cb-inner { flex-direction: column-reverse; align-items: stretch; }
+  .cf-cb-copy { flex: 1 1 auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
