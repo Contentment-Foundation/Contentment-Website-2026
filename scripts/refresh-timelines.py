@@ -99,15 +99,18 @@ STATUS_B = {
     "Paused":      ("upcoming", "s-up",    "Paused"),
 }
 
-_PIN_071 = ("Kristina moved Privacy/Terms out of Phase 1 launch scope; JSON Status=Open "
-            "reflects the ticket still being open, not the launch scope")
-
 # (file, id, occurrence) -> (class_or_status, var_or_None, label, reason)
 # A pin suppresses the write and ALWAYS prints, so it can never rot silently.
-PINS = {
-    ("A", "FEAT-071", 0): ("done", None, "✓ Moved to Phase 2", _PIN_071),
-    ("B", "FEAT-071", 0): ("done", "s-done", "Deferred", _PIN_071),
-}
+#
+# The FEAT-071 pins ("✓ Moved to Phase 2" / "Deferred") were REMOVED on 5 Aug 2026.
+# They existed because Kristina had moved Privacy/Terms out of Phase 1 launch scope,
+# so the timeline deliberately overrode the JSON. That premise no longer holds:
+# /privacy shipped 5 Aug and Somesh re-scoped the ticket to Phase 1 + 2 — Phase 1
+# because a page declaring our cookies/analytics is a compliance requirement in the
+# regions we serve, Phase 2 because it will keep evolving through review. With the
+# JSON now saying Done, the pins would have forced the timeline to keep showing
+# "Deferred" for a page that is live — the exact rot this mechanism exists to prevent.
+PINS = {}
 
 NOTE_LIMIT = {"A": 160, "B": 140}
 # Which capture group holds the ticket id. They differ: in ROW_A the id is captured before

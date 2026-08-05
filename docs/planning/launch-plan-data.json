@@ -236,7 +236,7 @@
       "Sam",
       "Low-Medium",
       "No",
-      "https://contentmentweb2.netlify.app/privacy — LIVE 5 Aug. PURPOSE: hosts the live Cookiebot cookie declaration and the Cookie Preferences trigger, which is what makes the consent banner's withdrawal promise true. Before this the banner linked to a 404. Ships the cookie half only, and says so on the page: branded hero, status note, per-tool accordion (GA4, Clarity, PostHog, Sentry, Cookiebot), regional compliance table from DECISION-002, and the auto-generated declaration (now Necessary 4 / Statistics 11 / Marketing 7 after the 5 Aug rescan). STILL OWED: the legal text itself — controller identity, lawful basis, retention, data-subject rights, transfers, complaints — from Lorna + Finance/Legal per D-08. It drops into a marked section in privacy.astro; the cookie half needs no rework. NEEDS TEAM REVIEW: built without reaching Kristina's page list."
+      "Tracked as FEAT-071 (Phase 1 + 2, Done 5 Aug). https://contentmentweb2.netlify.app/privacy — LIVE 5 Aug. PURPOSE: hosts the live Cookiebot cookie declaration and the Cookie Preferences trigger, which is what makes the consent banner's withdrawal promise true. Before this the banner linked to a 404. Ships the cookie half only, and says so on the page: branded hero, status note, per-tool accordion (GA4, Clarity, PostHog, Sentry, Cookiebot), regional compliance table from DECISION-002, and the auto-generated declaration (now Necessary 4 / Statistics 11 / Marketing 7 after the 5 Aug rescan). STILL OWED: the legal text itself — controller identity, lawful basis, retention, data-subject rights, transfers, complaints — from Lorna + Finance/Legal per D-08. It drops into a marked section in privacy.astro; the cookie half needs no rework. NEEDS TEAM REVIEW: built without reaching Kristina's page list."
     ],
     [
       "Terms of Use",
@@ -258,7 +258,7 @@
       "Sam",
       "Low",
       "No",
-      "PURPOSE: the standalone newsletter signup page — the destination for 'subscribe' links that need a real page rather than an inline form (Footer Explore column, sitemap). 31 Jul — src/pages/updates.astro live. 4 Aug — form WIRED to Flodesk (FEAT-070) via <NewsletterForm source=\"updates_page\" bare />; segment CONFIRMED by Somesh 4 Aug → \"www.contentment.org\". The `bare` prop was added because the page supplied its own .news section + heading and was rendering a nested duplicate section with two headings — fixed. NEEDS TEAM REVIEW: built without ever reaching Kristina's page list, so its copy and framing have had no non-engineering review."
+      "Tracked as FEAT-073. PURPOSE: the standalone newsletter signup page — the destination for 'subscribe' links that need a real page rather than an inline form (Footer Explore column, sitemap). 31 Jul — src/pages/updates.astro live. 4 Aug — form WIRED to Flodesk (FEAT-070) via <NewsletterForm source=\"updates_page\" bare />; segment CONFIRMED by Somesh 4 Aug → \"www.contentment.org\". The `bare` prop was added because the page supplied its own .news section + heading and was rendering a nested duplicate section with two headings — fixed. NEEDS TEAM REVIEW: built without ever reaching Kristina's page list, so its copy and framing have had no non-engineering review."
     ],
     [
       "404 page",
@@ -269,7 +269,7 @@
       "—",
       "Low",
       "No",
-      "PURPOSE: branded error page shown for any unmatched URL — keeps someone who mistypes or follows a dead link inside the site instead of bouncing. STATUS CORRECTION (4 Aug): this row said 'Not started' but the page SHIPPED 2 Aug — src/pages/404.astro, `noindex, follow`, short brand-gradient hero and 6 destination cards, reusing existing tokens and .anim (no new design language). Netlify serves dist/404.html automatically. Verified in-browser at 1280 and 390px. NEEDS TEAM REVIEW: never went through Kristina's page list — the 6 destination cards and the copy have had no non-engineering review."
+      "Tracked as FEAT-072. PURPOSE: branded error page shown for any unmatched URL — keeps someone who mistypes or follows a dead link inside the site instead of bouncing. STATUS CORRECTION (4 Aug): this row said 'Not started' but the page SHIPPED 2 Aug — src/pages/404.astro, `noindex, follow`, short brand-gradient hero and 6 destination cards, reusing existing tokens and .anim (no new design language). Netlify serves dist/404.html automatically. Verified in-browser at 1280 and 390px. NEEDS TEAM REVIEW: never went through Kristina's page list — the 6 destination cards and the copy have had no non-engineering review."
     ],
     [
       "Individual impact story",
@@ -1012,14 +1012,14 @@
     ],
     [
       "FEAT-071",
-      "Privacy and Terms pages",
-      "1.5 or 2",
+      "Privacy & cookies page (/privacy) — and Terms (/terms)",
+      "1 + 2",
       "Should",
-      "In Progress",
+      "Done",
       "Sam",
-      "Phase 1.5 or Phase 2 — TBD (under process)",
+      "5 Aug",
       "FEAT-002",
-      "5 Aug — page SHIPPED as a partial: src/pages/privacy.astro is live with the Cookiebot cookie declaration, a working Cookie Preferences trigger and an honest list of the analytics tools in use. It carries an on-page notice that the full policy is still in review, so nothing is presented as final legal text. Still owed: the legal copy itself (controller identity, lawful basis, retention, data-subject rights, transfers, complaints) from Lorna + Finance/Legal per D-08 — drops into a marked section. /terms remains not started."
+      "SHIPPED 5 Aug — /privacy live. Counted in BOTH Phase 1 and Phase 2 by Somesh's call: Phase 1 because a dedicated page declaring our cookies/analytics is a compliance requirement in the regions we serve, and shipping without one is a real exposure — not a nice-to-have. Phase 2 because it will keep evolving through review by Kristina, Lorna and Nav. DONE MEANS: the cookie half — live Cookiebot declaration (Necessary 4 / Statistics 11 / Marketing 7 after the 5 Aug rescan), a working Cookie Preferences trigger, per-tool disclosures for GA4/Clarity/PostHog/Sentry/Cookiebot, and the regional compliance table from DECISION-002. DONE DOES NOT MEAN complete: the legal text — controller identity, lawful basis, retention, data-subject rights, transfers, complaints — is still owed by Lorna + Finance/Legal (D-08) and drops into a marked section in privacy.astro; the cookie half needs no rework. The page carries an on-page notice saying the full policy is in review, so no visitor is misled. /terms is NOT covered by this and remains not started."
     ],
     [
       "FEAT-080",
@@ -1185,6 +1185,28 @@
       "—",
       "—",
       "Fixed in the Story Board prototype (site/story-board.html) ahead of the Astro migration."
+    ],
+    [
+      "FEAT-072",
+      "Branded 404 page (/404)",
+      "1",
+      "Should",
+      "Done",
+      "Sam",
+      "2 Aug",
+      "FEAT-002",
+      "SHIPPED 2 Aug — src/pages/404.astro, `noindex, follow`, short brand-gradient hero + 6 destination cards, reusing existing tokens and .anim (no new design language). Netlify serves dist/404.html automatically. Verified in-browser at 1280 and 390px. Ticket created 5 Aug retrospectively: the page shipped with no ticket row, so it lived only in the Reference tab's pages table and was invisible to anyone tracking work on the Tickets tab. NEEDS TEAM REVIEW — the 6 destination cards and the copy never went through Kristina's page list."
+    ],
+    [
+      "FEAT-073",
+      "Newsletter signup page (/updates)",
+      "1",
+      "Should",
+      "Done",
+      "Sam",
+      "31 Jul",
+      "FEAT-002, FEAT-070",
+      "SHIPPED 31 Jul — src/pages/updates.astro, the standalone destination for subscribe links that need a real page (Footer Explore, sitemap). Form wired to Flodesk 4 Aug via <NewsletterForm source=\"updates_page\" bare />; segment confirmed 'www.contentment.org'. Ticket created 5 Aug retrospectively for the same reason as FEAT-072 — the page had no Tickets-tab row. NEEDS TEAM REVIEW: built without reaching Kristina's page list, so its copy and framing have had no non-engineering review."
     ]
   ],
   "externalBlockers": [
