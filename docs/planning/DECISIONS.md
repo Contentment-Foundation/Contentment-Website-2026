@@ -295,6 +295,37 @@ PUBLIC_POSTHOG_HOST=https://us.i.posthog.com   # was app.posthog.com; see amendm
 
 
 
+## DECISION-008 — Where sign-ups land: Keela or Flodesk
+
+**Blocks:** TICKET-060, TICKET-070, TICKET-090, HC-078, HC-079, D-24
+**Depends on:** business decision (Kristina / Lorna / WoeiJing) — engineering can implement any of the three
+**Status:** 🟠 **Open** — raised 5 August 2026
+**Raised by:** Somesh Bhardwaj, after reviewing Lorna's Website → Keela → Finance map
+
+**The disconnect.** Two plans are being built against each other and neither party had seen the other's:
+
+- **Lorna's map** (Streams 4 and 5) states that every sign-up — event registrations, the November waitlist, other forms — must land in **Keela**, tagged, with a confirmation email and an internal notification, and must reconcile to QuickBooks.
+- **What we built** routes *all* email capture to **Flodesk** via `/api/newsletter` (D-19, live since 4 Aug): 11 capture points across 5 pages, segments `www.contentment.org` and `Contentment Festival`. Keela handles **payments only**.
+- **Nothing currently moves a Flodesk subscriber into Keela.** Both systems cannot be the record of truth for the same person without a sync, and no one has decided which is.
+
+| Option | Notes |
+|--------|-------|
+| **1. Flodesk for email capture, Keela for money only** | Cheapest — matches what is already live and tested. Lorna's tagging, confirmation and internal-notification requirements would have to be met *in Flodesk* rather than Keela, and donor records would not show non-donor sign-ups. |
+| **2. Keela for everything** | Matches Lorna's map exactly and gives one donor record. Means replacing live Flodesk capture on 5 pages and re-testing all 11 points; Flodesk's double opt-in trail (`optin_ip` + `optin_timestamp`) needs a documented Keela equivalent for EU/UK compliance. |
+| **3. Both, with a sync** | Most moving parts. Someone must own dedupe and conflict rules, and a sync failure is silent by nature. |
+
+**Cost of not deciding:** every day this stays open, more addresses accumulate in Flodesk that may later have to be exported, deduped and re-tagged into Keela by hand — which is exactly the cleanup Lorna's map warns is *exponentially* more work after the fact than connecting it correctly the first time.
+
+**Relationship to D-24.** D-24 asked the same question for the Events page alone. This supersedes it in scope: the answer has to be sitewide, or `/events`, `/updates` and the homepage will each behave differently.
+
+**Decision:**
+
+- [ ] Signed off — option chosen: _______
+- [ ] Signed off by: Kristina / Lorna / WoeiJing
+- [ ] Date: _______
+
+---
+
 ## Decision log
 
 
@@ -307,6 +338,8 @@ PUBLIC_POSTHOG_HOST=https://us.i.posthog.com   # was app.posthog.com; see amendm
 | 005 | Image optimization approach  | **Resolved**    | 14 Jul 2026 | Astro `<Image />` (`astro:assets`)                                     | Somesh Bhardwaj      |
 | 006 | Error monitoring             | **Resolved**    | 14 Jul 2026 | Hybrid: Slack + Sentry + Vercel logs + PostHog diagnostics             | Somesh Bhardwaj      |
 | 007 | PostHog hosting              | **Resolved**    | 14 Jul 2026 | PostHog Cloud (`us.i.posthog.com`; was `app.posthog.com`)                                      | Somesh Bhardwaj      |
-| —   | Homeroom tier amounts        | Open            | —         | $5/$25/$100 vs $25/$50/$100 (product/finance — not engineering)        | Finance / Leadership |
+| 008 | Where sign-ups land          | 🟠 **Open**     | raised 5 Aug 2026 | Keela vs Flodesk vs both-with-sync — supersedes D-24's Events-only framing | Kristina / Lorna / WJ |
+| —   | Homeroom tier **amounts**    | **Resolved**    | 27 Jul 2026 | **$25 / $50 / $100** (D-01, Kristina) — the earlier $5/$25/$100 option was dropped and the $5 entry copy removed 3 Aug | Finance / Leadership |
+| —   | Homeroom tier **benefits**   | 🟠 **Open**     | raised 5 Aug 2026 | What membership *includes* — sets the tax-deductible portion of the receipt, the Keela designation and the widget config (D-25 / Lorna's Decision 1) | Kristina / WJ / Lorna |
 
 

@@ -225,15 +225,33 @@ Individual story page: `.split` hero with educator photo, pull quote, school con
 
 ---
 
-### TICKET-033 · Interactive global map
+### TICKET-033 · Foundation Reach Map (`/foundation-reach-map`)
 
 | Field | Value |
 |-------|-------|
 | **Priority** | nice-to-have |
 | **Dependencies** | TICKET-031 |
+| **Status** | **Paused** — working prototype, publicly reachable, design work paused by choice |
 
 **Description:**  
-Map with country pins on `/stories`. Filters by region, theme, school type. Use lightweight library (Mapbox GL or SVG world map). Style pins with `--teal` / `--ocean`. Defer if content not ready.
+Flat **D3 + topojson-client** world map with a pin card per served country, intended for the homepage once approved. `public/foundation-reach-map.html` → `/foundation-reach-map` (a `netlify.toml` 200 rewrite). Bundled map data in `assets/countries-110m.js`; stories shared with the Story Board via `program-data.js`. Desktop: hanging pendulum pin cards (hover to preview, click for modal). Mobile (`pointer:coarse`): 18 px balloon pins that scale with zoom (√zoom), with a bottom-sheet picker when pins crowd. Style pins with `--teal` / `--ocean` when it is restyled to site tokens.
+
+> **Retitled 5 Aug 2026** from "Interactive global map". The old title named no route and no artefact, so it was impossible to tell from the ticket that a **live URL already existed** on the preview. "Paused" refers to the *design* work, not to availability. **NEEDS TEAM REVIEW** — never went through Kristina's page list. Notes: [`prototypes/phase-2/world-map/README.md`](../../prototypes/phase-2/world-map/README.md).
+
+---
+
+### TICKET-034 · Story Board prototype (`/story-board`)
+
+| Field | Value |
+|-------|-------|
+| **Priority** | nice-to-have |
+| **Dependencies** | TICKET-031 |
+| **Status** | **Paused** — working prototype, publicly reachable, design work paused by choice |
+
+**Description:**  
+A feed-style way to browse programme stories, built to test the format before committing homepage space to it. `public/story-board.html` → `/story-board` (200 rewrite), with the feed guide at `/story-board-feed-guide`. Shares `program-data.js` with the Reach Map. Accessibility gaps (dialog focus trap, `aria-pressed`, live region) already fixed under **OPS/QA-001**.
+
+> **Ticket created 5 Aug 2026.** The route was live on the preview and listed in the pages table but had **no ticket row**, so it was invisible to anyone tracking work on the Tickets tab — the same gap TICKET-072/073 closed for `/404` and `/updates`. **NEEDS TEAM REVIEW.**
 
 ---
 
@@ -384,25 +402,98 @@ Connect homepage newsletter form and build `/updates` standalone page. Integrate
 
 ---
 
-### TICKET-071 · Privacy and terms pages
+### TICKET-071 · Privacy & cookies page (`/privacy`)
 
 | Field | Value |
 |-------|-------|
-| **Priority** | must-have |
-| **Dependencies** | TICKET-002, legal copy |
+| **Priority** | should-have |
+| **Dependencies** | TICKET-002, legal copy (D-08) for the legal half only |
+| **Status** | **Done (5 Aug 2026)** — cookie half shipped; legal half owed by Lorna + Finance/Legal |
 
 **Description:**  
-Simple text pages at `/privacy` and `/terms` using `.band` + `.wrap` + `.body` typography. No special components. Link from footer. Privacy page must document cookie/consent compliance per [SECURITY-AND-ACCESS](./SECURITY-AND-ACCESS.md) §5.1 and [DECISION-002](./DECISIONS.md). **Production path:** Astro static routes (`src/pages/privacy.astro`, `src/pages/terms.astro`) — see SECURITY-AND-ACCESS §5.2; planning MD files are spec only, not served publicly.
+Text page at `/privacy` using `.band` + `.wrap` + `.body` typography. Documents cookie/consent compliance per [SECURITY-AND-ACCESS](./SECURITY-AND-ACCESS.md) §5.1 and [DECISION-002](./DECISIONS.md). **Production path:** Astro static route `src/pages/privacy.astro` — planning MD files are spec only, not served publicly.
+
+> **Scope split (5 Aug 2026).** This ticket previously read "Privacy **and terms** pages" and covered both routes. When `/privacy` shipped and the ticket was marked Done, that made it look as though `/terms` had shipped too — it has not been started. **Terms is now TICKET-074.**
+>
+> **Counted in Phase 1 *and* Phase 2** by Somesh's call. Phase 1 because a page declaring our cookies and analytics is a compliance requirement in the regions we serve, and shipping analytics without one is real exposure rather than a nice-to-have. Phase 2 because the page will keep evolving through review by Kristina, Lorna and Nav.
+>
+> **Done means the cookie half**, and the page says so on itself so no visitor is misled: live Cookiebot declaration (Necessary 4 / Statistics 11 / Marketing 7 after the 5 Aug rescan), a working Cookie Preferences trigger (`Cookiebot.renew()`), per-tool disclosures, and the regional compliance table. It fixed two real defects — the consent banner linked to a **404**, and Cookiebot's standard copy promised withdrawal "from the Cookie Declaration on our website" when neither the declaration nor any withdrawal path existed.
+>
+> **Done does not mean complete.** Controller identity, lawful basis, retention, data-subject rights, transfers and complaints are still owed under D-08 and drop into a marked section in `privacy.astro`. The cookie half needs no rework when they land.
 
 **Acceptance criteria:**
-- [ ] Live at `https://contentment.org/privacy` and `/terms` after deploy (static Astro routes)
+- [x] Live at `/privacy` (static Astro route) — live on preview; production URL at cutover
+- [x] Linked from footer on every page
+- [x] Cookie & privacy compliance section: EU/UK/US regulatory table (GDPR, PECR, CCPA) per SECURITY-AND-ACCESS §5.1
+- [x] Per-tool disclosures: Cookiebot CMP, GA4, Microsoft Clarity, PostHog (cookieless), Sentry
+- [x] Footer includes **Cookie Preferences** link (Cookiebot re-open)
+- [x] Cookiebot CMP attribution on `/privacy` (free tier requires the "Powered by Cookiebot" mark)
+- [ ] Cover newsletter, Keela and form data in the legal text — **D-08, Lorna + Finance/Legal**
+- [ ] Legal team sign-off on copy — **D-08**
+
+---
+
+### TICKET-074 · Terms of Use page (`/terms`)
+
+| Field | Value |
+|-------|-------|
+| **Priority** | should-have |
+| **Dependencies** | TICKET-002, **terms copy (D-08)** |
+| **Status** | **Blocked** — waiting on Lorna + Finance/Legal |
+
+**Description:**  
+Static Astro route `src/pages/terms.astro` on the same branded utility pattern already built for `/privacy`. Linked from the footer.
+
+> **Split out of TICKET-071 on 5 Aug 2026.** Unlike `/privacy`, there is no half we can ship on our own: `/privacy` had a live Cookiebot cookie declaration to stand on, `/terms` has no equivalent — every word of it is legal copy we do not own. Build effort once the copy lands is roughly an hour, because the utility-page pattern, footer link and route conventions all already exist.
+>
+> **Does not block the Aug 21 Phase 1 go-live** (D-08 confirmed Low priority, Phase 1.5 or 2 — TBD).
+
+**Acceptance criteria:**
+- [ ] Terms copy supplied — **D-08, Lorna + Finance/Legal**
+- [ ] Live at `/terms` (static Astro route)
 - [ ] Linked from footer on every page
-- [ ] Cover newsletter, analytics, Keela, form data per Security doc
-- [ ] Cookie & privacy compliance section: EU/UK/US regulatory table (GDPR, PECR, CCPA) per SECURITY-AND-ACCESS §5.1
-- [ ] Per-tool disclosures: Cookiebot CMP, GA4, Microsoft Clarity, PostHog (cookieless), SendGrid (transactional email)
-- [ ] Footer includes **Cookie Preferences** link (Cookiebot re-open)
-- [ ] Cookiebot CMP attribution on `/privacy` (free tier requires the "Powered by Cookiebot" mark)
 - [ ] Legal team sign-off on copy
+
+---
+
+### TICKET-072 · Branded 404 page (`/404`)
+
+| Field | Value |
+|-------|-------|
+| **Priority** | should-have |
+| **Dependencies** | TICKET-002 |
+| **Status** | **Done (2 Aug 2026)** — needs team review |
+
+**Description:**  
+Branded error page shown for any unmatched URL, so someone who mistypes or follows a dead link stays inside the site instead of bouncing. `src/pages/404.astro`, `noindex, follow`, short brand-gradient hero + 6 destination cards, reusing existing tokens and `.anim` — no new design language. Netlify serves `dist/404.html` automatically.
+
+> **Ticket created retrospectively 5 Aug 2026.** The page shipped 2 Aug with no ticket row, so it existed only in the Reference tab's pages table and was invisible to anyone tracking work on the Tickets tab. **NEEDS TEAM REVIEW** — the 6 destination cards and the copy never went through Kristina's page list.
+
+**Acceptance criteria:**
+- [x] Branded page renders for any unmatched URL
+- [x] `noindex, follow`
+- [x] Verified at 1280 px and 390 px
+- [ ] Copy + destination cards reviewed by Kristina
+
+---
+
+### TICKET-073 · Newsletter signup page (`/updates`)
+
+| Field | Value |
+|-------|-------|
+| **Priority** | should-have |
+| **Dependencies** | TICKET-002, TICKET-070 |
+| **Status** | **Done (31 Jul 2026)** — needs team review |
+
+**Description:**  
+The standalone destination for subscribe links that need a real page rather than an inline form (Footer Explore column, `sitemap.xml`). `src/pages/updates.astro`, form wired to Flodesk 4 Aug via `<NewsletterForm source="updates_page" bare />`; segment confirmed `www.contentment.org`.
+
+> **Ticket created retrospectively 5 Aug 2026**, same reason as TICKET-072 — the page had no Tickets-tab row. **NEEDS TEAM REVIEW**: built without reaching Kristina's page list, so its copy and framing have had no non-engineering review.
+
+**Acceptance criteria:**
+- [x] Page live with orientation line
+- [x] Form wired to Flodesk with a confirmed segment
+- [ ] Copy + framing reviewed by Kristina
 
 ---
 
@@ -520,6 +611,42 @@ Reusable template for `/festival/2026` and `/10years`. Dedicated analytics. Emai
 
 ---
 
+### TICKET-095 · Press & Media page (`/press`)
+
+| Field | Value |
+|-------|-------|
+| **Priority** | nice-to-have |
+| **Dependencies** | TICKET-002, press assets from Comms |
+| **Status** | **Scheduled** — Phase 2, not started |
+
+**Description:**  
+Footer / outreach destination holding press assets, boilerplate and a media contact.
+
+> **Ticket created 5 Aug 2026.** `/press` had been listed in the pages table since the start with no ticket row, so it never appeared in any status view.
+
+---
+
+### TICKET-096 · Impact naming — resolved to `/our-impact`
+
+| Field | Value |
+|-------|-------|
+| **Priority** | nice-to-have |
+| **Dependencies** | TICKET-031 |
+| **Status** | ✅ **Done (5 Aug 2026)** — resolved; no separate page will be built |
+
+**Description:**  
+Resolves the `/impact` vs `/our-impact` naming overlap.
+
+> **Resolved by Somesh, 5 Aug 2026 — `/our-impact` is the impact page**, it is live, and it is already the route in use. **No separate `/impact` page will be built**; the Phase 2 nav item is superseded, not deferred.
+>
+> **No redirect is needed.** `/impact` has never existed as a live route — verified against `src/`, `public/sitemap.xml`, `netlify.toml` and `vercel.json`, none of which reference it. There is nothing to redirect from.
+>
+> Raised and closed the same day. The ticket existed for one reason — to give the overlap an owner — and it is recorded as Done rather than deleted so the decision stays visible on the Sheet instead of vanishing. The clash had been noted in the pages table since 27 Jul without ever becoming a tracked item.
+>
+> Ongoing work on the page itself lives on **TICKET-031** (index) and **TICKET-030** (story content, blocked on comms).
+
+---
+
 ## Launch
 
 ### TICKET-100 · Pre-launch QA checklist
@@ -556,7 +683,55 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 - [ ] https://contentment.org loads homepage
 - [ ] All Phase 1 routes work on production
 - [ ] Preview branch deploys work for future PRs
-- [ ] Internal project docs are **not** publicly accessible: Footer “Project docs” removed; production build does not publish `public/docs` / does not run `copy-docs.sh` into the deploy artifact; `/docs` and `/docs/*` 404 (or equivalent) on contentment.org; `docs/` sources stay in the private GitHub repo only (HC-077)
+- [ ] Internal project docs are **not** publicly accessible: Footer “Project docs” removed; production build does not publish `public/docs` / does not run `copy-docs.sh` into the deploy artifact; `/docs` and `/docs/*` 404 (or equivalent) on contentment.org; `docs/` sources stay in the private GitHub repo only (HC-077, TICKET-102)
+- [ ] Cookiebot's single registered domain moved to `www.contentment.org` — the free tier allows **one** domain and the banner silently no-ops on any other (HC-067)
+- [ ] Every `PUBLIC_*` and server-side env var set on the production host, not just Netlify
+- [ ] GA4 / Clarity / Sentry / Cookiebot re-verified on the production domain
+
+---
+
+### TICKET-102 · Internal docs hub (`/docs`) — publish now, unpublish at cutover
+
+| Field | Value |
+|-------|-------|
+| **Priority** | should-have |
+| **Dependencies** | TICKET-101 |
+| **Status** | **In Progress** — live on preview by design; must be unpublished at cutover |
+
+**Description:**  
+The team-facing planning and brief hub — DEV-TIMELINE, the TEAM/TECH/GROWTH/AUTOMATION briefs and the planning index — published so non-engineering readers can self-serve status without a repo checkout. `scripts/copy-docs.sh` copies `docs/*.html` → `public/docs` (and `site/docs`) at build time; both generated directories are gitignored.
+
+> **Ticket created 5 Aug 2026.** `/docs` is a publicly reachable route, linked from the Footer as "Project docs", that appeared in **no ticket and no page table** — the same visibility gap TICKET-072/073 closed, but this one carries a real security action at cutover that lived only inside a checklist item. Pairs [SECURITY-AND-ACCESS](./SECURITY-AND-ACCESS.md) §8 and [TECHNICAL-ARCHITECTURE](./TECHNICAL-ARCHITECTURE.md) §12 step 3b.
+
+**Acceptance criteria:**
+- [x] `/docs` reachable on the Netlify preview and linked from the Footer
+- [x] `public/docs` and `site/docs` gitignored — sources edited in `docs/` only
+- [ ] **At cutover (HC-077):** Footer "Project docs" link removed
+- [ ] **At cutover:** production build skips `copy-docs.sh` / does not publish `public/docs`
+- [ ] **At cutover:** `/docs*` 404s on contentment.org; `docs/` stays in the private repo only
+
+---
+
+### OPS-004 · Generate both timeline briefs from `launch-plan-data.json`
+
+| Field | Value |
+|-------|-------|
+| **Priority** | should-have |
+| **Dependencies** | — |
+| **Status** | **Done (5 Aug 2026)** |
+
+**Description:**  
+`scripts/refresh-timelines.py`. The two timeline HTMLs were the only team-facing artefact not downstream of `launch-plan-data.json`, so they could only drift — and did, sitting two days stale on the very page the team had been pointed at for self-serve status.
+
+> **ID-keyed in-place rewrite, not template regeneration.** Both files stay hand-authored designs; the script rewrites only the ID-keyed status spans, their note cells and the `As of` stamp. Guards are all fail-closed: slot counts per file, a reflow tripwire, exactly one `As of` stamp, unknown ticket id or status is a hard error, <10 % size delta, stale-pin detection, and a post-condition that re-runs the slot regex against the generated output. `--check` exits 1 when stale, so it works as a pre-commit gate.
+>
+> **Ticket created retrospectively 5 Aug 2026** — the script shipped and is referenced in TRACKER, but had no ticket row.
+
+**Acceptance criteria:**
+- [x] Both files regenerate from JSON; second run reports 0 changes (idempotent)
+- [x] `--check` exits 1 when stale
+- [x] Guards verified by deliberately breaking the input
+- [x] **0 orphans** — every JSON ticket has a slot in both files (17 slots added 5 Aug)
 
 ---
 
@@ -565,12 +740,14 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | Priority | Count |
 |----------|------:|
 | must-have | 14 |
-| should-have | 8 |
-| nice-to-have | 6 |
+| should-have | 14 |
+| nice-to-have | 9 |
 
 **Suggested sprint order:** 001 → 002 → 003 → 010 → 011 → 004 → 020 → 030 → 031 → 040 → 050 → 060 → 051 → 070 → 071 → 080 → 081 → 100 → 101
 
 > TICKET-011 (homepage copy audit) added after 010; TICKET-081 (SEO baseline) added before 100 — both were missing from the previous order.
+>
+> **5 Aug 2026 — nine tickets added, none of them new work.** TICKET-034, 072, 073, 074, 095, 096, 102 and OPS-004 all describe work that had already shipped, was already live on the preview, or was already in the pages table — but had **no ticket row**, so it appeared in no status view and nobody outside engineering could see or question it. Counts above move accordingly (should-have 8 → 14, nice-to-have 6 → 9). They sit outside the sprint order because none of them is sequenced work: four are already Done, two are Paused prototypes, two are Phase 2, and one (`/terms`) is blocked on legal copy.
 
 ---
 
@@ -600,3 +777,6 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 | 2026-08-03 | TICKET-041 → Scheduled Phase 2. Kristina Miro: hold Google Form embed; test simple `/schools` page first. Embed commented off; seam URL cleared (retained in comment). |
 | 2026-08-04 | TICKET-101 — acceptance: unpublish internal `/docs` + Footer “Project docs” at production cutover (repo keeps docs; public site must not). |
 | 2026-08-04 | Somesh — `/getinvolved` `#donate` split (Keela General Donation Form + `gi-donate-photo.jpg`); Nav `aria-current` underline; `/schools` `fs-Jadielsm.jpg` photo swap. See TRACKER changelog. |
+| 2026-08-05 | **TICKET-071 split.** Was "Privacy **and terms** pages" and was marked Done when `/privacy` shipped — which read as though `/terms` had shipped too. `/privacy` keeps 071 (Done, cookie half; legal half owed under D-08); **`/terms` is now TICKET-074** (Blocked on legal copy, Phase 1.5). |
+| 2026-08-05 | **Eight tickets added for work that already existed but had no ticket row:** TICKET-034 (`/story-board`), 072 (`/404`), 073 (`/updates`), 074 (`/terms`), 095 (`/press`), 096 (`/impact`), 102 (`/docs`) and OPS-004 (timeline generator). Five of those routes are publicly reachable on the preview today. **TICKET-033 retitled** "Interactive global map" → "Foundation Reach Map (`/foundation-reach-map`)" — the old title named no route, so nothing indicated a live URL existed. TICKET-101 acceptance extended with the three cutover steps that silently fail if skipped (Cookiebot domain move, production env vars, post-cutover analytics re-verification). |
+| 2026-08-05 | **Ticket statuses re-cut against a written rule.** Twelve tickets sat at "In Progress" whether the remaining work was ours or someone else's. New rule: work on us = In Progress/Done/Scheduled; fully stopped on another person = **Blocked**; part landed, part owed = **Partial** — and a new **Waiting on** column names the person. Nine statuses changed: 002 → Done; 031/032/090 → Blocked; 004/005/040/050/060/093 → Partial; 101 → Scheduled. See TRACKER changelog and `launch-plan-data.json`. |

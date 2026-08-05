@@ -520,13 +520,23 @@
         <tbody>
           <tr><td><strong>Home</strong></td><td><code>/</code></td><td>Join Homeroom</td></tr>
           <tr><td><strong>Why Teacher Wellbeing</strong></td><td><code>/why</code></td><td>Join Homeroom</td></tr>
-          <tr><td><strong>Educator Stories</strong></td><td><code>/stories</code></td><td>Join Homeroom</td></tr>
+          <tr><td><strong>Our Impact</strong> <span style="color:#9A3412;">(was “Educator Stories”)</span></td><td><code>/our-impact</code></td><td>Join Homeroom</td></tr>
           <tr><td><strong>For Schools</strong></td><td><code>/schools</code></td><td>Start the conversation</td></tr>
-          <tr><td><strong>Get Involved</strong></td><td><code>/give</code></td><td>Join Homeroom</td></tr>
-          <tr><td><strong>Homeroom</strong></td><td><code>/give/monthly</code></td><td>Become a Founding Member</td></tr>
-          <tr><td><strong>Legal</strong></td><td><code>/privacy · /terms</code></td><td>—</td></tr>
+          <tr><td><strong>Events</strong></td><td><code>/events</code></td><td>Save my spot</td></tr>
+          <tr><td><strong>Get Involved</strong></td><td><code>/getinvolved</code></td><td>Join Homeroom</td></tr>
+          <tr><td><strong>About Us</strong></td><td><code>/about</code></td><td>Talk with us</td></tr>
+          <tr><td><strong>Newsletter signup</strong></td><td><code>/updates</code></td><td>Subscribe</td></tr>
+          <tr><td><strong>Homeroom conversion</strong></td><td><code>/give/monthly</code></td><td>Become a Founding Member</td></tr>
+          <tr><td><strong>Legal</strong></td><td><code>/privacy</code> · <code>/terms</code></td><td>—</td></tr>
+          <tr><td><strong>404</strong></td><td><code>/404</code></td><td>—</td></tr>
         </tbody>
       </table>
+      <p style="font-size:12px;line-height:1.6;margin-top:10px;">
+        <strong>Routes corrected 5 Aug 2026.</strong> Two slugs had changed since this table was written and the old ones were still listed:
+        <code>/stories</code> → <code>/our-impact</code> (renamed by Kristina, 27 Jul) and <code>/give</code> → <code>/getinvolved</code> (4 Aug; <code>/give</code> 301s).
+        Four shipped pages — <code>/events</code>, <code>/about</code>, <code>/updates</code>, <code>/404</code> — were missing entirely.
+        <strong>Also publicly reachable on the preview:</strong> <code>/story-board</code> and <code>/foundation-reach-map</code> (Phase 2 prototypes, design paused, never team-reviewed) and the internal <code>/docs</code> hub, which <strong>must be unpublished at cutover</strong> (HC-077).
+      </p>
     </section>
 
   </div>
@@ -741,12 +751,16 @@
       <div class="sprint-chain">
         <span class="ticket">001</span> Layout → <span class="ticket">002</span> Routing → <span class="ticket">003</span> Mobile nav<br>
         → <span class="ticket">010</span> Homepage → <span class="ticket">004</span> Wire links<br>
-        → <span class="ticket">020</span> /why · <span class="ticket">030</span> Stories data <span class="ext">← comms content needed</span><br>
-        → <span class="ticket">031</span> /stories · <span class="ticket">040</span> /schools · <span class="ticket">050</span> /give<br>
-        → <span class="ticket">060</span> Keela wiring <span class="ext">← URLs from finance needed</span><br>
-        → <span class="ticket">051</span> /give/monthly · <span class="ticket">070</span> Newsletter · <span class="ticket">071</span> Legal<br>
-        → <span class="ticket">080</span> Analytics → <span class="ticket">100</span> QA → <span class="ticket">101</span> Deploy
+        → <span class="ticket">020</span> /why · <span class="ticket">030</span> Our Impact data <span class="ext">← BLOCKED: comms photos + permissions</span><br>
+        → <span class="ticket">031</span> /our-impact <span class="ext">← BLOCKED by 030 (live, 0 cards)</span> · <span class="ticket">040</span> /schools · <span class="ticket">050</span> /getinvolved<br>
+        → <span class="ticket">060</span> Keela wiring <span class="ext">← PARTIAL: general form live; designation + tiers owed by Lorna</span><br>
+        → <span class="ticket">051</span> /give/monthly <span class="ext">← BLOCKED</span> · <span class="ticket">070</span> Newsletter <span class="ext">← shipped 4 Aug</span><br>
+        → <span class="ticket">071</span> /privacy <span class="ext">← shipped 5 Aug</span> · <span class="ticket">074</span> /terms <span class="ext">← BLOCKED: legal copy</span><br>
+        → <span class="ticket">080</span> Analytics <span class="ext">← closed 7/7</span> → <span class="ticket">100</span> QA → <span class="ticket">101</span> Deploy
       </div>
+      <p style="font-size:12px;line-height:1.6;margin-top:10px;">
+        <strong>Updated 5 Aug 2026.</strong> Routes corrected, and <strong>ticket 071 split</strong> — it covered “Privacy <em>and Terms</em>” and was marked Done when <code>/privacy</code> shipped, which read as though <code>/terms</code> had shipped too. It has not been started; Terms is now <span class="ticket">074</span>.
+      </p>
     </section>
 
   </div>

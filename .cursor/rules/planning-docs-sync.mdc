@@ -9,6 +9,24 @@ Not every commit needs planning updates. **Code-only** UI/CSS/copy/layout polish
 
 When **status, scope, schedule, routes/slugs, CTA wiring, or team-facing truth** changes — sync the planning layer **before or with the commit**, and include the same updates when **pushing**.
 
+## Status vocabulary (tickets + HC) — added 5 Aug 2026
+
+A status must answer **"is anyone on our side moving on this?"** Before 5 Aug, twelve tickets sat at `In Progress` whether the remaining work was ours or someone else's, so the Sheet could not tell "Sam is building this" from "this has sat on one person for a week."
+
+| Situation | Status | Also required |
+|---|---|---|
+| We are actively working it | `In Progress` | — |
+| Ours, finished | `Done` | — |
+| Ours, prepared, waiting on a date | `Scheduled` (tickets) / `Ready` (HC) | — |
+| **Fully stopped on another person** | `Blocked` | **Name them in `Waiting on`** |
+| **Part landed, rest owed by another person** | `Partial` | **Name them in `Waiting on`** |
+| Deliberately not scheduled, needs a decision first | `Open` | Name the decision owner |
+
+- **Always name a person, never a team alone** — "Lorna — per-tier Keela products", not "waiting on Finance".
+- **Tickets have a `Waiting on` column.** The **Handoff Checklist does not and must not** — `LaunchPlanSheet.gs` hardcodes its legend panel at column **J** with Notes at **H**, so a 9th column silently collides with the legend. HC puts `WAITING ON:` / `ON US:` as the **first line of Notes** instead.
+- **Ticket notes are two fields:** `Where it stands` (current truth, bulleted, no history) and `History` (dated bullets, newest first). Do not merge them back — the merged field had grown to ~1,400 characters on FEAT-002 and nobody read it.
+- **Adding a status value means touching three places** or a generator fails closed: `STATUS_OPTIONS.tickets` in `LaunchPlanSheet.gs`, and `STATUS_A` + `STATUS_B` in `refresh-timelines.py` (unknown status = hard error, by design).
+
 ## Always (source of truth)
 
 Edit these first whenever truth changed:

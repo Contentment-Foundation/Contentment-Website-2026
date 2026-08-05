@@ -4,7 +4,7 @@
     "version": "2026-08-05",
     "owner": "Somesh Bhardwaj",
     "contact": "somesh@contentment.org",
-    "summary": "Aug 4 (Somesh): RF-010 Dave Aug 3 notes — hero zoom on Home/Why/Schools matched Get Involved (shared .hero-bg scale 1.06 / 18s, was 1.32 / 10s); Schools wellbeing-lead photo already replaced; Get Involved Meet Jose / Homeroom video cut HELD pending WoeiJing + Kristina. Aug 4 (Somesh): /updates segment CONFIRMED -> \"www.contentment.org\". Double opt-in verified ON in the Flodesk account, so FLODESK_DOUBLE_OPTIN=true is now set explicitly and the success copy says \"check your inbox to confirm\" (leaving it unset would have shown \"You're in\" while a confirmation click was still pending). optin_ip + optin_timestamp sent as the EU/US consent trail. PAGE-RECORD AUDIT: pages shipped without reaching Kristina's review list were invisible to the team, so nobody could advise on them. /404 was recorded \"Not started\" but shipped 2 Aug (corrected). /updates, /404, /story-board and /foundation-reach-map now carry an explicit PURPOSE statement and a NEEDS TEAM REVIEW flag; the two prototype routes are noted as publicly reachable on the preview even though their design work is paused. Aug 4 (Somesh): FEAT-070 Flodesk newsletter LIVE — custom forms POST to a host-native /api/newsletter function (netlify/functions/newsletter.mjs + api/newsletter.js, shared core src/lib/flodesk.js), NOT an Astro SSR route, so astro.config.mjs stays output:'static' and the 3 Aug security revert holds. FLODESK_API_KEY is server-only; segment IDs come from env. 11 capture points wired across 5 pages. Per Kristina's Miro CTA suggestions, 8 go to segment \"www.contentment.org\" (home bottom CTA, /about, /why, and on /events: Why-we-gather, closing aside, both Join-the-waitlist recap links, recap Be-first-to-know); the /events hero Save-my-free-spot opens a shared CaptureModal -> \"Contentment Festival\". STILL PENDING Kristina + WoeiJing: /updates form, /events top capture fold, and the 3 Upcoming-grid CTAs (Save my spot / Be first to know / Join the waitlist) which still just scroll to #ev-signup. Interim FLODESK_SEGMENT_DEFAULT -> www.contentment.org so unconfirmed forms still land somewhere mailed. Double opt-in left to the Flodesk account setting (FLODESK_DOUBLE_OPTIN unset). newsletter_submit now fires on a CONFIRMED subscribe, not on click. Aug 4 (Somesh): /getinvolved donate split (#donate) — photo + Keela General Donation Form (same embed as homepage; asset public/assets/gi-donate-photo.jpg); one-time gift → #donate. Nav current-page underline (white on transparent header, --btnblue on scrolled white bar; aria-current=page desktop+drawer). /schools wellbeing-lead photo replaced (public/assets/fs-Jadielsm.jpg). HC-077 docs-unpublish at cutover logged. Aug 4: HC-077 / FEAT-101 — at production cutover unpublish internal /docs hub + Footer 'Project docs' (docs stay in private repo only). Aug 4: Get Involved URL slug → `/getinvolved` (was `/give`); `src/pages/getinvolved.astro`; seams.join/donate + Nav/Footer/sitemap; `/give` 301→`/getinvolved` (Netlify + Vercel). Aug 4: /give Join Homeroom ($25/$50/$100) → homepage Keela form with selected amount (`/?amount=N&frequency=monthly#homeroom`, seams.homeroomDonateUrl). Aug 4: Keela General Donation Form live (give-usa embed MnqZFksL49Ym3M8Ho, org CBbknhqovLi8DNEzW) on homepage Homeroom + /why give band; master script in BaseLayout; Donate CTAs → /#homeroom; giveOneTime → same. India region + per-tier Homeroom joinTiers still deferred. CSP allows cdn.keela.co + *.keela.co. Aug 3: /give Homeroom Dreamer/Catalyst/Visionary tiers now selectable (joinTiers seam for per-tier Keela URLs). Aug 3 Nav priorities: (1) Conversion paths — Events festival Save-my-spot no longer routes to /give; RSVP/waitlist interim → #ev-signup email capture until seams.rsvp/Keela; Homeroom join stays /give; school enquiry = mailto #start; one-time/other-ways still # pending Lorna. (2) Homeroom offer — D-01 $25/$50/$100: killed remaining $5 entry copy on homepage InviteBand + meta; Give page tiers already $25/$50/$100; donate widgets match. Benefits still need Kristina/WJ editorial pass to unify Events access list vs Give benefit cards if desired. (3) PostHog wizard PR #1 triaged — kept its 6 new conversion events + vercel.json CSP, reverted the consent/cookie regression, env-var rename and unused dep (FEAT-080). (4) CSP now identical in netlify.toml + vercel.json (OPS-001/002); netlify had none at all, and vercel's was missing YouTube frame-src, which would have blanked every video embed at cutover. PUBLIC_GA_ID has landed (first of HC-076's five) — confirm it is set in Netlify's env, not just local. STILL BLOCKED — Keela URLs HC-075/071; D-24 Flodesk; HC-005 Spread-the-movement. Go-live Aug 21."
+    "summary": "5 Aug (Somesh) — PLANNING-TRUTH OVERHAUL. Four things were wrong on the Sheet at once, and each hid work from the team.\n\n1. PAGES WITHOUT TICKETS. Six routes existed in the pages table (or on the live preview) with no Tickets-tab row, so anyone outside engineering could not see, question or amend them: /terms, /press, /impact, /story-board, /foundation-reach-map and /docs. Added as FEAT-074, FEAT-095, FEAT-096, FEAT-034, FEAT-033 (retitled from the vague 'Interactive global map') and FEAT-102. OPS-004 added for the timeline generator, which shipped 5 Aug and was referenced in TRACKER with no row. FEAT-071 was titled 'Privacy & cookies — and Terms' and marked Done when /privacy shipped, which made it look as though /terms had shipped too; Terms is now its own ticket, Blocked on legal copy.\n\n2. STATUSES THAT SAID 'IN PROGRESS' WHEN NOBODY ON OUR SIDE WAS PROGRESSING. Twelve tickets sat at In Progress regardless of whether the remaining work was ours or someone else's, so the Sheet could not distinguish 'Sam is building this' from 'this has been sitting on one person for a week'. New rule applied throughout: work on us = In Progress/Done/Scheduled; fully stopped on someone else = Blocked; part landed, part owed = Partial. A new WAITING ON column names the person and what they owe, on every row. Nine ticket statuses changed (FEAT-002 -> Done, FEAT-031/032/090 -> Blocked, FEAT-004/005/040/050/060/093 -> Partial, FEAT-101 -> Scheduled).\n\n3. UNREADABLE NOTE FIELDS. The single 'Blocker / Note' column had grown into paragraph blobs mixing current state with history — FEAT-002's ran to 1,400 characters. Split into WHERE IT STANDS (current truth, bulleted, no history) and HISTORY (dated bullets, newest first). Handoff Checklist keeps its 8 columns because LaunchPlanSheet.gs hardcodes its legend panel at column J, so its Waiting-on rides as the first line of Notes in a fixed format.\n\n4. HANDOFF ITEMS LEFT OPEN LONG AFTER THEY CLOSED. Fifteen HC items were corrected. HC-027 logo — the SVG landed and is in use on every route; the item was never flipped. HC-028 critical-only review — ran as designed, output absorbed, pages four review rounds past that snapshot. HC-053 approvers — the names have been operating as approvers all sprint (design Dave+Veron, content Kristina+WoeiJing, legal Lorna, go/no-go Nav+WoeiJing, engineering Somesh). HC-032 newsletter destination — Flodesk live since 4 Aug. HC-061/062/066/076 — all finished work still showing as unfinished. HC-067 and HC-077 moved to Ready (prepared, date-gated). Cookiebot's domain move to www.contentment.org is now recorded on HC-067 as a cutover step, since it belongs to go-live rather than to the credentials item.\n\nLORNA'S KEELA MAP (website-keela.netlify.app, 5 Aug) reviewed against the build. Her Stream 1 matches: the General Donation Form is live on three pages. Her Stream 2 confirms a gap we suspected — the general widget CANNOT capture campaign designation, so designated gifts would receipt with the wrong tax letter. Three genuine disconnects found and logged: (a) HC-078 — her map assumes EVERY sign-up lands in Keela, while we route all email capture sitewide to Flodesk per D-19, and nothing moves a Flodesk subscriber into Keela; this supersedes D-24's Events-only framing. (b) HC-079 — her Stream 4 shows a November waitlist PAGE that does not exist in our build and is not in the Phase 1 page list. (c) HC-080 — her timeline launches 8/17, ours Aug 21, and both are being worked to. D-25 opened for what Homeroom membership INCLUDES; note the price half is already settled (D-01, $25/$50/$100, 27 Jul), so only benefits are missing. Her Decision 4 (access to draft pages) can be closed immediately — contentmentweb2.netlify.app has been live throughout.\n\nEarlier 4-5 Aug work still current: Flodesk newsletter LIVE via a host-native /api/newsletter function (astro.config.mjs stays output:'static', so the 3 Aug security revert holds); double opt-in ON and explicit; custom Cookiebot banner (390x155 mobile, from 374x800 stock) with sources version-controlled in docs/cookiebot/; /privacy live with the real cookie declaration; Consent Mode signal set complete; /getinvolved donate split; Nav current-page underline. STILL BLOCKED — Keela per-tier/designation (HC-030/075/078, Lorna); story photos + permissions (FEAT-030, Comms); Dave's second Events notes round (HC-072); Spread-the-movement door (WoeiJing). Go-live Aug 21, pending HC-080."
   },
   "overview": [
     [
@@ -159,7 +159,7 @@
       "Dave",
       "Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/ — Astro live. HC-057 passed 31 Jul. Aug 3 — hero CTA→/why; Join Homeroom invite→/give; door Schools/Events wired; Spread-the-movement TBD WJ; Homeroom donate form measure 46ch; Sign In + Donate chrome wired sitewide. Aug 4 — Keela General Donation Form live in Homeroom (#homeroom); Donate chrome → /#homeroom. Aug 4 — KeelaDonateForm accepts /?amount=25|50|100&frequency=monthly#homeroom presets from /give Join Homeroom. Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (subtle scale 1.06 / 18s)."
+      "Tracked as FEAT-010 + FEAT-011. https://contentmentweb2.netlify.app/ — Astro live. HC-057 passed 31 Jul. Aug 3 — hero CTA→/why; Join Homeroom invite→/give; door Schools/Events wired; Spread-the-movement TBD WJ; Homeroom donate form measure 46ch; Sign In + Donate chrome wired sitewide. Aug 4 — Keela General Donation Form live in Homeroom (#homeroom); Donate chrome → /#homeroom. Aug 4 — KeelaDonateForm accepts /?amount=25|50|100&frequency=monthly#homeroom presets from /give Join Homeroom. Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (subtle scale 1.06 / 18s)."
     ],
     [
       "Why Teacher Wellbeing",
@@ -170,7 +170,7 @@
       "Dave",
       "Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/why — Astro live. RF-006 Why QA 31 Jul. 1 Aug lightbox fix. Aug 3 — teacher Shorts fill 9:16 reels; donate form measure matched to copy (52ch). Aug 4 — Keela General Donation Form live in give band. Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (subtle scale 1.06 / 18s)."
+      "Tracked as FEAT-020. https://contentmentweb2.netlify.app/why — Astro live. RF-006 Why QA 31 Jul. 1 Aug lightbox fix. Aug 3 — teacher Shorts fill 9:16 reels; donate form measure matched to copy (52ch). Aug 4 — Keela General Donation Form live in give band. Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (subtle scale 1.06 / 18s)."
     ],
     [
       "Our Impact",
@@ -181,7 +181,7 @@
       "Dave",
       "Medium-High",
       "Yes",
-      "https://contentmentweb2.netlify.app/our-impact — Astro live. RF-006 QA pass 31 Jul (locked widths clean; no code fixes). FEAT-030 story data still blocked. 1 Aug — RF-008 fixed: video lightbox was playing in a tiny frame; now fills the modal."
+      "Tracked as FEAT-031 (content blocked on FEAT-030). https://contentmentweb2.netlify.app/our-impact — Astro live. RF-006 QA pass 31 Jul (locked widths clean; no code fixes). FEAT-030 story data still blocked. 1 Aug — RF-008 fixed: video lightbox was playing in a tiny frame; now fills the modal."
     ],
     [
       "For Schools",
@@ -192,7 +192,7 @@
       "Dave / Veron",
       "High",
       "Yes",
-      "https://contentmentweb2.netlify.app/schools — Aug 3: partner deck Drive URL; form embed Phase 2 hold (Kristina Miro); simple page + #start mailto; pricing titles enlarged. Aug 4 (Somesh) — wellbeing-lead photo replaced at public/assets/fs-Jadielsm.jpg (same path in schools.astro). Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (subtle scale 1.06 / 18s)."
+      "Tracked as FEAT-040. https://contentmentweb2.netlify.app/schools — Aug 3: partner deck Drive URL; form embed Phase 2 hold (Kristina Miro); simple page + #start mailto; pricing titles enlarged. Aug 4 (Somesh) — wellbeing-lead photo replaced at public/assets/fs-Jadielsm.jpg (same path in schools.astro). Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (subtle scale 1.06 / 18s)."
     ],
     [
       "Events",
@@ -203,7 +203,7 @@
       "Dave / Veron",
       "Medium-High",
       "Yes",
-      "https://contentmentweb2.netlify.app/events — Aug 3: email-capture UI forms (Flodesk TBD D-24); Join Homeroom→/give; See the stories→/our-impact. HC-072 review-only; RSVP seams empty."
+      "Tracked as FEAT-090. https://contentmentweb2.netlify.app/events — Aug 3: email-capture UI forms (Flodesk TBD D-24); Join Homeroom→/give; See the stories→/our-impact. HC-072 review-only; RSVP seams empty."
     ],
     [
       "Get Involved",
@@ -214,7 +214,7 @@
       "Dave",
       "Low-Medium",
       "Yes",
-      "https://contentmentweb2.netlify.app/getinvolved — Homeroom at /getinvolved (was /give; 301 kept). RF-006 QA 31 Jul. Aug 3 — hero Join Homeroom → #become. Aug 4 — Join Homeroom tiers deep-link to homepage Keela form (seams.homeroomDonateUrl); joinTiers empty (HC-075/071). Aug 4 (Somesh) — donate split #donate (gi-donate-photo.jpg + KeelaDonateForm); one-time gift → #donate. D-03 monthly split still open. Aug 4 (RF-010 Dave) — hero zoom is the reference model for Home/Why/Schools; Meet Jose / Homeroom video cut HELD pending WoeiJing + Kristina."
+      "Tracked as FEAT-050 (+ FEAT-051 monthly). https://contentmentweb2.netlify.app/getinvolved — Homeroom at /getinvolved (was /give; 301 kept). RF-006 QA 31 Jul. Aug 3 — hero Join Homeroom → #become. Aug 4 — Join Homeroom tiers deep-link to homepage Keela form (seams.homeroomDonateUrl); joinTiers empty (HC-075/071). Aug 4 (Somesh) — donate split #donate (gi-donate-photo.jpg + KeelaDonateForm); one-time gift → #donate. D-03 monthly split still open. Aug 4 (RF-010 Dave) — hero zoom is the reference model for Home/Why/Schools; Meet Jose / Homeroom video cut HELD pending WoeiJing + Kristina."
     ],
     [
       "About Us",
@@ -225,7 +225,7 @@
       "Dave (rev4)",
       "TBD",
       "Yes",
-      "https://contentmentweb2.netlify.app/about — Astro live. RF-006 About QA 31 Jul. Aug 3 — hero filename about-hero-team-bali-july2025.jpg; Dan caption tweak; Talk-with-Us email visible; share mailto fixed. Roster still needs Dave line-by-line before public deploy."
+      "Tracked as FEAT-093. https://contentmentweb2.netlify.app/about — Astro live. RF-006 About QA 31 Jul. Aug 3 — hero filename about-hero-team-bali-july2025.jpg; Dan caption tweak; Talk-with-Us email visible; share mailto fixed. Roster still needs Dave line-by-line before public deploy."
     ],
     [
       "Privacy Policy",
@@ -247,7 +247,7 @@
       "—",
       "Low",
       "No",
-      "Open ticket — under process. Phase 1.5 or Phase 2 TBD. Does not block Aug 21. NOTE: /privacy shipped 5 Aug as a partial (cookie half only); /terms has no equivalent and remains entirely not started."
+      "Tracked as FEAT-074 (split out of FEAT-071 on 5 Aug). NOT STARTED and Blocked — waiting on Lorna + Finance/Legal for the terms text (D-08). Unlike /privacy there is no half we can ship alone: /privacy had a live Cookiebot declaration to stand on, /terms has no equivalent. Does not block Aug 21. Build effort once copy lands is about an hour — the /privacy branded utility pattern is already built and reusable."
     ],
     [
       "Newsletter signup",
@@ -280,7 +280,7 @@
       "—",
       "Medium",
       "No",
-      "After index ships; formerly 'Individual story'"
+      "Tracked as FEAT-032. After index ships; formerly 'Individual story'"
     ],
     [
       "Press & Media",
@@ -291,18 +291,18 @@
       "—",
       "Low",
       "No",
-      "Footer / outreach"
+      "Tracked as FEAT-095. Footer / outreach"
     ],
     [
       "Impact (main nav)",
       "/impact",
-      "2",
+      "— (superseded)",
       "—",
-      "Not started",
+      "Not building",
       "—",
       "Medium",
       "No",
-      "Distinct from the new 'Our Impact' page (renamed Stories, Phase 1) — needs a naming/scope decision before Phase 2 build to avoid confusion"
+      "Tracked as FEAT-096 — CLOSED 5 Aug. RESOLVED: /our-impact is the impact page and is already the route in use; no separate /impact page will be built. This row is kept so the Sheet shows the decision rather than silently dropping a route the team had been told to expect. No redirect is needed — /impact never existed as a live route."
     ],
     [
       "Homeroom member hub",
@@ -313,7 +313,7 @@
       "—",
       "High",
       "No",
-      "Password-gated; not in public nav"
+      "Tracked as FEAT-091 + FEAT-092. Password-gated; not in public nav"
     ],
     [
       "Festival campaign",
@@ -324,7 +324,7 @@
       "—",
       "Medium",
       "No",
-      "Linked from Events; needs campaign brief"
+      "Tracked as FEAT-094. Linked from Events; needs campaign brief"
     ],
     [
       "Story Board prototype",
@@ -335,7 +335,7 @@
       "—",
       "—",
       "No",
-      "PURPOSE: Somesh's Story Board prototype — a feed-style way to browse programme stories, built to test the format before committing homepage space to it. public/story-board.html → /story-board (netlify.toml 200 rewrite). NOTE: 'Paused' refers to the DESIGN work; the route is PUBLICLY REACHABLE on the preview right now. Not linked from any nav, so it is only findable if you know the URL."
+      "Tracked as FEAT-034. PURPOSE: Somesh's Story Board prototype — a feed-style way to browse programme stories, built to test the format before committing homepage space to it. public/story-board.html → /story-board (netlify.toml 200 rewrite). NOTE: 'Paused' refers to the DESIGN work; the route is PUBLICLY REACHABLE on the preview right now. Not linked from any nav, so it is only findable if you know the URL."
     ],
     [
       "Foundation Reach Map",
@@ -346,7 +346,18 @@
       "—",
       "—",
       "No",
-      "PURPOSE: Somesh's Foundation Reach Map prototype — flat D3 + TopoJSON world map with a pin card per served country, intended for the homepage once approved. public/foundation-reach-map.html → /foundation-reach-map (netlify.toml 200 rewrite). NOTE: 'Paused' refers to the DESIGN work; the route is PUBLICLY REACHABLE on the preview right now. Not linked from any nav."
+      "Tracked as FEAT-033. PURPOSE: Somesh's Foundation Reach Map prototype — flat D3 + TopoJSON world map with a pin card per served country, intended for the homepage once approved. public/foundation-reach-map.html → /foundation-reach-map (netlify.toml 200 rewrite). NOTE: 'Paused' refers to the DESIGN work; the route is PUBLICLY REACHABLE on the preview right now. Not linked from any nav."
+    ],
+    [
+      "Internal docs hub",
+      "/docs",
+      "1 (internal)",
+      "—",
+      "Live on preview",
+      "Somesh",
+      "Low",
+      "No",
+      "Tracked as FEAT-102 + HC-077. PURPOSE: the team-facing planning + brief hub — DEV-TIMELINE, TEAM/TECH/GROWTH/AUTOMATION briefs and the planning index, published so non-engineering readers can self-serve status without a repo checkout. Generated at build time by scripts/copy-docs.sh (docs/*.html -> public/docs); public/docs and site/docs are gitignored. MUST BE UNPUBLISHED AT CUTOVER (HC-077): remove the Footer 'Project docs' link, skip copy-docs.sh on the production build, 404 /docs* and keep docs/ in the private repo only. Recorded 5 Aug — it was publicly reachable on the preview and linked from the Footer while appearing in no ticket and no page table."
     ]
   ],
   "designNotes": [
@@ -484,7 +495,7 @@
     [
       "D-03",
       "/give routing",
-      "Gateway at /give for Homeroom tiers; Join Homeroom interim deep-links to homepage General Donation Form with selected amount. Full /give vs /give/monthly routing still open; joinTiers still empty.",
+      "Gateway at /getinvolved for Homeroom tiers; Join Homeroom interim deep-links to the homepage General Donation Form with the selected amount. Full /give vs /give/monthly split still open. 5 AUG UPDATE — Lorna's Website->Keela->Finance map assumes embedded Keela widgets per stream rather than a redirect gateway, which is the direction already built. That is close to a confirmation but has not been stated as a decision, so this stays Open. Her Stream 3 also proposes Homeroom membership as its OWN widget rather than three per-tier links — if that holds, seams.joinTiers is the wrong model. See HC-078.",
       "Product / Kristina / Lorna",
       "Open",
       "Scope in 2-week sprint",
@@ -529,7 +540,7 @@
     [
       "D-08",
       "Legal copy (Privacy + Terms)",
-      "Open ticket — under process. Ship in Phase 1.5 or Phase 2 (TBD). Does not block Aug 21 Phase 1 hard go-live.",
+      "Open ticket — under process. 5 AUG UPDATE — /privacy SHIPPED as a deliberate partial (FEAT-071): the cookie half is live and verified, and the page says on itself that the full policy is in review, so no visitor is misled. Still owed by Lorna + Finance/Legal: controller identity, lawful basis, retention, data-subject rights, transfers, complaints — these drop into a marked section in privacy.astro and the cookie half needs no rework. /terms is NOT covered and remains entirely not started (FEAT-074). Does not block Aug 21 Phase 1 hard go-live.",
       "Legal / Ops — Somesh (action item)",
       "Open",
       "Privacy/Terms pages only — not Aug 21 launch",
@@ -673,11 +684,20 @@
     [
       "D-24",
       "Events email-capture destination",
-      "Flodesk vs Keela vs other — asked of WoeiJing + Kristina in Slack 2 Aug (answer requested by Aug 3; still Open as of Aug 3 CTA sync). /events keeps three placeholder slots (newsletter-signup fold; event-announcements in Why + Close; festival-signup CTAs). Do NOT invent provider embeds until decided. Pairs with FEAT-070 / D-19. Aug 3: Events UI forms shipped (first name+email stub); provider still open (Flodesk vs Keela vs other). Aug 4 — PARTIALLY RESOLVED. Provider is Flodesk (D-19 closed). Kristina's Miro board CTA suggestions assigned segments for 8 of 11 capture points: \"www.contentment.org\" for the /events Why-we-gather box, the closing aside, both Join-the-waitlist recap links and recap Be-first-to-know; \"Contentment Festival\" for the hero Save-my-free-spot modal. STILL OPEN, pending Kristina + WoeiJing: (1) /events top capture fold, (2) /updates page form, (3) the 3 Upcoming-grid CTAs — Save my spot (festival-virtual), Be first to know (festival-irl), Join the waitlist (bali-retreat) — which still only scroll to #ev-signup and have no segment. Interim: FLODESK_SEGMENT_DEFAULT points at www.contentment.org so unconfirmed forms still reach a mailed list rather than creating unsegmented subscribers.",
+      "Flodesk vs Keela vs other — asked of WoeiJing + Kristina in Slack 2 Aug; still Open. /events capture is live to Flodesk in the meantime (segment 'Contentment Festival' for the hero CTA). 5 AUG — BROADENED AND SUPERSEDED IN SCOPE by HC-078: Lorna's map shows this is not an Events-only question. Her Streams 4 and 5 assume EVERY sign-up lands in Keela tagged, receipted and notified, while we route all email capture sitewide to Flodesk. Decide once, sitewide, not per page.",
       "Somesh → WoeiJing + Kristina",
       "Open",
       "Events capture wiring (FEAT-070 related)",
       "High"
+    ],
+    [
+      "D-25",
+      "What Homeroom membership includes (benefits, not price)",
+      "Lorna's Decision 1, raised 5 Aug. The PRICE half is already settled — D-01 resolved the tiers to $25/$50/$100 on 27 Jul. What is missing is what a member actually GETS. This is not a marketing question: the benefits determine the tax-deductible portion of the receipt, which determines the Keela designation, which determines how the membership widget is configured. Until it lands, the Homeroom payment path cannot be built or receipted correctly. Lorna's interim proposal is to launch an INTEREST form instead of a payment page. Blocks FEAT-051 and the Homeroom half of FEAT-060.",
+      "Kristina / WoeiJing / Lorna",
+      "Open",
+      "FEAT-051, FEAT-060, HC-071, HC-075",
+      "Critical"
     ]
   ],
   "integrations": [
@@ -699,7 +719,7 @@
       "Finance — live checkout URLs (needed before Aug 21)",
       "Finance + Sam",
       "Blocked",
-      "Critical path for go-live"
+      "5 AUG — reviewed against Lorna's Website->Keela->Finance map (website-keela.netlify.app). LIVE: General Donation Form (give-usa embed MnqZFksL49Ym3M8Ho, org CBbknhqovLi8DNEzW) on the homepage Homeroom band, /why give band and /getinvolved #donate; one master script in BaseLayout; amount + frequency forwarded onto the embed iframe so tier buttons prefill; CSP allows cdn.keela.co + *.keela.co. CONFIRMED GAP: the general widget CANNOT capture campaign designation, so homeroom, event and other designated gifts would land undesignated and receipt with the wrong tax letter — Lorna states this independently in her Stream 2, which turns our suspected gap into a confirmed one. NOT BUILT: campaign designation, per-tier Homeroom products, India region. Button colour is Keela's default #507b91 vs brand #0090bd (dashboard-side fix, HC-070). See HC-078, D-25."
     ],
     [
       "Newsletter (Flodesk)",
@@ -830,9 +850,11 @@
       "Priority",
       "Status",
       "Owner",
+      "Waiting on",
       "Sprint dates",
       "Depends on",
-      "Blocker / Note"
+      "Where it stands",
+      "History"
     ],
     [
       "FEAT-001",
@@ -841,20 +863,24 @@
       "Must",
       "Done",
       "Sam",
+      "—",
       "Jul 28",
       "—",
-      "BaseLayout + Nav/Footer + tokens shared across all 7 Astro routes. Mobile drawer shipped (FEAT-003 ✅ 30 Jul). Aug 4 (Somesh) — Nav current-page indicator: aria-current=page + underline (white on transparent header; --btnblue when scrolled). Aug 4 — CLOSED: all 5 acceptance criteria verified against the build (tokens shared, nav/footer on all 7 routes, Google Fonts link intact, prefers-reduced-motion present in 12 built files, homepage renders on BaseLayout)."
+      "CLOSED — all 5 acceptance criteria verified against the build.\n• BaseLayout + Nav + Footer + design tokens shared across every route\n• Google Fonts link intact; prefers-reduced-motion present in 12 built files\n• Homepage renders on BaseLayout",
+      "4 Aug · Closed 5/5 after audit against the built output.\n4 Aug · Nav current-page indicator added — aria-current=page + underline (white on transparent header, --btnblue when scrolled).\n30 Jul · Mobile drawer shipped (FEAT-003).\n28 Jul · BaseLayout, Nav, Footer and tokens extracted."
     ],
     [
       "FEAT-002",
       "Multi-page routing scaffold (Astro)",
       "1",
       "Must",
-      "In Progress",
+      "Done",
       "Sam",
+      "—",
       "Jul 28",
       "FEAT-001",
-      "All 7 Phase 1 content routes under src/pages/. Netlify preview publishes dist/ (cut over 30 Jul). 2 Aug — branded /404 shipped (src/pages/404.astro, noindex, reuses existing tokens + .anim). Astro switched static → hybrid with @astrojs/netlify@5.x adapter (2 Aug), then REVERTED to output:'static' with no adapter (3 Aug) — no route ever set prerender=false, so hybrid shipped a live SSR function, edge middleware and /_image endpoint carrying 5 open Dependabot alerts for zero benefit. Static dist/ is file-for-file identical minus _redirects (netlify.toml already covers those 3 routes). Re-blocks FEAT-070's hosting until the Astro 4→7 migration. privacy/terms still blocked on legal copy. Aug 4 AUDIT — NOT closeable: acceptance criterion 'active nav state' fails on 2 of 7 routes. aria-current=page is absent on / (homepage) and /updates; present on the other five. Small fix, but the ticket was being treated as done. Aug 5 — GAP CLOSED + COUNT CORRECTED: the 4 Aug audit said aria-current was 'present on the other five' routes; it was actually present on SIX (/our-impact was miscounted because the check counted grep LINES, not occurrences — the minified markup puts header + drawer on one line). Root cause of the two failures was coverage, not logic: navLinks holds only the six header routes, so '/' (linked by the brand lockup) and '/updates' (linked only from the footer, which had no current-page logic at all) were never tested. Fixed in Nav.astro (brand anchor) + Footer.astro (new trailing-slash-safe isCurrent). Verified: / and /updates now 1 each, the six existing routes unchanged at 2, /404 correctly 0. Semantics-only — no .brand[aria-current] or .foot-col a[aria-current] rule exists, so no visual change ships."
+      "CLOSED 5 Aug — the last failing criterion (active nav state) now passes on every route.\n• 10 routes build from src/pages/; Netlify publishes dist/\n• output:'static', no adapter — the 3 Aug security revert stands\n• aria-current=page verified: / and /updates 1 each, six header routes 2 each, /404 correctly 0",
+      "5 Aug · GAP CLOSED + COUNT CORRECTED. The 4 Aug audit said aria-current was present on five routes; it was six — /our-impact was miscounted because the check counted grep LINES, not occurrences (minified markup puts header + drawer on one line). Root cause was coverage, not logic: navLinks holds only the six header routes, so '/' (linked by the brand lockup) and '/updates' (linked only from the footer, which had no current-page logic at all) were never tested. Fixed in Nav.astro (brand anchor) + Footer.astro (new trailing-slash-safe isCurrent). Semantics only — no .brand[aria-current] or .foot-col a[aria-current] rule exists, so no visual change shipped.\n4 Aug · AUDIT — not closeable: aria-current=page absent on / and /updates.\n3 Aug · REVERTED to output:'static' with no adapter. No route ever set prerender=false, so hybrid shipped a live SSR function, edge middleware and an /_image endpoint carrying 5 open Dependabot alerts for zero benefit. Static dist/ is file-for-file identical minus _redirects, which netlify.toml already covers.\n2 Aug · Branded /404 shipped (src/pages/404.astro, noindex). Astro switched static -> hybrid with @astrojs/netlify@5.x.\n30 Jul · Netlify preview cut over to publishing dist/.\n28 Jul · All Phase 1 content routes created under src/pages/."
     ],
     [
       "FEAT-003",
@@ -863,31 +889,37 @@
       "Must",
       "Done",
       "Sam",
+      "—",
       "Jul 30",
       "FEAT-001",
-      "Slide-in drawer in Nav.astro + nav.js — focus trap, Escape, Join Homeroom + Donate. See HOMEPAGE-RESPONSIVE-AUDIT.md. Aug 4 (Somesh) — drawer links also get aria-current=page + white underline for the active route."
+      "CLOSED — slide-in drawer in Nav.astro + nav.js with focus trap, Escape and body scroll lock.\n• Join Homeroom + Donate present in the drawer\n• Drawer links carry aria-current=page + white underline for the active route\n• Behaviour documented in HOMEPAGE-RESPONSIVE-AUDIT.md",
+      "4 Aug · Drawer links given aria-current=page and the active-route underline.\n30 Jul · Drawer shipped."
     ],
     [
       "FEAT-004",
       "Wire all nav and footer links",
       "1",
       "Must",
-      "In Progress",
+      "Partial",
       "Sam",
+      "WoeiJing — destination for the 'Spread the movement' homepage door",
       "Jul 29",
       "FEAT-002",
-      "Aug 4 — Get Involved slug `/getinvolved` (was `/give`); Donate → `/getinvolved#become`; seams.join=/getinvolved. Also: giveOneTime → /#homeroom; Join Homeroom tiers → /?amount=N&frequency=monthly#homeroom. Aug 3 Nav: Events RSVP → #ev-signup; school mailto; partner deck live. Dead: waysToGive #, Spread the movement #, Flodesk stubs. HC-005 Open."
+      "Everything on our side is wired. ONE destination remains unknown.\n• LIVE — Sign In, Donate, Join Homeroom, all nav + footer links, Events CTAs, /schools mailto + partner deck, newsletter\n• DEAD — 'Spread the movement' door in DoorCards.astro is still href='#'\n• 'Ways to give' resolved 4 Aug: one-time now goes to /getinvolved#donate",
+      "4 Aug · Get Involved slug moved to /getinvolved (was /give); Donate -> /getinvolved#become; seams.join=/getinvolved; giveOneTime -> /#homeroom; Join Homeroom tiers -> /?amount=N&frequency=monthly#homeroom.\n3 Aug · Events RSVP -> #ev-signup interim; /schools mailto + partner deck live.\n29 Jul · Nav and footer links wired from seams."
     ],
     [
       "FEAT-005",
       "Button / CTA inventory (all destinations)",
       "1",
       "Must",
-      "Open",
-      "Kristina → Sam",
+      "Partial",
+      "Kristina -> Sam",
+      "WoeiJing — 'Spread the movement' door · Lorna — per-tier Keela products (HC-030/075) · Kristina — Events RSVP choreography (HC-071/D-24)",
       "Before / during handoff — needed early in sprint",
       "—",
-      "Kristina Miro inventory still owed (HC-005). Aug 3 — Sam wired known destinations without waiting: Sign In, Donate→/#homeroom (Keela General Donation Form, Aug 4), homepage hero/invite/doors, Give hero→#become, About Talk-with-Us + share mailto. Remaining unknowns: Spread-the-movement door (WJ), per-tier Homeroom joinTiers + India (HC-075 remainder), Events RSVP/join seams."
+      "CTA wiring is MOSTLY COMPLETE. The Miro inventory stopped being the blocker — Sam wired the destinations without it.\nVerified against src/config/seams.ts and the built output, exactly THREE destinations remain unwired:\n• 'Spread the movement' door — href='#' — WoeiJing owns the destination\n• seams.joinTiers 25/50/100 — empty — Lorna owes per-tier Keela products\n• seams.rsvp — empty — Events RSVP choreography undecided\nNOT a blocker: seams.schools.discoveryFormUrl is empty DELIBERATELY (Kristina moved the embed to Phase 2).",
+      "5 Aug · Re-scoped. Kept open only for the three named items above, not for the inventory as a document.\n4 Aug · Donate -> /#homeroom now lands on the live Keela General Donation Form.\n3 Aug · Sam wired known destinations ahead of Miro: Sign In, Donate, homepage hero/invite/doors, Give hero -> #become, About Talk-with-Us + share mailto.\n28 Jul · Kristina to supply the Miro CTA inventory by EOW."
     ],
     [
       "FEAT-010",
@@ -896,9 +928,11 @@
       "Must",
       "Done",
       "Dave + Sam",
+      "—",
       "Jul 28–29",
       "FEAT-001, FEAT-002",
-      "Live on contentmentweb2.netlify.app. Slack review passed 31 Jul (HC-057). Aug 3 — CTA wires: hero→/why, InviteBand→/give, doors Schools/Events; Homeroom form/note measure 46ch matching lead; Priscillah hr-card remains Dave designed graphic (no text-free asset). Aug 4 — Keela General Donation Form live in Homeroom band (FEAT-060 interim). Per-tier Homeroom join still HC-075. Aug 3 — InviteBand Homeroom entry $25/mo (D-01). Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (global .hero-bg scale 1.06 / 18s)."
+      "CLOSED — homepage live on contentmentweb2.netlify.app; Slack review passed 31 Jul (HC-057).\n• Keela General Donation Form live in the Homeroom band\n• Homeroom entry copy at $25/mo per D-01\n• Per-tier Homeroom join still routes through the general form (HC-075)",
+      "4 Aug · Keela General Donation Form live in the Homeroom band (FEAT-060 interim). Hero zoom matched Get Involved (global .hero-bg scale 1.06 / 18s) per RF-010.\n3 Aug · CTA wiring — hero -> /why, InviteBand -> /give, doors Schools/Events. Homeroom form/note measure 46ch matching the lead. InviteBand Homeroom entry set to $25/mo (D-01). Priscillah hr-card remains Dave's designed graphic (no text-free asset supplied).\n31 Jul · Slack review passed (HC-057)."
     ],
     [
       "FEAT-011",
@@ -907,9 +941,11 @@
       "Should",
       "Done",
       "Sam",
+      "—",
       "31 Jul",
       "FEAT-010",
-      "31 Jul Four Pillars + Homeroom CTA. Aug 3 — D-01 copy: InviteBand + homepage meta $5→$25/month (HC-041). Give tiers already $25/$50/$100 Dreamer/Catalyst/Visionary."
+      "CLOSED — homepage copy reconciled against MESSAGING-AND-COPY.md.\n• Four Pillars + Homeroom CTA copy aligned\n• D-01 pricing consistent everywhere: $25 entry, $25/$50/$100 tiers",
+      "3 Aug · D-01 copy fix — InviteBand + homepage meta $5 -> $25/month (HC-041). Give tiers already $25/$50/$100 Dreamer/Catalyst/Visionary.\n31 Jul · Four Pillars + Homeroom CTA audit."
     ],
     [
       "FEAT-020",
@@ -918,42 +954,89 @@
       "Must",
       "In Progress",
       "Sam",
+      "—",
       "Jul 29–30",
       "FEAT-001, FEAT-002",
-      "Jul 29 — ported to src/pages/why.astro. 31 Jul RF-006 QA pass. 1 Aug — video lightbox sizing fixed (RF-008 pattern). Aug 3 — teacher reels (.vframe.vert) iframes fill 9:16 (missing absolute-fill CSS from Dave handoff); Homeroom donate form measure matched to head copy (52ch). Aug 4 — Keela General Donation Form live in give band. Newsletter still placeholder. Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (global .hero-bg scale 1.06 / 18s). Aug 4 AUDIT — NOT closeable: acceptance requires 'share button triggers Web Share API or copy-link fallback'. /why has no share affordance at all (about.astro has one; /why never got it). Citations (Harvard/86%/Bhutan/Hawaii) are present. Aug 5 — SHARE GAP CLOSED: /why now has the secondary CTA the messaging brief specifies ('Secondary CTA: Share this page', MESSAGING-AND-COPY.md /why section). Three tiers — Web Share -> clipboard copy -> mailto — so the acceptance wording 'copy-link fallback' is literally met (/about only fires native_share/email). Analytics contract matches /about: content_shared {method, source:'why_page'}. shareUrl matches the page's own canonical incl. trailing slash. Ticket STAYS In Progress: 3 of 4 criteria still unticked (first-time visitor test, evidence-doc citation links, approved-components check)."
+      "Page is live and QA'd. Remaining work is OURS — 3 of 4 acceptance criteria still unticked.\n• DONE — share CTA (Web Share -> clipboard -> mailto), evidence citations present, video reels fill 9:16, Keela form live in the give band\n• TO DO — first-time-visitor test, evidence-doc citation links, approved-components check",
+      "5 Aug · SHARE GAP CLOSED. /why now has the secondary CTA the messaging brief specifies. Three tiers — Web Share -> clipboard copy -> mailto — so the acceptance wording 'copy-link fallback' is literally met (/about only fires native_share/email). Analytics contract matches /about: content_shared {method, source:'why_page'}. shareUrl matches the page's own canonical including trailing slash.\n4 Aug · AUDIT — not closeable: acceptance requires a share affordance and /why had none. Citations (Harvard/86%/Bhutan/Hawaii) confirmed present. Hero zoom matched Get Involved per RF-010. Keela General Donation Form live in the give band.\n3 Aug · Teacher reels (.vframe.vert) iframes fill 9:16 — absolute-fill CSS was missing from the Dave handoff. Donate form measure matched to head copy (52ch).\n1 Aug · Video lightbox sizing fixed (RF-008 pattern).\n31 Jul · RF-006 QA pass.\n29 Jul · Ported to src/pages/why.astro."
     ],
     [
       "FEAT-030",
-      "Our Impact Page data model + JSON",
+      "Our Impact page data model + JSON",
       "1",
       "Must",
       "Blocked",
       "Sam",
+      "Comms / Programs — story photos + subject permissions",
       "Jul 31",
       "—",
-      "Renamed from 'Stories' per Kristina; comms: photos + permissions"
+      "HARD STOP. No story content can be modelled until photos and permissions arrive.\n• The schema and index chrome are built and QA'd — only the content is missing\n• Directly blocks FEAT-031 (index renders 0 cards) and FEAT-032",
+      "31 Jul · Opened. Renamed from 'Stories' per Kristina. Comms owe photos + permissions."
     ],
     [
       "FEAT-031",
       "Build Our Impact index (/our-impact)",
       "1",
       "Must",
-      "In Progress",
+      "Blocked",
       "Sam",
+      "Comms / Programs — story photos + permissions, via FEAT-030",
       "Jul 31 · Aug 3–4",
-      "FEAT-002",
-      "Jul 29 — ported to src/pages/our-impact/index.astro. Route /our-impact. 31 Jul RF-006 QA pass (320–1280 clean; no code fixes). FEAT-030 story data still blocked. 1 Aug — RF-008 (Kristina) fixed: video lightbox was playing in a tiny frame; iframe missed Astro's scoped CSS sizing since it's injected via JS, fixed with inline style. Aug 4 AUDIT — NOT closeable: acceptance requires 'all published stories render as cards'; /our-impact renders 0 story cards because FEAT-030 content is still blocked on comms photos+permissions. Index chrome itself is built and QA'd. Note the criteria still describe the old /stories scope."
+      "FEAT-002, FEAT-030",
+      "Index chrome is BUILT and QA'd. The page renders ZERO story cards because the content is blocked.\n• Acceptance requires 'all published stories render as cards' — cannot pass until FEAT-030 clears\n• Acceptance criteria still describe the old /stories scope and need rewording\n• Annual Report PDFs also still owed (HC-074, Somesh)",
+      "4 Aug · AUDIT — not closeable; re-classified Blocked 5 Aug because the remaining work is not ours.\n1 Aug · RF-008 (Kristina) fixed — video lightbox played in a tiny frame; the iframe missed Astro's scoped CSS sizing because it is injected via JS. Fixed with an inline style.\n31 Jul · RF-006 QA pass, 320–1280 clean, no code fixes.\n29 Jul · Ported to src/pages/our-impact/index.astro."
+    ],
+    [
+      "FEAT-032",
+      "Individual story pages /stories/[slug]",
+      "1.5",
+      "Should",
+      "Blocked",
+      "Sam",
+      "Comms / Programs — story content, via FEAT-030",
+      "Aug 7",
+      "FEAT-031",
+      "Not started, and cannot start — there is no story content to template.\n• Follows FEAT-031; page family renamed 'Our Impact'",
+      "5 Aug · Re-classified Scheduled -> Blocked: the dependency is content owned by Comms, not sequencing on our side."
+    ],
+    [
+      "FEAT-033",
+      "Foundation Reach Map (/foundation-reach-map)",
+      "2",
+      "Nice",
+      "Paused",
+      "Sam",
+      "—",
+      "—",
+      "FEAT-031",
+      "Phase 2. Working prototype, publicly reachable on the preview, design work PAUSED by choice.\n• public/foundation-reach-map.html -> /foundation-reach-map (netlify.toml 200 rewrite)\n• Flat D3 + topojson-client, assets/countries-110m.js, program-data.js\n• Desktop: hanging pendulum pin cards. Mobile: 18px balloon pins scaling with zoom; crowded pins open a bottom-sheet picker\n• NEEDS TEAM REVIEW — never went through Kristina's page list\n• Notes: prototypes/phase-2/world-map/README.md",
+      "5 Aug · Retitled from 'Interactive global map' to name the actual route, and given an explicit purpose statement — it was previously impossible to tell from the ticket that a live URL existed.\n4 Aug · Recorded as publicly reachable on the preview even though design work is paused."
+    ],
+    [
+      "FEAT-034",
+      "Story Board prototype (/story-board)",
+      "2",
+      "Nice",
+      "Paused",
+      "Sam",
+      "—",
+      "—",
+      "FEAT-031",
+      "Phase 2. Working prototype, publicly reachable on the preview, design work PAUSED by choice.\n• public/story-board.html -> /story-board (netlify.toml 200 rewrite); feed guide at /story-board-feed-guide\n• PURPOSE — a feed-style way to browse programme stories, built to test the format before committing homepage space to it\n• Shares program-data.js with the Reach Map\n• a11y gaps already fixed under QA-001\n• NEEDS TEAM REVIEW — never went through Kristina's page list",
+      "5 Aug · Ticket created retrospectively. The route was live on the preview and listed in the pages table but had NO ticket row, so it was invisible to anyone tracking work on the Tickets tab — the same gap FEAT-072/073 closed for /404 and /updates."
     ],
     [
       "FEAT-040",
       "Build /schools page",
       "1",
       "Must",
-      "In Progress",
+      "Partial",
       "Sam",
+      "Kristina — proof-point copy (renewal rates, Harvard, five-step model)",
       "Aug 4–5",
       "FEAT-002",
-      "Jul 29 port; 31 Jul RF-006 QA. Aug 3 — partner deck Drive URL wired (hero+close); Google Form embed deferred Phase 2 (Kristina Miro); pricing .col-name 1.4rem. Aug 4 (Somesh) — replaced wellbeing-lead conversation photo public/assets/fs-Jadielsm.jpg (same filename; no src change). Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (global .hero-bg scale 1.06 / 18s). Aug 4 AUDIT — NOT closeable: acceptance requires proof points 'renewal rates, Harvard, five-step model'; none of those appear on /schools. Tier overview (Educator/School/Network) present and 'program rollout' language correctly absent. Content gap, needs Kristina/messaging."
+      "Page is built, QA'd and live. One acceptance criterion fails on CONTENT we do not own.\n• DONE — tier overview (Educator/School/Network), partner deck wired, #start mailto, pricing titles enlarged, wellbeing-lead photo replaced\n• MISSING — the proof points acceptance requires (renewal rates, Harvard, five-step model) do not appear anywhere on the page\n• 'Program rollout' language correctly absent\n• Google Form embed deliberately deferred to Phase 2 (FEAT-041)",
+      "4 Aug · AUDIT — not closeable: content gap needs Kristina/messaging. Wellbeing-lead conversation photo replaced at public/assets/fs-Jadielsm.jpg (same filename, no src change). Hero zoom matched Get Involved per RF-010.\n3 Aug · Partner deck Drive URL wired (hero + close). Google Form embed deferred to Phase 2 per Kristina's Miro. Pricing .col-name to 1.4rem.\n31 Jul · RF-006 QA pass.\n29 Jul · Ported."
     ],
     [
       "FEAT-041",
@@ -962,42 +1045,50 @@
       "Should",
       "Scheduled",
       "Sam",
+      "—",
       "Phase 2",
       "FEAT-040",
-      "31 Jul — Google Form + Slack built and was embedded. Aug 3 Kristina Miro: put embed on hold for Phase 2 — test simple /schools page first, re-integrate if people are not using the form. Embed commented out in schools.astro; discoveryFormUrl cleared (URL retained in seams comment). Launch CTA = #start mailto."
+      "Built, then deliberately shelved to Phase 2 — not a blocker.\n• Google Form + Slack integration is BUILT and was embedded\n• Embed commented out in schools.astro; discoveryFormUrl cleared (URL retained in a seams comment)\n• Launch CTA is the #start mailto",
+      "3 Aug · Kristina's Miro put the embed on hold for Phase 2 — test the simple /schools page first, re-integrate if people do not use the form.\n31 Jul · Google Form + Slack built and embedded."
     ],
     [
       "FEAT-050",
       "Build /getinvolved gateway",
       "1",
       "Must",
-      "In Progress",
+      "Partial",
       "Sam",
+      "WoeiJing + Kristina — Meet Jose / Homeroom video cut · Lorna — D-03 monthly-split routing",
       "Jul 30–31",
       "FEAT-002",
-      "Get Involved at src/pages/getinvolved.astro (route `/getinvolved`; `/give` 301). 31 Jul RF-006 QA. Aug 3 — hero Join Homeroom → #become. Aug 4 — Join Homeroom tiers deep-link to homepage Keela form (seams.homeroomDonateUrl); joinTiers empty; seams.join=/getinvolved. Aug 4 (Somesh) — new donate split fold #donate (photo left / Keela form on blue, asset gi-donate-photo.jpg); Prefer to give differently one-time → #donate. D-03 monthly split still open. Aug 4 (RF-010 Dave) — hero zoom is the reference model; Meet Jose / Homeroom video cut HELD pending WoeiJing + Kristina."
+      "Page is live at /getinvolved (/give 301s to it). Two items are held on other people.\n• DONE — hero Join Homeroom -> #become, donate split fold #donate (photo + Keela form on blue), one-time -> #donate, tiers deep-link to the homepage form with amount + frequency\n• HELD — Meet Jose / Homeroom video cut, pending WoeiJing + Kristina (RF-010)\n• OPEN — D-03 /give vs /give/monthly split; seams.joinTiers still empty",
+      "4 Aug · Donate split fold #donate added (photo left / Keela form on blue, asset gi-donate-photo.jpg). 'Prefer to give differently' one-time -> #donate. Join Homeroom tiers deep-link to the homepage Keela form via seams.homeroomDonateUrl. seams.join=/getinvolved. Hero zoom is the reference model for the other pages; Meet Jose video cut HELD per RF-010.\n31 Jul · RF-006 QA pass.\n30 Jul · Ported; route later renamed /give -> /getinvolved with a 301."
     ],
     [
       "FEAT-051",
-      "Build /give/monthly Get Involved Page",
+      "Build /give/monthly Homeroom page",
       "1",
       "Must",
       "Blocked",
       "Sam",
+      "Lorna — per-tier Homeroom Keela products (HC-030/HC-075) · Kristina/Lorna — D-03 routing",
       "Jul 30–31",
       "FEAT-050, FEAT-060",
-      "Homeroom UI currently at /give. No separate /give/monthly route yet. Aug 4 — still blocked on per-tier Homeroom Keela (HC-075 remainder) + D-03 routing; General Donation Form does not close this ticket."
+      "HARD STOP. No separate route can be built until the Keela product shape and the routing decision land.\n• Homeroom UI currently lives on /getinvolved; there is no /give/monthly route\n• The General Donation Form does NOT close this ticket — it is a general/one-time path\n• Lorna's 5 Aug map proposes a SEPARATE membership widget rather than per-tier checkout URLs — see HC-078; this may change the ticket's shape",
+      "5 Aug · Flagged against Lorna's Website->Keela->Finance map: her Stream 3 treats Homeroom membership as its own Keela widget, not as three hosted checkout links. If that holds, seams.joinTiers is the wrong model and this ticket needs re-specifying.\n4 Aug · Still blocked on per-tier Homeroom Keela (HC-075 remainder) + D-03 routing."
     ],
     [
       "FEAT-060",
       "Keela donation integration",
       "1",
       "Must",
-      "In Progress",
+      "Partial",
       "Sam",
+      "Lorna — campaign-designation mechanism + per-tier Homeroom products (HC-030/075/078)",
       "Aug 14–16",
       "—",
-      "Aug 4 — General Donation Form wired sitewide (master script + embeds on / Homeroom + /why). seams.keela records orgId + form. Donate → /#homeroom. Aug 4 (follow-on) — /getinvolved Join Homeroom tiers deep-link to `/?amount=N&frequency=monthly#homeroom` via seams.homeroomDonateUrl(); KeelaDonateForm forwards amount+frequency onto the embed iframe. Aug 4 (Somesh) — same Keela embed also on /getinvolved #donate split (no second form ID). joinTiers still preferred when set. India region + per-tier hosted URLs still open (HC-075 remainder). CSP updated for cdn.keela.co."
+      "The general donation path is LIVE sitewide. Designated giving is not, and cannot be built until Lorna decides the mechanism.\n• LIVE — Keela General Donation Form (give-usa embed MnqZFksL49Ym3M8Ho, org CBbknhqovLi8DNEzW) on / Homeroom, /why give band and /getinvolved #donate; one master script in BaseLayout; CSP allows cdn.keela.co + *.keela.co\n• LIVE — KeelaDonateForm forwards amount + frequency onto the embed iframe, so tier buttons prefill\n• NOT BUILT — campaign designation. Lorna's 5 Aug map confirms the general widget CANNOT capture it as built, so homeroom/event/other gifts will land undesignated\n• NOT BUILT — per-tier Homeroom products; India region deferred\n• OPEN — Keela Donate button colour is #507b91 (default) vs brand #0090bd; fix lives in the Keela dashboard (HC-070)",
+      "5 Aug · Lorna's map reviewed. Her Stream 2 states the current widget cannot capture campaign designation — this matches our build and turns a suspected gap into a confirmed one. Awaiting her decision on whether designation comes via extra widgets or URL parameters before any code changes.\n4 Aug · General Donation Form wired sitewide; seams.keela records orgId + form; Donate -> /#homeroom. Same embed reused on /getinvolved #donate (no second form ID). joinTiers still preferred when set."
     ],
     [
       "FEAT-070",
@@ -1006,20 +1097,63 @@
       "Must",
       "In Progress",
       "Sam",
+      "Kristina + WoeiJing — segment for /updates, /events top fold and the 3 Upcoming-grid CTAs (does not block; interim default is set)",
       "Aug 13–14",
       "FEAT-010",
-      "4 Aug — SHIPPED (unblocked without the adapter). The §6.2 server-side path is now a HOST-NATIVE function, not an Astro route: netlify/functions/newsletter.mjs (preview) + api/newsletter.js (Vercel target) over one shared core, src/lib/flodesk.js. astro.config.mjs stays output:'static' — the 3 Aug security revert is untouched and FEAT-101 is NO LONGER a blocker for this ticket. FLODESK_API_KEY stays server-only; Flodesk contract verified against developers.flodesk.com (Basic auth base64('KEY:'); POST /v1/subscribers then POST /v1/subscribers/{email}/segments). netlify.toml rewrites /api/newsletter -> the function so both hosts share one public path. 11 capture points across home, /about, /why, /updates, /events; honeypot + inline aria-live success/error; 4 Events link-CTAs share one <CaptureModal />. Segment per form comes from SEGMENT_ENV_BY_SOURCE (env-driven IDs, never hardcoded). Segment assignments per Kristina's Miro CTA suggestions. STILL PENDING Kristina + WoeiJing: /updates form, /events top capture fold, and the 3 Upcoming-grid CTAs. Not yet done: live end-to-end submit test, rate limiting (UPSTASH_* unset), Vercel-side verification at cutover."
+      "SHIPPED and live. Remaining work to close is OURS.\n• LIVE — 11 capture points across home, /about, /why, /updates, /events; honeypot + inline aria-live success/error; 4 Events link-CTAs share one CaptureModal\n• ARCHITECTURE — host-native function, NOT an Astro SSR route: netlify/functions/newsletter.mjs (preview) + api/newsletter.js (Vercel) over one shared core src/lib/flodesk.js. astro.config.mjs stays output:'static', so the 3 Aug security revert is untouched and FEAT-101 is no longer a blocker\n• Double opt-in ON and explicit (FLODESK_DOUBLE_OPTIN=true); success copy says 'check your inbox to confirm'; optin_ip + optin_timestamp sent as the EU/US consent trail\n• TO DO (ours) — live end-to-end submit test, rate limiting (UPSTASH_* unset), Vercel-side verification at cutover",
+      "5 Aug · Flagged against Lorna's map: her Stream 4/5 assume every sign-up lands in KEELA, while D-19/D-24 routed capture to FLODESK. That architectural split is now tracked as HC-078 and is the single biggest open question between the two plans.\n4 Aug · /updates segment CONFIRMED 'www.contentment.org'. Double opt-in verified ON in the Flodesk account and set explicitly — leaving it unset would have shown 'You're in' while a confirmation click was still pending. newsletter_submit now fires on a CONFIRMED subscribe, not on click. Segment assignments follow Kristina's Miro CTA suggestions: 8 to 'www.contentment.org', /events hero Save-my-free-spot to 'Contentment Festival'.\n4 Aug · SHIPPED. Flodesk contract verified against developers.flodesk.com (Basic auth base64('KEY:'); POST /v1/subscribers then POST /v1/subscribers/{email}/segments). FLODESK_API_KEY server-only; segment IDs from env via SEGMENT_ENV_BY_SOURCE, never hardcoded. netlify.toml rewrites /api/newsletter so both hosts share one public path."
     ],
     [
       "FEAT-071",
-      "Privacy & cookies page (/privacy) — and Terms (/terms)",
+      "Privacy & cookies page (/privacy)",
       "1 + 2",
       "Should",
       "Done",
       "Sam",
+      "Lorna + Finance/Legal — the legal text half (D-08), which drops into a marked section",
       "5 Aug",
       "FEAT-002",
-      "SHIPPED 5 Aug — /privacy live. Counted in BOTH Phase 1 and Phase 2 by Somesh's call: Phase 1 because a dedicated page declaring our cookies/analytics is a compliance requirement in the regions we serve, and shipping without one is a real exposure — not a nice-to-have. Phase 2 because it will keep evolving through review by Kristina, Lorna and Nav. DONE MEANS: the cookie half — live Cookiebot declaration (Necessary 4 / Statistics 11 / Marketing 7 after the 5 Aug rescan), a working Cookie Preferences trigger, per-tool disclosures for GA4/Clarity/PostHog/Sentry/Cookiebot, and the regional compliance table from DECISION-002. DONE DOES NOT MEAN complete: the legal text — controller identity, lawful basis, retention, data-subject rights, transfers, complaints — is still owed by Lorna + Finance/Legal (D-08) and drops into a marked section in privacy.astro; the cookie half needs no rework. The page carries an on-page notice saying the full policy is in review, so no visitor is misled. /terms is NOT covered by this and remains not started."
+      "SHIPPED 5 Aug — live at /privacy. Counted in BOTH Phase 1 and Phase 2 by Somesh's call.\n• WHY PHASE 1 — a page declaring our cookies and analytics is a compliance requirement in the regions we serve; shipping analytics without one is real exposure, not a nice-to-have\n• WHY PHASE 2 — it will keep evolving through review by Kristina, Lorna and Nav\n• DONE MEANS the cookie half: live Cookiebot declaration (Necessary 4 / Statistics 11 / Marketing 7 after the 5 Aug rescan), a working Cookie Preferences trigger, per-tool disclosures for GA4/Clarity/PostHog/Sentry/Cookiebot, and the regional compliance table from DECISION-002\n• DONE DOES NOT MEAN complete: controller identity, lawful basis, retention, data-subject rights, transfers and complaints are still owed under D-08. The page carries an on-page notice that the full policy is in review, so no visitor is misled\n• /terms is NOT covered here — split out as FEAT-074 on 5 Aug",
+      "5 Aug · Terms split out to its own ticket (FEAT-074). Leaving /terms inside a ticket marked Done would have read as though Terms had shipped.\n5 Aug · SHIPPED. Fixes two real defects: the consent banner linked to a 404, and Cookiebot's standard copy promised withdrawal 'from the Cookie Declaration on our website' when neither the declaration nor any withdrawal path existed."
+    ],
+    [
+      "FEAT-072",
+      "Branded 404 page (/404)",
+      "1",
+      "Should",
+      "Done",
+      "Sam",
+      "Kristina — team review of copy + destination cards (post-ship, not blocking)",
+      "2 Aug",
+      "FEAT-002",
+      "SHIPPED 2 Aug — src/pages/404.astro.\n• 'noindex, follow'; short brand-gradient hero + 6 destination cards; reuses existing tokens and .anim (no new design language)\n• Netlify serves dist/404.html automatically; verified in-browser at 1280 and 390px\n• NEEDS TEAM REVIEW — the 6 destination cards and the copy never went through Kristina's page list",
+      "5 Aug · Ticket created retrospectively. The page shipped with no ticket row, so it lived only in the Reference tab's pages table and was invisible to anyone tracking work on the Tickets tab."
+    ],
+    [
+      "FEAT-073",
+      "Newsletter signup page (/updates)",
+      "1",
+      "Should",
+      "Done",
+      "Sam",
+      "Kristina — team review of copy + framing (post-ship, not blocking)",
+      "31 Jul",
+      "FEAT-002, FEAT-070",
+      "SHIPPED 31 Jul — src/pages/updates.astro.\n• PURPOSE — the standalone destination for subscribe links that need a real page rather than an inline form (Footer Explore column, sitemap)\n• Form wired to Flodesk 4 Aug via <NewsletterForm source=\"updates_page\" bare />; segment confirmed 'www.contentment.org'\n• NEEDS TEAM REVIEW — built without reaching Kristina's page list, so its copy and framing have had no non-engineering review",
+      "5 Aug · Ticket created retrospectively, same reason as FEAT-072 — the page had no Tickets-tab row.\n4 Aug · Form wired to Flodesk; segment confirmed."
+    ],
+    [
+      "FEAT-074",
+      "Terms of Use page (/terms)",
+      "1.5",
+      "Should",
+      "Blocked",
+      "Sam",
+      "Lorna + Finance/Legal — the entire terms text (D-08)",
+      "Phase 1.5 or 2 — TBD",
+      "FEAT-002",
+      "NOT STARTED and cannot start — there is no draft text to build from.\n• Unlike /privacy, there is no half we can ship on our own: /privacy had a live Cookiebot declaration to stand on, /terms has no equivalent\n• Does NOT block the Aug 21 Phase 1 go-live (D-08 confirmed Low priority)\n• Build effort once copy lands is ~1 hour — the /privacy branded utility pattern is already built and reusable",
+      "5 Aug · Split out of FEAT-071. FEAT-071 was titled 'Privacy & cookies page — and Terms' and was marked Done when /privacy shipped, which made it look as though /terms had shipped too. Terms now has its own row so its true state (not started, blocked on legal copy) is visible on the Tickets tab."
     ],
     [
       "FEAT-080",
@@ -1028,9 +1162,11 @@
       "Must",
       "Done",
       "Sam",
+      "—",
       "Aug 10–12",
       "FEAT-002",
-      "PLANNED: GA4 + Clarity + PostHog + CMP + Sentry, each behind its own env var, no-op until credentials land.\n\nDONE:\n• 31 Jul — Analytics.astro scaffolded; Sentry via @sentry/astro; cta_homeroom_click + newsletter_submit wired.\n• 3 Aug — PostHog wizard PR #1 triaged: kept its 6 conversion events + CSP; reverted its cookie-setting init, env rename and unused dep (broke DECISION-002/007). Event contract = 8 events.\n• 4 Aug — all 5 credentials wired (HC-076). Verified live: GA4 204, Clarity 204, Sentry envelope 200, Cookiebot bridge flips GA4 gcs G100 -> G111. PostHog confirmed by Sam in-dashboard only.\n• 4 Aug — PostHog loader stub rewritten to PostHog's official shape (__SV + _i); persistence now genuinely 'memory'.\n• 4 Aug — CMP swapped to Cookiebot, manual blocking mode (auto would rewrite tracker scripts to text/plain, risking our own gtag consent default and blocking cookieless PostHog).\n• 4 Aug — CSP updated in netlify.toml AND vercel.json, byte-identical: cookiebot script/style/connect/frame.\n\nREMAINING:\n• Cookiebot config under development — re-verify before launch.\n• Move Cookiebot's single registered domain to www.contentment.org at DNS cutover.\n• PostHog event delivery still unconfirmed by automated test — dashboard is the only evidence. Aug 4 — CLOSED 7/7: last criterion ('pageviews recording on staging') verified — contentmentweb2.netlify.app serves the real gtag tag G-0GBRRW2MCL, Cookiebot uc.js, and the CSP header. All 5 HC-076 credentials landed."
+      "CLOSED 7/7 — every tool live and verified on the wire, ahead of its Aug 10–14 window.\n• GA4 /g/collect 204 (en=page_view) with the real tag G-0GBRRW2MCL · Clarity r.clarity.ms/collect 204 · Sentry envelope 200 · Cookiebot consent bridge flips gcs G100 -> G111 and gcd 13p3p3p3p5l1 -> 13r3r3r3r5l1\n• 8-event conversion contract; each tool behind its own env var\n• PostHog confirmed in-dashboard by Sam only — no automated capture request is observable from a headless browser\n• AT CUTOVER (tracked on HC-067) — move Cookiebot's single registered domain to www.contentment.org, or the banner silently no-ops",
+      "5 Aug · Custom Cookiebot banner live; sources version-controlled in docs/cookiebot/ rather than living only in the vendor dashboard. Consent Mode signal set completed. Cookiebot rescan run.\n4 Aug · CLOSED 7/7; all 5 HC-076 credentials landed. CMP swapped Osano -> Cookiebot in manual blocking mode (auto would rewrite tracker scripts to text/plain, risking our own gtag consent default and blocking cookieless PostHog). PostHog loader stub rewritten to PostHog's official shape (__SV + _i) — persistence is now genuinely 'memory'. CSP updated byte-identically in netlify.toml AND vercel.json.\n3 Aug · PostHog wizard PR #1 triaged: kept its 6 conversion events + CSP; reverted its cookie-setting init, env rename and unused dep, which broke DECISION-002/007.\n31 Jul · Analytics.astro scaffolded; Sentry via @sentry/astro; cta_homeroom_click + newsletter_submit wired."
     ],
     [
       "FEAT-081",
@@ -1039,9 +1175,24 @@
       "Should",
       "Done",
       "Sam",
+      "—",
       "31 Jul",
       "FEAT-002",
-      "31 Jul — per-page title/description/OG/JSON-LD, robots.txt/sitemap.xml/llms.txt/favicon.svg shipped."
+      "CLOSED — per-page title/description/OG/JSON-LD plus robots.txt, sitemap.xml, llms.txt and favicon.svg all shipped.\n• sitemap.xml must be updated whenever a public route is added or renamed",
+      "31 Jul · Shipped."
+    ],
+    [
+      "FEAT-090",
+      "Events page",
+      "1",
+      "Must",
+      "Blocked",
+      "Sam",
+      "Dave — second round of team review notes (HC-072); design is not locked",
+      "Aug 6–7",
+      "FEAT-002",
+      "HARD STOP on production build. Dave's own handoff notes flag that a second page of team review notes has not been delivered.\n• The current build must be treated as REVIEW-ONLY, not production-final\n• Interim CTA wiring is in place: Save my spot / RSVP / waitlist -> #ev-signup email capture until seams.rsvp lands; hero Save-my-free-spot opens the Flodesk CaptureModal\n• Join Homeroom / Unlock still route to Get Involved\n• Lorna's 5 Aug map adds a NEW requirement this ticket does not yet cover: a November online-event waitlist page (HC-079)",
+      "5 Aug · Re-classified In Progress -> Blocked. The remaining work is Dave's notes round, not ours, and the page should not be built to production without it.\n3 Aug · Save my free spot / RSVP / waitlist no longer use seams.join -> /give. Interim destination #ev-signup until seams.rsvp."
     ],
     [
       "FEAT-091",
@@ -1051,8 +1202,10 @@
       "Scheduled",
       "Sam",
       "—",
+      "—",
       "FEAT-060, FEAT-092",
-      "Phase 2"
+      "Phase 2. Password-gated, not in public nav. Not started.",
+      "—"
     ],
     [
       "FEAT-092",
@@ -1062,8 +1215,23 @@
       "Scheduled",
       "Sam",
       "—",
+      "—",
       "Edge function hosting",
-      "Phase 2"
+      "Phase 2. Depends on edge-function hosting, which the current output:'static' build deliberately does not use.",
+      "—"
+    ],
+    [
+      "FEAT-093",
+      "About Us page (v1 single page)",
+      "1",
+      "Must",
+      "Partial",
+      "Sam / Veron",
+      "Dave — line-by-line roster sign-off before public deploy",
+      "Aug 7 or fast-follow",
+      "FEAT-002",
+      "Page is built, QA'd and live on the preview. It should NOT go public until the roster is signed off.\n• DONE — hero, Dan caption, Talk-with-Us mailto visible, share/mailto hardened, newsletter capture wired\n• HELD — roster sign-off owed by Dave; naming real people wrongly on a public site is not a risk worth taking\n• PENDING — hi-res hero swap still owed by Dave",
+      "3 Aug · Hero uses about-hero-team-bali-july2025.jpg (same bytes as the prior ab-hero-bali5; hi-res swap still pending Dave). Caption 'Dan in Bhutan, 2014'. Talk with Us shows mailto + hello@contentment.org. Email-this-to-someone share/mailto hardened.\n31 Jul · RF-006 QA pass.\n29 Jul · about.astro built from about-deploy-rev4."
     ],
     [
       "FEAT-094",
@@ -1072,53 +1240,37 @@
       "Nice",
       "Scheduled",
       "Sam",
+      "Events — campaign brief",
       "—",
       "FEAT-080",
-      "Phase 2"
-    ],
-    [
-      "FEAT-090",
-      "Events page (renamed from 'Events & Experiences')",
-      "1",
-      "Must",
-      "In Progress",
-      "Sam",
-      "Aug 6–7",
-      "FEAT-002",
-      "Aug 3 — Save my free spot / RSVP / waitlist no longer use seams.join→/give (Nav). Interim destination #ev-signup until seams.rsvp. Join Homeroom/Unlock still /give. HC-072 review-only."
-    ],
-    [
-      "FEAT-032",
-      "Individual story pages /stories/[slug] (page renamed 'Our Impact')",
-      "1.5",
-      "Should",
-      "Scheduled",
-      "Sam",
-      "Aug 7",
-      "FEAT-031",
+      "Phase 2. Linked from Events; needs a campaign brief before any build.",
       "—"
     ],
     [
-      "FEAT-033",
-      "Interactive global map",
+      "FEAT-095",
+      "Press & Media page (/press)",
       "2",
       "Nice",
-      "Paused",
+      "Scheduled",
       "Sam",
+      "Comms — press assets, boilerplate and contact",
       "—",
-      "FEAT-031",
-      "Phase 2"
+      "FEAT-002",
+      "Phase 2, not started. Footer / outreach destination.\n• Listed in the pages table since the start but had no ticket row until 5 Aug",
+      "5 Aug · Ticket created so every route in the pages table has a Tickets-tab row."
     ],
     [
-      "FEAT-093",
-      "About Us page (v1 single page)",
-      "1",
-      "Must",
-      "In Progress",
-      "Sam / Veron",
-      "Aug 7 or FF",
-      "FEAT-002",
-      "Jul 29 — about.astro from about-deploy-rev4. 31 Jul RF-006 QA. Aug 3 — hero uses about-hero-team-bali-july2025.jpg (same bytes as prior ab-hero-bali5; hi-res swap still pending Dave); caption \"Dan in Bhutan, 2014\"; Talk with Us shows mailto + hello@contentment.org; Email-this-to-someone share/mailto hardened. Newsletter FEAT-070; roster Dave sign-off still owed."
+      "FEAT-096",
+      "Impact naming — resolved to /our-impact (no separate /impact page)",
+      "2",
+      "Nice",
+      "Done",
+      "Sam",
+      "—",
+      "5 Aug",
+      "FEAT-031",
+      "CLOSED 5 Aug — the naming overlap is settled by Somesh: /our-impact IS the impact page, it is live, and it is already the route in use.\n• NO separate /impact page will be built — the Phase 2 nav item is superseded, not deferred\n• No redirect needed: /impact has never existed as a route (verified — no reference in src/, sitemap.xml, netlify.toml or vercel.json), so there is nothing to redirect from\n• Ongoing work on the page itself lives on FEAT-031 (index) and FEAT-030 (story content)",
+      "5 Aug · Resolved and closed the same day it was raised. The ticket existed for one reason — to give the /impact vs /our-impact overlap an owner — and Somesh confirmed the answer is /our-impact, already in use. Recording it as Done rather than deleting the row so the decision is visible on the Sheet instead of vanishing.\n5 Aug · Ticket created. The clash was noted in the pages table on 27 Jul but never became a tracked item, so nobody owned resolving it."
     ],
     [
       "FEAT-100",
@@ -1127,42 +1279,63 @@
       "Must",
       "In Progress",
       "Sam",
+      "—",
       "Aug 13–14",
       "All must-haves",
-      "2 Aug — AUDIT DONE (docs/planning/PRE-LAUNCH-QA-AUDIT.md): axe-core 4.12.1 + Lighthouse 13.4.1, 8 routes x desktop/mobile. Verdict 0/8 pass, but causes cluster: 1 Critical, 4 Serious, 6 Moderate, 3 Minor. Shared-chrome fixes clear most of it — no <main> landmark + no skip link (BaseLayout, 2 lines, fixes all 8); video-lightbox focus management (/schools is a real keyboard trap, WCAG 2.1.2 A — Escape handler exists but is on window, so it never fires once focus is in the cross-origin YouTube iframe); /events filter chips use role=tablist with aria-selected on plain buttons and no arrow keys; mobile perf 56-75 on all 8 (pure asset weight — zero TBT; unsized imgs, render-blocking fonts, base64 images). White-on-mint contrast fails AA and is already fixed on /events+/why but not homepage orbit or /give. Console clean: 0 JS errors / 0 failed requests across 16 loads. NOT yet done: screen-reader pass, text-over-image contrast (manual), Google Form iframe (cross-origin), Keela live test (HC-075)."
+      "Audit DONE, fixes IN FLIGHT. All remaining work is ours.\n• Verdict 0/8 routes pass, but causes cluster: 1 Critical, 4 Serious, 6 Moderate, 3 Minor — shared-chrome fixes clear most of it\n• BIGGEST WIN — no <main> landmark and no skip link (BaseLayout, 2 lines, fixes all 8 routes)\n• REAL KEYBOARD TRAP — /schools video lightbox: the Escape handler is on window, so it never fires once focus is inside the cross-origin YouTube iframe (WCAG 2.1.2 Level A)\n• /events filter chips use role=tablist with aria-selected on plain buttons and no arrow-key handling\n• Mobile perf 56–75 on all 8 — pure asset weight, zero TBT (unsized imgs, render-blocking fonts, base64 images)\n• White-on-mint contrast fails AA; already fixed on /events + /why, still open on the homepage orbit and Get Involved\n• Console clean — 0 JS errors, 0 failed requests across 16 loads\n• NOT yet done — screen-reader pass, text-over-image contrast (manual), Google Form iframe (cross-origin), Keela live test (HC-075)",
+      "2 Aug · AUDIT DONE — docs/planning/PRE-LAUNCH-QA-AUDIT.md, axe-core 4.12.1 + Lighthouse 13.4.1 over 8 routes x desktop/mobile."
     ],
     [
       "FEAT-101",
-      "Production deploy + DNS",
+      "Production deploy + DNS cutover",
       "1",
       "Must",
-      "Open",
+      "Scheduled",
       "Sam",
+      "—",
       "Aug 21",
       "FEAT-100",
-      "contentment.org cutover — Phase 1 hard go-live Aug 21. Aug 4 — HC-077: at production cutover unpublish internal project docs — remove Footer 'Project docs' (/docs); stop copy-docs.sh / public/docs on prod build; 404 /docs*; keep docs/ in private repo only (preview Netlify may keep /docs until cutover)."
+      "Scheduled for the Aug 21 hard go-live. Prep is done; execution is date-gated, not blocked.\n• vercel.json + netlify.toml CSP already byte-identical and cutover-ready (OPS-001/002)\n• AT CUTOVER — move Cookiebot's registered domain to www.contentment.org or the banner silently no-ops (free tier = 1 domain)\n• AT CUTOVER — unpublish the internal docs hub: see FEAT-102 / HC-077\n• NOTE — Lorna's 5 Aug map states a launch date of Sun 8/17, four days earlier than the Aug 21 in this plan. Unreconciled — see HC-080",
+      "5 Aug · Re-classified Open -> Scheduled: nothing is undecided, the date is simply in the future.\n4 Aug · HC-077 logged — unpublish internal project docs at cutover."
+    ],
+    [
+      "FEAT-102",
+      "Internal docs hub (/docs) — publish now, unpublish at cutover",
+      "1",
+      "Should",
+      "In Progress",
+      "Sam",
+      "—",
+      "Through cutover",
+      "FEAT-101",
+      "Live on the Netlify preview by design; must NOT be publicly reachable on contentment.org.\n• scripts/copy-docs.sh copies docs/*.html -> public/docs (and site/docs) at build time; both generated dirs are gitignored\n• Reachable today at /docs on the preview, and linked from the Footer as 'Project docs'\n• AT CUTOVER (HC-077) — remove the Footer link, skip copy-docs.sh on the production build, 404 /docs*, keep docs/ in the private repo only\n• Pairs with SECURITY-AND-ACCESS §8 and TECHNICAL-ARCHITECTURE §12 step 3b",
+      "5 Aug · Ticket created. /docs is a publicly reachable route with no ticket row — the same visibility gap that FEAT-072/073 closed for /404 and /updates, and it carries a real security action at cutover that lived only in a checklist item."
     ],
     [
       "OPS-001",
-      "Add security headers to netlify.toml (interim env)",
+      "Security headers in netlify.toml (interim env)",
       "1",
       "Must",
       "Done",
       "Sam",
       "—",
       "—",
-      "Interim Netlify security headers ahead of the Vercel cutover (TECHNICAL-ARCHITECTURE §9). Aug 3 — CSP added; netlify.toml previously had none at all while vercel.json did, so the live host was the unprotected one. Policy now identical across both files."
+      "—",
+      "CLOSED — interim Netlify security headers ahead of the Vercel cutover (TECHNICAL-ARCHITECTURE §9).\n• netlify.toml previously had NO CSP at all while vercel.json did, so the live host was the unprotected one\n• Policy now identical across both files",
+      "3 Aug · CSP added to netlify.toml and matched to vercel.json."
     ],
     [
       "OPS-002",
-      "Commit vercel.json from TECHNICAL-ARCHITECTURE §9 spec",
+      "vercel.json from TECHNICAL-ARCHITECTURE §9 spec",
       "1",
       "Must",
       "Done",
       "Sam",
       "—",
       "—",
-      "Vercel security headers config, ready for the production cutover (FEAT-101). Aug 3 — CSP rewritten from a dist/ origin inventory: added YouTube frame-src (it would have blanked every video embed at cutover), Osano, Clarity connect, jsdelivr (map/story-board prototypes), GA4 regional ingest, Sentry ingest, form-action; dropped plausible.io, which DECISION-001 never chose. Aug 4 — cmp.osano.com REPLACED in both netlify.toml and vercel.json (kept byte-identical) by consent.cookiebot.com (script + style) and consentcdn.cookiebot.com (script, connect, and frame — Cookiebot renders its banner in an iframe, which Osano never required). Without the frame-src entry the banner would have been CSP-blocked outright. Verified live: no CSP violations on / or /privacy."
+      "—",
+      "CLOSED — Vercel security headers config, ready for the production cutover (FEAT-101).\n• Kept byte-identical to netlify.toml so the policy cannot drift between hosts\n• Verified live: no CSP violations on / or /privacy",
+      "4 Aug · cmp.osano.com REPLACED in both files by consent.cookiebot.com (script + style) and consentcdn.cookiebot.com (script, connect AND frame). Cookiebot renders its banner in an iframe, which Osano never required — without the frame-src entry the banner would have been CSP-blocked outright.\n3 Aug · CSP rewritten from a dist/ origin inventory: added YouTube frame-src (it would have blanked every video embed at cutover), Clarity connect, jsdelivr (map/story-board prototypes), GA4 regional ingest, Sentry ingest, form-action. Dropped plausible.io, which DECISION-001 never chose."
     ],
     [
       "OPS-003",
@@ -1173,7 +1346,22 @@
       "Sam",
       "—",
       "—",
-      "Keeps the portable single-file build in sync with site/index.html without a manual step."
+      "—",
+      "CLOSED — keeps the portable single-file build in sync with site/index.html without a manual step.",
+      "—"
+    ],
+    [
+      "OPS-004",
+      "Generate both timeline briefs from launch-plan-data.json",
+      "1",
+      "Should",
+      "Done",
+      "Sam",
+      "—",
+      "5 Aug",
+      "—",
+      "CLOSED 5 Aug — scripts/refresh-timelines.py. The timelines were the only team-facing artefact not downstream of the JSON, so they could only drift, and did.\n• ID-keyed in-place rewrite, NOT template regeneration — both files stay hand-authored designs; the script rewrites only the 25 status spans, their note cells and the 'As of' stamp\n• Guards all fail-closed: slot counts, reflow tripwire, single 'As of' stamp, unknown ticket id or status is a hard error, <10% size delta, stale-pin detection, and a post-condition that re-runs the slot regex on the output\n• --check exits 1 when stale, so it works as a pre-commit gate\n• KNOWN LIMIT — 11 JSON tickets have no timeline slot and are reported as orphans on every run; slots live in hand-authored phase containers the JSON cannot map to",
+      "5 Aug · Ticket created retrospectively — the script shipped and is referenced in TRACKER, but had no Tickets-tab row.\n5 Aug · Shipped. Root cause it closes: the 4 Aug rule already REQUIRED timeline updates and twelve consecutive commits skipped them anyway. Moving it from a checklist item a human must remember to a script step is the only thing that changed the outcome."
     ],
     [
       "QA-001",
@@ -1184,29 +1372,9 @@
       "Sam",
       "—",
       "—",
-      "Fixed in the Story Board prototype (site/story-board.html) ahead of the Astro migration."
-    ],
-    [
-      "FEAT-072",
-      "Branded 404 page (/404)",
-      "1",
-      "Should",
-      "Done",
-      "Sam",
-      "2 Aug",
-      "FEAT-002",
-      "SHIPPED 2 Aug — src/pages/404.astro, `noindex, follow`, short brand-gradient hero + 6 destination cards, reusing existing tokens and .anim (no new design language). Netlify serves dist/404.html automatically. Verified in-browser at 1280 and 390px. Ticket created 5 Aug retrospectively: the page shipped with no ticket row, so it lived only in the Reference tab's pages table and was invisible to anyone tracking work on the Tickets tab. NEEDS TEAM REVIEW — the 6 destination cards and the copy never went through Kristina's page list."
-    ],
-    [
-      "FEAT-073",
-      "Newsletter signup page (/updates)",
-      "1",
-      "Should",
-      "Done",
-      "Sam",
-      "31 Jul",
-      "FEAT-002, FEAT-070",
-      "SHIPPED 31 Jul — src/pages/updates.astro, the standalone destination for subscribe links that need a real page (Footer Explore, sitemap). Form wired to Flodesk 4 Aug via <NewsletterForm source=\"updates_page\" bare />; segment confirmed 'www.contentment.org'. Ticket created 5 Aug retrospectively for the same reason as FEAT-072 — the page had no Tickets-tab row. NEEDS TEAM REVIEW: built without reaching Kristina's page list, so its copy and framing have had no non-engineering review."
+      "—",
+      "CLOSED — fixed in the Story Board prototype ahead of the Astro migration. Tracked under FEAT-034 from 5 Aug.",
+      "5 Aug · Cross-referenced to the new FEAT-034 Story Board ticket."
     ]
   ],
   "externalBlockers": [
@@ -1243,7 +1411,7 @@
       "Lorna (Finance)",
       "FEAT-060, FEAT-051",
       "Partial — Aug 4",
-      "General Donation Form live on / + /why. Remaining: per-tier Homeroom joinTiers + India region."
+      "5 AUG — reframed by Lorna's map. We asked for three hosted checkout URLs; her Stream 3 proposes a separate MEMBERSHIP WIDGET instead. Those are different integrations — three links in seams.joinTiers versus a second embed with its own configuration — so this cannot be answered as 'send the URLs'. Blocks FEAT-051. See HC-078, HC-075, D-25."
     ],
     [
       "Story photos + permissions",
@@ -1314,6 +1482,34 @@
       "FEAT-051, FEAT-060, Events gated-CTA wiring",
       "Before those CTAs can be wired and tested",
       "Aug 4 — Donate chrome → /#homeroom (General Donation Form live). Events RSVP + Get Involved Join Homeroom / joinTiers still empty until join-flow decided."
+    ],
+    [
+      "Where sign-ups land — Keela or Flodesk (sitewide)",
+      "Kristina + Lorna + WoeiJing",
+      "Events capture, waitlist, /updates, and any Keela tagging/receipting of non-donors",
+      "Lorna's map asks for decisions by Fri 8/7",
+      "Addresses keep accumulating in Flodesk that may later need exporting, deduping and re-tagging into Keela by hand — the exact cleanup Lorna's map warns is exponentially more work after the fact. HC-078."
+    ],
+    [
+      "What Homeroom membership includes (benefits)",
+      "Kristina + WoeiJing + Lorna",
+      "Homeroom payment page, membership widget config, tax-deductible portion of the receipt",
+      "Lorna's map asks for decisions by Fri 8/7",
+      "Homeroom cannot launch with payment. Lorna's fallback is an interest form instead of a payment page. Price is NOT the blocker — D-01 settled $25/$50/$100 on 27 Jul. D-25."
+    ],
+    [
+      "November online event — waitlist page + routing",
+      "Kristina + Ni Luh (Cika)",
+      "A dedicated waitlist page, waitlist tagging, post-waitlist sequence, conversion path to registration",
+      "Lorna's map asks for decisions by Fri 8/7",
+      "No waitlist page exists in the build and it is not in the Phase 1 page list. Lorna and Cika scoped the festival waitlist without reference to the website, so plan and site were never reconciled. HC-079."
+    ],
+    [
+      "Launch date — 8/17 or Aug 21",
+      "Kristina + Nav",
+      "Every downstream schedule: Keela build, end-to-end testing, QA fixes, DNS cutover",
+      "Immediate — both dates are being worked to right now",
+      "Lorna is scheduling her Keela build and her own capacity against 8/17 while this plan says Aug 21. If 8/17 holds, the Aug 10-14 review window becomes launch week and the buffer disappears. HC-080."
     ]
   ],
   "phase2Deferred": [
@@ -1471,9 +1667,9 @@
       "Button / CTA inventory from Kristina",
       "Every CTA destination confirmed. Critical for wiring links + event tracking at speed.",
       "Kristina → Sam",
-      "Open",
+      "Partial",
       "Critical",
-      "Jul 28 — Kristina Miro by EOW. Aug 2 — re-asked by Aug 3. Aug 3 — inventory still Open; Sam wired known destinations in seams/Nav/Footer/homepage/give/about ahead of Miro. Still need WJ on Spread-the-movement door + any destinations only Kristina inventory would confirm."
+      "WAITING ON: WoeiJing — 'Spread the movement' door destination · Lorna — per-tier Keela products (HC-030/075) · Kristina — Events RSVP / email-capture choreography (D-24, HC-071).\n5 Aug · DOWNGRADED Open -> Partial. Largely overtaken by events: Sam wired the destinations without waiting for the Miro board, and only three remain — none of which the inventory document would answer. Kept open ONLY for those three named items, not for the inventory as a deliverable. See FEAT-005.\n3 Aug · Sam wired known destinations ahead of Miro.\n28 Jul · Kristina to supply the Miro CTA inventory by EOW."
     ],
     [
       "HC-010",
@@ -1591,9 +1787,9 @@
       "Design tokens locked",
       "Colors, fonts, spacing vs site/index.html tokens (teal/ocean/deep/green/paper).",
       "Dave + Veron",
-      "Open",
+      "Confirmed",
       "High",
-      ""
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. Tokens are locked and in production use: --teal #1FAFC0, --ocean #0080B0, --deep #024E70, --green #4FA98C, --paper #FBFAF7; Newsreader (display), Inter (body), Varela Round (brand). Defined once in the shared layout and consumed by all 10 routes. This was recorded Open because it was written as 'Dave + Veron to confirm a token list', but the tokens were extracted from site/index.html on 28 Jul (FEAT-001) and nothing has changed them since — the confirmation the item was waiting for has been overtaken by the build."
     ],
     [
       "HC-023",
@@ -1601,9 +1797,9 @@
       "Reusable component inventory",
       "Nav, footer, CTA states, typography scale, form fields — named list, not reverse-engineered.",
       "Dave",
-      "Open",
+      "Confirmed",
       "High",
-      ""
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. The component inventory exists as shipped code, not as a document: 17 components under src/components/ (Analytics, CaptureModal, CommunityCircles, DoorCards, Footer, Hero, HomeroomBlock, InviteBand, KeelaDonateForm, KeelaScripts, Nav, NewsletterForm, OrbitSection, Pillars, StatBand, VoiceBand, WhySplit) plus BaseLayout. Nothing was reverse-engineered blind. The contract is recorded in FRONTEND-SPECIFICATION.md."
     ],
     [
       "HC-024",
@@ -1611,9 +1807,9 @@
       "All image / media assets — direct links",
       "Heroes, Homepage video, About team photos, Get Involved donor quote/video.",
       "Dave + Veron + WJ",
-      "Open",
+      "Partial",
       "High",
-      "Jul 28 — Dave zip includes assets. Jose video placeholder OK; video file → Somesh directly when ready."
+      "WAITING ON: WoeiJing / Dave — the Meet Jose video file (still a placeholder on Get Involved).\n5 Aug · Everything else landed. All hero images, About team photos, /schools wellbeing-lead photo (public/assets/fs-Jadielsm.jpg) and the Get Involved donate photo (gi-donate-photo.jpg) are in public/assets and live. Outstanding: the Jose video file, and the hi-res About hero swap Dave still owes.\n28 Jul · Dave zip includes assets. Jose video placeholder OK; file to Somesh directly when ready."
     ],
     [
       "HC-025",
@@ -1621,9 +1817,9 @@
       "Accessibility / contrast rule",
       "WCAG contrast wins over strict brand palette when they conflict.",
       "Dave + Veron",
-      "Open",
+      "Confirmed",
       "High",
-      "Known Veron vs Dave tension — get the resolution rule"
+      "ON US: apply it — the rule itself is settled.\n5 Aug · CLOSED as a decision. The resolution rule in force is WCAG CONTRAST WINS over strict brand palette when the two conflict, and it has been applied in practice: white-on-mint was corrected on /events and /why for exactly this reason. Remaining contrast defects (homepage orbit, Get Involved) are tracked as QA work under FEAT-100, not as an open design question.\n28 Jul · Opened over a known Veron-vs-Dave tension; the tension is resolved by the rule above."
     ],
     [
       "HC-026",
@@ -1631,9 +1827,9 @@
       "No open unresolved feedback threads",
       "Ask: any open comment thread still open on any page?",
       "Dave + K + WJ + Nav",
-      "Open",
+      "Confirmed",
       "High",
-      "Jul 28 — critical-only red flags via Slack #website (~1hr); Kristina collates EOD → Dave; Dave reworks Jul 29 AM. Copy changes out of scope."
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. Every review round that arrived has been processed and closed out: RF-006 (mobile UI/UX, all 7 pages), RF-008 (Kristina, video lightbox) and RF-010 (Dave, 3 Aug notes). Anything still open from those rounds now has its own ticket rather than sitting as an unresolved thread — HC-072 (Dave's second Events notes round) is the one genuine outstanding item and is tracked separately.\n28 Jul · Critical-only red flags via Slack #website; Kristina collated EOD, Dave reworked 29 Jul AM."
     ],
     [
       "HC-030",
@@ -1643,7 +1839,7 @@
       "Finance + Lorna",
       "Partial",
       "Critical",
-      "General form unblocks donate widgets; per-tier Homeroom join still blocks FEAT-051 polish."
+      "WAITING ON: Lorna / Finance — the mechanism for campaign-designated and per-tier giving.\n5 Aug · Lorna's Website->Keela->Finance map (5 Aug) reframes this item. It is NOT simply 'more checkout URLs': her Stream 2 states the current general widget CANNOT capture campaign designation as built, and her Stream 3 proposes Homeroom membership as its own SEPARATE widget rather than three hosted links. If that holds, seams.joinTiers is the wrong model and FEAT-051/060 need re-specifying. Decision tracked as HC-078.\n4 Aug · General Donation Form embed live (non-India) — unblocks the donate widgets. Per-tier Homeroom still blocks FEAT-051."
     ],
     [
       "HC-031",
@@ -1651,9 +1847,9 @@
       "/give routing (D-03)",
       "Keela widget vs gateway/redirect — Lorna confirmation pending.",
       "Kristina / Lorna",
-      "Open",
+      "Partial",
       "High",
-      ""
+      "WAITING ON: Lorna — confirmation of the widget-vs-gateway model for Homeroom (D-03).\n5 Aug · Partly answered by Lorna's own map, which assumes embedded Keela widgets per stream rather than a redirect gateway. That is the direction we already built toward, so this is closer to confirmation than to an open question — but it has not been stated as a decision, so it stays Partial rather than Confirmed.\nInterim in production: Join Homeroom deep-links to the homepage General Donation Form with amount + frequency prefilled."
     ],
     [
       "HC-032",
@@ -1661,9 +1857,9 @@
       "Newsletter destination (D-19)",
       "Flodesk vs Keela vs custom — still open. Owner + decision date. Events page slots separately tracked as D-24 (Somesh → WoeiJing + Kristina).",
       "Comms + Eng",
-      "Open",
+      "Confirmed",
       "High",
-      "Blocks FEAT-070"
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. D-19 resolved to FLODESK and the integration is LIVE (FEAT-070, shipped 4 Aug): 11 capture points across 5 pages, double opt-in ON, segments driven by env vars. The destination question this item asked is settled.\nIMPORTANT CAVEAT — this closes 'which newsletter tool', NOT 'where every sign-up lands'. Lorna's 5 Aug map assumes event and waitlist sign-ups land in KEELA; we route them to FLODESK. That split is a separate, still-open question tracked as HC-078."
     ],
     [
       "HC-033",
@@ -1671,9 +1867,9 @@
       "School inquiry form (D-04)",
       "Google Form + Slack — already resolved. Confirm form exists / owner.",
       "Partnerships + Sam",
-      "Ready",
+      "Confirmed",
       "Medium",
-      "Resolved"
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. D-04 resolved: Google Form + Slack integration, built 31 Jul and confirmed working. Kristina then deliberately deferred the EMBED to Phase 2 (3 Aug Miro) — test the simple /schools page first, re-integrate if people do not use the form. The launch CTA is the #start mailto. Deferral is a decision, not an open item; the Phase 2 build is tracked as FEAT-041."
     ],
     [
       "HC-034",
@@ -1741,9 +1937,9 @@
       "Anik as technical sounding board",
       "Confirm availability during sprint.",
       "Sam + Anik",
-      "Ready",
+      "Confirmed",
       "Medium",
-      "Named in Slack as technical/deployment sounding board for the sprint. Confirm availability on call."
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. Anik engaged as technical sounding board and his review was answered in full — see docs/correspondence/ANIK-REVIEW-RESPONSE.md. Availability is no longer a question; it happened."
     ],
     [
       "HC-053",
@@ -1751,9 +1947,9 @@
       "Named approvers for go/no-go",
       "Design fidelity, content accuracy, legal, final launch sign-off.",
       "Kristina",
-      "Open",
+      "Confirmed",
       "High",
-      "Nav + WJ final approval gates Aug 21"
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED by Somesh. The approvers are already known and have been operating as such throughout the sprint, so the item was recording a formality rather than a gap:\n• Design fidelity — Dave (build) + Veron (visual system)\n• Content accuracy — Kristina (page list + copy), WoeiJing (programme/brand)\n• Legal — Lorna with Finance/Legal (D-08)\n• Final launch go/no-go — Nav + WoeiJing\n• Engineering readiness — Somesh\nEveryone continues to cross-check across areas; that is working practice, not an unassigned role. The go/no-go EVENT itself (not the naming of approvers) remains gated on HC-068 pre-launch QA sign-off."
     ],
     [
       "HC-054",
@@ -1771,9 +1967,9 @@
       "Audit UI/UX package vs repo",
       "Handoff package completeness.",
       "Sam",
-      "Open",
+      "Confirmed",
       "High",
-      ""
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. The UI/UX package has been audited against the repo repeatedly and in writing, which is what this item asked for: RF-006 locked-width QA across all 7 pages (31 Jul), the 4 Aug ticket-vs-acceptance-criteria audit that found 4 real gaps, HOMEPAGE-RESPONSIVE-AUDIT.md, the per-page responsive audits, and PRE-LAUNCH-QA-AUDIT.md. Gaps found by those audits are tracked as tickets rather than here."
     ],
     [
       "HC-061",
@@ -1781,9 +1977,9 @@
       "Astro scaffold + shared layout",
       "FEAT-001 / FEAT-002 — nav, footer, tokens.",
       "Sam",
-      "In Progress",
+      "Confirmed",
       "Critical",
-      "BaseLayout/Nav/Footer/tokens live; FEAT-003 drawer shipped 30 Jul"
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. FEAT-001 and FEAT-002 are both Done: BaseLayout, Nav, Footer and tokens are shared across every route, the mobile drawer shipped 30 Jul, and the last open criterion (active nav state on / and /updates) closed 5 Aug."
     ],
     [
       "HC-062",
@@ -1791,9 +1987,9 @@
       "Convert 7 Dave prototypes → production",
       "Astro multi-page build.",
       "Sam",
-      "In Progress",
+      "Confirmed",
       "Critical",
-      "All 7 pages under src/pages/; polish + seams + Slack review remain"
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. All 7 Dave prototypes are converted and live under src/pages/, and the site has since grown to 10 built routes (+ /privacy, /updates, /404). Continuing polish is tracked under FEAT-100 and the per-page tickets, not here — leaving this In Progress made a finished conversion look unfinished."
     ],
     [
       "HC-063",
@@ -1803,7 +1999,7 @@
       "Sam",
       "In Progress",
       "Critical",
-      "Homepage responsive audit done 30 Jul (docs/planning/HOMEPAGE-RESPONSIVE-AUDIT.md). Remaining pages still need pass."
+      "ON US: yes — this is our work and it is genuinely still in flight.\n5 Aug · Responsive is done: locked-width QA (320/390/759/768/940/1280) passed on every page and is recorded in HOMEPAGE-RESPONSIVE-AUDIT.md plus the per-page audits. Accessibility is NOT done: PRE-LAUNCH-QA-AUDIT.md (2 Aug) found 1 Critical / 4 Serious / 6 Moderate / 3 Minor across 8 routes, including a real keyboard trap in the /schools video lightbox. Fixes are tracked on FEAT-100."
     ],
     [
       "HC-064",
@@ -1811,9 +2007,9 @@
       "Keela + forms + newsletter wiring",
       "Donation, school inquiry, newsletter.",
       "Sam",
-      "Open",
+      "Partial",
       "Critical",
-      "Depends on D-02, D-19, Button inventory"
+      "WAITING ON: Lorna — campaign designation + per-tier Homeroom products (HC-030/075/078).\n5 Aug · Two of the three sub-items are DONE:\n• Newsletter — LIVE (Flodesk, FEAT-070, 4 Aug), 11 capture points, double opt-in ON\n• School inquiry form — RESOLVED (Google Form + Slack built; embed deliberately Phase 2 per Kristina)\n• Donations — PARTIAL: the general Keela form is live sitewide, but campaign-designated and per-tier giving cannot be wired until Lorna decides the mechanism"
     ],
     [
       "HC-065",
@@ -1831,9 +2027,9 @@
       "Analytics + SEO + Cookiebot CMP",
       "GA4, Clarity, PostHog, cookie consent — decisions already resolved.",
       "Sam",
-      "Ready",
+      "Confirmed",
       "High",
-      "Analytics stack decisions resolved (GA4 + Clarity + PostHog + Cookiebot; Osano dropped 4 Aug). Shipped and verified live 4-5 Aug rather than waiting for the Aug 10-14 window — see HC-076."
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. Analytics, SEO and the Cookiebot CMP are all shipped and verified live, ahead of the Aug 10–14 window they were scheduled for: FEAT-080 closed 7/7, FEAT-081 shipped 31 Jul. GA4, Clarity, Sentry and the Cookiebot consent bridge were each confirmed on the wire. Osano was dropped 4 Aug in favour of Cookiebot. 'Ready' understated work that is finished."
     ],
     [
       "HC-067",
@@ -1841,9 +2037,9 @@
       "Deploy + DNS cutover Aug 21",
       "Vercel + contentment.org.",
       "Sam",
-      "Open",
+      "Ready",
       "Critical",
-      "Phase 1 hard go-live"
+      "ON US: yes — fully prepared, date-gated on Aug 21, nothing outstanding from anyone else.\n5 Aug · Upgraded Open -> Ready. Everything that can be done ahead of the cutover is done:\n• vercel.json + netlify.toml CSP byte-identical and cutover-ready (OPS-001/002)\n• Build is output:'static' with no adapter — nothing host-specific to unwind\n• sitemap.xml, robots.txt, redirects in place\nMUST HAPPEN AT CUTOVER (each will silently fail if skipped):\n• Move Cookiebot's single registered domain to www.contentment.org — free tier allows ONE domain, and the banner no-ops on any other\n• Unpublish the internal docs hub (HC-077 / FEAT-102)\n• Confirm every PUBLIC_* and server-side env var is set on the production host, not just Netlify\n• Re-verify GA4 / Clarity / Sentry / Cookiebot on the production domain\nOPEN QUESTION — Lorna's 5 Aug map states a launch date of Sun 8/17; this plan says Aug 21. See HC-080."
     ],
     [
       "HC-068",
@@ -1851,9 +2047,9 @@
       "QA + launch stabilization",
       "a11y, Lighthouse ≥85, cross-browser, Nav+WJ sign-off.",
       "Sam",
-      "Open",
+      "In Progress",
       "Critical",
-      ""
+      "ON US: yes — audit complete, fixes in flight.\n5 Aug · Upgraded Open -> In Progress; the work started 2 Aug and calling it Open misrepresented that. PRE-LAUNCH-QA-AUDIT.md covers 8 routes x desktop/mobile with axe-core 4.12.1 + Lighthouse 13.4.1. Headline: 0/8 routes pass today, but the causes cluster and shared-chrome fixes clear most of them (no <main> landmark + no skip link is 2 lines in BaseLayout and fixes all 8). Mobile perf 56–75 is pure asset weight with zero TBT. Console is clean — 0 JS errors across 16 loads. Lighthouse >=85 and the Nav + WJ sign-off are the two gates still to clear."
     ],
     [
       "HC-027",
@@ -1861,9 +2057,9 @@
       "Logo SVG = live-site mark (no three dots)",
       "Nav sends SVG via Slack; Dave implements in final pages; Somesh uses same file in build (D-21).",
       "Nav → Dave → Sam",
-      "Open",
+      "Confirmed",
       "Critical",
-      "Jul 28 blocker — Dave cannot finalize pages until SVG lands."
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED by Somesh. The logo is FINALIZED and already in use across the build — the live-site mark (no three dots) is the one shipping in Nav and Footer on every route. This item was written on 28 Jul as a blocker because Dave could not finalize pages without the SVG; the SVG landed, the pages were finalized, and the item was simply never flipped. D-21 is satisfied.\nNOTE: this closes the LOGO. Anything still labelled 'live-site' that actually belongs to the contentment.org cutover (Cookiebot domain move, docs unpublish, DNS) sits on HC-067 / FEAT-101, not here."
     ],
     [
       "HC-028",
@@ -1871,9 +2067,9 @@
       "Critical-only final page review",
       "WJ + Nav flag critical design/compliance red flags in Slack #website (name the page). No copy-change requests for Phase 1 (D-22).",
       "WJ / Nav → Kristina → Dave",
-      "Open",
+      "Confirmed",
       "Critical",
-      "Flags ~1hr post-call; Kristina consolidated list EOD Jul 28; Dave applies Jul 29 AM."
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED by Somesh. The critical-only review round ran as designed and its output was absorbed: flags came back via Slack #website, Kristina consolidated them, and Dave applied the reworks. The pages have since moved several revisions past that snapshot and the substance has been accepted. Holding a 28 Jul review gate open eight days and four review rounds later was recording a process step, not a real outstanding item. Final go/no-go sign-off is a separate gate and lives on HC-053 + HC-068.\nD-22 stands: no copy-change requests for Phase 1."
     ],
     [
       "HC-042",
@@ -1913,7 +2109,7 @@
       "Kristina / Lorna",
       "Open",
       "Medium",
-      "Jul 28 action item — does not block code start but needed for sustained sprint tooling."
+      "WAITING ON: Kristina / Lorna — confirm the ~$100/month plan.\nAdministrative, does not block any build work. Tooling is in use in the meantime.\n28 Jul · Action item raised on the handoff call."
     ],
     [
       "HC-057",
@@ -1933,7 +2129,7 @@
       "Kristina",
       "Open",
       "High",
-      "Jul 28 — pairs with HC-054 SOP ownership. Target during/after sprint window."
+      "WAITING ON: Kristina — create the single Change Request form + Google Sheet.\nTarget during or after the sprint window. Pairs with HC-054 SOP ownership. Not a launch blocker, but it is what stops post-launch requests arriving as scattered Slack messages.\n28 Jul · Raised."
     ],
     [
       "HC-069",
@@ -1953,7 +2149,7 @@
       "Finance / Lorna",
       "Open",
       "Medium",
-      "Jul 29 — flagged across every page (Home, Why, Our Impact, Schools, Events, Get Involved). Push to Google Sheet + timeline."
+      "WAITING ON: Lorna / Finance — the fix is in the Keela dashboard, not in our CSS.\nShipped pages show Keela's default button colour #507b91; the brand spec is #0090bd. Visible on every page carrying a donate widget (Home, Why, Our Impact, Schools, Events, Get Involved). Cosmetic, not a launch blocker.\n29 Jul · Flagged."
     ],
     [
       "HC-071",
@@ -1963,7 +2159,7 @@
       "Lorna / Kristina",
       "Open",
       "High",
-      "Jul 29 — blocks FEAT-051, FEAT-060, and Events gated-CTA wiring. Broader than D-03 (/give routing alone). Aug 4 — General Donation Form unblocks donate widgets (FEAT-060 interim); Join Homeroom tiers + Events RSVP still blocked on this choreography."
+      "WAITING ON: Lorna / Kristina — the Homeroom join-flow choreography, and now also Lorna's Decision 1 (what membership includes).\n5 Aug · Lorna's map makes this concrete and states the dependency precisely: what membership INCLUDES sets the tax-deductible portion of the receipt, which sets the Keela designation, which sets the widget configuration. Note the price half is already settled — D-01 resolved the tiers to $25/$50/$100 on 27 Jul. What is missing is BENEFITS, not amounts.\nEvery gated CTA (Events RSVPs, Get Involved tiers) carries a data-event/data-join seam for a return-trip redirect that cannot be wired or tested until this lands. Blocks FEAT-051, FEAT-060 and Events gated CTAs. Broader than D-03, which is routing alone."
     ],
     [
       "HC-072",
@@ -1973,7 +2169,7 @@
       "Dave → Somesh",
       "Open",
       "High",
-      "Jul 29 — do not build /events to production off this drop until the second notes round lands and design is locked. Tag Dave for delivery."
+      "WAITING ON: Dave — the second round of team review notes for /events.\nDave's own handoff notes flag that a second page of notes has not been delivered. Until it lands the current events build must be treated as REVIEW-ONLY, not production-final, so FEAT-090 is Blocked rather than In Progress.\n5 Aug · Still outstanding, and now on the critical path — /events also carries the November waitlist requirement from Lorna's map (HC-079).\n29 Jul · Raised; Dave tagged for delivery."
     ],
     [
       "HC-073",
@@ -1991,9 +2187,9 @@
       "Annual Report PDFs (2019–2024) — hosting + URLs",
       "Our Impact page needs the actual report PDFs hosted with links; Somesh to supply files/links later.",
       "Somesh",
-      "Open",
+      "In Progress",
       "Medium",
-      "Jul 29 — placeholder until files are provided; does not block other Our Impact build work."
+      "ON US: yes — Somesh to supply and host the files.\n5 Aug · Upgraded Open -> In Progress; this is our own action, not a wait on anyone else. Our Impact needs the 2019–2024 Annual Report PDFs hosted with real links; placeholders are in place and do not block other Our Impact work (which is separately blocked on story content, FEAT-030)."
     ],
     [
       "HC-075",
@@ -2003,7 +2199,7 @@
       "Lorna + Somesh",
       "Partial",
       "Critical",
-      "Jul 31 opened; Aug 4 general form shipped. Remaining: per-tier Homeroom products + India."
+      "WAITING ON: Lorna — per-tier Homeroom products, and now a decision on the widget model itself.\n5 Aug · Reframed by Lorna's map. We asked for three hosted checkout URLs; her Stream 3 proposes a separate MEMBERSHIP WIDGET instead, on the grounds that Keela handles memberships better that way. Those are different integrations — one is three links in seams.joinTiers, the other is a second embed with its own configuration. Answering this is a prerequisite for FEAT-051. Tracked as HC-078.\n4 Aug · Interim shipped and working: the General Donation Form on the homepage and /why, with Get Involved Join Homeroom deep-linking $25/$50/$100 to it as monthly. India region deferred.\n31 Jul · Opened."
     ],
     [
       "HC-076",
@@ -2011,9 +2207,9 @@
       "Live GA4 / PostHog / Cookiebot / Clarity / Sentry IDs",
       "FEAT-080 (Analytics) is fully scaffolded in src/components/Analytics.astro but every tool is a no-op until its real ID/key exists: PUBLIC_GA_ID, PUBLIC_POSTHOG_KEY/HOST, PUBLIC_COOKIEBOT_ID, PUBLIC_CLARITY_ID, SENTRY_DSN.",
       "Sam",
-      "In Progress",
+      "Confirmed",
       "Critical",
-      "PLANNED: source + wire the 5 live analytics credentials so FEAT-080 stops being a no-op.\n\nDONE (4 Aug):\n• All 5 sourced and set in Netlify env vars (SENTRY_DSN confirmed added by Sam 4 Aug): GA4, PostHog key/host (US), Clarity, Cookiebot, Sentry.\n• CMP switched Osano -> Cookiebot. PUBLIC_OSANO_CUSTOMER_ID -> PUBLIC_COOKIEBOT_ID, renamed in one pass across code, .env, .env.example, ARCH 6.1, DECISIONS, this JSON.\n• Verified live on the wire: GA4 /g/collect 204 (en=page_view); Clarity r.clarity.ms/collect 204; Sentry envelope 200 x4; Cookiebot banner + consent bridge (GA4 gcs G100 -> G111).\n• PostHog NOT verified by us: init is correct (persistence 'memory') but no capture request is observable from an automated browser. Sam confirms events in the dashboard — recorded on his evidence.\n• BUG FIXED — PostHog stub never set __SV / posthog._i, so array.js ignored our config and fell back to localStorage+cookie. The DECISION-002/007 cookieless guarantee was cosmetic.\n• BUG FIXED — CSP allowed Osano only. Cookiebot also needs consentcdn on frame-src (its banner is an iframe) or it is silently blocked.\n• GOTCHA — SENTRY_DSN is read via process.env, which .env does NOT populate. A local .env alone ships zero Sentry code. PUBLIC_* vars are unaffected (import.meta.env).\n\nREMAINING:\n• Cookiebot deferred by Sam (4 Aug): config still under development and expected to change — do NOT treat current behaviour as final; full re-check required before launch.\n• Cookiebot free tier = 1 domain (now contentmentweb2.netlify.app). Must move to www.contentment.org at cutover or the banner silently no-ops.\n• Keep Cookiebot's own Google Consent Mode DISABLED — it races our gtag consent calls.\n• Resolve the test issue \"HC-076 Sentry verification error\" in Sentry (created by verification, not a real bug).\n\n5 AUG UPDATE:\n• Custom Cookiebot banner LIVE. Stock CybotMultilevel dialog no longer mounts; Cookiebot calls our cfShowCookieBanner/cfHideCookieBanner. Sources version-controlled in docs/cookiebot/ (banner.html, banner.css, banner.js) rather than living only in the vendor dashboard.\n• Banner size: 390x155 mobile / 900x90 desktop, from 374x800 (95% of a phone screen) and 1280x265 stock. ~90 lines of !important CSS that fought the vendor dialog were deleted as dead weight.\n• /privacy SHIPPED (partial, and says so on the page). Hosts the live Cookiebot declaration + a working Cookie Preferences trigger (Cookiebot.renew()). Fixes two real defects: the banner previously linked to a 404, and Cookiebot's standard copy promised withdrawal 'from the Cookie Declaration on our website' when neither existed. Legal copy (D-08/FEAT-071, Lorna + Finance/Legal) drops into a marked section; the cookie half needs no rework.\n• Consent Mode signal set completed: functionality_storage + personalization_storage (denied by default, now upgraded from Cookiebot's 'preferences' category), security_storage granted, ads_data_redaction true, url_passthrough false. Verified live: gcd moved 13p3p3p3p5l1 -> 13r3r3r3r5l1 alongside gcs G100 -> G111.\n• Cookiebot's own Google Consent Mode is NOT enabled (it is opt-in by pasting their snippet, which we deliberately did not) — so no competing gtag consent calls. GTM is not used and is not needed; gtag.js loads directly.\n• ACTION ON SAM: run a Cookiebot rescan (Cookies & Reports). The declaration currently lists only 'Necessary (4)' — the scan predates GA4/Clarity going live, so it understates what the site actually sets.\n• 5 Aug: Sentry test issue 'HC-076 Sentry verification error' RESOLVED by Sam. Cookiebot rescan running — declaration listed only Necessary (4) beforehand. If the scan still misses GA4/Clarity cookies, add them by hand (_ga, _ga_* and _clck, _clsk under Statistics): our custom banner means Cookiebot's crawler has no dialog it recognises to click, so it may never observe consent-gated cookies. PostHog needs no entry — cookieless by design per DECISION-007."
+      "ON US: nothing — closed 5 Aug. Cutover residuals moved to HC-067.\n5 Aug · CLOSED. All five credentials landed on 4 Aug and were verified live, which is exactly what this item asked for: GA4 (G-0GBRRW2MCL) /g/collect 204, Clarity r.clarity.ms/collect 204, Sentry envelope 200, Cookiebot consent bridge flipping gcs G100 -> G111, PostHog key/host set (US region). PostHog is confirmed in-dashboard by Sam; no capture request is observable from an automated browser, which is recorded as his evidence.\nTWO BUGS THIS FOUND, both real: the PostHog stub never set __SV / posthog._i, so array.js ignored our config and fell back to localStorage + cookie — the DECISION-002/007 cookieless guarantee was cosmetic. And the CSP allowed Osano only; Cookiebot also needs consentcdn on frame-src (its banner is an iframe) or it is silently blocked.\nGOTCHA worth keeping: SENTRY_DSN is read via process.env, which .env does NOT populate — a local .env alone ships zero Sentry code. PUBLIC_* vars are unaffected (import.meta.env).\n5 Aug · Sentry test issue resolved by Sam. Cookiebot rescan run; declaration now Necessary 4 / Statistics 11 / Marketing 7. Custom banner live (390x155 mobile / 900x90 desktop, from 374x800 stock).\nMOVED TO HC-067 (cutover): Cookiebot's registered domain must move to www.contentment.org — free tier is one domain and the banner silently no-ops on any other."
     ],
     [
       "HC-077",
@@ -2021,9 +2217,39 @@
       "Unpublish Project docs at production cutover",
       "Remove Footer 'Project docs' link; stop publishing public/docs (skip copy-docs.sh on prod build); remove or 404 /docs* host routes. Keep docs/ in the private GitHub repo — not publicly accessible on contentment.org.",
       "Sam",
+      "Ready",
+      "High",
+      "ON US: yes — planned and specified, executes at cutover. Nothing outstanding from anyone else.\n5 Aug · Upgraded Open -> Ready and given a ticket row (FEAT-102) so it is visible to anyone reading the Tickets tab rather than only this checklist.\nAT CUTOVER: remove the Footer 'Project docs' link; stop publishing public/docs (skip copy-docs.sh on the production build); 404 /docs* on the host; keep docs/ in the private GitHub repo only. The Netlify preview may keep /docs until cutover.\nPairs FEAT-101 / SECURITY-AND-ACCESS §8 / TECHNICAL-ARCHITECTURE §12 step 3b.\n4 Aug · Logged by Somesh."
+    ],
+    [
+      "HC-078",
+      "Integrations",
+      "Where sign-ups land: Keela or Flodesk (Lorna's Decision 2)",
+      "Lorna's 5 Aug map assumes every sign-up and payment lands in KEELA, tagged and receipted. Our build routes email capture to FLODESK (D-19, live since 4 Aug) and payments to Keela. Both cannot be the system of record for the same person without a sync, and nobody has decided which is.",
+      "Kristina / Lorna / WoeiJing",
+      "Open",
+      "Critical",
+      "WAITING ON: Kristina + Lorna + WoeiJing — one decision, then we wire it.\n5 Aug · Raised by Somesh after reviewing Lorna's map (website-keela.netlify.app).\nTHE DISCONNECT, precisely:\n• Lorna's Streams 4 and 5 say waitlist and event sign-ups must land in Keela with a tag, a confirmation email and an internal notification\n• Our /events and /updates capture posts to Flodesk via /api/newsletter, with segments 'www.contentment.org' and 'Contentment Festival'\n• Nothing currently moves a Flodesk subscriber into Keela\nTHREE WORKABLE OPTIONS:\n1. Flodesk for email capture, Keela for money only — cheapest, matches what is built today, but Lorna's tagging/notification requirements would have to be met in Flodesk instead\n2. Keela for everything — matches Lorna's map exactly; means replacing the live Flodesk capture on 5 pages and re-testing, and Flodesk's double opt-in trail would need an equivalent\n3. Both, with a sync — most work, most moving parts, and someone must own the dedupe\nCOST OF NOT DECIDING: every day this stays open, more addresses accumulate in Flodesk that may later have to be exported, deduped and re-tagged into Keela by hand — which is the exact cleanup Lorna's map warns about.\nSupersedes the narrow framing of D-24 (Events capture only) — this is sitewide."
+    ],
+    [
+      "HC-079",
+      "Content",
+      "November online event — waitlist page does not exist yet (Lorna's Decision 3)",
+      "Lorna's map Stream 4 shows a 'Waitlist page' collecting names for the November online event, with Keela tagging, a confirmation email, a post-waitlist sequence and a conversion path to registration. No such page exists in the build and it is not in the Phase 1 page list.",
+      "Kristina / Ni Luh (Cika) / Lorna",
       "Open",
       "High",
-      "Logged 4 Aug by Somesh. Pairs FEAT-101 / SECURITY §8 / TECHNICAL-ARCHITECTURE §12 step 3b. Netlify preview may keep /docs until cutover."
+      "WAITING ON: Kristina + Cika — confirm whether a dedicated waitlist page is in Phase 1 scope, and what routes where.\n5 Aug · Raised by Somesh after reviewing Lorna's map.\nWHAT EXISTS TODAY: /events has email capture — the hero 'Save my free spot' opens a shared CaptureModal to the Flodesk segment 'Contentment Festival', and three Upcoming-grid CTAs currently just scroll to #ev-signup.\nWHAT DOES NOT EXIST: a dedicated waitlist page, Keela waitlist tagging, source tracking, a post-waitlist sequence, or any conversion path to registration.\nLorna notes she and Cika began scoping the festival waitlist last week but NOT in relation to the website, so the site and the plan were never reconciled. That reconciliation is what this item is for.\nDEPENDS ON HC-078 — where the waitlist lands (Keela vs Flodesk) has to be settled first, or the page gets built twice.\nBuild effort once decided: small — the capture UI, modal and API path all already exist."
+    ],
+    [
+      "HC-080",
+      "Process",
+      "Launch date conflict — Lorna's map says 8/17, this plan says Aug 21",
+      "Lorna's 5 Aug map sets out a timeline ending 'Sun 8/17 — Launch (MVP scope)', with Keela build 8/7–8/13 and end-to-end testing 8/13–8/15. The launch plan of record has Phase 1 hard go-live on Aug 21, with the review + fixes window Aug 10–14. Four days apart, and both are being worked to.",
+      "Kristina / Nav",
+      "Open",
+      "Critical",
+      "WAITING ON: Kristina + Nav — confirm ONE date, then everything downstream re-plans against it.\n5 Aug · Raised by Somesh. This is not a documentation nit: Lorna is scheduling her Keela build, her end-to-end testing and her own capacity against 8/17, and has said explicitly that anything not decided by 8/7 moves to a post-launch list with a committed date.\nIF THE DATE IS 8/17: our review + fixes window (Aug 10–14) becomes the launch week, and the Aug 21 buffer disappears. FEAT-100 QA fixes, the Nav + WJ sign-off and the DNS cutover all compress.\nIF THE DATE IS AUG 21: Lorna gains four days, and her 8/7 decision deadline can move with it.\nALSO WORTH CHECKING WITH HER: the map labels the launch 'Sun 8/17', but 17 Aug 2026 is a MONDAY — the Sunday that week is 8/16. Her other four labels are all correct (Tue 8/4, Wed 8/5, Fri 8/7, and the 8/13–8/15 test window), so this looks like a single slipped label rather than a different week. Worth confirming she means Mon 17 Aug, because 'launch on a Sunday' and 'launch on a Monday' imply different cover arrangements."
     ]
   ],
   "reviewFeedback": [

@@ -383,23 +383,29 @@ TICKET-003  Mobile nav drawer (focus trap, aria-expanded)
 TICKET-010  Port homepage from site/index.html → /
 TICKET-004  Wire all nav + footer links (no href="#" remaining)
 TICKET-020  Build /why (longform, share CTA, Web Share API)
-TICKET-030  stories.json schema + seed data  ← wait on comms content
-TICKET-031  /stories index (door-card grid)
+TICKET-030  Our Impact data schema + seed data  ← BLOCKED on comms content
+TICKET-031  /our-impact index (door-card grid)  ← BLOCKED by 030
 TICKET-040  /schools (split layout, discovery form UI)
-TICKET-050  /give gateway (five-seat door cards)
-TICKET-060  Keela env vars + wire all CTAs  ← wait on finance URLs
-TICKET-051  /give/monthly full copy (depends on 060 + tier decision)
-TICKET-070  Newsletter integration (Flodesk embed or /api/newsletter)
-TICKET-071  /privacy + /terms (text pages)
-TICKET-080  Analytics (script + conversion events)
+TICKET-050  /getinvolved gateway (five-seat door cards)
+TICKET-060  Keela env vars + wire all CTAs  ← PARTIAL, see below
+TICKET-051  /give/monthly full copy (depends on 060 + membership benefits)
+TICKET-070  Newsletter integration (Flodesk, /api/newsletter)  ← shipped 4 Aug
+TICKET-071  /privacy (text page)  ← shipped 5 Aug, cookie half
+TICKET-074  /terms (text page)    ← BLOCKED on legal copy (D-08)
+TICKET-080  Analytics (script + conversion events)  ← closed 7/7, 4 Aug
 TICKET-100  Pre-launch QA (a11y, Lighthouse ≥85, Keela live test)
 TICKET-101  DNS cutover + production deploy
+TICKET-102  Internal /docs hub — unpublish at cutover (HC-077)
 ```
 
-**External blockers that gate engineering work:**
-- `TICKET-060` and `TICKET-051` blocked until **finance provides Keela URLs**
-- `TICKET-030` blocked until **comms provides story content** (min 3 stories with photos)
-- `TICKET-051` copy blocked until **tier amount decision** ($5/$25/$100 vs $25/$50/$100)
+> **Routes corrected 5 Aug 2026:** `/stories` → `/our-impact` (27 Jul), `/give` → `/getinvolved` (4 Aug, 301 kept). TICKET-071 split — it covered Privacy *and* Terms and was marked Done when `/privacy` shipped, which read as though `/terms` had shipped too; Terms is now TICKET-074.
+
+**External blockers that gate engineering work** *(refreshed 5 Aug 2026)*:
+- `TICKET-030` / `TICKET-031` **Blocked** until **comms provides story content** (min 3 stories with photos + permissions). `/our-impact` is live with **zero story cards** today.
+- `TICKET-060` **Partial**, `TICKET-051` **Blocked** — and the ask has been **reframed, not just delayed**. We had been requesting three per-tier hosted checkout URLs; Lorna's 5 Aug map proposes Homeroom membership as its **own Keela widget** instead. Those are different integrations — three links in `seams.joinTiers` versus a second embed with its own config — so `seams.joinTiers` may be the wrong model entirely. See HC-078.
+- `TICKET-060` also has a **confirmed** functional gap: the general donation widget **cannot capture campaign designation**, so homeroom/event/other gifts land undesignated and receipt with the wrong tax letter. Lorna states this independently in her Stream 2.
+- ~~`TICKET-051` copy blocked until tier amount decision~~ — **resolved 27 Jul**: tiers are **$25 / $50 / $100** (D-01), and the `$5` entry copy was removed 3 Aug. What is still missing is what membership **includes** (D-25), which sets the tax-deductible portion of the receipt.
+- `TICKET-070` shipped, but **where sign-ups should land is unresolved sitewide** — Lorna's map assumes Keela, we route capture to Flodesk, nothing syncs. DECISION-008 / HC-078.
 
 ---
 

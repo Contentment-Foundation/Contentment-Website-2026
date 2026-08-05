@@ -44,7 +44,11 @@ LP_PATH = ROOT / "docs/planning/launch-plan-data.json"
 FILE_A = ROOT / "docs/briefs/DEV-TIMELINE.html"      # table design
 FILE_B = ROOT / "docs/briefs/dev-timelinev2.html"    # card design
 
-EXPECTED_SLOTS = {"A": 25, "B": 25}
+# 5 Aug 2026: 25 -> 42. A "Utility pages, prototypes & ops" block was added to BOTH files
+# holding the 17 tickets that had no slot anywhere -- including four routes that are
+# publicly reachable on the preview (/404, /updates, /docs, and the two prototypes).
+# Bump this deliberately when slots are added; it is the guard that catches accidental loss.
+EXPECTED_SLOTS = {"A": 42, "B": 42}
 # 5-column decision rows in A's "Open Decisions" table. They carry <td class="id"> but are
 # not ticket rows, so they legitimately fall outside ROW_A.
 ALLOWED_UNMATCHED_A = {"D-02", "D-03"}
@@ -78,9 +82,15 @@ STAMP = re.compile(r"<strong>As of [^<]*</strong>")
 # Keys are the class SUFFIX only: ROW_A captures `tag-([a-z]+)`, so the literal "tag-" is
 # outside the group. Storing "tag-done" here would make every comparison unequal and report
 # all 25 rows as changed on every run.
+# "Partial" joined the ticket vocabulary on 5 Aug 2026, when statuses were re-cut so that
+# "In Progress" means *we* are moving and anything waiting on another person says so. It
+# reuses the progress CLASS (the work is live, not stopped) with its own LABEL, so no new
+# CSS is needed in either hand-authored file -- inventing a tag-partial/s-part class would
+# have rendered unstyled.
 STATUS_A = {
     "Done":        ("done",     "✓ Done"),
     "In Progress": ("progress", "● In progress"),
+    "Partial":     ("progress", "◐ Partial"),
     "Blocked":     ("blocked",  "⚠ Blocked"),
     "Scheduled":   ("upcoming", "○ Upcoming"),
     "Open":        ("upcoming", "○ Upcoming"),
@@ -93,6 +103,7 @@ STATUS_A = {
 STATUS_B = {
     "Done":        ("done",     "s-done",  "Done"),
     "In Progress": ("progress", "s-prog",  "In progress"),
+    "Partial":     ("progress", "s-prog",  "Partial"),
     "Blocked":     ("blocked",  "s-block", "Blocked"),
     "Scheduled":   ("upcoming", "s-up",    "Upcoming"),
     "Open":        ("upcoming", "s-up",    "Upcoming"),
@@ -136,6 +147,16 @@ _STAMP_RE = re.compile(
 
 def condense(note: str, limit: int) -> str | None:
     """Reduce a long JSON note to its most recent work-log entry, escaped for HTML."""
+    # These notes are authored in a JSON field that also reads like Markdown, but they land
+    # in HTML verbatim -- `**bold**` renders as literal asterisks in the timeline. Caught on
+    # FEAT-096, 5 Aug 2026, where "**/our-impact is the impact page**" shipped with the stars
+    # visible. Fail closed rather than silently stripping: the JSON is the source of truth and
+    # should not contain emphasis it cannot honour.
+    if "**" in note:
+        raise Fail(
+            "note contains Markdown bold (**) -- these fields render as raw HTML, so the "
+            f"asterisks would be visible. Use plain text or CAPS instead. Note: {note[:120]!r}"
+        )
     t = re.sub(r"\s+", " ", note).strip()
     t = re.sub(r"\b(PLANNED|DONE|REMAINING)\s*:\s*", "", t)
     t = t.replace("•", "·")
@@ -165,14 +186,30 @@ def condense(note: str, limit: int) -> str | None:
 def load_tickets() -> tuple[dict[str, dict], str, Counter]:
     lp = json.loads(LP_PATH.read_text(encoding="utf-8"))
     hdr, rows = lp["tickets"][0], lp["tickets"][1:]
+    # 5 Aug 2026: the single "Blocker / Note" column was split into "Where it stands"
+    # (current truth) and "History" (dated log), and a "Waiting on" column was added.
+    # Timelines take the CURRENT-TRUTH field only -- a stakeholder reading the timeline
+    # wants today's state, and the history now lives one click away on the Sheet.
     try:
         i_id, i_title = hdr.index("ID"), hdr.index("Title")
-        i_status, i_note = hdr.index("Status"), hdr.index("Blocker / Note")
+        i_status = hdr.index("Status")
+        i_note = hdr.index("Where it stands")
+        i_wait = hdr.index("Waiting on")
     except ValueError as exc:
         raise Fail(f"launch-plan-data.json tickets header changed: {hdr} ({exc})") from exc
 
+    def note_for(r):
+        # For anything not moving on our side, WHO it is waiting on is the single most
+        # useful thing a timeline can say -- so it leads, and condense() keeps it because
+        # it is the first sentence. This is the whole point of the 5 Aug status re-cut.
+        stands = r[i_note]
+        waiting = (r[i_wait] or "").strip()
+        if r[i_status] in ("Blocked", "Partial") and waiting not in ("", "—", "-"):
+            return f"Waiting on {waiting}. {stands}"
+        return stands
+
     tickets = {
-        r[i_id]: {"title": r[i_title], "status": r[i_status], "note": r[i_note]}
+        r[i_id]: {"title": r[i_title], "status": r[i_status], "note": note_for(r)}
         for r in rows
     }
     version = lp.get("meta", {}).get("version")

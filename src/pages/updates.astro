@@ -1,46 +1,287 @@
 ---
+/**
+ * /updates — standalone newsletter signup (FEAT-070).
+ * Utility-page layout aligned with /privacy and /404: short deep gradient hero,
+ * paper content bands, shared tokens. Form wires to Flodesk via NewsletterForm.
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
+
+const PROMISES = [
+  {
+    title: 'Classroom stories',
+    body: 'Real moments from educators working with wellbeing practices — not press-release fluff.',
+  },
+  {
+    title: 'Tools you can use',
+    body: 'Short practices and prompts you can try the same week, without a full programme overhaul.',
+  },
+  {
+    title: 'Invitations worth opening',
+    body: 'Occasional events, community gatherings, and ways to go deeper — only when they matter.',
+  },
+];
 ---
 <BaseLayout
   title="Contentment Updates: Stories and Tools for Educators"
   description="Subscribe to stories from the classroom, wellbeing practices, and invitations to build a more caring future for education."
 >
 
-<!-- Hero section with simple orientation line -->
-<section class="hero" id="top">
-  <div class="hero-inner wrap">
-    <div class="hero-content">
-      <h1 class="hero-q">
-        <span class="l1 anim">Stories from the classroom.</span>
-        <span class="l2 anim d1">Right to your inbox.</span>
-      </h1>
-    </div>
+<!-- 1. HERO -->
+<section class="up-hero" id="top">
+  <div class="up-motif" aria-hidden="true">
+    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect class="up-env" x="40" y="58" width="120" height="84" rx="10" />
+      <path class="up-flap" d="M46 66 L100 108 L154 66" />
+      <circle class="up-dot" cx="72" cy="118" r="4" />
+      <circle class="up-dot" cx="100" cy="118" r="4" />
+      <circle class="up-dot" cx="128" cy="118" r="4" />
+    </svg>
   </div>
-  <div class="scrollcue"><span class="dot"></span></div>
-</section>
-
-<!-- Newsletter signup section -->
-<section class="band-tight news">
-  <div class="wrap news-inner">
-    <div class="anim">
-      <h2 class="title">Wellbeing for educators, curated by us.</h2>
-      <p class="body">Practical tools you can actually use, real stories from educators working in classrooms today, and the occasional thing that makes the week feel a little lighter.</p>
-    </div>
-    <!-- `bare`: this page supplies its own .news section + heading above, so the
-         component must not render a second one (it used to, producing a nested
-         section and two headings). -->
-    <NewsletterForm source="updates_page" bare />
-  </div>
-</section>
-
-<!-- Closing copy section -->
-<section class="band">
   <div class="wrap">
-    <div class="anim">
-      <p class="lead">No noise. No spam. You can unsubscribe anytime. We respect your inbox.</p>
+    <div class="up-rail">
+      <p class="eyebrow anim">Updates</p>
+      <h1 class="up-title anim d1">Stories from the classroom.<br />Right to your inbox.</h1>
+      <p class="up-sub anim d2">
+        Wellbeing for educators, curated by us — practical, human, and easy to leave
+        whenever you want.
+      </p>
+      <div class="up-actions anim d3">
+        <a href="#subscribe" class="btn btn-primary">
+          Subscribe <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a href="#what" class="btn btn-ghost">What you&rsquo;ll get</a>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- 2. WHAT YOU'LL GET -->
+<section class="up-section" id="what">
+  <div class="wrap">
+    <div class="up-rail">
+      <span class="eyebrow anim">In each send</span>
+      <h2 class="title anim d1">Wellbeing for educators, curated by us.</h2>
+      <p class="body anim d2">
+        Practical tools you can actually use, real stories from educators working in
+        classrooms today, and the occasional thing that makes the week feel a little lighter.
+      </p>
+      <ul class="up-promises">
+        {PROMISES.map((p, i) => (
+          <li class={`up-promise anim d${Math.min(i + 1, 3)}`}>
+            <h3>{p.title}</h3>
+            <p>{p.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3. SUBSCRIBE -->
+<section class="up-subscribe news" id="subscribe">
+  <div class="wrap">
+    <div class="up-rail up-subscribe-grid">
+      <div class="anim">
+        <span class="eyebrow">Join the list</span>
+        <h2 class="title">Get the next update.</h2>
+        <p class="body">
+          One form. No noise. Unsubscribe anytime — we respect your inbox.
+        </p>
+      </div>
+      <!-- `bare`: this page supplies its own section + heading, so the component
+           must not wrap a second .news band (that used to nest two headings). -->
+      <NewsletterForm source="updates_page" bare />
+    </div>
+  </div>
+</section>
+
+<!-- 4. CLOSE -->
+<section class="up-close">
+  <div class="wrap">
+    <div class="up-rail">
+      <p class="lead anim">
+        Prefer a conversation first?
+        <a href="mailto:hello@contentment.org">hello@contentment.org</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .up-rail { max-width: 1080px; width: 100%; }
+
+  .up-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(380px, 48vh, 480px);
+    padding: clamp(112px, 14vh, 148px) 0 clamp(48px, 6vh, 64px);
+    color: #fff;
+    overflow: hidden;
+    background:
+      radial-gradient(1200px 620px at 18% 8%, rgba(31, 175, 192, .34) 0%, rgba(31, 175, 192, 0) 62%),
+      linear-gradient(140deg, var(--deep) 0%, var(--deep2, #023a54) 46%, #01374f 100%);
+  }
+  .up-hero .wrap { width: 100%; position: relative; z-index: 2; }
+  .up-hero .eyebrow { color: #9fe9f2; }
+  .up-title {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(2.3rem, 5vw, 3.5rem);
+    line-height: 1.06;
+    letter-spacing: -.005em;
+    margin-top: 14px;
+    text-wrap: balance;
+  }
+  .up-sub {
+    margin-top: 18px;
+    font-size: clamp(1.04rem, 1.35vw, 1.18rem);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, .9);
+    max-width: 52ch;
+  }
+  .up-actions { margin-top: 28px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .up-motif {
+    position: absolute;
+    right: clamp(-20px, 3vw, 6%);
+    top: 54%;
+    translate: 0 -50%;
+    width: clamp(140px, 20vw, 260px);
+    opacity: .24;
+    pointer-events: none;
+    z-index: 1;
+    animation: upFloat 10s ease-in-out infinite;
+  }
+  .up-motif svg { width: 100%; height: auto; display: block; }
+  .up-env {
+    fill: rgba(159, 233, 242, .14);
+    stroke: rgba(191, 238, 245, .55);
+    stroke-width: 3;
+  }
+  .up-flap {
+    fill: none;
+    stroke: rgba(191, 238, 245, .55);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .up-dot { fill: rgba(31, 175, 192, .65); }
+  @keyframes upFloat {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+  }
+
+  .up-section { padding: clamp(40px, 5vw, 72px) 0; }
+  .up-section .title { margin-top: 10px; }
+  .up-section .body { margin-top: 14px; max-width: 62ch; }
+
+  .up-promises {
+    list-style: none;
+    margin: 32px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .up-promise {
+    padding: 22px 20px;
+    border-top: 3px solid var(--teal);
+    background: #fff;
+    transition: transform .28s cubic-bezier(.2, .8, .2, 1), box-shadow .28s, border-color .28s;
+  }
+  .up-promise:hover {
+    transform: translateY(-3px);
+    border-top-color: var(--ocean);
+    box-shadow: 0 18px 40px -28px rgba(2, 55, 79, .55);
+  }
+  .up-promise h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.25rem;
+    color: var(--deep);
+    line-height: 1.2;
+  }
+  .up-promise p {
+    margin-top: 8px;
+    font-size: .98rem;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  .up-subscribe {
+    background: var(--mist);
+    padding: clamp(48px, 6vw, 88px) 0;
+  }
+  .up-subscribe-grid {
+    display: grid;
+    grid-template-columns: 1fr minmax(280px, 420px);
+    gap: clamp(28px, 4vw, 56px);
+    align-items: start;
+  }
+  .up-subscribe .eyebrow { color: var(--ocean); }
+  .up-subscribe .title { margin-top: 10px; color: var(--deep); }
+  .up-subscribe .body { margin-top: 12px; max-width: 42ch; }
+  /* NewsletterForm renders in a child component — pierce scope with :global */
+  .up-subscribe :global(form) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+  .up-subscribe :global(.row) { display: flex; gap: 12px; width: 100%; min-width: 0; }
+  .up-subscribe :global(input) {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    padding: .85em 1em;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+  }
+  .up-subscribe :global(input:focus) { outline: none; border-color: var(--teal); }
+  .up-subscribe :global(.btn-primary) { justify-content: center; width: 100%; }
+  .up-subscribe :global(.fine) { font-size: .84rem; color: var(--slate); opacity: .85; }
+
+  .up-close { padding: clamp(40px, 5vw, 64px) 0 clamp(56px, 7vw, 88px); }
+  .up-close .lead { max-width: 40ch; }
+  .up-close a {
+    color: var(--ocean);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color .2s;
+  }
+  .up-close a:hover { color: var(--deep); }
+
+  @media (max-width: 900px) {
+    .up-promises { grid-template-columns: 1fr; }
+    .up-subscribe-grid { grid-template-columns: 1fr; }
+    .up-motif {
+      opacity: .3;
+      right: 10px;
+      top: 78px;
+      translate: none;
+      width: clamp(100px, 30vw, 140px);
+    }
+  }
+  @media (max-width: 560px) {
+    .up-actions .btn { width: 100%; justify-content: center; }
+    .up-subscribe :global(.row) { flex-direction: column; }
+    .up-motif { width: 100px; opacity: .34; right: 8px; top: 72px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .up-motif { animation: none; }
+    .up-promise { transition: none; }
+    .up-hero .anim,
+    .up-section .anim,
+    .up-subscribe .anim,
+    .up-close .anim { opacity: 1; transform: none; }
+  }
+</style>
 
 </BaseLayout>

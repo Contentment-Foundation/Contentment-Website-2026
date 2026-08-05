@@ -387,10 +387,19 @@
   </section>
 
   <section>
-    <div class="section-title">Brand Assets — Logo, Favicon &amp; OG Images <span class="tag tag-high" style="margin-left:4px;">Not yet in repo</span></div>
+    <div class="section-title">Brand Assets — Logo, Favicon &amp; OG Images <span class="tag tag-done" style="margin-left:4px;">Logo shipped · HC-027 closed</span></div>
     <p style="font-size:12px;color:var(--slate);line-height:1.6;margin-bottom:12px;">
-      No logo file or favicon exists in <code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">site/assets/</code> today, and the JSON-LD below still points at a placeholder path
-      (<code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">/assets/logo.svg</code>). This blocks OG image production, structured data, the browser tab icon, and social profile consistency — treat it as a launch blocker, not a nice-to-have.
+      <strong>Corrected 5 Aug 2026 — the logo is in the repo and live on every page.</strong> This section previously read
+      <em>“no logo file or favicon exists in <code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">site/assets/</code> today, and the JSON-LD below still points at a placeholder path (<code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">/assets/logo.svg</code>)”</em>
+      and called it a launch blocker. All three claims were stale. <strong>Logo:</strong>
+      <code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">public/assets/logo_lockup_light.svg</code> +
+      <code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">logo_lockup_dark.svg</code>, rendered by the brand lockup in <code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">Nav.astro</code> on all 10 routes.
+      <strong>Favicon:</strong> <code style="font-family:var(--mono);font-size:10.5px;background:var(--mist);padding:1px 5px;border-radius:4px;color:var(--deep);">public/favicon.svg</code>, shipped 31 Jul with FEAT-081.
+      <strong>JSON-LD:</strong> verified in the built output as the real logo URL, not a placeholder.
+      <strong>HC-027 closed</strong> on the same evidence — the mark in use is the live-site wordmark without three dots (D-21); the item sat Open since 28 Jul only because nobody flipped it after the SVG landed.
+    </p>
+    <p style="font-size:12px;color:var(--slate);line-height:1.6;margin-bottom:12px;">
+      <strong>Still genuinely outstanding</strong> from the variant table below: the icon-only square mark, the raster PNG fallback, and the generated favicon/app-icon set. Those are real gaps, but they are polish for scrapers, legacy browsers and iOS home screens — <strong>not launch blockers</strong>, since a valid SVG favicon and a valid JSON-LD logo are both already serving.
     </p>
     <div class="grid-2" style="margin-bottom:14px;">
       <div class="col-stack">

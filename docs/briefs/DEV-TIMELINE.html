@@ -238,6 +238,7 @@
     <a href="#review">Aug 7 · Review</a>
     <a href="#fixes">Aug 10–14 · Fixes &amp; approval</a>
     <a href="#launch">Aug 17–21 · Launch</a>
+    <a href="#support">Utility pages, prototypes &amp; ops</a>
     <a href="#decisions">Open decisions</a>
     <a href="#blockers">External blockers</a>
     <a href="#phase2">Phase 1.5 / 2 / 3 pipeline</a>
@@ -759,28 +760,28 @@
       <table class="detail" style="margin-bottom:16px;">
         <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
         <tbody>
-          <tr><td class="id">FEAT-001</td><td>Extract shared layout — CSS tokens, nav, footer</td><td><span class="tag tag-done">✓ Done</span></td><td>Aug 4 — CLOSED: all 5 acceptance criteria verified against the build (tokens shared, nav/footer on all 7 routes, Google Fonts link intact…</td></tr>
-          <tr><td class="id">FEAT-002</td><td>Multi-page routing scaffold (Astro)</td><td><span class="tag tag-progress">● In progress</span></td><td>Aug 5 — GAP CLOSED + COUNT CORRECTED: the 4 Aug audit said aria-current was 'present on the other five' routes; it was actually present on SIX (/our-impact…</td></tr>
-          <tr><td class="id">FEAT-003</td><td>Mobile navigation drawer</td><td><span class="tag tag-done">✓ Done</span></td><td>Aug 4 (Somesh) — drawer links also get aria-current=page + white underline for the active route.</td></tr>
-          <tr><td class="id">FEAT-010</td><td>Migrate homepage to <code>/</code></td><td><span class="tag tag-done">✓ Done</span></td><td>Aug 4 (RF-010 Dave) — hero zoom matched Get Involved (global .hero-bg scale 1.06 / 18s).</td></tr>
-          <tr><td class="id">FEAT-011</td><td>Homepage copy audit vs messaging brief</td><td><span class="tag tag-done">✓ Done</span></td><td>Aug 3 — D-01 copy: InviteBand + homepage meta $5→$25/month (HC-041).</td></tr>
-          <tr><td class="id">FEAT-004</td><td>Wire all nav and footer links</td><td><span class="tag tag-progress">● In progress</span></td><td>Aug 3 Nav: Events RSVP → #ev-signup; school mailto; partner deck live.</td></tr>
-          <tr><td class="id">FEAT-020</td><td>Build <code>/why</code> page</td><td><span class="tag tag-progress">● In progress</span></td><td>Aug 5 — SHARE GAP CLOSED: /why now has the secondary CTA the messaging brief specifies ('Secondary CTA: Share this page', MESSAGING-AND-COPY.md /why section).</td></tr>
-          <tr><td class="id">FEAT-050</td><td>Build <code>/give</code> gateway (Get Involved)</td><td><span class="tag tag-progress">● In progress</span></td><td>Aug 4 (RF-010 Dave) — hero zoom is the reference model; Meet Jose / Homeroom video cut HELD pending WoeiJing + Kristina.</td></tr>
-          <tr><td class="id">FEAT-051</td><td>Build <code>/give/monthly</code></td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Aug 4 — still blocked on per-tier Homeroom Keela (HC-075 remainder) + D-03 routing; General Donation Form does not close this ticket.</td></tr>
+          <tr><td class="id">FEAT-001</td><td>Extract shared layout — CSS tokens, nav, footer</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED — all 5 acceptance criteria verified against the build.</td></tr>
+          <tr><td class="id">FEAT-002</td><td>Multi-page routing scaffold (Astro)</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED 5 Aug — the last failing criterion (active nav state) now passes on every route.</td></tr>
+          <tr><td class="id">FEAT-003</td><td>Mobile navigation drawer</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED — slide-in drawer in Nav.astro + nav.js with focus trap, Escape and body scroll lock.</td></tr>
+          <tr><td class="id">FEAT-010</td><td>Migrate homepage to <code>/</code></td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED — homepage live on contentmentweb2.netlify.app; Slack review passed 31 Jul (HC-057).</td></tr>
+          <tr><td class="id">FEAT-011</td><td>Homepage copy audit vs messaging brief</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED — homepage copy reconciled against MESSAGING-AND-COPY.md.</td></tr>
+          <tr><td class="id">FEAT-004</td><td>Wire all nav and footer links</td><td><span class="tag tag-progress">◐ Partial</span></td><td>Waiting on WoeiJing — destination for the 'Spread the movement' homepage door.</td></tr>
+          <tr><td class="id">FEAT-020</td><td>Build <code>/why</code> page</td><td><span class="tag tag-progress">● In progress</span></td><td>Page is live and QA'd.</td></tr>
+          <tr><td class="id">FEAT-050</td><td>Build <code>/give</code> gateway (Get Involved)</td><td><span class="tag tag-progress">◐ Partial</span></td><td>Waiting on WoeiJing + Kristina — Meet Jose / Homeroom video cut · Lorna — D-03 monthly-split routing.</td></tr>
+          <tr><td class="id">FEAT-051</td><td>Build <code>/give/monthly</code></td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Waiting on Lorna — per-tier Homeroom Keela products (HC-030/HC-075) · Kristina/Lorna — D-03 routing.</td></tr>
         </tbody>
       </table>
       <div class="section-title">Week 2 · Aug 3–7 — Our Impact, Schools, Events, About Us</div>
       <table class="detail">
         <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
         <tbody>
-          <tr><td class="id">FEAT-030</td><td>Our Impact Page data model + JSON (renamed from "Stories"; min. 3 stories)</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Renamed from 'Stories' per Kristina; comms: photos + permissions</td></tr>
-          <tr><td class="id">FEAT-031</td><td>Build <code>/our-impact</code> index — region-scroll, no map in v1</td><td><span class="tag tag-progress">● In progress</span></td><td>Aug 4 AUDIT — NOT closeable: acceptance requires 'all published stories render as cards'; /our-impact renders 0 story cards because FEAT-030 content is still…</td></tr>
-          <tr><td class="id">FEAT-040</td><td>Build <code>/schools</code> — ripple diagram, comparison table</td><td><span class="tag tag-progress">● In progress</span></td><td>Aug 4 AUDIT — NOT closeable: acceptance requires proof points 'renewal rates, Harvard, five-step model'; none of those appear on /schools.</td></tr>
+          <tr><td class="id">FEAT-030</td><td>Our Impact Page data model + JSON (renamed from "Stories"; min. 3 stories)</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Waiting on Comms / Programs — story photos + subject permissions.</td></tr>
+          <tr><td class="id">FEAT-031</td><td>Build <code>/our-impact</code> index — region-scroll, no map in v1</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Waiting on Comms / Programs — story photos + permissions, via FEAT-030.</td></tr>
+          <tr><td class="id">FEAT-040</td><td>Build <code>/schools</code> — ripple diagram, comparison table</td><td><span class="tag tag-progress">◐ Partial</span></td><td>Waiting on Kristina — proof-point copy (renewal rates, Harvard, five-step model).</td></tr>
           <tr><td class="id">FEAT-041</td><td>School discovery form</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>31 Jul — live Google Form embed on <code>/schools</code> (D-04); Slack via Forms native</td></tr>
-          <tr><td class="id">FEAT-090</td><td>Events page — filter chips, access badges</td><td><span class="tag tag-progress">● In progress</span></td><td>Aug 3 — Save my free spot / RSVP / waitlist no longer use seams.join→/give (Nav).</td></tr>
-          <tr><td class="id">FEAT-032</td><td>Individual story pages <code>/stories/[slug]</code></td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Scheduled — after FEAT-030 content lands</td></tr>
-          <tr><td class="id">FEAT-093</td><td>About Us — v1 single page</td><td><span class="tag tag-progress">● In progress</span></td><td>Aug 3 — hero uses about-hero-team-bali-july2025.jpg (same bytes as prior ab-hero-bali5; hi-res swap still pending Dave); caption "Dan in Bhutan, 2014"; Talk…</td></tr>
+          <tr><td class="id">FEAT-090</td><td>Events page — filter chips, access badges</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Waiting on Dave — second round of team review notes (HC-072); design is not locked.</td></tr>
+          <tr><td class="id">FEAT-032</td><td>Individual story pages <code>/stories/[slug]</code></td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Waiting on Comms / Programs — story content, via FEAT-030.</td></tr>
+          <tr><td class="id">FEAT-093</td><td>About Us — v1 single page</td><td><span class="tag tag-progress">◐ Partial</span></td><td>Waiting on Dave — line-by-line roster sign-off before public deploy.</td></tr>
         </tbody>
       </table>
     </details>
@@ -832,9 +833,9 @@
         <tbody>
           <tr><td class="id">FEAT-100</td><td>Bug fixes from Aug 7 review, cross-browser + mobile polish</td><td><span class="tag tag-progress">● In progress</span></td><td>Scope depends on review findings</td></tr>
           <tr><td>—</td><td>Mobile UI/UX pass (RF-006)</td><td><span class="tag tag-progress">● In progress</span></td><td>31 Jul — locked-width QA done on all 7 pages; Aug 10–14 is polish, not first pass</td></tr>
-          <tr><td class="id">FEAT-071</td><td>Privacy + Terms pages</td><td><span class="tag tag-done">✓ Done</span></td><td>Open ticket per Somesh/Kristina — does not block Aug 21 Phase 1 hard go-live (D-08)</td></tr>
-          <tr><td class="id">FEAT-080</td><td>Analytics — GA4 + Clarity + PostHog Cloud + Cookiebot CMP + Sentry</td><td><span class="tag tag-done">✓ Done</span></td><td>Aug 4 — CLOSED 7/7: last criterion ('pageviews recording on staging') verified — contentmentweb2.netlify.app serves the real gtag tag G-0GBRRW2MCL, Cookiebot…</td></tr>
-          <tr><td class="id">FEAT-081</td><td>SEO baseline — meta, OG, sitemap, favicon</td><td><span class="tag tag-done">✓ Done</span></td><td>31 Jul — per-page title/description/OG/JSON-LD, robots.txt/sitemap.xml/llms.txt/favicon.svg shipped.</td></tr>
+          <tr><td class="id">FEAT-071</td><td>Privacy + Terms pages</td><td><span class="tag tag-done">✓ Done</span></td><td>SHIPPED 5 Aug — live at /privacy.</td></tr>
+          <tr><td class="id">FEAT-080</td><td>Analytics — GA4 + Clarity + PostHog Cloud + Cookiebot CMP + Sentry</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED 7/7 — every tool live and verified on the wire, ahead of its Aug 10–14 window.</td></tr>
+          <tr><td class="id">FEAT-081</td><td>SEO baseline — meta, OG, sitemap, favicon</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED — per-page title/description/OG/JSON-LD plus robots.txt, sitemap.xml, llms.txt and favicon.svg all shipped.</td></tr>
           <tr><td>—</td><td>Cookie consent banner (Cookiebot)</td><td><span class="tag tag-progress">● In progress</span></td><td>Bundled in Analytics.astro; activates when Cookiebot ID lands (HC-076)</td></tr>
           <tr><td>—</td><td><strong>Final approval — Nav + WJ review and sign off</strong></td><td><span class="tag tag-signoff">✎ Pending sign-off</span></td><td>Unlocks DNS cutover — nothing ships without this</td></tr>
           <tr><td class="id">FEAT-041</td><td>Google Form with embedded link from website</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>31 Jul — school discovery form live on <code>/schools</code></td></tr>
@@ -855,10 +856,43 @@
       <table class="detail">
         <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
         <tbody>
-          <tr><td class="id">FEAT-060</td><td>Keela donation integration — wire all CTAs</td><td><span class="tag tag-progress">● In progress</span></td><td>Aug 4 (Somesh) — same Keela embed also on /getinvolved #donate split (no second form ID). joinTiers still preferred when set.</td></tr>
-          <tr><td class="id">FEAT-070</td><td>Newsletter live (Flodesk)</td><td><span class="tag tag-progress">● In progress</span></td><td>4 Aug — SHIPPED (unblocked without the adapter).</td></tr>
+          <tr><td class="id">FEAT-060</td><td>Keela donation integration — wire all CTAs</td><td><span class="tag tag-progress">◐ Partial</span></td><td>Waiting on Lorna — campaign-designation mechanism + per-tier Homeroom products (HC-030/075/078).</td></tr>
+          <tr><td class="id">FEAT-070</td><td>Newsletter live (Flodesk)</td><td><span class="tag tag-progress">● In progress</span></td><td>SHIPPED and live.</td></tr>
           <tr><td class="id">FEAT-100</td><td>Lighthouse ≥85 QA pass</td><td><span class="tag tag-progress">● In progress</span></td><td>—</td></tr>
-          <tr><td class="id">FEAT-101</td><td>Production deploy + DNS cutover to contentment.org</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Aug 4 — HC-077: at production cutover unpublish internal project docs — remove Footer 'Project docs' (/docs); stop copy-docs.sh / public/docs on prod build…</td></tr>
+          <tr><td class="id">FEAT-101</td><td>Production deploy + DNS cutover to contentment.org</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Scheduled for the Aug 21 hard go-live.</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </section>
+
+  <!-- UTILITY PAGES, PROTOTYPES & OPS -->
+  <section id="support">
+    <details class="phase-block" open>
+      <summary class="phase-block-head">
+        <h3><span class="chev">▾</span>Utility pages, prototypes &amp; engineering ops</h3>
+        <span class="phase-dates pd-dev">Tracked retrospectively · added 5 Aug</span>
+      </summary>
+      <p class="phase-block-note">Work that shipped or was scheduled without a ticket row, so it appeared on no timeline and nobody outside engineering could see it. Recorded here on 5 Aug — <strong>five of these routes are publicly reachable on the preview right now</strong>. Statuses and notes on this table sync from <code>launch-plan-data.json</code> like every other block.</p>
+      <table class="detail">
+        <thead><tr><th>Ticket</th><th>Task</th><th>Status</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td class="id">FEAT-072</td><td>Branded 404 page (<code>/404</code>)</td><td><span class="tag tag-done">✓ Done</span></td><td>SHIPPED 2 Aug — src/pages/404.astro.</td></tr>
+          <tr><td class="id">FEAT-073</td><td>Newsletter signup page (<code>/updates</code>)</td><td><span class="tag tag-done">✓ Done</span></td><td>SHIPPED 31 Jul — src/pages/updates.astro.</td></tr>
+          <tr><td class="id">FEAT-074</td><td>Terms of Use page (<code>/terms</code>)</td><td><span class="tag tag-blocked">⚠ Blocked</span></td><td>Waiting on Lorna + Finance/Legal — the entire terms text (D-08).</td></tr>
+          <tr><td class="id">FEAT-102</td><td>Internal docs hub (<code>/docs</code>) — unpublish at cutover</td><td><span class="tag tag-progress">● In progress</span></td><td>Live on the Netlify preview by design; must NOT be publicly reachable on contentment.org.</td></tr>
+          <tr><td class="id">FEAT-005</td><td>Button / CTA inventory — all destinations</td><td><span class="tag tag-progress">◐ Partial</span></td><td>Waiting on WoeiJing — 'Spread the movement' door · Lorna — per-tier Keela products (HC-030/075) · Kristina — Events RSVP choreography (HC-071/D-24).</td></tr>
+          <tr><td class="id">FEAT-033</td><td>Foundation Reach Map (<code>/foundation-reach-map</code>)</td><td><span class="tag tag-upcoming">○ Paused</span></td><td>Phase 2.</td></tr>
+          <tr><td class="id">FEAT-034</td><td>Story Board prototype (<code>/story-board</code>)</td><td><span class="tag tag-upcoming">○ Paused</span></td><td>Phase 2.</td></tr>
+          <tr><td class="id">FEAT-095</td><td>Press &amp; Media page (<code>/press</code>)</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Phase 2, not started.</td></tr>
+          <tr><td class="id">FEAT-096</td><td>Impact naming — resolved to <code>/our-impact</code>; no separate page</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED 5 Aug — the naming overlap is settled by Somesh: /our-impact IS the impact page, it is live, and it is already the route in use.</td></tr>
+          <tr><td class="id">FEAT-091</td><td>Homeroom gated member hub (<code>/homeroom</code>)</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Phase 2.</td></tr>
+          <tr><td class="id">FEAT-092</td><td>Homeroom access middleware (edge + password)</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Phase 2.</td></tr>
+          <tr><td class="id">FEAT-094</td><td>Campaign page template (<code>/festival/2026</code>)</td><td><span class="tag tag-upcoming">○ Upcoming</span></td><td>Phase 2.</td></tr>
+          <tr><td class="id">OPS-001</td><td>Security headers in <code>netlify.toml</code></td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED — interim Netlify security headers ahead of the Vercel cutover (TECHNICAL-ARCHITECTURE §9).</td></tr>
+          <tr><td class="id">OPS-002</td><td><code>vercel.json</code> from TECHNICAL-ARCHITECTURE §9</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED — Vercel security headers config, ready for the production cutover (FEAT-101).</td></tr>
+          <tr><td class="id">OPS-003</td><td>CI — auto-regenerate <code>contentment-home.html</code></td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED — keeps the portable single-file build in sync with site/index.html without a manual step.</td></tr>
+          <tr><td class="id">OPS-004</td><td>Generate both timeline briefs from the launch-plan JSON</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED 5 Aug — scripts/refresh-timelines.py.</td></tr>
+          <tr><td class="id">QA-001</td><td>Story Board a11y gaps — focus trap, aria-pressed, live region</td><td><span class="tag tag-done">✓ Done</span></td><td>CLOSED — fixed in the Story Board prototype ahead of the Astro migration.</td></tr>
         </tbody>
       </table>
     </details>

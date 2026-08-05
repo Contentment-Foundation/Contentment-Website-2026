@@ -189,11 +189,19 @@ All titles ≤ 60 characters. All descriptions 140–160 characters.
 
 **OG image brief:** 1200 × 630 px. Dark hero with TCF wordmark top-left. Page-specific headline in Newsreader. Teal accent. Bhutan or Kenya educator photo where appropriate. Create one per Phase 1 page.
 
-> **Dependency:** the OG image brief above can't be finalized until the logo asset in the next section ships — sequence logo delivery *before* OG image production, not in parallel.
+> **Dependency — CLEARED 5 Aug 2026.** This said the OG image brief could not be finalized until the logo shipped. The logo has shipped (see below), so OG image production is unblocked.
 
 ### Brand assets — logo, favicon & app icons
 
-**Status: not yet in the repo.** No logo file or favicon exists in `site/assets/` today, and the JSON-LD below still points at a placeholder path (`/assets/logo.svg`). This blocks OG image production, structured data, the browser tab icon, and social profile consistency — treat it as a launch blocker, not a nice-to-have.
+> **Status corrected 5 Aug 2026 — the logo IS in the repo and live on every page.** This section previously read *"not yet in the repo. No logo file or favicon exists in `site/assets/` today, and the JSON-LD below still points at a placeholder path (`/assets/logo.svg`)"* and called it a launch blocker. All three claims were stale:
+>
+> - **Logo:** `public/assets/logo_lockup_light.svg` and `logo_lockup_dark.svg`, rendered by the brand lockup in `Nav.astro` on all 10 routes (light/dark variants swap with the header state).
+> - **Favicon:** `public/favicon.svg` shipped 31 Jul with the SEO baseline (FEAT-081).
+> - **JSON-LD:** verified in the built output — `"logo":"https://www.contentment.org/assets/logo_lockup_light.svg"`. Not a placeholder.
+>
+> **HC-027 closed** on the same evidence: the mark in use is the live-site wordmark without three dots, which is what D-21 asked for. The item had been sitting Open since 28 Jul purely because nobody flipped it after the SVG landed.
+>
+> **Still genuinely outstanding** from the variant table below: the icon-only square mark, the raster PNG fallback, and the generated favicon/app-icon set (`favicon.ico`, `apple-touch-icon.png`, etc.). Those are real gaps — but they are polish for scrapers, legacy browsers and iOS home screens, **not launch blockers**, since a valid SVG favicon and a valid JSON-LD logo are both already serving.
 
 **Original logo — required variants**
 
