@@ -77,13 +77,37 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
        block, so equal-specificity rules lose the cascade. Measured 4 Aug — without
        it, max-height computed to Cookiebot's own calc(100% - 16px) and the 90x90
        logo ignored the cap entirely. */
+    /* Pin to the bottom edge. Stock CybotEdge centres the dialog with
+       top:422px + transform:translate(-187px,-211px), so on a phone it floats in
+       the MIDDLE of the screen over the content someone is trying to read. A
+       bottom bar keeps the page usable while consent is pending. */
     #CybotCookiebotDialog {
-      max-height: 58vh !important;
+      top: auto !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      transform: none !important;
+      margin: 0 auto !important;
+      max-width: 860px !important;
+      max-height: 40vh !important;
       overflow-y: auto !important;
       font-size: 0.85rem !important;
-      border-radius: 10px !important;
+      border-radius: 10px 10px 0 0 !important;
       /* Stock padding is 24px, i.e. 48px of pure vertical chrome. */
       padding: 12px !important;
+    }
+    /* Collapse the four inline consent-category toggles (122px on mobile, and the
+       single largest remaining block). This is NOT a loss of granular consent:
+       Cookiebot renders its own "Show details" link
+       (#CybotCookiebotDialogBodyEdgeMoreDetailsLink), which opens the same
+       per-category controls. Accept / Reject / Customise with "Allow all" and
+       "Deny" equally prominent is the standard compliant pattern — what would be
+       non-compliant is burying Deny or removing the details path, and neither
+       happens here. Revert this one rule if legal wants categories on first view. */
+    #CybotCookiebotDialogBodyFieldsetInnerContainer { display: none !important; }
+    #CybotCookiebotDialogBodyEdgeMoreDetailsLink {
+      font-size: 0.78rem !important;
+      text-decoration: underline !important;
     }
     /* Branding block: 208px tall on desktop, driven by a 90x90 logo. Scaled, not
        removed — free-tier terms require the attribution. */
@@ -122,24 +146,30 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
       padding: 0.5rem 0.9rem !important;
       font-size: 0.82rem !important;
     }
+    /* "Allow all" and "Deny" measured 323x44 each, stacked — two full rows plus a
+       gap. Side by side costs one row and keeps both equally prominent, which is
+       the fairness requirement. */
+    #CybotCookiebotDialogBodyLevelButtonsTable,
+    #CybotCookiebotDialogBodyLevelButtonsRow {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      gap: 0.4rem !important;
+      width: 100% !important;
+    }
+    #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll,
+    #CybotCookiebotDialogBodyButtonDecline {
+      flex: 1 1 auto !important;
+      width: auto !important;
+      min-width: 120px !important;
+      margin: 0 !important;
+    }
     @media (max-width: 600px) {
-      #CybotCookiebotDialog { max-height: 50vh !important; }
-      #CybotCookiebotDialogBodyContentText { max-height: 4.4em !important; }
-      /* The real mobile cost: the four consent-category toggles. The fieldset is
-         already flex-row, but each wrapper was full-width (374px), so they wrapped
-         to 4 rows x 62px = 248px. Two-up halves that.
-         They are NOT hidden — granular per-category choice is what makes the
-         consent valid under GDPR; only the layout changes. */
-      #CybotCookiebotDialogBodyFieldsetInnerContainer {
-        flex-wrap: wrap !important;
-        gap: 0.2rem 0.5rem !important;
+      #CybotCookiebotDialog {
+        max-height: 34vh !important;
+        border-radius: 12px 12px 0 0 !important;
       }
-      #CybotCookiebotDialogBodyFieldsetInnerContainer
-        .CybotCookiebotDialogBodyLevelButtonWrapper {
-        flex: 1 1 44% !important;
-        width: auto !important;
-        min-width: 0 !important;
-      }
+      #CybotCookiebotDialogBodyContentText { max-height: 3.6em !important; }
     }
   </style>
 )}
