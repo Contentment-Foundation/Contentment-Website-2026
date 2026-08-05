@@ -24,6 +24,7 @@ Edit these first whenever truth changed:
 ```bash
 python3 scripts/google-sheets/build-sheet-script.py   # → LaunchPlanSheet.gs EMBEDDED_JSON
 python3 scripts/refresh-launch-canvas.py              # → local canvas (not in git)
+python3 scripts/refresh-timelines.py --notes          # → both timeline HTMLs (commit these)
 ```
 
 Then remind the human:
@@ -54,8 +55,8 @@ Walk this list on every status-worthy commit. Update what applies; skip what doe
 
 | File | Update when |
 |------|-------------|
-| `DEV-TIMELINE.html` | Sprint dates, go-live, or FEAT status narrative |
-| `dev-timelinev2.html` | Same (keep both timeline HTMLs aligned) |
+| `DEV-TIMELINE.html` | **Generated — do not hand-edit status.** Run `refresh-timelines.py --notes`; it rewrites the 25 ID-keyed status spans, their notes and the `As of` stamp from the JSON |
+| `dev-timelinev2.html` | Same script does both files in one pass — they can no longer drift apart |
 | `HANDOFF-CHECKLIST.md` | Meeting outcomes / HC items that briefs still mirror (Sheet is live HC tracker) |
 | `TEAM-BRIEF.md` + `TEAM-BRIEF.html` | Team-facing status that non-eng readers need |
 | `TECH-BRIEF.md` + `TECH-BRIEF.html` | Technical narrative for stakeholders |
@@ -96,7 +97,7 @@ After editing `docs/*.html` or brief HTML sources that feed `/docs/*`, refresh l
 When the user asks to **commit** and/or **push** a status-worthy change:
 
 1. Confirm planning files above are updated (or explicitly note “code-only, no planning”).
-2. Run `build-sheet-script.py` (and canvas refresh when JSON changed).
+2. Run `build-sheet-script.py`, `refresh-timelines.py --notes` (and canvas refresh when JSON changed). `refresh-timelines.py --check` exits 1 if the timelines are stale — cheap pre-commit gate.
 3. Include planning + generated `.gs` in the commit when they changed.
 4. On push, remind: Sheet **Refresh from source** / **Force reseed** as needed.
 
@@ -105,6 +106,7 @@ When the user asks to **commit** and/or **push** a status-worthy change:
 - Canvas output under `~/.cursor/projects/.../canvases/` — regenerate only
 - `public/docs/`, `site/docs/`, `dist/` — build output
 - Don't rewrite `LaunchPlanSheet.gs` by hand — use `build-sheet-script.py`
+- Don't hand-edit timeline **status spans, note cells or the `As of` stamp** — use `refresh-timelines.py`. Everything else in those files (design, phase grouping, Gantt, chapter prose) is still hand-authored and safe to edit. A genuine divergence from JSON goes in that script's `PINS`, which prints its reason on every run so it cannot rot.
 - Don't edit only the HTML brief and skip the `.md` twin (or vice versa) when both exist — keep pairs aligned
 
 ## Keep rules mirrored
