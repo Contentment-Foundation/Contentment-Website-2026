@@ -163,7 +163,7 @@ Long-form page using existing section patterns (`.split`, `.impact`, `.quote-car
 - [ ] Passes first-time visitor test (messaging brief §5)
 - [ ] Citations: Harvard, 86%, Bhutan, Hawaiʻi renewal — link to [Evidence doc](../research/EVIDENCE-AND-RESEARCH.md) where cited
 - [ ] Uses only approved design system components
-- [ ] Share button triggers Web Share API or copy-link fallback
+- [x] Share button triggers Web Share API or copy-link fallback
 
 ---
 

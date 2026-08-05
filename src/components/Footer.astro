@@ -6,6 +6,16 @@ const getInvolvedHref = seams.join || '/getinvolved';
 const newTab = { target: '_blank', rel: 'noopener' } as const;
 const externalAttrs = (href: string) =>
   /^https?:\/\//.test(href) ? newTab : {};
+
+// FEAT-002 — current-page marking, same trailing-slash-safe normalization as Nav.astro.
+// Deliberately applied ONLY to routes whose sole site-chrome link lives in this footer
+// (today: /updates). The six Nav.astro `navLinks` routes are already marked in the header
+// and drawer; re-marking them here would announce "current page" a third time to a screen
+// reader for no added orientation. Add /privacy + /terms here when FEAT-071 lands.
+// The trailing-slash strip is load-bearing: Astro's directory build makes the build-time
+// pathname `/updates/`, so a bare `Astro.url.pathname === href` would never match.
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => pathname === href.replace(/\/$/, '');
 ---
 <footer>
   <div class="wrap">
@@ -19,7 +29,9 @@ const externalAttrs = (href: string) =>
         <a href="/about">About</a>
         <a href="/why">Why Teacher Wellbeing</a>
         <a href="/our-impact">Our Impact</a>
-        <a href="/updates">Updates</a>
+        <a href="/updates" aria-current={isCurrent('/updates') ? 'page' : undefined}>Updates</a>
+        <!-- /docs stays unmarked on purpose: it is a public/ directory index served by a
+             netlify.toml rewrite, not an Astro route, so no built page's pathname equals it. -->
         <a href="/docs">Project docs</a>
       </div>
       <div class="foot-col">

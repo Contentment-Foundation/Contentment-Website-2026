@@ -25,7 +25,11 @@ const externalAttrs = (href: string) =>
 ---
 <header id="hdr">
   <div class="wrap nav">
-    <a class="brand" href="/" aria-label="The Contentment Foundation, home">
+    <!-- FEAT-002 — `/` is not in navLinks (it has no header nav item by design), so the
+         brand lockup is the only site-chrome link to the homepage and therefore the element
+         that must carry aria-current there. Verified: no `.brand[aria-current]` rule exists
+         in global.css, so this is semantics-only and ships no visual change. -->
+    <a class="brand" href="/" aria-label="The Contentment Foundation, home" aria-current={isCurrent('/') ? 'page' : undefined}>
       <img src="/assets/logo_lockup_light.svg" alt="The Contentment Foundation" class="brand-logo--light">
       <img src="/assets/logo_lockup_dark.svg" alt="" aria-hidden="true" class="brand-logo--dark">
     </a>

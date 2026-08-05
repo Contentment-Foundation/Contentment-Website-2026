@@ -7,6 +7,20 @@
 // migration hard rules); nav/footer seams are wired centrally in src/config/seams.ts.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import KeelaDonateForm from '../components/KeelaDonateForm.astro';
+
+// TICKET-020 acceptance — "Share button triggers Web Share API or copy-link fallback"
+// (FEATURE-TICKETS.md:166), and MESSAGING-AND-COPY.md's /why spec: "Secondary CTA: Share
+// this page." Gap logged in the 4 Aug audit. Same seam shape as /about (about.astro:17-19)
+// with /why-specific copy. shareUrl matches this page's OWN canonical exactly — BaseLayout
+// renders `new URL(Astro.url.pathname, Astro.site)` and Astro's directory build emits
+// dist/why/index.html, so canonical and og:url both carry the trailing slash.
+// The mailto href is the no-JS floor and the handler's last-resort tier; everything else is
+// read off data-* so the rendered link and the script can never drift apart.
+const shareUrl = 'https://www.contentment.org/why/';
+const shareSubject = 'Why teacher wellbeing? This page answers it.';
+const shareText = 'This is why we put teachers first, and how you can too.';
+const shareBody = `${shareText} Start here: ${shareUrl}`;
+const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${encodeURIComponent(shareBody)}`;
 ---
 <BaseLayout
   title="Why Teacher Wellbeing Matters — TCF"
@@ -155,6 +169,24 @@ import KeelaDonateForm from '../components/KeelaDonateForm.astro';
       <div class="homeroom-cta anim d1">
         <span class="fine">Cancel anytime. Gifts are unrestricted.</span>
         <p class="legal">Contentment Foundation is a 501(c)(3) nonprofit (EIN 47-5432756), and your contributions are tax-deductible to the extent permitted by law. Thank you for being part of this work.</p>
+      </div>
+      <!-- TICKET-020 secondary CTA — "Primary CTA: Join Homeroom. Secondary: Share this page."
+           Sits AFTER .homeroom-cta so "Cancel anytime" stays adjacent to the Keela form it
+           describes. Uses the global .btn/.btn-ghost component (global.css:15,18-19) — the
+           same pairing schools.astro and 404.astro use on dark bands. /about's .cbtn is
+           page-scoped and would render unstyled here. Caption echoes /about's approved
+           Pass-it-On line (about.astro:150) rather than inventing new copy. -->
+      <div class="give-share anim d2">
+        <span class="fine">Can&#8217;t give today? Showing this to someone who loves a teacher helps too.</span>
+        <a
+          class="btn btn-ghost"
+          href={shareMailto}
+          data-share-page
+          data-share-url={shareUrl}
+          data-share-title={shareSubject}
+          data-share-text={shareText}
+        >Share this page</a>
+        <span class="share-status" data-share-status role="status" aria-live="polite"></span>
       </div>
     </div>
   </div>
@@ -348,6 +380,15 @@ import KeelaDonateForm from '../components/KeelaDonateForm.astro';
   #give .homeroom-head p{margin-bottom:6px}
   #give .homeroom-cta{gap:38px;margin-top:34px}
   #give .fine{max-width:var(--give-measure)}
+  /* TICKET-020 share seam — layout only. Pill styling comes entirely from the global
+     .btn/.btn-ghost component (global.css:15,18-19); nothing is added to global.css.
+     .share-status copies .nl-status's :empty-hides behaviour (global.css:561-562) without
+     the newsletter's [data-tone] colours (563-564), which are tuned for the white .news
+     band rather than this dark panel — both sit on .homeroom's `color:#fff`. */
+  #give .give-share{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px;margin-top:30px;max-width:var(--give-measure)}
+  #give .give-share .fine{flex:1 1 100%}
+  #give .share-status{font-size:.86rem;line-height:1.45;color:rgba(255,255,255,.92)}
+  #give .share-status:empty{display:none}
   @media(max-width:940px){
     .homeroom{grid-template-columns:1fr}
     .homeroom-img::after{background:linear-gradient(180deg,rgba(2,55,79,0) 70%,rgba(2,55,79,.45) 100%)}
@@ -376,6 +417,7 @@ import KeelaDonateForm from '../components/KeelaDonateForm.astro';
   // scroll, count-up are already handled globally by BaseLayout's animations.js/nav.js).
   import { initNewsletterForms } from '../scripts/newsletter.js';
   import { youtubeIframeHtml, createYoutubeIframe } from '../scripts/youtube-embed.js';
+  import { trackEvent } from '../scripts/analytics.js';
 
   // FEAT-070 — "Send me something meaningful" → Flodesk segment "www.contentment.org".
   initNewsletterForms();
@@ -422,4 +464,55 @@ import KeelaDonateForm from '../components/KeelaDonateForm.astro';
   lbClose?.addEventListener('click', closeLb);
   lb?.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
   addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
+
+  // TICKET-020 acceptance — "Share button triggers Web Share API or copy-link fallback".
+  // Analytics contract matches /about's [data-share-email] handler (about.astro:193-215):
+  // trackEvent('content_shared', { method, source }). Only source differs ('why_page');
+  // 'copy_link' is the new middle tier, so the criterion's literal "copy-link fallback"
+  // wording is met — /about only ever fires native_share / email.
+  // Tiers: Web Share -> clipboard copy -> mailto navigation.
+  // The mailto tier carries /about's Chromium workaround: empty-To `mailto:?` links often
+  // no-op once the click is handled in JS, so navigate explicitly after preventDefault().
+  // That same href is what keeps the control working with JS disabled.
+  // Copy and URL come off data-* (the dataset pattern this file already uses for [data-yt])
+  // so the frontmatter consts stay the single source and cannot drift from the rendered mailto.
+  document.querySelectorAll<HTMLAnchorElement>('[data-share-page]').forEach((el) => {
+    const status = el.closest('.give-share')?.querySelector<HTMLElement>('[data-share-status]');
+    const url = el.dataset.shareUrl || location.href;
+    const title = el.dataset.shareTitle || document.title;
+    const text = el.dataset.shareText || '';
+
+    el.addEventListener('click', async (e) => {
+      const href = el.getAttribute('href') || '';
+
+      e.preventDefault();
+
+      if (typeof navigator.share === 'function') {
+        try {
+          await navigator.share({ title, text, url });
+          trackEvent('content_shared', { method: 'native_share', source: 'why_page' });
+        } catch {
+          /* user cancelled the share sheet — leave quietly, same as /about */
+        }
+        return;
+      }
+
+      if (typeof navigator.clipboard?.writeText === 'function') {
+        try {
+          await navigator.clipboard.writeText(url);
+          trackEvent('content_shared', { method: 'copy_link', source: 'why_page' });
+          if (status) {
+            status.textContent = 'Link copied.';
+            setTimeout(() => { status.textContent = ''; }, 4000);
+          }
+          return;
+        } catch {
+          /* clipboard blocked (insecure origin / denied permission) — fall through to mailto */
+        }
+      }
+
+      trackEvent('content_shared', { method: 'email', source: 'why_page' });
+      window.location.href = href;
+    });
+  });
 </script>
