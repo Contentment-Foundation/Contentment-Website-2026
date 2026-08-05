@@ -2,148 +2,638 @@
 /**
  * /privacy — FEAT-071 / D-08.
  *
- * Deliberately a PARTIAL page, and it says so on the page itself. The full legal
- * policy (controller identity, lawful basis, retention, data-subject rights) is
- * owned by Lorna / Finance+Legal and is still an open ticket. Nothing here is
- * presented as that policy.
+ * Partial page on purpose: full legal policy (controller identity, lawful basis,
+ * retention, data-subject rights) is still owed by Lorna / Finance+Legal. The
+ * on-page notice says so — nothing here is presented as that final policy.
  *
- * What it DOES ship today is the part engineering actually knows and that the
- * cookie consent depends on:
- *   - the live Cookiebot cookie declaration (auto-generated from their scan)
- *   - a working "Cookie Preferences" trigger so consent can be withdrawn, which
- *     is what makes the banner's withdrawal promise true
- *   - an honest list of the analytics tools that run and what each stores
+ * What ships today is the cookie half engineering owns and consent depends on:
+ * Cookiebot declaration, Cookie Preferences re-open, analytics tool disclosures,
+ * and the regulatory table from DECISION-002.
  *
- * Until this existed the consent banner linked to a 404, and the standard
- * Cookiebot copy ("you can at any time change or withdraw your consent from the
- * Cookie Declaration on our website") was simply false.
- *
- * When legal copy lands, drop it into the marked section — the cookie half needs
- * no rework.
+ * Layout follows the branded utility pattern used on /404 (short deep gradient
+ * hero + paper content bands) so this page reads with the rest of the site.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const COOKIEBOT_ID = import.meta.env.PUBLIC_COOKIEBOT_ID;
+
+const TOOLS = [
+  {
+    name: 'Google Analytics 4',
+    role: 'How many people visit and which pages they read.',
+    cookies: 'Yes after consent',
+    note: 'Runs in Google\'s cookieless Consent Mode until you accept — no analytics cookies beforehand.',
+  },
+  {
+    name: 'Microsoft Clarity',
+    role: 'Anonymised heatmaps and session replays — where people get stuck.',
+    cookies: 'Yes after consent',
+    note: 'Held in a consent-denied, cookieless state until you accept.',
+  },
+  {
+    name: 'PostHog',
+    role: 'Product analytics on key interactions.',
+    cookies: 'Never',
+    note: 'Configured cookieless permanently (`persistence: memory`) — nothing kept between page loads.',
+  },
+  {
+    name: 'Sentry',
+    role: 'Error monitoring so we hear about broken pages.',
+    cookies: 'No browsing cookies',
+    note: 'Records technical error details, not browsing behaviour.',
+  },
+  {
+    name: 'Cookiebot',
+    role: 'Records your consent choice itself.',
+    cookies: 'Strictly necessary',
+    note: 'Works before you choose — required to remember (and withdraw) consent.',
+  },
+];
 ---
 <BaseLayout
   title="Privacy and Cookies — The Contentment Foundation"
   description="How The Contentment Foundation uses cookies and analytics, and how to change or withdraw your consent at any time."
 >
 
-<section class="hero hero-short" id="top">
-  <div class="hero-inner wrap">
-    <div class="hero-content">
-      <h1 class="hero-q">
-        <span class="l1 anim">Privacy &amp; cookies.</span>
-      </h1>
-    </div>
+<!-- 1. HERO — short brand gradient + subtle themed cookie motif -->
+<section class="pv-hero" id="top">
+  <div class="pv-cookie" aria-hidden="true">
+    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle class="pv-cookie-body" cx="100" cy="100" r="72" />
+      <circle class="pv-cookie-bite" cx="148" cy="52" r="28" />
+      <circle class="pv-cookie-chip" cx="78" cy="78" r="7" />
+      <circle class="pv-cookie-chip" cx="118" cy="96" r="5.5" />
+      <circle class="pv-cookie-chip" cx="88" cy="122" r="6" />
+      <circle class="pv-cookie-chip" cx="128" cy="128" r="4.5" />
+      <circle class="pv-cookie-chip" cx="70" cy="104" r="4" />
+    </svg>
   </div>
-</section>
-
-<section class="band-tight">
-  <div class="wrap prose">
-
-    <div class="anim notice" role="note">
-      <p><strong>Our full privacy policy is being finalised.</strong> The complete
-      legal text — including how we handle personal data, how long we keep it and
-      your rights over it — is in review and will be published here. In the
-      meantime, everything below about cookies and analytics is accurate and
-      current, and your consent choices work today.</p>
-      <p>Questions in the meantime: <a href="mailto:hello@contentment.org">hello@contentment.org</a></p>
-    </div>
-
-    <h2 class="title anim">Your cookie choices</h2>
-    <p class="body anim">
-      We ask before setting anything that isn't strictly necessary. You can change
-      your mind at any time — nothing is permanent.
-    </p>
-    {COOKIEBOT_ID && (
-      <p class="anim">
-        <button type="button" id="cfCookiePrefs" class="btn btn-primary">Cookie preferences</button>
+  <div class="wrap">
+    <div class="pv-rail">
+      <p class="eyebrow anim">Legal</p>
+      <h1 class="pv-title anim d1">Privacy &amp; cookies.</h1>
+      <p class="pv-sub anim d2">
+        How we use cookies and analytics on this site — and how you change or
+        withdraw your consent whenever you like.
       </p>
-    )}
-
-    <h2 class="title anim">What we use, and why</h2>
-    <p class="body anim">
-      We use a small number of tools to understand how the site is used so we can
-      improve it. We don't sell data, and we don't run advertising.
-    </p>
-    <ul class="body anim plain-list">
-      <li><strong>Google Analytics 4</strong> — how many people visit and which pages
-        they read. Runs in Google's cookieless consent mode until you accept, so no
-        analytics cookies are set beforehand.</li>
-      <li><strong>Microsoft Clarity</strong> — anonymised heatmaps and session
-        replays showing where people get stuck. Also held in a consent-denied,
-        cookieless state until you accept.</li>
-      <li><strong>PostHog</strong> — product analytics. Configured cookieless
-        permanently: it keeps nothing between page loads and sets no cookies at all.</li>
-      <li><strong>Sentry</strong> — error monitoring, so we hear about broken pages.
-        Records technical error details, not browsing behaviour.</li>
-      <li><strong>Cookiebot</strong> — records your consent choice itself. Strictly
-        necessary, which is why it works before you choose.</li>
-    </ul>
-
-    <h2 class="title anim">Cookie declaration</h2>
-    <p class="body anim">
-      This list is generated automatically from a scan of the site, so it stays
-      accurate as things change.
-    </p>
-    {COOKIEBOT_ID ? (
-      <div class="anim cookie-declaration">
-        <script
-          id="CookieDeclaration"
-          src={`https://consent.cookiebot.com/${COOKIEBOT_ID}/cd.js`}
-          type="text/javascript"
-          async
-          is:inline
-        ></script>
+      <div class="pv-actions anim d3">
+        {COOKIEBOT_ID && (
+          <button type="button" id="cfCookiePrefs" class="btn btn-primary">
+            Cookie preferences <span class="arrow" aria-hidden="true">&rarr;</span>
+          </button>
+        )}
+        <a href="mailto:hello@contentment.org" class="btn btn-ghost">Email us</a>
       </div>
-    ) : (
-      <p class="body anim"><em>The cookie declaration appears here once consent
-      management is configured.</em></p>
-    )}
-
-    <!-- ============================================================
-         LEGAL COPY GOES HERE when Lorna / Finance+Legal deliver it
-         (D-08 / FEAT-071). Expected sections: who we are and how to
-         contact us; what personal data we collect and why; lawful
-         basis; who we share it with; retention periods; your rights
-         and how to exercise them; international transfers; complaints.
-         Remove the .notice block above once this lands.
-         ============================================================ -->
-
+      <nav class="pv-jump anim d4" aria-label="On this page">
+        <a href="#choices">Your choices</a>
+        <a href="#tools">What we use</a>
+        <a href="#regions">By region</a>
+        <a href="#declaration">Declaration</a>
+      </nav>
+    </div>
   </div>
 </section>
+
+<!-- 2. STATUS — full policy still in review -->
+<section class="pv-status" id="status">
+  <div class="wrap">
+    <div class="pv-rail">
+      <div class="pv-note anim" role="note">
+        <p class="pv-note-label">In progress</p>
+        <p><strong>Our full privacy policy is being finalised.</strong> The complete
+          legal text — who we are, what personal data we handle, how long we keep it,
+          and your rights over it — is in review and will be published here.</p>
+        <p>Everything below about cookies and analytics is accurate and current.
+          Your consent choices work today. Questions:
+          <a href="mailto:hello@contentment.org">hello@contentment.org</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. YOUR CHOICES -->
+<section class="pv-section" id="choices">
+  <div class="wrap">
+    <div class="pv-rail">
+      <span class="eyebrow anim">Your control</span>
+      <h2 class="title anim d1">Change your mind anytime.</h2>
+      <p class="body anim d2">
+        We ask before setting anything that isn&rsquo;t strictly necessary. Nothing is
+        permanent — reopen Cookie Preferences from this page whenever you want to
+        update or withdraw consent.
+      </p>
+      {COOKIEBOT_ID && (
+        <p class="anim d3 pv-inline-cta">
+          <button type="button" id="cfCookiePrefsSecondary" class="btn btn-primary">
+            Cookie preferences <span class="arrow" aria-hidden="true">&rarr;</span>
+          </button>
+        </p>
+      )}
+    </div>
+  </div>
+</section>
+
+<!-- 4. TOOLS -->
+<section class="pv-tools" id="tools">
+  <div class="wrap">
+    <div class="pv-rail">
+      <span class="eyebrow anim">What runs</span>
+      <h2 class="title anim d1">What we use, and why.</h2>
+      <p class="body anim d2">
+        A small set of tools to understand how the site is used so we can improve
+        it. We don&rsquo;t sell data, and we don&rsquo;t run advertising.
+      </p>
+      <ul class="pv-tool-list">
+        {TOOLS.map((t, i) => (
+          <li class={`pv-tool anim d${Math.min(i + 1, 3)}`}>
+            <button
+              type="button"
+              class="pv-tool-btn"
+              aria-expanded="false"
+              aria-controls={`pv-tool-note-${i}`}
+              id={`pv-tool-${i}`}
+            >
+              <span class="pv-tool-head">
+                <span class="pv-tool-name">{t.name}</span>
+                <span class="pv-chip">{t.cookies}</span>
+              </span>
+              <span class="pv-tool-role">{t.role}</span>
+              <span class="pv-tool-more" aria-hidden="true">Details</span>
+            </button>
+            <div class="pv-tool-panel" id={`pv-tool-note-${i}`} hidden>
+              <p class="pv-tool-note">{t.note}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 5. REGULATORY ALIGNMENT (DECISION-002) -->
+<section class="pv-section" id="regions">
+  <div class="wrap">
+    <div class="pv-rail">
+      <span class="eyebrow anim">Where this applies</span>
+      <h2 class="title anim d1">How we comply by region.</h2>
+      <div class="pv-table-wrap anim d2" role="region" aria-label="Regulatory alignment by region">
+        <table class="pv-table">
+          <thead>
+            <tr>
+              <th scope="col">Region</th>
+              <th scope="col">Regulation</th>
+              <th scope="col">How we comply</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>EU</td>
+              <td>GDPR + ePrivacy</td>
+              <td>Cookiebot CMP; no non-essential cookies before consent; GA4 Consent Mode v2</td>
+            </tr>
+            <tr>
+              <td>UK</td>
+              <td>UK GDPR + PECR</td>
+              <td>Same as EU — Cookiebot geo-targets EU/UK visitors</td>
+            </tr>
+            <tr>
+              <td>US (California)</td>
+              <td>CCPA / CPRA</td>
+              <td>Disclosure of analytics tools on this page; link to cookie preferences</td>
+            </tr>
+            <tr>
+              <td>Rest of world</td>
+              <td>Best practice</td>
+              <td>This page + Cookiebot preferences available sitewide</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. COOKIE DECLARATION -->
+<section class="pv-section" id="declaration">
+  <div class="wrap">
+    <div class="pv-rail">
+      <span class="eyebrow anim">Live scan</span>
+      <h2 class="title anim d1">Cookie declaration.</h2>
+      <p class="body anim d2">
+        Generated automatically from a scan of the site, so it stays accurate as
+        things change.
+      </p>
+      {COOKIEBOT_ID ? (
+        <div class="anim d3 cookie-declaration">
+          <script
+            id="CookieDeclaration"
+            src={`https://consent.cookiebot.com/${COOKIEBOT_ID}/cd.js`}
+            type="text/javascript"
+            async
+            is:inline
+          ></script>
+        </div>
+      ) : (
+        <p class="body anim d3"><em>The cookie declaration appears here once consent
+          management is configured.</em></p>
+      )}
+    </div>
+  </div>
+</section>
+
+<!-- 7. CLOSE -->
+<section class="pv-close" id="contact">
+  <div class="wrap">
+    <div class="pv-rail">
+      <h2 class="title anim">Still have a question?</h2>
+      <p class="lead anim d1">
+        Write to
+        <a href="mailto:hello@contentment.org">hello@contentment.org</a>
+        and we&rsquo;ll point you to the right person.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     LEGAL COPY GOES HERE when Lorna / Finance+Legal deliver it
+     (D-08 / FEAT-071). Expected sections: who we are and how to
+     contact us; what personal data we collect and why; lawful
+     basis; who we share it with; retention periods; your rights
+     and how to exercise them; international transfers; complaints.
+     Remove the .pv-status notice above once this lands.
+     ============================================================ -->
 
 {COOKIEBOT_ID && (
   <script is:inline>
     // Re-opens the consent banner. Cookiebot.renew() is the documented API and
     // works with our custom banner, since Cookiebot calls cfShowCookieBanner().
-    document.getElementById('cfCookiePrefs')?.addEventListener('click', function () {
+    function cfOpenCookiePrefs() {
       if (window.Cookiebot && typeof window.Cookiebot.renew === 'function') {
         window.Cookiebot.renew();
       }
-    });
+    }
+    document.getElementById('cfCookiePrefs')?.addEventListener('click', cfOpenCookiePrefs);
+    document.getElementById('cfCookiePrefsSecondary')?.addEventListener('click', cfOpenCookiePrefs);
   </script>
 )}
 
+<script is:inline>
+  // Expand / collapse tool detail panels — one open at a time.
+  document.querySelectorAll('.pv-tool-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      document.querySelectorAll('.pv-tool-btn').forEach(function (other) {
+        if (other === btn) return;
+        other.setAttribute('aria-expanded', 'false');
+        var op = document.getElementById(other.getAttribute('aria-controls'));
+        if (op) op.hidden = true;
+        other.closest('.pv-tool')?.classList.remove('is-open');
+      });
+      btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      if (panel) panel.hidden = expanded;
+      btn.closest('.pv-tool')?.classList.toggle('is-open', !expanded);
+    });
+  });
+</script>
+
 <style>
-  .hero-short { min-height: 46vh; }
-  .prose { max-width: 68ch; }
-  .prose h2 { margin-top: 2.2rem; }
-  .prose p { margin-bottom: 1rem; }
-  .notice {
-    background: rgba(31, 175, 192, .08);
-    border-left: 4px solid var(--teal);
-    border-radius: 8px;
-    padding: 1rem 1.15rem;
-    margin-bottom: 2rem;
+  /* One content rail — near full .wrap so desktop doesn’t leave a huge empty right gutter */
+  .pv-rail { max-width: 1080px; width: 100%; }
+
+  /* Short branded hero — same gradient vocabulary as /404 .nf */
+  .pv-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(380px, 48vh, 480px);
+    padding: clamp(112px, 14vh, 148px) 0 clamp(48px, 6vh, 64px);
+    color: #fff;
+    overflow: hidden;
+    background:
+      radial-gradient(1200px 620px at 18% 8%, rgba(31, 175, 192, .34) 0%, rgba(31, 175, 192, 0) 62%),
+      linear-gradient(140deg, var(--deep) 0%, var(--deep2, #023a54) 46%, #01374f 100%);
   }
-  .notice p { margin-bottom: .6rem; }
-  .notice p:last-child { margin-bottom: 0; }
-  .plain-list { padding-left: 1.15rem; }
-  .plain-list li { margin-bottom: .6rem; }
-  .cookie-declaration { margin-top: 1rem; overflow-x: auto; }
+  .pv-hero .wrap { width: 100%; position: relative; z-index: 2; }
+  .pv-hero .eyebrow { color: #9fe9f2; }
+  .pv-title {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(2.4rem, 5.2vw, 3.6rem);
+    line-height: 1.04;
+    letter-spacing: -.005em;
+    margin-top: 14px;
+    text-wrap: balance;
+  }
+  .pv-sub {
+    margin-top: 18px;
+    font-size: clamp(1.04rem, 1.35vw, 1.18rem);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, .9);
+    max-width: 62ch;
+  }
+  .pv-actions { margin-top: 28px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+  /* Subtle themed cookie — brand teal/mint, decorative only */
+  .pv-cookie {
+    position: absolute;
+    right: clamp(-24px, 2vw, 6%);
+    top: 58%;
+    translate: 0 -50%;
+    width: clamp(110px, 28vw, 280px);
+    opacity: .28;
+    pointer-events: none;
+    z-index: 1;
+    animation: pvCookieFloat 9s ease-in-out infinite;
+  }
+  .pv-cookie svg { width: 100%; height: auto; display: block; }
+  .pv-cookie-body {
+    fill: rgba(159, 233, 242, .18);
+    stroke: rgba(191, 238, 245, .55);
+    stroke-width: 3;
+  }
+  .pv-cookie-bite { fill: var(--deep, #024E70); }
+  .pv-cookie-chip { fill: rgba(31, 175, 192, .55); }
+  @keyframes pvCookieFloat {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-12px) rotate(3deg); }
+  }
+
+  /* In-page jump links */
+  .pv-jump {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pv-jump a {
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: rgba(255, 255, 255, .88);
+    border: 1px solid rgba(255, 255, 255, .28);
+    border-radius: 999px;
+    padding: .45em .95em;
+    transition: background .25s, border-color .25s, color .25s, transform .25s;
+  }
+  .pv-jump a:hover,
+  .pv-jump a:focus-visible {
+    background: rgba(255, 255, 255, .12);
+    border-color: rgba(255, 255, 255, .55);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  /* Tighter vertical rhythm than global .band — this is a dense legal page */
+  .pv-status { padding: clamp(36px, 4.5vw, 56px) 0 clamp(20px, 2.5vw, 28px); }
+  .pv-section { padding: clamp(40px, 5vw, 64px) 0; }
+  .pv-tools { background: #fff; padding: clamp(40px, 5vw, 64px) 0; }
+  .pv-close { padding: clamp(40px, 5vw, 64px) 0 clamp(56px, 7vw, 88px); }
+
+  .pv-section .title,
+  .pv-tools .title,
+  .pv-close .title { margin-top: 10px; }
+  .pv-section .body,
+  .pv-tools .body { margin-top: 14px; max-width: 68ch; }
+  .pv-close .lead { margin-top: 12px; max-width: 60ch; }
+  .pv-inline-cta { margin-top: 24px; }
+
+  /* Status notice — teal rule, not a floating card */
+  .pv-note {
+    padding: 2px 0 2px 20px;
+    border-left: 3px solid var(--teal);
+    transition: border-color .3s;
+  }
+  .pv-note:hover { border-left-color: var(--ocean); }
+  .pv-note-label {
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ocean);
+    margin-bottom: 8px;
+  }
+  .pv-note p { color: var(--slate); font-size: 1.05rem; line-height: 1.55; margin-bottom: .75em; }
+  .pv-note p:last-child { margin-bottom: 0; }
+  .pv-note a {
+    color: var(--ocean);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color .2s;
+  }
+  .pv-note a:hover { color: var(--deep); }
+
+  /* Interactive tool accordion */
+  .pv-tool-list {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .pv-tool {
+    border-bottom: 1px solid var(--line);
+    transition: background .28s ease, box-shadow .28s ease;
+  }
+  .pv-tool.is-open,
+  .pv-tool:hover {
+    background: rgba(31, 175, 192, .05);
+  }
+  .pv-tool-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: 0;
+    padding: 18px 8px;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    transition: padding .25s ease;
+  }
+  .pv-tool.is-open .pv-tool-btn { padding-bottom: 10px; }
+  .pv-tool-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .pv-tool-name {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.28rem;
+    color: var(--deep);
+    line-height: 1.2;
+    transition: color .25s;
+  }
+  .pv-tool:hover .pv-tool-name,
+  .pv-tool.is-open .pv-tool-name { color: var(--ocean); }
+  .pv-chip {
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ocean);
+    white-space: nowrap;
+    border: 1px solid rgba(0, 128, 176, .22);
+    border-radius: 999px;
+    padding: .28em .7em;
+    transition: background .25s, border-color .25s;
+  }
+  .pv-tool.is-open .pv-chip,
+  .pv-tool:hover .pv-chip {
+    background: rgba(31, 175, 192, .12);
+    border-color: rgba(0, 128, 176, .4);
+  }
+  .pv-tool-role {
+    display: block;
+    margin-top: 6px;
+    font-size: 1.02rem;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .pv-tool-more {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ocean);
+    transition: transform .25s, opacity .25s;
+  }
+  .pv-tool-more::after { content: ' +'; }
+  .pv-tool.is-open .pv-tool-more::after { content: ' −'; }
+  .pv-tool-panel {
+    padding: 0 8px 18px;
+    animation: pvPanelIn .32s ease;
+  }
+  .pv-tool-note {
+    margin: 0;
+    font-size: .96rem;
+    color: var(--slate);
+    line-height: 1.55;
+    max-width: 68ch;
+    padding-left: 14px;
+    border-left: 2px solid var(--teal);
+  }
+  @keyframes pvPanelIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* Compliance table — ours; fills the same rail */
+  .pv-table-wrap { margin-top: 22px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .pv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .95rem;
+    table-layout: fixed;
+  }
+  .pv-table th,
+  .pv-table td {
+    text-align: left;
+    vertical-align: top;
+    padding: 12px 18px 12px 0;
+    border-bottom: 1px solid var(--line);
+    transition: background .22s ease, color .22s ease;
+  }
+  .pv-table tbody tr { transition: background .22s ease; }
+  .pv-table tbody tr:hover td { background: rgba(31, 175, 192, .06); }
+  .pv-table th {
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ocean);
+  }
+  .pv-table th:nth-child(1),
+  .pv-table td:nth-child(1) { width: 22%; }
+  .pv-table th:nth-child(2),
+  .pv-table td:nth-child(2) { width: 26%; }
+  .pv-table th:nth-child(3),
+  .pv-table td:nth-child(3) { width: 52%; }
+  .pv-table td:first-child {
+    font-weight: 600;
+    color: var(--deep);
+  }
+  .pv-table td { color: var(--slate); line-height: 1.45; }
+
+  /* Cookiebot-injected declaration — we only style the wrapper */
+  .cookie-declaration {
+    margin-top: 1.2rem;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, .7);
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .cookie-declaration:hover {
+    border-color: rgba(31, 175, 192, .45);
+    box-shadow: 0 12px 32px -24px rgba(2, 78, 112, .45);
+  }
+
+  .pv-close .title { color: var(--deep); }
+  .pv-close a {
+    color: var(--ocean);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color .2s;
+  }
+  .pv-close a:hover { color: var(--deep); }
+
+  @media (max-width: 900px) {
+    .pv-cookie {
+      opacity: .34;
+      right: 8px;
+      top: 88px;
+      bottom: auto;
+      translate: none;
+      width: clamp(112px, 32vw, 152px);
+    }
+    .pv-cookie-body {
+      fill: rgba(159, 233, 242, .28);
+      stroke: rgba(191, 238, 245, .75);
+      stroke-width: 3.5;
+    }
+    .pv-cookie-chip { fill: rgba(85, 220, 230, .7); }
+  }
+  @media (max-width: 720px) {
+    .pv-table { table-layout: auto; min-width: 520px; }
+    .pv-cookie {
+      display: block;
+      opacity: .4;
+      right: 10px;
+      top: 76px;
+      bottom: auto;
+      width: 108px;
+    }
+  }
+  @media (max-width: 560px) {
+    .pv-actions .btn,
+    .pv-inline-cta .btn { width: 100%; justify-content: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pv-cookie { animation: none; }
+    .pv-tool-panel { animation: none; }
+    .pv-jump a,
+    .pv-tool,
+    .pv-tool-btn,
+    .pv-chip,
+    .pv-table tbody tr,
+    .pv-table td,
+    .cookie-declaration { transition: none; }
+    .pv-hero .anim,
+    .pv-status .anim,
+    .pv-section .anim,
+    .pv-tools .anim,
+    .pv-close .anim { opacity: 1; transform: none; }
+  }
 </style>
 
 </BaseLayout>
