@@ -140,7 +140,19 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
       max-height: 5.5em !important;
       overflow-y: auto !important;
     }
-    #CybotCookiebotDialogBodyContent { padding: 0.6rem 0.9rem !important; }
+    #CybotCookiebotDialogBodyContent { padding: 0.4rem 0.9rem !important; }
+    /* Last of the fat: TabContent measured 190px on desktop wrapping a 118px
+       BodyContent, and 157 vs 94 on mobile — ~70px and ~63px of vertical padding
+       and a 60px min-height. Horizontal margin is preserved (it separates the body
+       from the branding column); only the vertical slack goes. */
+    #CybotCookiebotDialogTabContent,
+    #CybotCookiebotDialogBody {
+      min-height: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+    }
     #CybotCookiebotDialogBodyButtonDecline,
     #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll,
     #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection,
