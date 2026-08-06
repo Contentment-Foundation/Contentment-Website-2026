@@ -22,6 +22,16 @@ A status must answer **"is anyone on our side moving on this?"** Before 5 Aug, t
 - **Ticket notes are two fields:** `Where it stands` (current truth, bulleted, no history) and `History` (dated bullets, newest first). Do not merge them back — the merged field had grown to ~1,400 characters on FEAT-002 and nobody read it.
 - **Adding a status value means touching three places** or a generator fails closed: `STATUS_OPTIONS.tickets` in `LaunchPlanSheet.gs`, and `STATUS_A` + `STATUS_B` in `refresh-timelines.py` (unknown status = hard error, by design).
 
+## Row order (IDs ascending) — added 6 Aug 2026
+
+New rows get **appended**, so the tables drift out of order. By 6 Aug the Handoff Checklist read `HC-001…HC-068`, then `HC-027, HC-028, HC-042…` — unusable to scan on the Sheet.
+
+**`build-sheet-script.py` now sorts `tickets`, `handoffChecklist`, `decisions` and `reviewFeedback` ascending on every run and writes the order back to the JSON.** Nothing to remember: add a row wherever is convenient, run the sync chain, and it lands in the right place.
+
+- Sort is **natural**, not string — `HC-3 → HC-20 → HC-100`, and prefixes group (`FEAT-*`, then `OPS-*`, then `QA-*`).
+- **Duplicate IDs are a hard error** and refuse to write, since a duplicate on the Sheet silently shadows a real row.
+- Sorting may only **reorder** — a guard refuses to write if the row set changes at all.
+
 ## Always (source of truth)
 
 Edit these first whenever truth changed:

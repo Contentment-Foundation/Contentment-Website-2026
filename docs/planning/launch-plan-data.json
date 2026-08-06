@@ -1832,6 +1832,26 @@
       "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED. Every review round that arrived has been processed and closed out: RF-006 (mobile UI/UX, all 7 pages), RF-008 (Kristina, video lightbox) and RF-010 (Dave, 3 Aug notes). Anything still open from those rounds now has its own ticket rather than sitting as an unresolved thread — HC-072 (Dave's second Events notes round) is the one genuine outstanding item and is tracked separately.\n28 Jul · Critical-only red flags via Slack #website; Kristina collated EOD, Dave reworked 29 Jul AM."
     ],
     [
+      "HC-027",
+      "Design handoff",
+      "Logo SVG = live-site mark (no three dots)",
+      "Nav sends SVG via Slack; Dave implements in final pages; Somesh uses same file in build (D-21).",
+      "Nav → Dave → Somesh",
+      "Confirmed",
+      "Critical",
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED by Somesh. The logo is FINALIZED and already in use across the build — the live-site mark (no three dots) is the one shipping in Nav and Footer on every route. This item was written on 28 Jul as a blocker because Dave could not finalize pages without the SVG; the SVG landed, the pages were finalized, and the item was simply never flipped. D-21 is satisfied.\nNOTE: this closes the LOGO. Anything still labelled 'live-site' that actually belongs to the contentment.org cutover (Cookiebot domain move, docs unpublish, DNS) sits on HC-067 / FEAT-101, not here."
+    ],
+    [
+      "HC-028",
+      "Design handoff",
+      "Critical-only final page review",
+      "WJ + Nav flag critical design/compliance red flags in Slack #website (name the page). No copy-change requests for Phase 1 (D-22).",
+      "WJ / Nav → Kristina → Dave",
+      "Confirmed",
+      "Critical",
+      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED by Somesh. The critical-only review round ran as designed and its output was absorbed: flags came back via Slack #website, Kristina consolidated them, and Dave applied the reworks. The pages have since moved several revisions past that snapshot and the substance has been accepted. Holding a 28 Jul review gate open eight days and four review rounds later was recording a process step, not a real outstanding item. Final go/no-go sign-off is a separate gate and lives on HC-053 + HC-068.\nD-22 stands: no copy-change requests for Phase 1."
+    ],
+    [
       "HC-030",
       "Integrations",
       "Keela production checkout URLs (D-02)",
@@ -1912,6 +1932,26 @@
       "Confirmed — D-01 $25/$50/$100 (Kristina). Aug 3 Somesh: homepage InviteBand + meta updated $5→$25; Give tiers + donate chips already matched. Still audit any stray $5 in briefs/docs; benefits language Events vs Give may still differ (Nav Homeroom proposition ask)."
     ],
     [
+      "HC-042",
+      "Content",
+      "Priscilla duplicate quote → Phase 2",
+      "Leave duplicate quote as-is for launch; replacement deferred.",
+      "Content",
+      "Confirmed",
+      "Medium",
+      "Confirmed Jul 28 — Phase 2."
+    ],
+    [
+      "HC-043",
+      "Content",
+      "Copy changes excluded from Phase 1",
+      "Only critical design/compliance red flags accepted before freeze (D-22).",
+      "All",
+      "Confirmed",
+      "High",
+      "Confirmed Jul 28 handoff."
+    ],
+    [
       "HC-050",
       "Process",
       "Dev sprint dates Jul 28–Aug 7 confirmed",
@@ -1960,6 +2000,46 @@
       "Confirmed",
       "Medium",
       "Confirmed — Somesh edits via Claude/Cursor + GitHub; Kristina creating single CR form + Google Sheet to track all future website change requests."
+    ],
+    [
+      "HC-055",
+      "Process",
+      "Framework sign-off (React vs Astro)",
+      "Resolved Jul 29 — Somesh signed off directly in place of the pending Nick confirmation, delegating the technical call to Engineering. Decision: Astro 4.x, no React (D-23).",
+      "Somesh / Somesh",
+      "Confirmed",
+      "Critical",
+      "Unblocks FEAT-002 — scaffold choice no longer pending external sign-off."
+    ],
+    [
+      "HC-056",
+      "Process",
+      "Claude AI subscription for Somesh",
+      "Kristina confirms ~$100/month plan with Lorna.",
+      "Kristina / Lorna",
+      "Confirmed",
+      "Medium",
+      "ON US: nothing — closed 6 Aug.\n6 Aug · CLOSED by Somesh — subscription purchased and submitted to Ramp for reimbursement. Never blocked build work; the tooling was in use throughout."
+    ],
+    [
+      "HC-057",
+      "Process",
+      "Homepage-first build + Slack review",
+      "Somesh builds homepage (desktop + mobile responsive) first; share on Slack for team review before remaining pages.",
+      "Somesh",
+      "Confirmed",
+      "Critical",
+      "Confirmed Jul 28. Gate cleared 31 Jul — Kristina's Slack message (\"finished the Homepage... timeline to finish the other pages?\") taken as review sign-off, incl. mobile. RF-004/RF-005 closed. Cleared to proceed on remaining pages (see RF-006)."
+    ],
+    [
+      "HC-058",
+      "Process",
+      "Website Change Request form + Sheet",
+      "Kristina creates single form + Google Sheet to track all future website change requests.",
+      "Kristina",
+      "Open",
+      "High",
+      "WAITING ON: Kristina — create the single Change Request form + Google Sheet.\nTarget during or after the sprint window. Pairs with HC-054 SOP ownership. Not a launch blocker, but it is what stops post-launch requests arriving as scattered Slack messages.\n28 Jul · Raised."
     ],
     [
       "HC-060",
@@ -2050,86 +2130,6 @@
       "Partial",
       "Critical",
       "WAITING ON: Dave — optimised source exports (WebP, correctly-sized heroes, compression). Everything else is done or is a manual pass on us.\n6 Aug · A11Y HALF DONE (see HC-063, FEAT-100).\n6 Aug · PERF HALF: the three items measured as ours are now FIXED — 2,187 KB of inline base64 extracted to real files, 98/98 images given intrinsic dimensions with the required height:auto pairing, Google Fonts moved off the critical path, and Keela's third-party CSS removed from the 7 routes that never used it. The assumption that this was Dave's asset problem was worth checking: the large majority was markup and loading strategy.\nSTILL OPEN: optimised exports from Dave; manual screen-reader pass; text-over-image contrast; and a Lighthouse re-run to confirm the >= 85 gate now clears. Nav + WoeiJing sign-off remains an external gate."
-    ],
-    [
-      "HC-027",
-      "Design handoff",
-      "Logo SVG = live-site mark (no three dots)",
-      "Nav sends SVG via Slack; Dave implements in final pages; Somesh uses same file in build (D-21).",
-      "Nav → Dave → Somesh",
-      "Confirmed",
-      "Critical",
-      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED by Somesh. The logo is FINALIZED and already in use across the build — the live-site mark (no three dots) is the one shipping in Nav and Footer on every route. This item was written on 28 Jul as a blocker because Dave could not finalize pages without the SVG; the SVG landed, the pages were finalized, and the item was simply never flipped. D-21 is satisfied.\nNOTE: this closes the LOGO. Anything still labelled 'live-site' that actually belongs to the contentment.org cutover (Cookiebot domain move, docs unpublish, DNS) sits on HC-067 / FEAT-101, not here."
-    ],
-    [
-      "HC-028",
-      "Design handoff",
-      "Critical-only final page review",
-      "WJ + Nav flag critical design/compliance red flags in Slack #website (name the page). No copy-change requests for Phase 1 (D-22).",
-      "WJ / Nav → Kristina → Dave",
-      "Confirmed",
-      "Critical",
-      "ON US: nothing — closed 5 Aug.\n5 Aug · CLOSED by Somesh. The critical-only review round ran as designed and its output was absorbed: flags came back via Slack #website, Kristina consolidated them, and Dave applied the reworks. The pages have since moved several revisions past that snapshot and the substance has been accepted. Holding a 28 Jul review gate open eight days and four review rounds later was recording a process step, not a real outstanding item. Final go/no-go sign-off is a separate gate and lives on HC-053 + HC-068.\nD-22 stands: no copy-change requests for Phase 1."
-    ],
-    [
-      "HC-042",
-      "Content",
-      "Priscilla duplicate quote → Phase 2",
-      "Leave duplicate quote as-is for launch; replacement deferred.",
-      "Content",
-      "Confirmed",
-      "Medium",
-      "Confirmed Jul 28 — Phase 2."
-    ],
-    [
-      "HC-043",
-      "Content",
-      "Copy changes excluded from Phase 1",
-      "Only critical design/compliance red flags accepted before freeze (D-22).",
-      "All",
-      "Confirmed",
-      "High",
-      "Confirmed Jul 28 handoff."
-    ],
-    [
-      "HC-055",
-      "Process",
-      "Framework sign-off (React vs Astro)",
-      "Resolved Jul 29 — Somesh signed off directly in place of the pending Nick confirmation, delegating the technical call to Engineering. Decision: Astro 4.x, no React (D-23).",
-      "Somesh / Somesh",
-      "Confirmed",
-      "Critical",
-      "Unblocks FEAT-002 — scaffold choice no longer pending external sign-off."
-    ],
-    [
-      "HC-056",
-      "Process",
-      "Claude AI subscription for Somesh",
-      "Kristina confirms ~$100/month plan with Lorna.",
-      "Kristina / Lorna",
-      "Confirmed",
-      "Medium",
-      "ON US: nothing — closed 6 Aug.\n6 Aug · CLOSED by Somesh — subscription purchased and submitted to Ramp for reimbursement. Never blocked build work; the tooling was in use throughout."
-    ],
-    [
-      "HC-057",
-      "Process",
-      "Homepage-first build + Slack review",
-      "Somesh builds homepage (desktop + mobile responsive) first; share on Slack for team review before remaining pages.",
-      "Somesh",
-      "Confirmed",
-      "Critical",
-      "Confirmed Jul 28. Gate cleared 31 Jul — Kristina's Slack message (\"finished the Homepage... timeline to finish the other pages?\") taken as review sign-off, incl. mobile. RF-004/RF-005 closed. Cleared to proceed on remaining pages (see RF-006)."
-    ],
-    [
-      "HC-058",
-      "Process",
-      "Website Change Request form + Sheet",
-      "Kristina creates single form + Google Sheet to track all future website change requests.",
-      "Kristina",
-      "Open",
-      "High",
-      "WAITING ON: Kristina — create the single Change Request form + Google Sheet.\nTarget during or after the sprint window. Pairs with HC-054 SOP ownership. Not a launch blocker, but it is what stops post-launch requests arriving as scattered Slack messages.\n28 Jul · Raised."
     ],
     [
       "HC-069",
