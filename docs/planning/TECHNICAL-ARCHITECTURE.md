@@ -642,6 +642,7 @@ Run in sequence. `hello@contentment.org` email must not be interrupted during cu
 | 8 | +1 hour | Submit sitemap.xml in Google Search Console; check for crawl errors |
 | 9 | +24h | Restore DNS TTLs to 3600 seconds |
 | 10 | +30 days | Decommission old site once backlink traffic has migrated |
+| 11 | **Before cutover, not after** | **Decommission the third-party draft deployments** (HC-081). Six of Dave's draft page deploys and Lorna's Website→Keela→Finance map are live on public Netlify URLs — verified 6 Aug 2026 as HTTP 200 with **no `robots` meta and no `X-Robots-Tag`**, i.e. fully indexable. They are near-complete copies of contentment.org content with no canonical pointing back to us, so Google can index them alongside or instead of the real site. Delete, or at minimum add `X-Robots-Tag: noindex` / Netlify password protection while they are still needed for review. **These sit on Dave's and Lorna's own Netlify accounts — we cannot take them down ourselves.** |
 
 **Emergency rollback:** Revert A/CNAME to old host. 60-second TTL means recovery within ~2 minutes.
 

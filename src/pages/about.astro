@@ -78,8 +78,8 @@ const ADVISORY = [
       <a class="textlink anim d4" href="/why" target="_blank" rel="noopener">Our answer lives here &rarr;</a>
     </div>
     <div class="story-photos">
-      <figure class="sphoto live anim"><img src="/assets/ab-dan-bhutan-2014.jpg" alt="Dan Cordaro holding a globe for a circle of schoolchildren outside a school in Eastern Bhutan"><figcaption>Dan in Bhutan, 2014</figcaption></figure>
-      <figure class="sphoto live anim d1"><img src="/assets/ab-story-country3.jpg" alt="A teacher and her young students standing together with hands on their hearts in a classroom"><figcaption>Hands on hearts. The Country School, Los Angeles, May 2025</figcaption></figure>
+      <figure class="sphoto live anim"><img src="/assets/ab-dan-bhutan-2014.jpg" alt="Dan Cordaro holding a globe for a circle of schoolchildren outside a school in Eastern Bhutan" width="1600" height="900"><figcaption>Dan in Bhutan, 2014</figcaption></figure>
+      <figure class="sphoto live anim d1"><img src="/assets/ab-story-country3.jpg" alt="A teacher and her young students standing together with hands on their hearts in a classroom" width="1600" height="1000"><figcaption>Hands on hearts. The Country School, Los Angeles, May 2025</figcaption></figure>
     </div>
   </div>
 </section>
@@ -112,7 +112,7 @@ const ADVISORY = [
     <div class="tgrid">
       {TEAM.map(([name, title, slug]) => (
         <figure class="tcard anim">
-          <span class="pface"><img src={`/assets/ab-headshots-${slug}.jpg`} alt={name} /></span>
+          <span class="pface"><img src={`/assets/ab-headshots-${slug}.jpg`} alt={name} width="600" height="600" /></span>
           <figcaption><strong>{name}</strong><span>{title}</span></figcaption>
         </figure>
       ))}
@@ -165,7 +165,7 @@ const ADVISORY = [
     <div class="ggrid anim d1">
       {BOARD.map(([name, title, slug]) => (
         <figure class="gcard anim">
-          <span class="pface"><img src={`/assets/ab-headshots-${slug}.jpg`} alt={name} /></span>
+          <span class="pface"><img src={`/assets/ab-headshots-${slug}.jpg`} alt={name} width="600" height="600" /></span>
           <figcaption><strong>{name}</strong><span>{title}</span></figcaption>
         </figure>
       ))}
@@ -174,7 +174,7 @@ const ADVISORY = [
     <div class="ggrid g3 anim d1">
       {ADVISORY.map(([name, title, slug]) => (
         <figure class="gcard anim">
-          <span class="pface"><img src={`/assets/ab-headshots-${slug}.jpg`} alt={name} /></span>
+          <span class="pface"><img src={`/assets/ab-headshots-${slug}.jpg`} alt={name} width="600" height="600" /></span>
           <figcaption><strong>{name}</strong><span>{title}</span></figcaption>
         </figure>
       ))}

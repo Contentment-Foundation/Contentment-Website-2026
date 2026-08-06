@@ -11,6 +11,16 @@ interface Props {
   description?: string;
   ogImage?: string;
   ogType?: string;
+  /**
+   * Load the Keela Forms master script + stylesheet. OPT-IN: it was previously loaded on
+   * every route, but only 3 of 10 mount an embed, so the other 7 paid a render-blocking
+   * third-party stylesheet for nothing (PRE-LAUNCH-QA-AUDIT perf work).
+   *
+   * SET THIS TO TRUE on any page that renders <KeelaDonateForm /> — directly or through a
+   * component like <HomeroomBlock />. Without it the embed mounts unstyled and never
+   * initialises, because window.Keela is undefined.
+   */
+  keela?: boolean;
 }
 
 const {
@@ -18,6 +28,7 @@ const {
   description = 'The Contentment Foundation — teacher and student wellbeing.',
   ogImage = '/assets/logo_lockup_light.svg',
   ogType = 'website',
+  keela = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -47,10 +58,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=Varela+Round&family=Cedarville+Cursive&display=swap" rel="stylesheet">
+  {/* PRE-LAUNCH-QA-AUDIT: this stylesheet was render-blocking on every route. `display=swap`
+      was already set, but that governs how the FONT behaves once the CSS arrives — it does
+      nothing about the round-trip to fonts.googleapis.com that blocks first paint.
+      Loaded async via the media="print" swap: the browser fetches it at low priority and
+      does not block rendering, then onload flips it to `all` and it applies. The <noscript>
+      copy keeps fonts working with JS disabled. */}
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=Varela+Round&family=Cedarville+Cursive&display=swap"
+    media="print"
+    onload="this.media='all';this.onload=null"
+  >
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=Varela+Round&family=Cedarville+Cursive&display=swap">
+  </noscript>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <Analytics />
-  <KeelaScripts />
+  {keela && <KeelaScripts />}
   <slot name="head" />
 </head>
 <body>

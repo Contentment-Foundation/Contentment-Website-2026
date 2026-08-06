@@ -30,8 +30,8 @@ const externalAttrs = (href: string) =>
          that must carry aria-current there. Verified: no `.brand[aria-current]` rule exists
          in global.css, so this is semantics-only and ships no visual change. -->
     <a class="brand" href="/" aria-label="The Contentment Foundation, home" aria-current={isCurrent('/') ? 'page' : undefined}>
-      <img src="/assets/logo_lockup_light.svg" alt="The Contentment Foundation" class="brand-logo--light">
-      <img src="/assets/logo_lockup_dark.svg" alt="" aria-hidden="true" class="brand-logo--dark">
+      <img src="/assets/logo_lockup_light.svg" alt="The Contentment Foundation" class="brand-logo--light" width="300" height="84">
+      <img src="/assets/logo_lockup_dark.svg" alt="" aria-hidden="true" class="brand-logo--dark" width="300" height="84">
     </a>
     <nav class="nav-links" aria-label="Main">
       {navLinks.map((link) => (
