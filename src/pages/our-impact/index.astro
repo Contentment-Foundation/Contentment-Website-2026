@@ -891,6 +891,7 @@ import { seams } from '../../config/seams';
   // reveal-on-scroll, count-up are already handled globally by BaseLayout's
   // animations.js/nav.js).
   import { youtubeIframeHtml } from '../../scripts/youtube-embed.js';
+  import { attachLightboxA11y } from '../../scripts/lightbox-a11y.js';
 
   // Our Impact: nav pinned white — the hero ground here is light green/white, not dark,
   // so the header must render in its scrolled (white-bar) state even at the very top of
@@ -903,30 +904,37 @@ import { seams } from '../../config/seams';
   const lbSlot = document.getElementById('lbSlot');
   const lbClose = document.getElementById('lbClose');
 
-  function openLb(id?: string, list?: string) {
+  // Focus management for the cross-origin YouTube frame — see lightbox-a11y.js.
+  // The old `window`-scoped Escape handler could never fire once focus was inside
+  // the player, which made this a real keyboard trap (WCAG 2.1.2 A).
+  const lbA11y = attachLightboxA11y(lb!, lbClose!, () => closeLb());
+
+  function openLb(id?: string, list?: string, trigger?: HTMLElement) {
     if (!lbSlot || !lb) return;
     if (!id || id === 'PENDING_YT_ID') {
       lbSlot.innerHTML = '<div style="color:#fff;padding:60px 30px;text-align:center;font-family:Inter,sans-serif">Video coming soon.</div>';
       lb.classList.add('open');
+      lbA11y.opened(trigger);
       return;
     }
     lbSlot.innerHTML = youtubeIframeHtml(id, { list });
     lb.classList.add('open');
+    lbA11y.opened(trigger);
   }
   function closeLb() {
     if (!lbSlot || !lb) return;
     lb.classList.remove('open');
     lbSlot.innerHTML = '';
+    lbA11y.closed();
   }
   document.querySelectorAll<HTMLElement>('[data-yt]').forEach((el) => {
-    el.addEventListener('click', () => openLb(el.dataset.yt, el.dataset.list));
+    el.addEventListener('click', () => openLb(el.dataset.yt, el.dataset.list, el));
     el.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(el.dataset.yt, el.dataset.list); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(el.dataset.yt, el.dataset.list, el); }
     });
   });
   lbClose?.addEventListener('click', closeLb);
   lb?.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
-  addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
 
   // interactive educator voices: click a face -> reveal its quote panel. Native <button
   // role="tab"> elements, so Enter/Space activation is free via the native click event —

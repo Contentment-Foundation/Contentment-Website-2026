@@ -2,7 +2,7 @@
 
 **Date:** 28 July 2026  
 **Source:** Zoom meeting assets (summary + next steps)  
-**Attendees (from handoff prep):** Kristina, Dave, Woei Jing, Nav, Veron, Somesh (Sam)
+**Attendees (from handoff prep):** Kristina, Dave, Woei Jing, Nav, Veron, Somesh
 
 > Planning source of truth updated in `docs/planning/launch-plan-data.json` (Handoff Checklist + decisions).  
 > **Stack note:** Call discussed React; repo/planning still has **D-11 Astro 4.x** until Nick confirms (**D-23 / HC-055**).
@@ -59,7 +59,7 @@ Final review and handoff of the Contentment Foundation website design from Dave 
 ### Woei Jing
 - Final look-through; flag critical issues within ~1 hour of the call.
 
-### Somesh (Sam)
+### Somesh
 - Use Nav’s logo SVG (no three dots) in the build.
 - Build homepage (desktop + mobile) first; share on Slack for review before remaining pages.
 - Review Handoff Checklist Google Sheet and align open tickets.

@@ -20,7 +20,7 @@
 |------|----------|
 | Phase 1 hard go-live | **Aug 21** |
 | Mobile | **Somesh** owns responsive build in sprint — no separate Dave mobile comps (**HC-021**) |
-| Logo | Live-site mark **without three dots**; Nav SVG → Dave → Sam (**D-21 / HC-027**) |
+| Logo | Live-site mark **without three dots**; Nav SVG → Dave → Somesh (**D-21 / HC-027**) |
 | Jose video | Placeholder on Get Involved; file → Somesh when ready (**HC-040**) |
 | Priscilla quote | Leave as-is → **Phase 2** (**HC-042**) |
 | Copy changes | Excluded from Phase 1; critical design/compliance only (**D-22 / HC-043**) |
@@ -45,7 +45,7 @@
 
 | Item | Owner | Needed by |
 |------|-------|-----------|
-| Button inventory Miro (**HC-005**) | Kristina | 🟠 **Partial** — overtaken by events; Sam wired the destinations without it. Only three remain: Spread-the-movement door (WJ), per-tier Keela (Lorna), Events RSVP (Kristina) |
+| Button inventory Miro (**HC-005**) | Kristina | 🟠 **Partial** — overtaken by events; Somesh wired the destinations without it. Only three remain: Spread-the-movement door (WJ), per-tier Keela (Lorna), Events RSVP (Kristina) |
 | Nick sign-off React vs Astro (**D-23**) | Nick | Before scaffold lock |
 | Claude subscription (~$100/mo) | Kristina ↔ Lorna | Sprint tooling |
 | Keela URLs / `/give` / newsletter | Finance / Lorna / Comms | Per existing D-02, D-03 (newsletter D-19 now closed) |

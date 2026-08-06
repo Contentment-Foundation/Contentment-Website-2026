@@ -444,7 +444,10 @@ import { seams } from '../config/seams';
   .fs-hero h1 .script{display:block;color:#d3faf1;font-size:.86em;line-height:1.12;margin-top:.06em;letter-spacing:0;text-shadow:0 2px 30px rgba(2,40,58,.45)}
   .fs-hero p.sub{margin-top:22px;font-size:clamp(1.06rem,1.4vw,1.3rem);max-width:52ch;color:rgba(255,255,255,.94);text-shadow:0 1px 16px rgba(2,40,58,.55)}
   .fs-hero .credline{margin-top:22px;font-size:.9rem;color:rgba(255,255,255,.82);letter-spacing:.02em}
-  .fs-hero .btn-primary{background:var(--mint);color:#fff;box-shadow:0 10px 28px -10px rgba(45,140,112,.55)}
+  /* PRE-LAUNCH-QA-AUDIT: white on --mint (#55bf98) is 2.26:1 — fails WCAG AA (needs 4.5).
+     --deep2 on the same background is 5.35:1 and passes. This is the same correction
+     already applied to .nav-cta and the drawer CTA, so the pattern is consistent. */
+  .fs-hero .btn-primary{background:var(--mint);color:var(--deep2);box-shadow:0 10px 28px -10px rgba(45,140,112,.55)}
   .fs-hero .btn-primary:hover{background:#63cba6;color:#fff}
   /* Dancing Script/Cedarville accent used throughout this page's headings via <span class="script"> */
   .script{font-family:var(--script);font-weight:400;font-style:normal;letter-spacing:0}
@@ -838,6 +841,7 @@ import { seams } from '../config/seams';
   // .fsr instead), and seam URLs are now resolved server-side via src/config/seams.ts.
   import { trackEvent } from '../scripts/analytics.js';
   import { youtubeIframeHtml } from '../scripts/youtube-embed.js';
+  import { attachLightboxA11y } from '../scripts/lightbox-a11y.js';
 
   document.querySelectorAll<HTMLAnchorElement>('[data-school-inquiry-source]').forEach((link) => {
     link.addEventListener('click', () => {
@@ -855,21 +859,28 @@ import { seams } from '../config/seams';
   const lbSlot = document.getElementById('lbSlot');
   const lbClose = document.getElementById('lbClose');
 
-  function openLb(id: string, list?: string) {
+  // Focus management for the cross-origin YouTube frame — see lightbox-a11y.js.
+  // The old `window`-scoped Escape handler could never fire once focus was inside
+  // the player, which made this a real keyboard trap (WCAG 2.1.2 A).
+  const lbA11y = attachLightboxA11y(lb!, lbClose!, () => closeLb());
+
+  function openLb(id: string, list?: string, trigger?: HTMLElement) {
     if (!lbSlot || !lb) return;
     lbSlot.innerHTML = youtubeIframeHtml(id, {
       list,
       style: 'width:100%;height:100%;border:0;border-radius:14px;display:block',
     });
     lb.classList.add('open');
+    lbA11y.opened(trigger);
   }
   function closeLb() {
     if (!lbSlot || !lb) return;
     lb.classList.remove('open');
     lbSlot.innerHTML = '';
+    lbA11y.closed();
   }
   document.querySelectorAll<HTMLElement>('[data-yt]').forEach((el) => {
-    const go = () => openLb(el.dataset.yt as string, el.dataset.list);
+    const go = () => openLb(el.dataset.yt as string, el.dataset.list, el);
     el.addEventListener('click', go);
     el.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
@@ -877,7 +888,6 @@ import { seams } from '../config/seams';
   });
   lbClose?.addEventListener('click', closeLb);
   lb?.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
-  addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
 
   // Fold 7 — scroll-driven pond ripple (mirrors src/scripts/orbit.js / homepage RF-002).
   // Mobile/tablet use the same scroll-driven reveal as desktop (rings + ground color +

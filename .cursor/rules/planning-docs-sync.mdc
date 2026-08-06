@@ -11,7 +11,7 @@ When **status, scope, schedule, routes/slugs, CTA wiring, or team-facing truth**
 
 ## Status vocabulary (tickets + HC) — added 5 Aug 2026
 
-A status must answer **"is anyone on our side moving on this?"** Before 5 Aug, twelve tickets sat at `In Progress` whether the remaining work was ours or someone else's, so the Sheet could not tell "Sam is building this" from "this has sat on one person for a week."
+A status must answer **"is anyone on our side moving on this?"** Before 5 Aug, twelve tickets sat at `In Progress` whether the remaining work was ours or someone else's, so the Sheet could not tell "Somesh is building this" from "this has sat on one person for a week."
 
 | Situation | Status | Also required |
 |---|---|---|

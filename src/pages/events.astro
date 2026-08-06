@@ -138,15 +138,22 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
       <a href={joinHref} {...joinAttrs} class="btn btn-primary ev-up-join" data-join="upcoming">Join Homeroom <span class="arrow">&rarr;</span></a>
     </div>
 
+    <!-- PRE-LAUNCH-QA-AUDIT.md flagged `role="tablist"` carrying `aria-selected` on plain
+         buttons with no keyboard support. Fixing that surfaced a bigger problem: these
+         chips had NO click handler at all and did nothing for anyone. The card taxonomy
+         (`data-access` / `data-format`) was already in the markup, so the behaviour is
+         wired below rather than the promise removed. Roving tabindex per the APG tabs
+         pattern: exactly one tab is tabbable, arrows move between them. -->
     <div class="ev-filters" role="tablist" aria-label="Filter events">
-      <button class="ev-filter is-active" data-filter="all" aria-selected="true">All</button>
-      <button class="ev-filter" data-filter="open" aria-selected="false">Open to everyone</button>
-      <button class="ev-filter" data-filter="member" aria-selected="false">Homeroom members</button>
-      <button class="ev-filter" data-filter="virtual" aria-selected="false">Virtual</button>
-      <button class="ev-filter" data-filter="in-person" aria-selected="false">In person</button>
+      <button class="ev-filter is-active" data-filter="all" id="ev-tab-all" role="tab" aria-selected="true" aria-controls="ev-grid" tabindex="0">All</button>
+      <button class="ev-filter" data-filter="open" id="ev-tab-open" role="tab" aria-selected="false" aria-controls="ev-grid" tabindex="-1">Open to everyone</button>
+      <button class="ev-filter" data-filter="member" id="ev-tab-member" role="tab" aria-selected="false" aria-controls="ev-grid" tabindex="-1">Homeroom members</button>
+      <button class="ev-filter" data-filter="virtual" id="ev-tab-virtual" role="tab" aria-selected="false" aria-controls="ev-grid" tabindex="-1">Virtual</button>
+      <button class="ev-filter" data-filter="in-person" id="ev-tab-in-person" role="tab" aria-selected="false" aria-controls="ev-grid" tabindex="-1">In person</button>
     </div>
+    <p class="ev-filter-status" role="status" aria-live="polite"></p>
 
-    <div class="ev-grid">
+    <div class="ev-grid" id="ev-grid" role="tabpanel" aria-labelledby="ev-tab-all">
 
       <!-- OPEN: Contentment Festival (virtual, free) -->
       <article class="ev-card" data-access="open" data-format="virtual" data-event="festival-virtual">
@@ -553,7 +560,9 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
     .ev-up-join{width:100%;justify-content:center}
   }
   /* filters */
-  .ev-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:38px}
+  .ev-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+  .ev-filter-status{font-size:.86rem;color:var(--slate);margin-bottom:24px;min-height:1.2em}
+  .ev-filter:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
   .ev-filter{font-family:var(--body);font-weight:600;font-size:.92rem;padding:.6em 1.25em;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--slate);cursor:pointer;transition:all .25s}
   .ev-filter:hover{border-color:var(--teal);color:var(--deep)}
   .ev-filter.is-active{background:var(--ocean);border-color:var(--ocean);color:#fff;box-shadow:0 8px 20px -10px rgba(0,128,176,.7)}
@@ -786,4 +795,68 @@ const joinAttrs = /^https?:\/\//.test(joinHref)
       });
     });
   });
+
+  // --- Upcoming-events filter (PRE-LAUNCH-QA-AUDIT: tablist had no keyboard support,
+  // and in fact no behaviour at all). Cards already carry data-access / data-format,
+  // so the chips filter on those. APG tabs pattern: roving tabindex, arrows to move.
+  (function initEventFilters() {
+    const tablist = document.querySelector<HTMLElement>('.ev-filters');
+    const grid = document.getElementById('ev-grid');
+    const status = document.querySelector<HTMLElement>('.ev-filter-status');
+    if (!tablist || !grid) return;
+
+    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>('.ev-card'));
+    if (!tabs.length || !cards.length) return;
+
+    const matches = (card: HTMLElement, filter: string) =>
+      filter === 'all' || card.dataset.access === filter || card.dataset.format === filter;
+
+    function select(tab: HTMLButtonElement, moveFocus = true) {
+      const filter = tab.dataset.filter || 'all';
+
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        t.classList.toggle('is-active', on);
+      });
+      grid!.setAttribute('aria-labelledby', tab.id);
+
+      let shown = 0;
+      cards.forEach((card) => {
+        const show = matches(card, filter);
+        // `hidden` (not just display:none) keeps hidden cards out of the a11y tree AND
+        // out of the tab order — otherwise keyboard users would tab through the links
+        // of events they had just filtered away.
+        card.hidden = !show;
+        if (show) shown += 1;
+      });
+
+      if (status) {
+        status.textContent = `${shown} ${shown === 1 ? 'event' : 'events'} shown`;
+      }
+      if (moveFocus) tab.focus();
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => select(tab, false));
+      tab.addEventListener('keydown', (e) => {
+        const i = tabs.indexOf(tab);
+        let next: HTMLButtonElement | undefined;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = tabs[(i + 1) % tabs.length];
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = tabs[(i - 1 + tabs.length) % tabs.length];
+        else if (e.key === 'Home') next = tabs[0];
+        else if (e.key === 'End') next = tabs[tabs.length - 1];
+        if (!next) return;
+        e.preventDefault();
+        select(next);
+      });
+    });
+
+    // Set the initial count without stealing focus or announcing on load.
+    const initial = tabs.find((t) => t.getAttribute('aria-selected') === 'true') || tabs[0];
+    const initialFilter = initial.dataset.filter || 'all';
+    cards.forEach((card) => { card.hidden = !matches(card, initialFilter); });
+  })();
 </script>

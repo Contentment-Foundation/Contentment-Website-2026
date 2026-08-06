@@ -417,6 +417,7 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
   // scroll, count-up are already handled globally by BaseLayout's animations.js/nav.js).
   import { initNewsletterForms } from '../scripts/newsletter.js';
   import { youtubeIframeHtml, createYoutubeIframe } from '../scripts/youtube-embed.js';
+  import { attachLightboxA11y } from '../scripts/lightbox-a11y.js';
   import { trackEvent } from '../scripts/analytics.js';
 
   // FEAT-070 — "Send me something meaningful" → Flodesk segment "www.contentment.org".
@@ -434,15 +435,22 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
   const lbSlot = document.getElementById('lbSlot');
   const lbClose = document.getElementById('lbClose');
 
-  function openLb(id: string) {
+  // Focus management for the cross-origin YouTube frame — see lightbox-a11y.js.
+  // The old `window`-scoped Escape handler could never fire once focus was inside
+  // the player, which made this a real keyboard trap (WCAG 2.1.2 A).
+  const lbA11y = attachLightboxA11y(lb!, lbClose!, () => closeLb());
+
+  function openLb(id: string, trigger?: HTMLElement) {
     if (!lbSlot || !lb) return;
     lbSlot.innerHTML = youtubeIframeHtml(id);
     lb.classList.add('open');
+    lbA11y.opened(trigger);
   }
   function closeLb() {
     if (!lbSlot || !lb) return;
     lb.classList.remove('open');
     lbSlot.innerHTML = '';
+    lbA11y.closed();
   }
   // data-inline reels play in place (one click, playsinline stops iOS hijacking to fullscreen).
   function playInline(el: HTMLElement) {
@@ -455,7 +463,7 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
     el.classList.add('is-playing');
   }
   document.querySelectorAll<HTMLElement>('[data-yt]').forEach((el) => {
-    const go = () => (el.dataset.inline ? playInline(el) : openLb(el.dataset.yt as string));
+    const go = () => (el.dataset.inline ? playInline(el) : openLb(el.dataset.yt as string, el));
     el.addEventListener('click', go);
     el.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
@@ -463,7 +471,6 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
   });
   lbClose?.addEventListener('click', closeLb);
   lb?.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
-  addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
 
   // TICKET-020 acceptance — "Share button triggers Web Share API or copy-link fallback".
   // Analytics contract matches /about's [data-share-email] handler (about.astro:193-215):

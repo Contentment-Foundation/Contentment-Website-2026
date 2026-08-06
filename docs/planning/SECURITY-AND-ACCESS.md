@@ -136,14 +136,14 @@ Planning docs (`SECURITY-AND-ACCESS.md` §5.1, `DECISIONS.md`) define **what** m
 
 | Step | What happens | Owner | Ticket / timing |
 |------|--------------|-------|-----------------|
-| 1 | Engineering drafts `/privacy` page structure from §5.1 (regulatory table, per-tool disclosures, cookie section) | Sam (Somesh) | FEAT-071 — Aug 18–19 review sprint |
+| 1 | Engineering drafts `/privacy` page structure from §5.1 (regulatory table, per-tool disclosures, cookie section) | Somesh | FEAT-071 — Aug 18–19 review sprint |
 | 2 | Legal provides and approves final prose (organization-specific language, contact details) | Legal / Ops | D-08 — before go-live |
-| 3 | Astro page built at `src/pages/privacy.astro` — shared layout, `.band` + `.wrap` + `.body` typography per FRONTEND-SPEC | Sam | FEAT-071 |
-| 4 | Legal copy stored in repo: inline in `.astro` **or** `src/content/legal/privacy.md` imported at build time (Markdown → static HTML) | Sam | FEAT-071 |
-| 5 | Same pattern for `/terms` at `src/pages/terms.astro` | Sam | FEAT-071 |
-| 6 | Footer on every page: **Privacy Policy** · **Terms** · **Cookie Preferences** (Cookiebot re-open) | Sam | FEAT-004 |
-| 7 | Cookiebot CMP script + GA4 Consent Mode v2 wired in `BaseLayout` before analytics scripts | Sam | FEAT-080 |
-| 8 | Optional Cookiebot partner badge / CMP attribution embedded on `/privacy` | Sam | FEAT-071 |
+| 3 | Astro page built at `src/pages/privacy.astro` — shared layout, `.band` + `.wrap` + `.body` typography per FRONTEND-SPEC | Somesh | FEAT-071 |
+| 4 | Legal copy stored in repo: inline in `.astro` **or** `src/content/legal/privacy.md` imported at build time (Markdown → static HTML) | Somesh | FEAT-071 |
+| 5 | Same pattern for `/terms` at `src/pages/terms.astro` | Somesh | FEAT-071 |
+| 6 | Footer on every page: **Privacy Policy** · **Terms** · **Cookie Preferences** (Cookiebot re-open) | Somesh | FEAT-004 |
+| 7 | Cookiebot CMP script + GA4 Consent Mode v2 wired in `BaseLayout` before analytics scripts | Somesh | FEAT-080 |
+| 8 | Optional Cookiebot partner badge / CMP attribution embedded on `/privacy` | Somesh | FEAT-071 |
 | 9 | `vercel build` → static HTML → deploy on merge to `main` → live at `https://contentment.org/privacy` | CI/CD | FEAT-101 |
 
 **Visitor-facing URL:** `https://contentment.org/privacy` (and `/terms`) — standard Astro static routes on Vercel, same as every other page. No separate CMS or PDF for launch; legal updates go through a repo PR + redeploy until Sanity migration (Phase 1.5) if editors need self-service.

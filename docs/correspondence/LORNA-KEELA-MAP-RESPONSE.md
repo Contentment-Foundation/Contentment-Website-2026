@@ -2,7 +2,7 @@
 
 **Date:** 5 August 2026
 **From:** Somesh Bhardwaj (engineering)
-**To:** Lorna Holman · cc Kristina Blundon, Woei Jing, Ni Luh (Cika), Sam
+**To:** Lorna Holman · cc Kristina Blundon, Woei Jing, Ni Luh (Cika)
 **Lorna's map:** https://website-keela.netlify.app/
 **Our preview:** https://contentmentweb2.netlify.app/
 

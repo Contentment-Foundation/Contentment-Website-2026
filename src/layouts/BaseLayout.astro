@@ -54,8 +54,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <slot name="head" />
 </head>
 <body>
+  {/* PRE-LAUNCH-QA-AUDIT.md Critical: no main landmark and no skip link on any route.
+      It repeated on all of them because the fix belongs here, not on the pages —
+      screen-reader users had no way to jump past the nav, and keyboard users had to
+      tab the whole header on every navigation. JSX comment, so it does not ship. */}
+  <a class="skip-link" href="#main">Skip to main content</a>
   <Nav />
-  <slot />
+  <main id="main" tabindex="-1">
+    <slot />
+  </main>
   <Footer />
   <script>
     import { initNav } from '../scripts/nav.js';

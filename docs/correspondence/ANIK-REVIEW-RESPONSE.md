@@ -2,7 +2,7 @@
 
 **Date:** 3 July 2026  
 **From:** Somesh Bhardwaj  
-**To:** Anik Ghosh, Sam, Kristina Blundon  
+**To:** Anik Ghosh, Somesh, Kristina Blundon  
 **Re:** Technical review of contentment.org briefs and repo
 
 ---
