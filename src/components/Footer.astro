@@ -14,7 +14,13 @@ const externalAttrs = (href: string) =>
 // reader for no added orientation. Add /privacy + /terms here when FEAT-071 lands.
 // The trailing-slash strip is load-bearing: Astro's directory build makes the build-time
 // pathname `/updates/`, so a bare `Astro.url.pathname === href` would never match.
-const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+// Normalise BOTH shapes: the trailing slash from a directory build and the `.html`
+// suffix from `build.format: 'file'` (6 Aug). Without the .html strip every
+// aria-current comparison silently fails and the current-page underline disappears.
+const pathname = Astro.url.pathname
+  .replace(/index\.html$/, '')
+  .replace(/\.html$/, '')
+  .replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => pathname === href.replace(/\/$/, '');
 ---
 <footer>

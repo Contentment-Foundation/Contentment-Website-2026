@@ -193,7 +193,7 @@ p.body+p.body{margin-top:1.1em}
 
 /* ---------- IMPACT ---------- */
 /* texture: raw asset, no wash. the file is a paper grain (51 levels of range), so this is as strong as it gets. */
-.impact{background:url('/assets/green_texture.jpg') center/cover no-repeat,var(--green);color:#fff;overflow:hidden;position:relative}
+.impact{background:url('/assets/green_texture.webp') center/cover no-repeat,var(--green);color:#fff;overflow:hidden;position:relative}
 .impact::before{content:"";position:absolute;width:680px;height:680px;border-radius:50%;border:1px solid rgba(255,255,255,.07);top:-220px;right:-180px;transform-origin:center;animation:rippleA 24s ease-in-out 0s infinite;will-change:transform,opacity}
 .impact::after{content:"";position:absolute;width:440px;height:440px;border-radius:50%;border:1px solid rgba(255,255,255,.06);bottom:-160px;left:-120px;transform-origin:center;animation:rippleB 30s ease-in-out -8s infinite;will-change:transform,opacity}
 .impact .wrap{position:relative;z-index:2}
@@ -226,10 +226,10 @@ p.body+p.body{margin-top:1.1em}
 .invite{position:relative;overflow:hidden;color:var(--ink);padding:clamp(62px,7.5vw,104px) 0;background:#fafaf8}
 /* framing: locked on Marla. she sits right-of-centre, so as the viewport narrows and
    cover crops horizontally we hold her and let the kid go, not the reverse. */
-.invite-bg{position:absolute;inset:0;background:url('/assets/marla_band.jpg') 80% 32%/cover no-repeat}
+.invite-bg{position:absolute;inset:0;background:url('/assets/marla_band.webp') 80% 32%/cover no-repeat}
 /* the paper itself fades out to the right. mask, not a gradient over an opaque layer. */
 .invite-bg::after{content:"";position:absolute;inset:0;
-  background:url('/assets/white_texture.jpg') center/cover no-repeat,#fafaf8;
+  background:url('/assets/white_texture.webp') center/cover no-repeat,#fafaf8;
   -webkit-mask-image:linear-gradient(95deg,#000 0%,rgba(0,0,0,.97) 34%,rgba(0,0,0,.62) 58%,rgba(0,0,0,.14) 82%,transparent 100%);
   mask-image:linear-gradient(95deg,#000 0%,rgba(0,0,0,.97) 34%,rgba(0,0,0,.62) 58%,rgba(0,0,0,.14) 82%,transparent 100%)}
 .invite-inner{position:relative;z-index:2}
@@ -449,7 +449,7 @@ p.body+p.body{margin-top:1.1em}
 .circ-wrap:nth-child(1)::before{background-image:url('/assets/wc1.png');width:134.7%;height:122.0%;left:-18.8%;top:-6.9%}
 .circ-wrap:nth-child(2)::before{background-image:url('/assets/wc2.png');width:113.1%;height:112.7%;left:-2.0%;top:-3.3%}
 .circ-wrap:nth-child(3)::before{background-image:url('/assets/wc3.png');width:117.1%;height:111.0%;left:-7.8%;top:-3.3%}
-.circ-wrap:nth-child(4)::before{background-image:url('/assets/wc4.png');width:122.9%;height:116.7%;left:-7.8%;top:-4.5%}
+.circ-wrap:nth-child(4)::before{background-image:url('/assets/wc4.webp');width:122.9%;height:116.7%;left:-7.8%;top:-4.5%}
 .circ{position:absolute;inset:0;z-index:1;overflow:hidden;border-radius:50%;box-shadow:0 14px 34px rgba(2,55,79,.16)}
 .circ img{width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.8,.2,1)}
 .circ-wrap:hover .circ img{transform:scale(1.06)}
@@ -483,7 +483,7 @@ p.body+p.body{margin-top:1.1em}
 .pcard .pdesc p{font-size:.96rem;color:rgba(255,255,255,.88);line-height:1.5}
 
 /* ---------- HOMEROOM (image / ask split) ---------- */
-.homeroom{display:grid;grid-template-columns:1.06fr .94fr;align-items:stretch;position:relative;overflow:hidden;background:url('/assets/white_texture.jpg') center/cover no-repeat,var(--paper)}
+.homeroom{display:grid;grid-template-columns:1.06fr .94fr;align-items:stretch;position:relative;overflow:hidden;background:url('/assets/white_texture.webp') center/cover no-repeat,var(--paper)}
 /* LEFT: Priscillah quote card (designed graphic) as an object on the paper field.
    Displayed whole, never cropped, because the quote text is baked into the image. */
 .hr-card{display:flex;align-items:center;justify-content:center;padding:clamp(38px,4vw,72px) clamp(28px,3.5vw,56px)}
@@ -530,7 +530,7 @@ p.body+p.body{margin-top:1.1em}
 
 /* ---------- DOORS ---------- */
 /* textured version, reusing the green block from the impact section */
-.doors{background:url('/assets/green_texture.jpg') center/cover no-repeat,var(--green);position:relative;overflow:hidden}
+.doors{background:url('/assets/green_texture.webp') center/cover no-repeat,var(--green);position:relative;overflow:hidden}
 .doors::before{content:"";position:absolute;width:680px;height:680px;border-radius:50%;border:1px solid rgba(255,255,255,.07);top:-240px;right:-180px;pointer-events:none;transform-origin:center;animation:rippleA 26s ease-in-out -5s infinite;will-change:transform,opacity}
 .doors::after{content:"";position:absolute;width:440px;height:440px;border-radius:50%;border:1px solid rgba(255,255,255,.06);bottom:-160px;left:-120px;pointer-events:none;transform-origin:center;animation:rippleB 32s ease-in-out -14s infinite;will-change:transform,opacity}
 .doors .wrap{position:relative;z-index:2}
@@ -594,7 +594,7 @@ footer{background:var(--btnblue);color:#fff;padding:64px 0 36px;position:relativ
 footer::before{
   content:"";position:absolute;right:-6%;bottom:-22%;z-index:0;pointer-events:none;
   width:min(58vw,460px);aspect-ratio:1;
-  background:url('/assets/cf_ball.png') center/contain no-repeat;
+  background:url('/assets/cf_ball.webp') center/contain no-repeat;
   opacity:.11;filter:brightness(2.2) contrast(.85)
 }
 footer .wrap{position:relative;z-index:1}

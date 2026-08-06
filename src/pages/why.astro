@@ -13,10 +13,10 @@ import KeelaDonateForm from '../components/KeelaDonateForm.astro';
 // this page." Gap logged in the 4 Aug audit. Same seam shape as /about (about.astro:17-19)
 // with /why-specific copy. shareUrl matches this page's OWN canonical exactly — BaseLayout
 // renders `new URL(Astro.url.pathname, Astro.site)` and Astro's directory build emits
-// dist/why/index.html, so canonical and og:url both carry the trailing slash.
+// dist/why/index.html, so canonical, og:url and this share URL are all slash-free (build.format:'file', 6 Aug).
 // The mailto href is the no-JS floor and the handler's last-resort tier; everything else is
 // read off data-* so the rendered link and the script can never drift apart.
-const shareUrl = 'https://www.contentment.org/why/';
+const shareUrl = 'https://www.contentment.org/why';
 const shareSubject = 'Why teacher wellbeing? This page answers it.';
 const shareText = 'This is why we put teachers first, and how you can too.';
 const shareBody = `${shareText} Start here: ${shareUrl}`;
@@ -30,8 +30,8 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
 
 <!-- 1 - HERO with CEO video -->
 <section class="hero" id="top">
-  <div class="hero-bg" style="background-image:url('/assets/why-hero-bg.jpg');background-size:cover;background-position:62% 30%"></div>
-  <div class="hero-bg mob" style="background-image:url('/assets/why-hero-bg.jpg');background-size:cover;background-position:70% 24%"></div>
+  <div class="hero-bg" style="background-image:url('/assets/why-hero-bg.webp');background-size:cover;background-position:62% 30%"></div>
+  <div class="hero-bg mob" style="background-image:url('/assets/why-hero-bg.webp');background-size:cover;background-position:70% 24%"></div>
   <div class="hero-inner wrap">
     <div class="hero-content">
       <h1 class="hero-q">
@@ -53,13 +53,13 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
     </div>
     <div class="jd-videowrap anim d1">
       <button class="jd-video" data-yt="OZsgO23XFj0" aria-label="Play: a one minute message from our CEO">
-        <span class="hv-poster" style="background-image:url('/assets/why-play-ceo-message.jpg')"></span>
+        <span class="hv-poster" style="background-image:url('/assets/why-play-ceo-message.webp')"></span>
         <span class="hv-play" aria-hidden="true"></span>
       </button>
       <div class="jd-doodle" aria-hidden="true"><img src="/assets/why-jd-doodle.png" alt="" width="308" height="313"><span>Watch the 1-minute message from our CEO.</span></div>
     </div>
     <figure class="teacher-quote anim d2">
-      <div class="tq-photo"><img src="/assets/why-tq-photo.jpg" alt="Jahar Van" width="600" height="600"></div>
+      <div class="tq-photo"><img src="/assets/why-tq-photo.webp" alt="Jahar Van" width="600" height="600"></div>
       <div class="tq-body">
         <blockquote>&#8220;You have kids that live in a shelter, you don't know if these kids ate. You don't know what his parents went through last night. And then they get in a classroom after all that&#8230;&#8221;</blockquote>
         <figcaption><b>Jahar Van</b> &middot; Counselor, PS/MS-124, Queens NY</figcaption>
@@ -76,7 +76,7 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
 <!-- 3 - FOLD A: the argument. Photo right, panel left. -->
 <section class="band leverage" id="leverage">
   <div class="lev-inner">
-  <div class="lev-shot" style="background-image:url('/assets/why-lev-shot.jpg')" role="img" aria-label="A teacher leaning in, listening closely to a student at her desk"></div>
+  <div class="lev-shot" style="background-image:url('/assets/why-lev-shot.webp')" role="img" aria-label="A teacher leaning in, listening closely to a student at her desk"></div>
   <div class="lev-panel">
     <div class="lev-pin anim">
       <h2 class="title">Teachers are one of the highest-leverage points in a child's life.</h2>
@@ -95,7 +95,7 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
         <h2 class="title">This is not a hunch. It is one of the best-documented ways to <span class="script">change education.</span></h2>
         <p class="proof-harvard">Harvard's Graduate School of Education found what teachers always knew: ease a teacher's stress, and children's early skills improve, with gains still visible years later.</p>
       </div>
-      <figure class="proof-photo anim d1"><img src="/assets/why-proof-photo.jpg" alt="A teacher and her students laughing together in a school courtyard in Bhutan" width="960" height="532"></figure>
+      <figure class="proof-photo anim d1"><img src="/assets/why-proof-photo.webp" alt="A teacher and her students laughing together in a school courtyard in Bhutan" width="960" height="532"></figure>
     </div>
     <div class="stats">
       <div class="stat anim"><div class="rnum">86%<span class="plus">+</span></div><div class="lab">improved in wellbeing, relationships, and classroom (2025, four regions)</div></div>
@@ -107,7 +107,7 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
 </section>
 
 <!-- 5 - WHY NOW + TEACHER VIDEOS -->
-<section class="band whynow" style="background:#008cb8 url('/assets/why-darkblue-texture.jpg') center/cover">
+<section class="band whynow" style="background:#008cb8 url('/assets/why-darkblue-texture.webp') center/cover">
   <div class="wrap">
     <div class="wn-grid">
       <div class="wn-head anim">
@@ -121,9 +121,9 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
     <div class="wn-videos anim d2">
       <span class="eyebrow">Teachers, in their own words</span>
       <div class="reels">
-        <div class="reel anim"><div class="vframe vert" data-yt="-9EAmpgkZ5w" data-inline="1" role="button" tabindex="0" aria-label="Play: Vincent Birisi"><div class="poster" style="background-image:url('/assets/why-play-vincent-birisi.jpg')"></div><div class="vscrim"></div><div class="play"></div></div><div class="rname">Vincent Birisi<i>Teacher, Oloolaiser High School, Kenya</i></div></div>
-        <div class="reel anim d1"><div class="vframe vert" data-yt="Q86tC-AaJQc" data-inline="1" role="button" tabindex="0" aria-label="Play: Tim Huang"><div class="poster" style="background-image:url('/assets/why-play-tim-huang.jpg')"></div><div class="vscrim"></div><div class="play"></div></div><div class="rname">Tim Huang<i>Teacher, ELC High School, Bhutan</i></div></div>
-        <div class="reel anim d2"><div class="vframe vert" data-yt="WtC8tA2PCtw" data-inline="1" role="button" tabindex="0" aria-label="Play: Sheyenne Keliʻikuli"><div class="poster" style="background-image:url('/assets/why-play-sheyenne-keliikuli.jpg')"></div><div class="vscrim"></div><div class="play"></div></div><div class="rname">Sheyenne Keliʻikuli<i>Teacher, Kaʻŭmeke Kāʻeo Charter School, Hawaiʻi</i></div></div>
+        <div class="reel anim"><div class="vframe vert" data-yt="-9EAmpgkZ5w" data-inline="1" role="button" tabindex="0" aria-label="Play: Vincent Birisi"><div class="poster" style="background-image:url('/assets/why-play-vincent-birisi.webp')"></div><div class="vscrim"></div><div class="play"></div></div><div class="rname">Vincent Birisi<i>Teacher, Oloolaiser High School, Kenya</i></div></div>
+        <div class="reel anim d1"><div class="vframe vert" data-yt="Q86tC-AaJQc" data-inline="1" role="button" tabindex="0" aria-label="Play: Tim Huang"><div class="poster" style="background-image:url('/assets/why-play-tim-huang.webp')"></div><div class="vscrim"></div><div class="play"></div></div><div class="rname">Tim Huang<i>Teacher, ELC High School, Bhutan</i></div></div>
+        <div class="reel anim d2"><div class="vframe vert" data-yt="WtC8tA2PCtw" data-inline="1" role="button" tabindex="0" aria-label="Play: Sheyenne Keliʻikuli"><div class="poster" style="background-image:url('/assets/why-play-sheyenne-keliikuli.webp')"></div><div class="vscrim"></div><div class="play"></div></div><div class="rname">Sheyenne Keliʻikuli<i>Teacher, Kaʻŭmeke Kāʻeo Charter School, Hawaiʻi</i></div></div>
       </div>
     </div>
   </div>
@@ -154,8 +154,8 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
 </section>
 
 <!-- 7 - GIVING (the one ask) -->
-<section class="band homeroom" id="give" style="--dbtex:url('/assets/why-darkblue-texture.jpg')">
-  <div class="homeroom-img" role="img" aria-label="A teacher helping two students" style="background-image:url('/assets/why-teacher-helping-two-students.jpg');background-size:cover;background-position:center 26%"></div>
+<section class="band homeroom" id="give" style="--dbtex:url('/assets/why-darkblue-texture.webp')">
+  <div class="homeroom-img" role="img" aria-label="A teacher helping two students" style="background-image:url('/assets/why-teacher-helping-two-students.webp');background-size:cover;background-position:center 26%"></div>
   <div class="homeroom-panel">
     <div class="homeroom-inner">
       <div class="homeroom-head anim">
@@ -243,7 +243,7 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
   @media(max-width:560px){.hero::after{background:linear-gradient(180deg,rgba(2,40,58,.5) 0%,rgba(2,46,66,.15) 35%,rgba(2,40,58,.9) 100%)}}
 
   /* merged "the teacher" beat */
-  .jobdef{background:#e8e8e8 url('/assets/why-white-texture.jpg') center/cover}
+  .jobdef{background:#e8e8e8 url('/assets/why-white-texture.webp') center/cover}
   .jobdef .wrap{max-width:1120px}
   .jobdef .lead{margin-top:14px;max-width:62ch;font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(1.3rem,2.2vw,1.75rem);color:var(--deep);letter-spacing:-.005em}
   .jobdef .title{margin-top:20px}
@@ -272,7 +272,7 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
   .jobdef .script{font-family:var(--script);font-style:normal;font-size:1.02em;line-height:1.15;display:inline-block;padding:0 .06em}
 
   /* FOLD A - the argument */
-  .leverage{padding:0;background:#53b591 url('/assets/why-green-texture.jpg') center/cover}
+  .leverage{padding:0;background:#53b591 url('/assets/why-green-texture.webp') center/cover}
   .lev-inner{max-width:1760px;margin:0 auto;display:grid;grid-template-columns:minmax(0,58%) minmax(0,42%);min-height:clamp(620px,44vw,900px)}
   .lev-shot{order:2;background-size:cover;background-position:center}
   .lev-panel{order:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;position:relative;overflow:hidden;
@@ -292,7 +292,7 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
   @media(max-width:560px){.lev-panel{padding-left:22px;padding-right:22px}}
 
   /* FOLD B - the proof */
-  .proof{background-color:#e8e8e8;background-image:url('/assets/why-white-texture.jpg');background-size:cover;background-position:center}
+  .proof{background-color:#e8e8e8;background-image:url('/assets/why-white-texture.webp');background-size:cover;background-position:center}
   .proof .wrap{max-width:1120px}
   .proof .title{color:#26929d;max-width:22ch;margin:0}
   .proof-harvard{margin-top:22px;color:var(--slate);font-size:1.05rem;line-height:1.62;max-width:60ch}
@@ -340,7 +340,7 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
   @media(max-width:680px){.wn-videos .reels{grid-template-columns:1fr;max-width:280px}}
 
   /* objections */
-  .objsec{background:#e8e8e8 url('/assets/why-white-texture.jpg') center/cover}
+  .objsec{background:#e8e8e8 url('/assets/why-white-texture.webp') center/cover}
   .objsec .wrap{max-width:1120px}
   .obj-head{margin-bottom:30px;max-width:62ch}
   .obj-head h2{margin-top:12px}

@@ -77,6 +77,14 @@ export default defineConfig({
   // stays as-is and you only re-add an adapter (@astrojs/vercel@11 for FEAT-101, which
   // peers on astro@^7 — same upgrade, so do them together).
   output: 'static',
+  // 6 Aug 2026 — was Astro's default `'directory'`, which emits `why/index.html` and is
+  // therefore served at `/why/`. Every internal link we write, and every sitemap entry,
+  // says `/why` with no slash — so each navigation cost a 301, measured by the 6 Aug
+  // Lighthouse run at ~1.2–1.4 s of FCP/LCP on EVERY non-home route on mobile.
+  // `'file'` emits `why.html`, which Netlify serves at `/why` directly. This aligns the
+  // build with what the links and sitemap already claimed, rather than rewriting ~40 hrefs
+  // to add slashes. Canonical (`Astro.url.pathname`) follows automatically.
+  build: { format: 'file' },
   integrations,
   vite: {
     plugins: [docsIndexDevPlugin()],

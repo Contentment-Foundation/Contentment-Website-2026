@@ -10,7 +10,13 @@ const navLinks = [
   { href: '/getinvolved', label: 'Get Involved' },
 ];
 
-const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+// Normalise BOTH shapes: the trailing slash from a directory build and the `.html`
+// suffix from `build.format: 'file'` (6 Aug). Without the .html strip every
+// aria-current comparison silently fails and the current-page underline disappears.
+const pathname = Astro.url.pathname
+  .replace(/index\.html$/, '')
+  .replace(/\.html$/, '')
+  .replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => {
   const path = href.replace(/\/$/, '') || '/';
   return pathname === path || (path !== '/' && pathname.startsWith(`${path}/`));

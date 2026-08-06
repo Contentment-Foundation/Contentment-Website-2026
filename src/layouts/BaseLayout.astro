@@ -31,7 +31,11 @@ const {
   keela = false,
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// `build.format: 'file'` (6 Aug) makes pathname `/why.html`, so canonical and og:url
+// would advertise a .html URL that neither the sitemap nor any link uses. Strip it.
+// `/index.html` -> `/` first, so the homepage canonical stays the bare origin.
+const cleanPath = Astro.url.pathname.replace(/index\.html$/, '').replace(/\.html$/, '') || '/';
+const canonicalURL = new URL(cleanPath, Astro.site);
 ---
 <!DOCTYPE html>
 <html lang="en">
