@@ -687,7 +687,7 @@ Deploy to production host. Point contentment.org DNS. SSL verified. Env vars set
 - [ ] Cookiebot's single registered domain moved to `www.contentment.org` — the free tier allows **one** domain and the banner silently no-ops on any other (HC-067)
 - [ ] Every `PUBLIC_*` and server-side env var set on the production host, not just Netlify
 - [ ] GA4 / Clarity / Sentry / Cookiebot re-verified on the production domain
-- [ ] **Third-party draft deployments decommissioned (HC-081)** — six of Dave's draft page deploys plus Lorna's `website-keela.netlify.app`. Verified 6 Aug as HTTP 200 with **no `robots` meta and no `X-Robots-Tag`**, so they are indexable copies of our content with no canonical back to us. **Do this before cutover, not at it** — de-indexing after the fact is far slower than never being indexed. They live on Dave's and Lorna's own Netlify accounts, so it has to be asked for
+- [ ] **Third-party draft deployments decommissioned (HC-081)** — six of Dave's draft page deploys plus Lorna's `website-keela.netlify.app`. Verified 6 Aug as HTTP 200 with **no `robots` meta and no `X-Robots-Tag`**, so they are indexable copies of our content with no canonical back to us. **Timing decided by Somesh:** requested once review feedback has passed, since these sites *are* the review surface; the indexing risk until then is accepted knowingly. `X-Robots-Tag: noindex` or Netlify password protection is the zero-cost middle ground if the review window stretches. They live on Dave's and Lorna's own Netlify accounts, so it has to be asked for
 
 ---
 
