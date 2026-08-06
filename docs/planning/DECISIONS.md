@@ -288,6 +288,20 @@ PUBLIC_POSTHOG_HOST=https://us.i.posthog.com   # was app.posthog.com; see amendm
 - [x] Signed off — option chosen: **PostHog Cloud** (`app.posthog.com`)
 
 **Amendment — 5 Aug 2026: host is `https://us.i.posthog.com`.** The decision (PostHog Cloud, cookieless) is unchanged; only the hostname moved on. PostHog split ingestion onto regional hosts after this was signed off. Verified 3 Aug: the project's key returns a live config from `us.i.posthog.com` and **404s on `eu.i.posthog.com`**, so the project is US-region. `app.posthog.com` still resolves as an alias and returns byte-identical config, which is why `Analytics.astro` keeps it as the fallback default — but `PUBLIC_POSTHOG_HOST` should be set to the regional host, and the SDK loads assets from `us-assets.i.posthog.com`, which the CSP's `https://*.posthog.com` already covers.
+
+**Amendment — 6 Aug 2026: what `persistence: 'memory'` actually costs us.** The cookieless requirement is met and the decision stands, but its analytical consequence was never written down, and it is larger than "no cookies":
+
+`distinct_id` lives only for the **page load**. Every page view is therefore a **new anonymous user**. In practice:
+
+- **Unique users ≈ pageviews** — the unique count is inflated and should not be quoted as "people".
+- **Sessions do not persist across navigation.**
+- **Multi-page funnels cannot stitch.** "How many people went from `/why` to `/getinvolved`?" is **not answerable** with this configuration — and that is a question the team is likely to ask after launch.
+
+**Read PostHog as page-level aggregates, not user journeys.** GA4 (consent-gated, with its own identifiers) remains the tool for cross-page behaviour.
+
+Changing this means moving persistence to `localStorage`, which breaks the cookieless guarantee in DECISION-002 and would then require gating PostHog behind consent — a **team decision on the analytics/privacy trade-off, not a code fix**. Flagged rather than actioned.
+
+**Also verified 6 Aug (FEAT-080): PostHog itself is working.** The "unverified" note carried since 4 Aug was a flaw in our *verification method*, not in the integration — `array.js` is 242 KB loaded async from `us-assets.i.posthog.com`, `init` is replayed from the loader stub, and `request_batching` is on by default, so the first `$pageview` flushes seconds after load. Checks asserting on `networkidle` miss it. Verify by waiting 5 s+ or watching for the POST to `us.i.posthog.com/i/v0/e/`. Confirmed directly: flags endpoint HTTP 200 with the live key, `array.js` HTTP 200 / 241,994 bytes.
 - [x] Signed off by: **Somesh Bhardwaj**
 - [x] Date: 14 July 2026
 

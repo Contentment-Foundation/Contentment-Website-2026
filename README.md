@@ -2,7 +2,7 @@
 
 > *Project overview, orientation, and developer reference. Start here.*
 
-> **Project:** Full website redesign and build — Phase 1 MVP → Production on Vercel  
+> **Project:** Multi-page Astro site → production on Vercel at contentment.org  
 > **Organisation:** The Contentment Foundation · 501(c)(3) nonprofit  
 > **Technical lead:** Somesh Bhardwaj · somesh@contentment.org · Sr. System Admin, Full Stack AI Engineer  
 > **General contact:** hello@contentment.org
@@ -11,78 +11,98 @@
 
 ## For AI tools and new contributors — read this first
 
-This section is written to give any AI tool or first-time contributor a complete, accurate picture of the project before reading anything else. **Do not skip it.**
+This section gives any AI tool or first-time contributor an accurate picture of the project before reading anything else. **Do not skip it.**
 
 ### What this project is
 
-A marketing and conversion website for The Contentment Foundation at `contentment.org`. The site tells a single story — TCF delivers teacher wellbeing at scale — and drives one primary action: **Join Homeroom from $5/month**.
+A marketing and conversion website for The Contentment Foundation at `contentment.org`. The site tells a single story — TCF delivers teacher wellbeing at scale — and drives one primary action: **Join Homeroom** (monthly giving; messaging floor currently **$25/month**).
 
-**Current state:** Phase 1 homepage prototype lives in `site/index.html` (static HTML/CSS/JS). The full multi-page site is planned and documented in `docs/` but not yet built. The prototype is deployed on Netlify (interim). Production target is Vercel.
+**Current state:** Phase 1 multi-page **Astro 4.x** static site lives in `src/`. Dev preview on Netlify publishes `dist/` from `npm run build`. Production target remains **Vercel → contentment.org** (FEAT-101). The old Phase 1 HTML prototype in `site/` is superseded — do not edit it for production work.
 
 ### Who built what
 
 | Area | Built by | Status |
 |------|----------|--------|
-| `site/index.html` — homepage prototype | Dave Kebo | Under finalization |
-| `contentment-home.html` — single-file base64 version | Dave Kebo | Under finalization |
-| `site/story-board.html` — Story Board prototype | Somesh Bhardwaj | In progress |
-| `site/foundation-reach-map.html` — Foundation Reach Map prototype | Somesh Bhardwaj | In progress |
-| `site/story-board-feed-guide.html` — Story Board feed guide | Somesh Bhardwaj | Built |
-| All `docs/` planning, briefs, and research | Somesh Bhardwaj | Built — living documents |
+| Astro site (`src/`) — pages, layout, components | Ported from Dave Kebo handoffs; owned by Somesh Bhardwaj | Live on Netlify preview; polish / wiring ongoing |
+| `src/config/seams.ts` — CTA / Keela / external destinations | Somesh Bhardwaj | Living — edit here for pending URLs |
+| Keela General Donation Form embeds | Somesh Bhardwaj | Live on `/`, `/why`, `/getinvolved#donate` |
+| Newsletter → Flodesk (`/api/newsletter`) | Somesh Bhardwaj | Shipped (host-native functions); e2e + rate limit pending |
+| `public/` prototypes — Story Board, Foundation Reach Map | Somesh Bhardwaj | Preview routes; not embedded on homepage yet |
+| All `docs/` planning, briefs, research, launch Sheet | Somesh Bhardwaj | Living documents |
 
-### What is planned vs what exists today
+### What exists today vs still open
 
-| Layer | Planned (in docs) | Exists today |
-|-------|------------------|--------------|
-| Multi-page Astro site on Vercel | ✅ Fully specced | ❌ Not yet built |
-| Homepage | ✅ Specced | ✅ Prototype (`site/index.html`) — Dave's WIP |
-| `/why`, `/stories`, `/schools`, `/give`, `/give/monthly` | ✅ Specced | ❌ Not yet built |
-| Serverless API routes (`/api/*`) | ✅ Specced | ❌ Not yet built |
-| Analytics (GA4 + PostHog + Clarity) | ✅ Decided | ❌ Not wired |
-| Security headers, CSP | ✅ Specced in `vercel.json` | ❌ Not committed yet |
-| Story Board | ✅ Prototype built | ✅ `site/story-board.html` |
-| Foundation Reach Map | ✅ Prototype built | ✅ `site/foundation-reach-map.html` |
+| Layer | Status |
+|-------|--------|
+| Multi-page Astro site on Netlify preview | ✅ Built — `src/pages/` → `dist/` |
+| Routes: `/`, `/why`, `/our-impact`, `/schools`, `/getinvolved`, `/events`, `/about`, `/updates`, `/privacy`, branded `/404` | ✅ Built |
+| `/give` → `/getinvolved` | ✅ 301 (Netlify + Vercel) |
+| Keela General Donation Form | ✅ Live (per-tier Homeroom products still pending) |
+| Newsletter (Flodesk) | ✅ Code shipped — live submit test + Upstash rate limit pending |
+| Analytics scaffold (GA4 + PostHog + Clarity + Cookiebot + Sentry) | ✅ Scaffolded — blocked on credentials (HC-076) |
+| Security headers + CSP | ✅ `netlify.toml` + `vercel.json` (kept in sync by hand) |
+| Production cutover to contentment.org | ❌ FEAT-101 open (includes HC-077: unpublish public `/docs*`) |
+| `/terms`, story CMS (`/stories/[slug]`), school discovery embed | ❌ Blocked / Phase 2 |
+| Story Board + Foundation Reach Map | ✅ Prototypes at `/story-board`, `/foundation-reach-map` |
 
 ---
 
-## Document flow — how the docs relate and the order to use them
+## Which files to edit
 
-Every engineering decision, ticket, and status entry flows through these documents in order. **Do not skip steps.**
+| Task | Edit |
+|------|------|
+| Page copy, layout, components | `src/pages/`, `src/components/`, `src/layouts/` |
+| Design tokens / global CSS | `src/styles/tokens.css`, `src/styles/global.css` |
+| CTA / Keela / donate / social / RSVP destinations | `src/config/seams.ts` **only** |
+| Images & static assets | `public/assets/` |
+| Prototypes (map, Story Board) | `public/*.html` (+ `public/program-data.js`) |
+| Planning status / tickets / Sheet | `docs/planning/launch-plan-data.json` + `TRACKER.md` (see planning sync below) |
+| Stakeholder briefs | `docs/briefs/*.md` + matching `*.html` |
+| Superseded Phase 1 prototype | `site/` — **do not use for production** |
+
+---
+
+## Document flow — how the docs relate
 
 ```
 1. PRD.md
    └── What we're building, for whom, and why.
-       Defines audiences, belief journey, success metrics, phase gates.
 
 2. TECHNICAL-ARCHITECTURE.md
-   └── How we're building it.
-       Stack, hosting, integrations, env vars, CI/CD, DNS runbook.
+   └── How we're building it (stack, hosting, env vars, CI/CD, DNS).
        If TECH-BRIEF.md disagrees with this file, this file wins.
 
 3. DECISIONS.md
-   └── Any open technical choice that blocks work.
-       Each decision has options, a recommendation, and a sign-off checkbox.
-       Resolve here before writing tickets that depend on the choice.
+   └── Open / resolved technical choices — resolve before tickets that depend on them.
 
 4. FEATURE-TICKETS.md
-   └── What to build, broken into actionable specs.
-       Each ticket has: description, acceptance criteria, priority, phase, dependencies.
-       This is the spec document — not a status tracker.
+   └── Specs + acceptance criteria (not the live status board).
 
 5. TRACKER.md  ← operational dashboard
-   └── Live status of every ticket (Open / In Progress / Blocked / Done / etc).
-       Raises by whom, owned by whom, opened/closed dates, blockers.
-       Always the LAST file touched — reflects what is already defined in 1–4.
+   └── Live status. Sheet source of truth: launch-plan-data.json.
 ```
 
-**For any new piece of work:**
-1. Define it in **FEATURE-TICKETS.md** (what + acceptance criteria)
-2. If it requires a technical choice → open an entry in **DECISIONS.md**
-3. Once defined → add a row to **TRACKER.md** (status, owner, dates, depends on)
+**For any new piece of work:** define it in FEATURE-TICKETS → open DECISIONS if needed → update `launch-plan-data.json` + TRACKER.
 
 **Briefs** (`docs/briefs/`) are readable summaries for stakeholders — not specs. If a brief disagrees with `docs/planning/`, planning wins.
 
 **Correspondence** (`docs/correspondence/`) holds external review responses and stakeholder communications — not planning docs.
+
+### Planning sync (status-worthy changes)
+
+Code-only UI/CSS/copy polish → ship code only. When **status, scope, schedule, routes/slugs, CTA wiring, or team-facing truth** changes, update planning first:
+
+1. Edit `docs/planning/launch-plan-data.json` + `docs/planning/TRACKER.md` (append changelog row)
+2. Update `src/config/seams.ts` if real CTA/URL/form values changed
+3. Run:
+
+```bash
+python3 scripts/google-sheets/build-sheet-script.py   # → LaunchPlanSheet.gs
+python3 scripts/refresh-launch-canvas.py              # local canvas (not in git)
+python3 scripts/refresh-timelines.py --notes          # both timeline HTMLs
+```
+
+Full checklist: [`.cursor/rules/planning-docs-sync.mdc`](./.cursor/rules/planning-docs-sync.mdc) (mirrored in `.claude/rules/`). Do **not** hand-edit timeline status spans / notes / `As of` stamps — use `refresh-timelines.py`. `refresh-timelines.py --check` exits 1 when timelines are stale.
 
 ---
 
@@ -99,48 +119,65 @@ docs/briefs/*.md / *.html                 ← readable summaries only; must matc
 
 ---
 
+## Live routes (Astro)
+
+| Path | Page |
+|------|------|
+| `/` | Homepage |
+| `/why` | Why Teacher Wellbeing |
+| `/our-impact` | Our Impact (stories index) |
+| `/schools` | For Schools |
+| `/getinvolved` | Get Involved (was `/give`) |
+| `/events` | Events |
+| `/about` | About Us |
+| `/updates` | Updates / newsletter |
+| `/privacy` | Privacy (legal copy still owed for `/terms`) |
+| `/404` | Branded not-found |
+
+Homepage anchors (among others): `#top` · `#why` · `#impact` · `#how` · `#homeroom`.
+
+---
+
 ## Complete document index
 
 ### Planning & execution — `docs/planning/`
 
-| Document | Purpose | Read when you need to… |
-|----------|---------|------------------------|
-| [`PRD.md`](./docs/planning/PRD.md) | Product requirements — features, audiences, success metrics, phase gates | Understand what we're building and why |
-| [`TECHNICAL-ARCHITECTURE.md`](./docs/planning/TECHNICAL-ARCHITECTURE.md) | Full tech stack, integrations, env vars, CI/CD pipeline, DNS runbook, `vercel.json` spec | Make any engineering or infrastructure decision |
-| [`DECISIONS.md`](./docs/planning/DECISIONS.md) | Open and resolved technical decisions (analytics, cookie consent, rate limiting, image optimisation) | Check if a choice has already been made before reopening it |
-| [`SECURITY-AND-ACCESS.md`](./docs/planning/SECURITY-AND-ACCESS.md) | Security posture, auth approach, data privacy, pre-launch checklist, error handling | Add security features, review form handling, plan for launch |
-| [`FRONTEND-SPECIFICATION.md`](./docs/planning/FRONTEND-SPECIFICATION.md) | Design system — components, CSS tokens, integration specs, analytics events | Build any page or component |
-| [`ACCESSIBILITY.md`](./docs/planning/ACCESSIBILITY.md) | WCAG 2.1 AA target, page checklist, component ARIA pattern map, known gaps | Build or audit any interactive element |
-| [`FEATURE-TICKETS.md`](./docs/planning/FEATURE-TICKETS.md) | Full ticket specs — description, acceptance criteria, priority, phase, dependencies | Get the spec for any piece of work before starting |
-| [`TRACKER.md`](./docs/planning/TRACKER.md) | Live status tracker — all tickets, owners, dates, blockers, critical path | Check what is open, blocked, done, or pending |
+| Document | Purpose |
+|----------|---------|
+| [`PRD.md`](./docs/planning/PRD.md) | Product requirements, audiences, success metrics, phase gates |
+| [`TECHNICAL-ARCHITECTURE.md`](./docs/planning/TECHNICAL-ARCHITECTURE.md) | Stack, integrations, env vars, CI/CD, DNS, `vercel.json` |
+| [`DECISIONS.md`](./docs/planning/DECISIONS.md) | Open and resolved technical decisions |
+| [`SECURITY-AND-ACCESS.md`](./docs/planning/SECURITY-AND-ACCESS.md) | Security posture, privacy, pre-launch checklist |
+| [`FRONTEND-SPECIFICATION.md`](./docs/planning/FRONTEND-SPECIFICATION.md) | Design system, components, analytics events |
+| [`ACCESSIBILITY.md`](./docs/planning/ACCESSIBILITY.md) | WCAG 2.1 AA target, ARIA patterns, known gaps |
+| [`FEATURE-TICKETS.md`](./docs/planning/FEATURE-TICKETS.md) | Ticket specs + acceptance criteria |
+| [`TRACKER.md`](./docs/planning/TRACKER.md) | Live ticket status, owners, blockers, changelog |
+| [`launch-plan-data.json`](./docs/planning/launch-plan-data.json) | Sheet / canvas / timeline source of truth |
+| Page audits + [`PRE-LAUNCH-QA-AUDIT.md`](./docs/planning/PRE-LAUNCH-QA-AUDIT.md) | Responsive + pre-launch QA findings |
 
-### Content & information architecture — `docs/research/`
-
-| Document | Purpose | Read when you need to… |
-|----------|---------|------------------------|
-| [`MESSAGING-AND-COPY.md`](./docs/research/MESSAGING-AND-COPY.md) | Taglines, belief journey, page copy briefs, approved stats, CTAs, banned words | Write or review any copy on the site |
-| [`VOICE-AND-TONE.md`](./docs/research/VOICE-AND-TONE.md) | Persona, tone principles, pre-publish voice check | Ensure writing sounds like TCF |
-| [`EVIDENCE-AND-RESEARCH.md`](./docs/research/EVIDENCE-AND-RESEARCH.md) | Citable sources, DOIs, Harvard/Jennings/Durlak citations, ready-to-use copy lines | Cite research or verify a stat |
-| [`WEBSITE-ARCHITECTURE.md`](./docs/research/WEBSITE-ARCHITECTURE.md) | Sitemap, all URLs, page phases, deployment model | Plan routing, redirects, or new pages |
-
-### Team briefs — `docs/briefs/`
-
-Readable one-pagers for stakeholders. Not specs — always defer to `docs/planning/` for engineering decisions.
-
-| Brief | `.md` source | Published at |
-|-------|-------------|--------------|
-| [Team Brief](./docs/briefs/TEAM-BRIEF.md) | `docs/briefs/TEAM-BRIEF.md` | `/docs/team-brief` |
-| [Tech Brief](./docs/briefs/TECH-BRIEF.md) | `docs/briefs/TECH-BRIEF.md` | `/docs/tech-brief` |
-| [Growth Brief](./docs/briefs/GROWTH-BRIEF.md) | `docs/briefs/GROWTH-BRIEF.md` | `/docs/growth-brief` |
-| [Automation Brief](./docs/briefs/AUTOMATION-BRIEF.md) | `docs/briefs/AUTOMATION-BRIEF.md` | `/docs/automation-brief` |
-
-### Correspondence — `docs/correspondence/`
-
-External review responses and stakeholder communications.
+### Content & IA — `docs/research/`
 
 | Document | Purpose |
 |----------|---------|
-| [`ANIK-REVIEW-RESPONSE.md`](./docs/correspondence/ANIK-REVIEW-RESPONSE.md) | Response to Anik Ghosh's engineering review (Jul 2026) — maps every comment to existing docs or new tickets, with hyperlinks and issue tracker |
+| [`MESSAGING-AND-COPY.md`](./docs/research/MESSAGING-AND-COPY.md) | Taglines, belief journey, page copy, stats, CTAs |
+| [`VOICE-AND-TONE.md`](./docs/research/VOICE-AND-TONE.md) | Persona and tone |
+| [`EVIDENCE-AND-RESEARCH.md`](./docs/research/EVIDENCE-AND-RESEARCH.md) | Citable sources and ready-to-use lines |
+| [`WEBSITE-ARCHITECTURE.md`](./docs/research/WEBSITE-ARCHITECTURE.md) | Sitemap, URLs, deployment model |
+
+### Team briefs — `docs/briefs/`
+
+| Brief | Published (preview) |
+|-------|---------------------|
+| [Team](./docs/briefs/TEAM-BRIEF.md) · [Tech](./docs/briefs/TECH-BRIEF.md) · [Growth](./docs/briefs/GROWTH-BRIEF.md) · [Automation](./docs/briefs/AUTOMATION-BRIEF.md) | `/docs/*` on Netlify |
+| Dev timelines (`DEV-TIMELINE.html`, `dev-timelinev2.html`) | Generated by `refresh-timelines.py` — do not hand-edit status |
+
+### Correspondence — `docs/correspondence/`
+
+| Document | Purpose |
+|----------|---------|
+| [`ANIK-REVIEW-RESPONSE.md`](./docs/correspondence/ANIK-REVIEW-RESPONSE.md) | Response to Anik Ghosh's engineering review (Jul 2026) |
+| [`LORNA-KEELA-MAP-RESPONSE.md`](./docs/correspondence/LORNA-KEELA-MAP-RESPONSE.md) | Keela product / donate map with Lorna |
+| [`HANDOFF-MEETING-2026-07-28.md`](./docs/correspondence/HANDOFF-MEETING-2026-07-28.md) | Jul 28 handoff meeting notes |
 
 ---
 
@@ -148,23 +185,24 @@ External review responses and stakeholder communications.
 
 | Environment | Host | URL | When |
 |-------------|------|-----|------|
-| **Dev preview (interim)** | Netlify | [contentmentweb2.netlify.app](https://contentmentweb2.netlify.app) | Now — prototype + internal briefs |
-| **Production** | Vercel | [contentment.org](https://contentment.org) | After Astro migration (FEAT-002) |
-| **PR previews** | Vercel | `*.vercel.app` | Per pull request on `main` |
+| **Dev preview** | Netlify | [contentmentweb2.netlify.app](https://contentmentweb2.netlify.app) | Now — Astro `dist/` + prototypes + internal `/docs` |
+| **Production** | Vercel | [contentment.org](https://contentment.org) | FEAT-101 cutover |
+| **PR previews** | Vercel | `*.vercel.app` | Per pull request (target host) |
 
-**Now:** [`netlify.toml`](./netlify.toml) publishes `site/` and generates `site/docs/` on each build by copying `docs/*.html`. That folder is **not in git** — edit sources in `docs/` only.
+**Build:** [`netlify.toml`](./netlify.toml) runs `scripts/copy-docs.sh public/docs && npm run build`, publishes `dist/`. Prototypes and the docs hub live under `public/` so they ship inside `dist/` unchanged.
 
-**Prototype routes (Netlify — `netlify.toml`):**
+**Prototype / passthrough routes:**
 
-| Path | Page |
-|------|------|
-| `/foundation-reach-map` | Foundation Reach Map (`site/foundation-reach-map.html`) |
-| `/story-board` | Story Board (`site/story-board.html`) |
-| `/story-board-feed-guide` | Story feed guide (`site/story-board-feed-guide.html`) |
+| Path | Source |
+|------|--------|
+| `/foundation-reach-map` | `public/foundation-reach-map.html` |
+| `/story-board` | `public/story-board.html` |
+| `/story-board-feed-guide` | `public/story-board-feed-guide.html` |
+| `/docs/*` | Generated from `docs/*.html` at build (preview only) |
 
-Same paths work as `/*.html` directly. Replicate these redirects in `vercel.json` at production cutover (FEAT-101).
+**Production cutover (FEAT-101 / HC-077):** remove Footer “Project docs”, stop shipping `public/docs` / skip `copy-docs.sh` on the production build, and 404 `/docs*`. Keep `docs/` in the private repo.
 
-**Target:** Astro 4.x static build on Vercel — see [`docs/planning/TECHNICAL-ARCHITECTURE.md`](./docs/planning/TECHNICAL-ARCHITECTURE.md).
+Stack detail: [`docs/planning/TECHNICAL-ARCHITECTURE.md`](./docs/planning/TECHNICAL-ARCHITECTURE.md).
 
 ---
 
@@ -173,143 +211,104 @@ Same paths work as `/*.html` directly. Replicate these redirects in `vercel.json
 ```
 Contentment-Website-2026/
 │
-├── site/                          ← Current prototype (Netlify publish root)
-│   ├── index.html                 ← Homepage prototype (Dave Kebo) ~48 KB
-│   ├── story-board.html           ← Story Board prototype (Somesh Bhardwaj)
-│   ├── foundation-reach-map.html  ← Foundation Reach Map prototype (Somesh Bhardwaj)
-│   ├── story-board-feed-guide.html ← Feed guide (Somesh Bhardwaj)
-│   ├── program-data.js            ← Shared story/country data (map + Story Board)
-│   └── assets/
-│       ├── …                        ← Homepage images (~2.8 MB)
-│       └── countries-110m.js        ← Bundled world map TopoJSON (Foundation Reach Map)
+├── src/                           ← PRIMARY — Astro site (edit here)
+│   ├── pages/                     ← Routes (index, why, our-impact, schools, …)
+│   ├── components/                ← Nav, Footer, Homeroom, Keela, Newsletter, …
+│   ├── layouts/BaseLayout.astro
+│   ├── styles/                    ← tokens.css + global.css
+│   ├── config/seams.ts            ← CTA / Keela / external destinations
+│   ├── scripts/                   ← Client JS (nav, orbit, newsletter, …)
+│   └── lib/flodesk.js             ← Shared Flodesk API helpers
 │
-├── prototypes/
-│   ├── world-map/README.md          ← Map prototype notes (D3, deploy, integration)
-│   └── story-board/                 ← Story Board dev guide (FEED-GUIDE.md)
+├── public/                        ← Static assets + prototypes (copied into dist/)
+│   ├── assets/                    ← Images
+│   ├── foundation-reach-map.html
+│   ├── story-board.html
+│   ├── program-data.js
+│   ├── sitemap.xml · robots.txt · llms.txt · favicon.svg
+│   └── docs/                      ← GENERATED at build — do not hand-edit
+│
+├── netlify/functions/             ← Preview host: newsletter.mjs → /api/newsletter
+├── api/newsletter.js              ← Vercel twin of the same newsletter handler
+│
+├── site/                          ← Superseded Phase 1 HTML prototype — not the publish root
+├── prototypes/                    ← Dev notes for map + Story Board
 │
 ├── docs/
-│   ├── planning/                  ← CANONICAL — engineering source of truth
-│   │   ├── PRD.md
-│   │   ├── TECHNICAL-ARCHITECTURE.md
-│   │   ├── DECISIONS.md
-│   │   ├── SECURITY-AND-ACCESS.md
-│   │   ├── FRONTEND-SPECIFICATION.md
-│   │   ├── ACCESSIBILITY.md
-│   │   ├── FEATURE-TICKETS.md
-│   │   └── TRACKER.md             ← Live status tracker (new)
-│   ├── research/                  ← Copy, messaging, evidence, site architecture
-│   │   ├── MESSAGING-AND-COPY.md
-│   │   ├── VOICE-AND-TONE.md
-│   │   ├── EVIDENCE-AND-RESEARCH.md
-│   │   └── WEBSITE-ARCHITECTURE.md
-│   ├── briefs/                    ← Stakeholder summaries (HTML + MD)
-│   │   ├── TEAM-BRIEF.md / .html
-│   │   ├── TECH-BRIEF.md / .html
-│   │   ├── GROWTH-BRIEF.md / .html
-│   │   └── AUTOMATION-BRIEF.md / .html
-│   ├── correspondence/            ← External reviews and stakeholder comms
-│   │   └── ANIK-REVIEW-RESPONSE.md
-│   ├── index.html                 ← Docs hub (published to /docs on Netlify)
-│   ├── drive-links.js             ← Google Drive PDF links for briefs
-│   └── README.md                  ← Docs index and authority order
+│   ├── planning/                  ← CANONICAL engineering source of truth
+│   ├── research/                  ← Copy, messaging, evidence, IA
+│   ├── briefs/                    ← Stakeholder summaries (+ generated timelines)
+│   ├── correspondence/            ← External reviews / stakeholder comms
+│   └── index.html                 ← Docs hub source
 │
 ├── scripts/
-│   └── copy-docs.sh               ← Copies docs/*.html into site/docs/ for local preview
+│   ├── copy-docs.sh               ← docs/*.html → public/docs (build + local)
+│   ├── refresh-timelines.py       ← regenerates both timeline HTMLs from JSON
+│   ├── refresh-launch-canvas.py
+│   └── google-sheets/             ← LaunchPlanSheet.gs builder
 │
-├── contentment-home.html          ← Single-file build (base64 images) — for email/offline
-├── netlify.toml                   ← Netlify config (interim deploy)
+├── astro.config.mjs               ← output: 'static' (no adapter)
+├── netlify.toml · vercel.json
+├── contentment-home.html          ← Legacy single-file build (email/offline)
 └── README.md                      ← This file
 ```
 
 ---
 
-## Local preview
-
-**Homepage prototype:**
+## Local development
 
 ```bash
-cd site && python3 -m http.server 8080
-# open http://localhost:8080
+npm install
+cp .env.example .env   # fill what you have; missing analytics/Flodesk vars no-op safely
+npm run dev            # http://localhost:4321
 ```
-
-**Somesh prototypes (Story Board + Foundation Reach Map):**
 
 ```bash
-cd site && python3 -m http.server 8080
-# http://localhost:8080/story-board
-# http://localhost:8080/foundation-reach-map
-# http://localhost:8080/story-board-feed-guide
+npm run build && npm run preview
 ```
 
-Serve from `site/` (recommended). `file://` works for these pages if `program-data.js` and `assets/countries-110m.js` load via `<script>` tags; D3/topojson still load from CDN (internet required once). See [`prototypes/phase-2/world-map/README.md`](./prototypes/phase-2/world-map/README.md).
-
-**Homepage + project docs:**
+Refresh the internal docs hub locally after editing `docs/*.html`:
 
 ```bash
 ./scripts/copy-docs.sh
-cd site && python3 -m http.server 8080
-# open http://localhost:8080/docs
+# then open http://localhost:4321/docs (with `npm run dev` running)
 ```
 
-`site/docs/` is gitignored. Run `copy-docs.sh` after editing anything in `docs/*.html`.
+`public/docs/` is generated — edit sources in `docs/` only.
 
-> **Post-scaffold (after FEAT-002):** `npm run dev` (`astro dev`) replaces `python3 -m http.server`.
+Locked responsive QA widths: **320, 390, 759, 768, 940, 1280** px — see [`HOMEPAGE-RESPONSIVE-AUDIT.md`](./docs/planning/HOMEPAGE-RESPONSIVE-AUDIT.md).
 
 ---
 
 ## Design tokens
 
-| Token | Value |
-|-------|-------|
-| Display font | Newsreader |
-| Body font | Inter |
-| Brand font | Varela Round |
-| `--teal` | `#1FAFC0` |
-| `--ocean` | `#0080B0` |
-| `--deep` | `#024E70` |
-| `--green` | `#4FA98C` |
-| `--paper` | `#FBFAF7` |
+Defined in `src/styles/tokens.css` (ported from the approved homepage).
 
-**Rule:** No design changes during migration. Copy CSS and JS verbatim from `site/index.html` into Astro components.
+| Token | Value | | Fonts | |
+|-------|-------|-|-------|-|
+| `--teal` | `#1FAFC0` | | Display | Newsreader |
+| `--ocean` | `#0080B0` | | Body | Inter |
+| `--deep` | `#024E70` | | Brand | Varela Round |
+| `--green` | `#4FA98C` | | | |
+| `--paper` | `#FBFAF7` | | | |
 
----
-
-## Homepage sections (anchor links)
-
-| Anchor | Section |
-|--------|---------|
-| `#top` | Hero |
-| `#why` | Why Teacher Wellbeing |
-| `#impact` | Stats + educator quote |
-| `#how` | How Change Happens (orbit scroll animation) |
-| `#homeroom` | Monthly giving tiers ($5 / $25 / $100) |
+Match existing tokens, fonts, and the `.anim` reveal pattern — don't introduce a new design language unless a ticket says otherwise.
 
 ---
 
-## Homepage assets (`site/assets/`)
-
-| File | Use |
-|------|-----|
-| `img01_3b9ca36077.png` | Logo (nav + footer) |
-| `img02_f3c7dabda3.jpg` | Hero (desktop) |
-| `img03_7bbd154b69.jpg` | Hero (mobile) |
-| `img04_62faa64049.jpg` | Why section |
-| `kenya_band.jpg` | Kenya principal quote band |
-| `img05`–`img08` | Community circle photos |
-| `img09_d4a3165ce3.jpg` | Four Pillars background |
-| `img10_526e7678c7.jpg` | Homeroom section |
-| `img11`–`img13` | "More ways in" door cards |
-
----
-
-## Known open items on the prototype (Dave Kebo — non-blocking)
+## Known open items (high level)
 
 | Item | Detail |
 |------|--------|
-| `href="#"` on donation CTAs | Hero, nav pill, Homeroom section — wire to Keela URLs when finance provides them (FEAT-060) |
-| `href="#"` on door / footer links | "Start the conversation", "See events", social links — wire when pages exist (FEAT-004) |
-| Newsletter form | `onsubmit="return false"` — no backend yet (FEAT-070) |
-| Mobile nav drawer | Slide-in drawer in `Nav.astro` at ≤940px (FEAT-003 ✅) |
+| Per-tier Homeroom Keela products | General Donation Form is live; `joinTiers` in `seams.ts` still empty (HC-075) |
+| Analytics credentials | Scaffold in `Analytics.astro` + Sentry — waiting on IDs (HC-076) |
+| Newsletter e2e | Flodesk path shipped; live submit test + Upstash rate limit + Vercel verify at cutover |
+| `/terms` + legal privacy copy | FEAT-071 |
+| Pre-launch QA fixes | Audit done — fixes in progress ([PRE-LAUNCH-QA-AUDIT.md](./docs/planning/PRE-LAUNCH-QA-AUDIT.md)) |
+| Production DNS cutover | FEAT-101 (+ HC-077 unpublish `/docs*`) |
+| Story Board / Reach Map on homepage | Prototypes only until approved |
+
+Live status: [`docs/planning/TRACKER.md`](./docs/planning/TRACKER.md).
 
 ---
 
@@ -317,17 +316,18 @@ cd site && python3 -m http.server 8080
 
 | Tool | Role |
 |------|------|
-| **GA4** | Primary — traffic, sessions, funnels, campaign attribution (existing account) |
-| **Microsoft Clarity** | Heatmaps + session recordings — CRO (existing account) |
+| **GA4** | Primary — traffic, sessions, funnels, campaign attribution |
+| **Microsoft Clarity** | Heatmaps + session recordings |
 | **PostHog** | Product analytics, funnel cohorts, A/B testing |
-| **Bing Webmaster Tools** | Bing + Copilot AI indexing (existing account) |
-| **Google Search Console** | Google indexing, Core Web Vitals, manual actions |
+| **Bing Webmaster Tools** | Bing + Copilot indexing |
+| **Google Search Console** | Google indexing, CWV, manual actions |
 
-> Plausible dropped (paid subscription). See [DECISIONS.md](./docs/planning/DECISIONS.md) DECISION-001.  
-> Cookie consent: **Osano Free** + GA4 Consent Mode v2 + cookieless PostHog — signed off **Somesh Bhardwaj**, 14 Jul 2026. See DECISION-002.  
-> Transactional email: **SendGrid** (existing paid plan) — signed off **Somesh Bhardwaj**, 14 Jul 2026. See DECISION-003.  
-> Observability: **Hybrid** (Slack + Sentry + Vercel logs + PostHog) — DECISION-006. PostHog **Cloud** — DECISION-007.  
-> **Privacy on production:** Planning MD = spec only; live page at `/privacy` via Astro — SECURITY-AND-ACCESS §5.2.
+> Plausible dropped. See [DECISIONS.md](./docs/planning/DECISIONS.md) DECISION-001.  
+> Cookie consent: Cookiebot / Consent Mode v2 + cookieless PostHog path — see DECISION-002 + live `Analytics.astro`.  
+> Transactional email: **SendGrid** — DECISION-003.  
+> Observability: hybrid (Slack + Sentry + host logs + PostHog) — DECISION-006. PostHog **Cloud** — DECISION-007.
+
+Env var template: [`.env.example`](./.env.example).
 
 ---
 

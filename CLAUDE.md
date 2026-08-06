@@ -1,49 +1,64 @@
 # CLAUDE.md — Contentment Foundation Website
 
 Context and standing instructions for AI sessions working in this repo. Read this first.
+Full project orientation: [`README.md`](./README.md).
 
 ## What this is
 
 The website for **The Contentment Foundation** (contentment.org), a 501(c)(3) nonprofit
-focused on teacher and student wellbeing. This repo holds the **Phase 1 homepage prototype**
-(static HTML/CSS/vanilla JS) plus the planning docs for the full multi-page rebuild.
+focused on teacher and student wellbeing.
 
-- **Now:** single approved homepage — `site/index.html` — deployed to Netlify.
-- **Target:** multi-page **Astro 4.x** static site on **Vercel** at contentment.org (migration = `TICKET-002`).
+- **Now:** multi-page **Astro 4.x** static site in `src/` — Netlify preview publishes `dist/`
+  (`contentmentweb2.netlify.app`).
+- **Target:** same build on **Vercel** at contentment.org (FEAT-101 cutover).
+- **`site/`** is the superseded Phase 1 HTML prototype — do **not** edit it for production.
 
 ## Which file to edit (important)
 
-- **Day-to-day homepage edits → `site/index.html`.** This is the primary editable build (~48 KB,
-  self-contained: CSS in `<style>`, JS in a `<script>` block at the bottom). This is the file to
-  touch for almost all homepage work.
-- **`contentment-home.html`** (repo root, ~3.8 MB) is a portable single-file build with all images
-  base64-embedded, for email/offline sharing. **Regenerate it from `site/index.html` when needed** —
-  don't edit it directly.
-- **Images → `site/assets/`.** Keep filenames stable, or update the `src`/`background-image` paths.
+- **Day-to-day page work → `src/`.** Routes in `src/pages/`; shared chrome in `src/components/`
+  and `src/layouts/`; tokens/CSS in `src/styles/`.
+- **CTA / Keela / donate / RSVP / social destinations → `src/config/seams.ts` only.**
+- **Images → `public/assets/`.** Keep filenames stable, or update every `src` that references them.
+- **Prototypes (map, Story Board) → `public/*.html`** (+ `public/program-data.js`).
+- **Planning status → `docs/planning/launch-plan-data.json` + `TRACKER.md`** (see planning sync).
+- **`contentment-home.html`** is a legacy single-file portable build — don’t treat it as the live site.
 
 ## Repo layout
 
 ```
-site/                    Phase-1 build (what ships now)
-  index.html             ← PRIMARY editable homepage (Dave Kebo)
-  foundation-reach-map.html   ← map prototype (Somesh Bhardwaj)
-  story-board.html            ← Story Board prototype (Somesh Bhardwaj)
-  story-board-feed-guide.html ← feed guide (Somesh Bhardwaj)
-  program-data.js             ← shared stories/countries (map + Story Board)
-  assets/                images + countries-110m.js (map TopoJSON)
-  docs/                  GENERATED at build time, gitignored — never edit here
-prototypes/
-  world-map/README.md    map prototype: D3, deploy, integration
-  story-board/           Story Board dev notes (FEED-GUIDE.md)
-contentment-home.html    portable single-file build (regenerate from site/index.html)
-docs/                    planning + content (source of truth for the rebuild)
-  planning/              PRD, TECHNICAL-ARCHITECTURE, FRONTEND-SPEC, ACCESSIBILITY, FEATURE-TICKETS, DECISIONS, SECURITY, TRACKER
+src/                     PRIMARY — Astro site (edit here)
+  pages/                 Routes: /, /why, /our-impact, /schools, /getinvolved,
+                         /events, /about, /updates, /privacy, 404
+  components/            Nav, Footer, Homeroom, Keela*, Newsletter, sections…
+  layouts/BaseLayout.astro
+  styles/                tokens.css + global.css
+  config/seams.ts        CTA / Keela / external destinations
+  scripts/               Client JS (nav, orbit, newsletter, …)
+  lib/flodesk.js         Shared Flodesk helpers
+public/                  Static assets + prototypes (copied into dist/)
+  assets/                Images
+  foundation-reach-map.html · story-board.html · story-board-feed-guide.html
+  program-data.js
+  sitemap.xml · robots.txt · llms.txt · favicon.svg
+  docs/                  GENERATED at build — never hand-edit
+netlify/functions/       Preview: newsletter.mjs → /api/newsletter
+api/newsletter.js        Vercel twin of the same handler
+site/                    Superseded Phase 1 prototype — not the publish root
+prototypes/              Dev notes for map + Story Board
+docs/                    Planning + content (source of truth for scope)
+  planning/              PRD, TECHNICAL-ARCHITECTURE, FRONTEND-SPEC, ACCESSIBILITY,
+                         FEATURE-TICKETS, DECISIONS, SECURITY, TRACKER,
+                         launch-plan-data.json, QA/responsive audits
   research/              MESSAGING-AND-COPY, VOICE-AND-TONE, WEBSITE-ARCHITECTURE, EVIDENCE
-  briefs/               stakeholder summaries (.md/.html) — NOT authoritative specs
-  correspondence/        external review responses (e.g. ANIK-REVIEW-RESPONSE.md)
-  index.html, *-BRIEF.html   sources for the /docs/* routes
-scripts/copy-docs.sh     copies docs/*.html → site/docs/ for local preview
-netlify.toml             Netlify build config (+ /foundation-reach-map, /story-board redirects)
+  briefs/                Stakeholder summaries (.md/.html) — NOT authoritative specs
+  correspondence/        External reviews / stakeholder comms
+scripts/
+  copy-docs.sh           docs/*.html → public/docs (build + local preview)
+  refresh-timelines.py   Regenerates both timeline HTMLs from JSON
+  refresh-launch-canvas.py
+  google-sheets/         LaunchPlanSheet.gs builder
+astro.config.mjs         output: 'static' (no adapter)
+netlify.toml · vercel.json
 ```
 
 ## Source-of-truth hierarchy
@@ -52,14 +67,15 @@ For anything about scope, UI, or build approach, defer to `docs/planning/` in th
 
 ```
 PRD.md (scope & MVP)
-  → FRONTEND-SPECIFICATION.md (locked UI = site/index.html)
-    → ACCESSIBILITY.md (a11y checklist + ARIA pattern reference for that UI)
+  → FRONTEND-SPECIFICATION.md (locked UI — ported into src/)
+    → ACCESSIBILITY.md (a11y checklist + ARIA pattern reference)
   → TECHNICAL-ARCHITECTURE.md + SECURITY-AND-ACCESS.md (how we build)
-  → FEATURE-TICKETS.md (execution order)
+  → FEATURE-TICKETS.md (specs)
+  → TRACKER.md + launch-plan-data.json (live status)
 ```
 
 `docs/briefs/*` are readable summaries only. **If a brief conflicts with `docs/planning/`, planning wins.**
-Assume **no UI/UX changes beyond the approved prototype** unless a ticket says otherwise.
+Assume **no UI/UX redesign** beyond the approved pages unless a ticket says otherwise.
 
 ## Deployment
 
@@ -69,20 +85,25 @@ Assume **no UI/UX changes beyond the approved prototype** unless a ticket says o
 | Production (target) | Vercel | contentment.org |
 | PR previews | Vercel | `*.vercel.app` |
 
-Netlify publishes `site/` and generates `site/docs/` on each build from `docs/*.html`.
-
-Prototype routes (also in `netlify.toml`): `/foundation-reach-map`, `/story-board`, `/story-board-feed-guide`.
+Netlify publishes `dist/` from `npm run build` (after `copy-docs.sh` → `public/docs`).
+Prototype routes in `netlify.toml`: `/foundation-reach-map`, `/story-board`, `/story-board-feed-guide`.
+`/give` → `/getinvolved` (301).
 
 ## Gotchas — read before editing
 
-- **`site/docs/` is gitignored and generated.** Edit brief sources in `docs/` only, then run
-  `./scripts/copy-docs.sh` to refresh the local preview. **At production cutover (FEAT-101 / HC-077):**
-  remove Footer “Project docs”, stop publishing `/docs*` on contentment.org; keep `docs/` in the private repo only.
-- After editing `site/index.html`, regenerate `contentment-home.html` if the single-file build is still needed.
-- Links use **relative paths** so the site works over `file://` and a local server.
-- `prefers-reduced-motion` is respected throughout — keep any new animations gated the same way.
+- **`public/docs/` is generated.** Edit brief sources in `docs/` only, then run `./scripts/copy-docs.sh`
+  (or rely on the Netlify build). **At production cutover (FEAT-101 / HC-077):** remove Footer
+  “Project docs”, stop publishing `/docs*` on contentment.org; keep `docs/` in the private repo only.
+- **`astro.config.mjs` stays `output: 'static'` with no adapter.** Newsletter uses host-native
+  functions (`netlify/functions` + `api/newsletter.js`), not Astro API routes — don’t reintroduce
+  a hybrid/SSR adapter without an explicit ticket.
+- Don’t list docs/prototype paths in Astro `redirects` — they overwrite real `public/` files with
+  absolute `site`-URL meta-refresh pages. Keep those rewrites in `netlify.toml` / `vercel.json`.
+- CSP lives in both `netlify.toml` and `vercel.json` — keep them in sync by hand when origins change.
+- `prefers-reduced-motion` is respected throughout — gate any new animations the same way.
+- Timeline HTML status spans / notes / `As of` are **generated** — use `refresh-timelines.py`, never hand-edit.
 
-## Design tokens (defined in `:root` of `site/index.html`)
+## Design tokens (defined in `src/styles/tokens.css`)
 
 | Token | Value | | Fonts | |
 |-------|-------|-|-------|-|
@@ -95,23 +116,25 @@ Prototype routes (also in `netlify.toml`): `/foundation-reach-map`, `/story-boar
 ## Homepage sections & interactions
 
 Anchors: `#top` hero · `#why` · `#impact` · Kenya band · `#how` (scroll-pinned ripple) ·
-community circles · Four Pillars (accordion cards) · `#homeroom` (giving tiers) · doors · newsletter · footer.
+community circles · Four Pillars (accordion cards) · `#homeroom` (Keela donate / Homeroom) ·
+doors · newsletter · footer.
 
-JS (bottom `<script>` of `site/index.html`): sticky nav, hero entrance, IntersectionObserver reveals
-(`.anim`), stat count-up (`.num[data-count]`), Four Pillars accordion, pinned orbit scroll (560vh),
-subtle parallax.
+Client JS lives under `src/scripts/` (nav, orbit, animations, newsletter) — not a single
+bottom-of-page `<script>` block as in the old `site/index.html`.
 
 ## Known open items
 
-- Donation/CTA links are `href="#"` — wire to the real Keela URL when available.
-- Newsletter form is `onsubmit="return false"` — no backend yet.
-- Mobile nav drawer at `≤940px` in shared `Nav.astro` (focus trap, Escape, body scroll lock).
-- **Foundation Reach Map (in progress):** flat D3 + TopoJSON world map with pin cards per served country.
-  Prototype: **`site/foundation-reach-map.html`** → `/foundation-reach-map` on Netlify.
-  Stack: D3 + topojson-client (CDN), `assets/countries-110m.js` (bundled map), `program-data.js` (stories).
-  Desktop: hanging pendulum pin cards (hover to preview, click to open modal). Mobile (`pointer:coarse`): 18 px balloon pins that scale with zoom (√zoom factor); crowded pins show a bottom-sheet picker so the user can choose which country to open.
-  Notes: [`prototypes/phase-2/world-map/README.md`](prototypes/phase-2/world-map/README.md). After approval, embed on homepage and restyle to site tokens.
-- **Story Board (in progress):** **`site/story-board.html`** → `/story-board`. Same `program-data.js`.
+- Per-tier Homeroom Keela products — General Donation Form is live; `seams.joinTiers` still empty (HC-075).
+- Analytics credentials — scaffold in `Analytics.astro` + Sentry; waiting on IDs (HC-076).
+- Newsletter — Flodesk path shipped; live e2e submit test + Upstash rate limit + Vercel verify pending.
+- `/terms` + final legal privacy copy (FEAT-071).
+- Pre-launch QA fixes — audit done ([PRE-LAUNCH-QA-AUDIT.md](docs/planning/PRE-LAUNCH-QA-AUDIT.md)).
+- Production DNS cutover (FEAT-101) including HC-077 unpublish `/docs*`.
+- **Foundation Reach Map:** `public/foundation-reach-map.html` → `/foundation-reach-map`.
+  D3 + topojson-client (CDN), `program-data.js`, `assets/countries-110m.js`.
+  Notes: [`prototypes/phase-2/world-map/README.md`](prototypes/phase-2/world-map/README.md).
+  After approval, embed on site and restyle to tokens.
+- **Story Board:** `public/story-board.html` → `/story-board`. Same `program-data.js`.
 
 ## Browser MCP (dev QA)
 
