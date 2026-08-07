@@ -68,6 +68,7 @@ Walk this list on every status-worthy commit. Update what applies; skip what doe
 | `DECISIONS.md` | Decision opened / closed / wording changed |
 | `ACCESSIBILITY.md` | a11y requirements or patterns changed |
 | `SECURITY-AND-ACCESS.md` | Security / access / CSP / auth notes changed |
+| `ANALYTICS-AND-EVENTS.md` | An analytics event is added, renamed or removed; a tool's consent behaviour changes; a limitation is discovered that would make someone misread a number |
 | `TECHNICAL-ARCHITECTURE.md` | Stack, hosting, routing, or architecture milestone |
 | `FRONTEND-SPECIFICATION.md` | Locked UI / component contract changed |
 | `PRD.md` | Product scope / MVP boundaries changed |

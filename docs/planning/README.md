@@ -14,6 +14,7 @@ Build-ready documents for the contentment.org redesign. All execution docs assum
 | Frontend Specification | [FRONTEND-SPECIFICATION.md](./FRONTEND-SPECIFICATION.md) | Design / Frontend |
 | Accessibility Checklist & ARIA Patterns | [ACCESSIBILITY.md](./ACCESSIBILITY.md) | Design / Frontend / QA |
 | Feature Tickets | [FEATURE-TICKETS.md](./FEATURE-TICKETS.md) | Engineering lead |
+| **Analytics & Events** | [ANALYTICS-AND-EVENTS.md](./ANALYTICS-AND-EVENTS.md) | **Anyone asking "where do I see X?"** — event catalogue, which tool answers which question, what the numbers do *not* include, and the source material for the internal dashboard |
 
 ## Source of truth hierarchy
 
