@@ -638,7 +638,8 @@ Run in sequence. `hello@contentment.org` email must not be interrupted during cu
 | 4 | Cutover | Set A record to `76.76.21.21` (Vercel) or CNAME to `cname.vercel-dns.com` for apex domain |
 | 5 | Cutover | **Verify MX records unchanged** — Google Workspace email must continue routing |
 | 6 | Cutover | Confirm HTTPS loads within 5 minutes (Vercel auto-provisions Let's Encrypt) |
-| 7 | +15 min | Smoke test https://contentment.org — homepage, /why, /getinvolved, Keela CTA; confirm `/docs` and `/docs/*` return 404 (or equivalent) and are absent from sitemap |
+| 6b | Cutover, immediately after HTTPS | **Move Cookiebot's registered domain to `www.contentment.org`** (HC-067). The free tier allows **one** domain and it is currently the Netlify preview. **This failure is silent** — the banner simply stops appearing, consent is never collected, GA4 and Clarity stay denied by default, and the Cookie Preferences controls in the footer and on `/privacy` become dead. Nothing errors and nothing looks broken, so it will not be noticed unless it is checked. |
+| 7 | +15 min | Smoke test https://contentment.org — homepage, /why, /getinvolved, Keela CTA; confirm `/docs` and `/docs/*` return 404 (or equivalent) and are absent from sitemap. **Also confirm the cookie banner actually appears in a fresh/incognito session, and that the footer "Cookie preferences" button re-opens it** — this is the check that catches step 6b having been missed |
 | 8 | +1 hour | Submit sitemap.xml in Google Search Console; check for crawl errors |
 | 9 | +24h | Restore DNS TTLs to 3600 seconds |
 | 10 | +30 days | Decommission old site once backlink traffic has migrated |
