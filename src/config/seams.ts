@@ -30,6 +30,29 @@ export const seams = {
     },
   },
 
+  /**
+   * ALTERNATE DONATION PATH — Raisely (Lorna, 7 Aug 2026).
+   *
+   * Why this exists: Keela confirmed donation-form traffic from **India and Brazil is
+   * blocked at the platform level**, with no restoration timeline, and their suggested
+   * workaround was for donors to use a VPN. A donor who cannot load the form has no way
+   * to give and no way to tell us — the failure is invisible on our side. Keela stays the
+   * primary experience; this is the fallback beneath it.
+   *
+   * Leave `url` EMPTY until the Raisely page is live and tested end-to-end. The fallback
+   * line does not render while it is empty, so a broken or placeholder link can never ship
+   * — filling this one value turns it on across every donate widget at once.
+   */
+  donateFallback: {
+    /** Raisely donation page URL. Empty = fallback line hidden everywhere. */
+    url: '',
+    /** Provider name, for the analytics payload and internal clarity. */
+    provider: 'Raisely',
+    /** Copy agreed with Kristina 7 Aug: link text is the second half. */
+    prompt: 'Trouble loading the form?',
+    linkText: 'Donate here instead',
+  },
+
   /** Donate CTAs → Get Involved Join Homeroom fold (`#become`). */
   donate: '/getinvolved#become',
 

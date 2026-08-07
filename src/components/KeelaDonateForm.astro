@@ -19,6 +19,7 @@ interface Props {
 const { source = 'keela_donate_form', class: className = '' } = Astro.props;
 const embedSrc = seams.keela.generalDonationForm.embedSrc;
 const formName = seams.keela.generalDonationForm.name;
+const fallback = seams.donateFallback;
 ---
 {embedSrc && (
   <div
@@ -31,10 +32,64 @@ const formName = seams.keela.generalDonationForm.name;
     <div class="keela-embed-form" data-src={embedSrc}>
       <div class="keela-loading"><div></div><div></div><div></div><div></div></div>
     </div>
+
+    {/* Alternate donation path (Lorna, 7 Aug). Renders ONLY once seams.donateFallback.url
+        is set, so no placeholder link can ship. Deliberately always visible rather than
+        shown on a load-failure check: the embed is a cross-origin iframe, so we cannot
+        reliably detect that it failed to render for the donor — a geo-block looks like a
+        blank frame, not an error we can catch. A donor who sees nothing needs the way out
+        already on the page. */}
+    {fallback.url && (
+      <p class="keela-fallback">
+        {fallback.prompt}{' '}
+        <a
+          href={fallback.url}
+          data-donate-fallback={fallback.provider}
+          data-fallback-source={source}
+          rel="noopener"
+        >{fallback.linkText}</a>
+      </p>
+    )}
   </div>
 )}
 
+<style>
+  /* Quiet by default — this must not compete with the primary donate CTA, but has to be
+     legible to someone staring at a frame that never loaded. --slate on the light bands
+     these widgets sit in clears AA. */
+  .keela-fallback {
+    margin-top: 14px;
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--slate);
+    text-align: center;
+  }
+  .keela-fallback a {
+    color: var(--ocean);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .keela-fallback a:hover { color: var(--deep); }
+</style>
+
 <script>
+  import { trackEvent } from '../scripts/analytics.js';
+
+  // Every click here is a donor telling us the primary widget did not work for them.
+  // That is the ONLY signal we get: a geo-blocked embed renders as a blank iframe, which
+  // is cross-origin and therefore invisible to us. Without this event, a region-wide
+  // outage looks exactly like "fewer donations this month". With it, we can show Keela
+  // a count instead of an anecdote.
+  document.querySelectorAll('[data-donate-fallback]').forEach((link) => {
+    link.addEventListener('click', () => {
+      trackEvent('donate_fallback_click', {
+        provider: link.dataset.donateFallback || 'unknown',
+        source: link.dataset.fallbackSource || 'unknown',
+      });
+    });
+  });
+
   const ALLOWED = new Set(['25', '50', '100']);
 
   function presetFromUrl() {

@@ -486,7 +486,7 @@
     [
       "D-02",
       "Keela checkout URLs",
-      "Interim: General Donation Form embed (give-usa) for all regions except India. Per-tier Homeroom hosted links still TBD.",
+      "Interim: General Donation Form embed (give-usa) for all regions except India. Per-tier Homeroom hosted links still TBD. 7 AUG — Keela confirmed India + Brazil donation traffic is BLOCKED at the platform level with no restoration timeline; suggested workaround was a VPN. Lorna recommended and Kristina approved launching Keela-primary with Raisely as an alternate path (HC-082). Site code is built and gated on the Raisely URL. Note this also reopens the India question that was previously just 'deferred' — it is now a known block, not an unbuilt region.",
       "Finance",
       "Partial",
       "Entire conversion path",
@@ -2260,6 +2260,16 @@
       "Open",
       "High",
       "WAITING ON: Dave (six draft sites) and Lorna (website-keela.netlify.app) — but NOT YET ASKED, by decision.\n6 Aug (Somesh) — TIMING DECIDED. The takedown request goes out only once all review feedback has passed and we are ready to cut over to contentment.org. Rationale: these sites ARE the review surface — Dave's drafts are what reviewers compare our build against, and Lorna's map is the shared reference for the Keela decisions still open (HC-078/079, D-25). Pulling them mid-review would cost more than the risk they carry.\nRISK ACCEPTED, stated so the choice is visible rather than implied: six near-complete copies of contentment.org content stay indexable, with no canonical pointing back to us, until launch. Google may index them in the meantime, and de-indexing a duplicate afterwards is slower than never being indexed. Lorna's map also stays publicly readable, and it names staff and sets out tax-letter handling, QuickBooks reconciliation and the launch plan.\nZERO-COST MIDDLE GROUND, still available at any point and worth taking if the review window stretches: add X-Robots-Tag: noindex via a _headers file on each site, or turn on Netlify password protection. Either removes the SEO exposure while leaving every site fully usable for reviewers — it costs them nothing and needs no takedown. Only the crawler is affected.\nAT CUTOVER: full delete of all seven.\nTHE URLS:\n  Homepage        https://comfy-brigadeiros-00c4b6.netlify.app/\n  Why             https://loquacious-zuccutto-ec29f4.netlify.app/\n  Our Impact      https://heartfelt-nougat-9d490a.netlify.app/\n  For Schools     https://timely-dasik-427334.netlify.app/\n  Events          https://helpful-elf-ba3c06.netlify.app/\n  Get Involved    https://cute-palmier-4c93e1.netlify.app/\n  Keela map       https://website-keela.netlify.app/\nNOTE — these sit on Dave's and Lorna's own Netlify accounts, so we cannot action any of it ourselves."
+    ],
+    [
+      "HC-082",
+      "Integrations",
+      "Raisely alternate donation path — Keela blocks India + Brazil",
+      "Keela confirmed (7 Aug) that donation-form traffic from India and Brazil is blocked at the platform level, no restoration timeline, suggested workaround is for donors to use a VPN. Lorna recommends launching with Keela primary + Raisely as an alternate path. Kristina approved. Code is BUILT and gated on the URL.",
+      "Lorna → Somesh",
+      "Partial",
+      "Critical",
+      "WAITING ON: Lorna — the live Raisely page URL, plus assets/copy and the end-to-end test she asked me to run.\nON US: DONE and waiting. seams.donateFallback is wired into KeelaDonateForm, so it appears under the widget on all three donate surfaces (homepage Homeroom, /why give band, /getinvolved #donate) the moment the URL is filled in. Copy per Kristina: 'Trouble loading the form? Donate here instead'. Renders ONLY when the URL is set, so no placeholder or dead link can ship.\nDESIGN NOTE worth keeping: the fallback line is ALWAYS visible rather than shown on a detected load failure. The Keela embed is a cross-origin iframe, so we cannot see whether it rendered for the donor — a geo-block looks like a blank frame, not a catchable error. A donor staring at nothing needs the way out already on the page.\nMEASUREMENT: clicks fire donate_fallback_click {provider, source}. This is the ONLY signal we get that the primary widget is failing for real people — without it a region-wide outage is indistinguishable from 'fewer donations this month'. It also turns the next Keela conversation from anecdote into a number.\nSTILL TO DO once the URL lands: fill seams.donateFallback.url, run the end-to-end test donation Lorna asked for, and confirm no CSP change is needed (it is a plain outbound link, so form-action/frame-src do not apply — but they would if Raisely is ever embedded rather than linked).\nOPEN QUESTIONS FOR KEELA (Somesh, 7 Aug) — none answered yet: which regions besides India and Brazil are affected or at risk; whether this is Keela's own WAF config or a Cloudflare managed ruleset; why a platform-level regional block was communicated only in a 1:1 email thread rather than proactively to all customers; and what the notification commitment is for the next occurrence."
     ]
   ],
   "reviewFeedback": [
