@@ -1,6 +1,8 @@
 ---
 import { seams } from '../config/seams';
 
+const COOKIEBOT_ID = import.meta.env.PUBLIC_COOKIEBOT_ID;
+
 const donateHref = seams.donate || '/getinvolved#become';
 const getInvolvedHref = seams.join || '/getinvolved';
 const newTab = { target: '_blank', rel: 'noopener' } as const;
@@ -37,6 +39,13 @@ const isCurrent = (href: string) => pathname === href.replace(/\/$/, '');
         <a href="/our-impact">Our Impact</a>
         <a href="/updates" aria-current={isCurrent('/updates') ? 'page' : undefined}>Updates</a>
         <a href="/privacy" aria-current={isCurrent('/privacy') ? 'page' : undefined}>Privacy &amp; cookies</a>
+        {COOKIEBOT_ID && (
+          /* Consent withdrawal must be as easy as giving it (GDPR Art. 7(3) / PECR), so this
+             belongs sitewide rather than only on /privacy. A <button> because it performs an
+             action; styled to match the sibling links. TICKET-071 listed this as done on
+             5 Aug when it did not exist — corrected 7 Aug. */
+          <button type="button" data-cookie-prefs class="foot-link-btn">Cookie preferences</button>
+        )}
         <!-- /docs stays unmarked on purpose: it is a public/ directory index served by a
              netlify.toml rewrite, not an Astro route, so no built page's pathname equals it. -->
         <a href="/docs">Project docs</a>
@@ -63,3 +72,13 @@ const isCurrent = (href: string) => pathname === href.replace(/\/$/, '');
     </div>
   </div>
 </footer>
+
+<script>
+  // NOT wrapped in {COOKIEBOT_ID && (...)}. A <script> inside a JSX conditional is not
+  // hoisted or bundled by Astro — it ships raw, so the bare `import` below would be an
+  // unresolvable specifier and the whole thing silently dead. Verified in dist/ on 7 Aug.
+  // No guard is needed anyway: initCookiePrefs() returns immediately when the page has no
+  // [data-cookie-prefs] elements, which is exactly the case when Cookiebot is unconfigured.
+  import { initCookiePrefs } from "../scripts/cookie-prefs.js";
+  initCookiePrefs();
+</script>

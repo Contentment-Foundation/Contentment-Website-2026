@@ -567,6 +567,29 @@ const modal=document.getElementById("modal"), modalBg=document.getElementById("m
 
 function hash(n){ return ((n*2654435761)>>>0)%1000; }
 function nameOf(k){ return PROGRAM[k].label||k; }
+/** Escape text for HTML attribute / text node interpolation (mirrors foundation-reach-map). */
+function esc(s){ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+const ALLOWED_SHAPES=new Set([
+  "shape-sticky","shape-polaroid","shape-torn","shape-ticket","shape-postcard","shape-tag",
+  "shape-rounded","shape-notebook","shape-circle","shape-arch"
+]);
+const ALLOWED_TAPES=new Set(["t0","t1","t2","t3"]);
+const ALLOWED_ROLES=new Set(["student","educator"]);
+function safeShape(v){ return ALLOWED_SHAPES.has(v)?v:"shape-notebook"; }
+function safeTape(v){ return ALLOWED_TAPES.has(v)?v:"t0"; }
+function safeRole(v){ return ALLOWED_ROLES.has(v)?v:"educator"; }
+/** Only https: images or safe data: image URIs. Blocks javascript: / event-handler breakouts. */
+function safeImgUrl(raw){
+  const s=String(raw||"").trim();
+  if(!s) return "";
+  if(/^data:image\/(png|jpe?g|gif|webp);base64,/i.test(s)) return s;
+  if(s.startsWith("data:image/svg+xml,")) return s;
+  try{
+    const u=new URL(s, location.origin);
+    if(u.protocol==="https:") return u.href;
+  }catch{ /* fall through */ }
+  return "";
+}
 
 function buildStories(){
   const out=[];
@@ -634,28 +657,35 @@ function renderCards(){
       <span class="d4">✿</span>
       <svg width="90" height="90" style="top:140px;left:40px" viewBox="0 0 90 90"><path d="M10,45 Q30,10 55,30 T80,50" fill="none" stroke="#024E70" stroke-width="2.5" stroke-linecap="round"/></svg>
       <svg width="70" height="70" style="bottom:60px;right:160px" viewBox="0 0 70 70"><path d="M8,35 Q25,8 45,28 T62,42" fill="none" stroke="#4FA98C" stroke-width="2" stroke-linecap="round"/></svg>
-    </div>`)+filtered.map(s=>`
-    <div class="frame-wrap" data-id="${s.id}" style="${gridMode?"":`
-      left:${s._x}px;top:${s._y}px;--rot:${s.rot};--swing:${s.swing};
-      --sway-dur:${s.swayDur};--sway-delay:${s.swayDelay};
-      --pin:${s.pin[1]};--pin-hi:${s.pin[0]};${s.cardWidth?`width:${s.cardWidth}px;`:""}`}">
-      <span class="washi ${s.tape}" aria-hidden="true"></span>
-      ${s.sticker?`<span class="sticker" style="top:${s.shape==="shape-sticky"?"8":"6"}px;left:${8+(hash(s.id)%30)}px;transform:rotate(${(hash(s.id)%20)-10}deg)">${s.sticker}</span>`:""}
-      <article class="frame ${s.shape}">
-        ${s.shape==="shape-ticket"?'<span class="ticket-stamp" aria-hidden="true">voice</span>':""}
-        ${s.shape==="shape-tag"?'<span class="tag-hole" aria-hidden="true"></span>':""}
+    </div>`)+filtered.map(s=>{
+    const shape=safeShape(s.shape);
+    const tape=safeTape(s.tape);
+    const role=safeRole(s.role);
+    const img=safeImgUrl(s.img)||placeholderStoryImg(role);
+    const sticker=s.sticker?esc(s.sticker):"";
+    return `
+    <div class="frame-wrap" data-id="${esc(String(s.id))}" style="${gridMode?"":`
+      left:${Number(s._x)||0}px;top:${Number(s._y)||0}px;--rot:${esc(s.rot)};--swing:${esc(s.swing)};
+      --sway-dur:${esc(s.swayDur)};--sway-delay:${esc(s.swayDelay)};
+      --pin:${esc(s.pin[1])};--pin-hi:${esc(s.pin[0])};${s.cardWidth?`width:${Number(s.cardWidth)||0}px;`:""}`}">
+      <span class="washi ${tape}" aria-hidden="true"></span>
+      ${sticker?`<span class="sticker" style="top:${shape==="shape-sticky"?"8":"6"}px;left:${8+(hash(s.id)%30)}px;transform:rotate(${(hash(s.id)%20)-10}deg)">${sticker}</span>`:""}
+      <article class="frame ${shape}">
+        ${shape==="shape-ticket"?'<span class="ticket-stamp" aria-hidden="true">voice</span>':""}
+        ${shape==="shape-tag"?'<span class="tag-hole" aria-hidden="true"></span>':""}
         <div class="media">
-          <img src="${s.img}" alt="${s.cap||""}" loading="lazy" />
+          <img src="${esc(img)}" alt="${esc(s.cap||"")}" loading="lazy" />
           ${s.hasVideo?'<div class="play" aria-hidden="true">▶</div>':""}
         </div>
         <div class="body">
-          <span class="badge ${s.role}">${s.role==="student"?"Student":"Educator"}</span>
-          <div class="place">${s.place} · ${s.region}</div>
-          <p class="quote">“${s.q}”</p>
-          <div class="by">— ${s.by}</div>
+          <span class="badge ${role}">${role==="student"?"Student":"Educator"}</span>
+          <div class="place">${esc(s.place)} · ${esc(s.region)}</div>
+          <p class="quote">“${esc(s.q)}”</p>
+          <div class="by">— ${esc(s.by)}</div>
         </div>
       </article>
-    </div>`).join("");
+    </div>`;
+  }).join("");
   boardSurface.querySelectorAll(".frame-wrap").forEach(wrap=>{
     const open=()=>openModal(+wrap.dataset.id);
     wrap.onclick=open;
@@ -844,13 +874,15 @@ function youtubeId(url){
 // routinely fails to hotlink on external sites (virus-scan interstitial on larger files,
 // intermittent throttling). The thumbnail endpoint is what Drive's own UI uses to render
 // previews, so it reliably returns an actual image regardless of file size.
-// Non-Drive URLs (e.g. an already-direct image link) pass through unchanged.
+// Non-Drive https URLs pass through; anything else is rejected (XSS hardening).
 function resolvePhotoUrl(raw){
   const trimmed=(raw||"").trim();
   if(!trimmed) return null;
-  if(!/drive\.google\.com/.test(trimmed)) return trimmed;
-  const m=trimmed.match(/\/file\/d\/([\w-]+)/)||trimmed.match(/[?&]id=([\w-]+)/);
-  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000` : trimmed;
+  if(/drive\.google\.com/.test(trimmed)){
+    const m=trimmed.match(/\/file\/d\/([\w-]+)/)||trimmed.match(/[?&]id=([\w-]+)/);
+    return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000` : null;
+  }
+  return safeImgUrl(trimmed)||null;
 }
 // Resolves what image a card should show: Drive photo > YouTube thumbnail > generated placeholder.
 function resolveCardImage(driveRaw, videoRaw, role){
@@ -858,7 +890,7 @@ function resolveCardImage(driveRaw, videoRaw, role){
   if(direct) return direct;
   const yt=youtubeId(videoRaw);
   if(yt) return `https://img.youtube.com/vi/${yt}/hqdefault.jpg`;
-  return placeholderStoryImg(role);
+  return placeholderStoryImg(safeRole(role));
 }
 
 // Modal
@@ -876,7 +908,7 @@ function openModal(id){
   }else{
     wrap.classList.remove("has-video");
     vid.removeAttribute("src");
-    document.getElementById("mImg").src=s.img;
+    document.getElementById("mImg").src=safeImgUrl(s.img)||placeholderStoryImg(safeRole(s.role));
     document.getElementById("mImg").alt=s.cap||"";
   }
   document.getElementById("mRole").textContent=s.role==="student"?"Student voice":"Educator voice";
@@ -1135,23 +1167,27 @@ function flashCard(id){
 }
 
 document.getElementById("pmSubmit").onclick=()=>{
-  const q=pmQuote.value.trim();
+  const q=pmQuote.value.trim().slice(0,2000);
   if(!q){ pmQuote.focus(); pmQuote.style.borderColor="#e74c3c"; return; }
   pmQuote.style.borderColor="";
-  const region=pmRegionSel.value;
-  const place=pmLocation.value.trim()||"Somewhere out there";
-  const by=pmName.value.trim()||"Anonymous";
-  const cardWidth=+pmSizeSel.value;
-  const driveUrl=pmDrive.value.trim();
-  const videoUrl=pmVideo.value.trim();
-  const img=pmUploadedImg||resolveCardImage(driveUrl,videoUrl,pmRole);
+  const region=REGIONS.includes(pmRegionSel.value)?pmRegionSel.value:"All";
+  const place=(pmLocation.value.trim()||"Somewhere out there").slice(0,120);
+  const by=(pmName.value.trim()||"Anonymous").slice(0,120);
+  const cardWidth=+pmSizeSel.value||280;
+  const driveUrl=pmDrive.value.trim().slice(0,500);
+  const videoUrl=pmVideo.value.trim().slice(0,500);
+  const role=safeRole(pmRole);
+  const shape=safeShape(pmShape);
+  const img=pmUploadedImg&&String(pmUploadedImg).startsWith("data:image/")
+    ? pmUploadedImg
+    : resolveCardImage(driveUrl,videoUrl,role);
   const hasVideo=!!youtubeId(videoUrl);
 
   if(editingId!=null){
     const idx=stories.findIndex(x=>x.id===editingId);
     if(idx>-1){
-      stories[idx]={...stories[idx], place, region, role:pmRole, q, text:q, full:q, by,
-        img, driveUrl, video:videoUrl||null, hasVideo, shape:pmShape, cardWidth};
+      stories[idx]={...stories[idx], place, region, role, q, text:q, full:q, by,
+        img, driveUrl, video:videoUrl||null, hasVideo, shape, cardWidth};
     }
     const editedId=editingId;
     closePinModal();
@@ -1162,9 +1198,9 @@ document.getElementById("pmSubmit").onclick=()=>{
 
   const n=stories.length;
   stories.push({
-    id:n, place, region, role:pmRole, q, text:q, full:q, by,
+    id:n, place, region, role, q, text:q, full:q, by,
     img, driveUrl, cap:"", video:videoUrl||null, hasVideo,
-    shape:pmShape, tape:"t"+(n%4), pin:PIN_COLORS[n%PIN_COLORS.length],
+    shape, tape:safeTape("t"+(n%4)), pin:PIN_COLORS[n%PIN_COLORS.length],
     sticker:STICKERS[n%STICKERS.length],
     rot:((hash(n)%7)-3)+"deg",
     swing:((hash(n*3)%25)/10+1.2).toFixed(1)+"deg",

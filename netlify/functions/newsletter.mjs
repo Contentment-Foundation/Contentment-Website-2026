@@ -8,7 +8,8 @@
  *
  * Local testing needs `netlify dev` (astro dev alone does not serve functions).
  */
-import { parseRequest, subscribe } from '../../src/lib/flodesk.js';
+import { assertAllowedOrigin, parseRequest, subscribe } from '../../src/lib/flodesk.js';
+import { enforceRateLimit } from '../../src/lib/ratelimit.js';
 
 const JSON_HEADERS = {
   'Content-Type': 'application/json',
@@ -17,6 +18,35 @@ const JSON_HEADERS = {
 };
 
 export async function handler(event) {
+  const headers = event.headers || {};
+  // Netlify lowercases header names; Origin/Referer may arrive either way.
+  const origin = headers.origin || headers.Origin;
+  const referer = headers.referer || headers.Referer || headers.referrer;
+
+  const originGate = assertAllowedOrigin(origin, referer);
+  if (originGate) {
+    return {
+      statusCode: originGate.status,
+      headers: JSON_HEADERS,
+      body: JSON.stringify(originGate.json),
+    };
+  }
+
+  // Netlify sets x-nf-client-connection-ip (trusted); x-forwarded-for is fallback.
+  const ip =
+    headers['x-nf-client-connection-ip'] ||
+    (headers['x-forwarded-for'] || '').split(',')[0].trim() ||
+    'unknown';
+
+  const limited = await enforceRateLimit(`api:newsletter:${ip}`, process.env);
+  if (limited) {
+    return {
+      statusCode: limited.status,
+      headers: JSON_HEADERS,
+      body: JSON.stringify(limited.json),
+    };
+  }
+
   const parsed = parseRequest(event.httpMethod, event.body);
   if (parsed.error) {
     return {
@@ -25,12 +55,6 @@ export async function handler(event) {
       body: JSON.stringify(parsed.error.json),
     };
   }
-
-  const headers = event.headers || {};
-  // Netlify sets x-nf-client-connection-ip; x-forwarded-for is the fallback.
-  const ip =
-    headers['x-nf-client-connection-ip'] ||
-    (headers['x-forwarded-for'] || '').split(',')[0].trim();
 
   const result = await subscribe({ body: parsed.body, ip, env: process.env });
 

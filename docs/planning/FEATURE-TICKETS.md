@@ -390,7 +390,7 @@ Connect homepage newsletter form and build `/updates` standalone page. Integrate
 >
 > **Still pending Kristina + WoeiJing (D-24):** `/updates` form, `/events` top capture fold, and the 3 Upcoming-grid CTAs (Save my spot / Be first to know / Join the waitlist) which still only scroll to `#ev-signup`. Interim `FLODESK_SEGMENT_DEFAULT` → `www.contentment.org`.
 >
-> **Not yet done:** live end-to-end submit test; rate limiting (`UPSTASH_*` unset — the endpoint is public behind only a honeypot); Vercel-side verification at cutover. **Behaviour change:** `newsletter_submit` now fires on a confirmed subscribe rather than on click (TICKET-080).
+> **Not yet done:** live end-to-end submit test; Vercel-side verification at cutover. **Rate limiting shipped 7 Aug** — `@upstash/ratelimit` (5/15m/IP) + Origin/Referer allowlist + 8 KB body cap in `src/lib/ratelimit.js` / wrappers; production fails closed if `UPSTASH_*` unset. Wire Redis credentials in Netlify/Vercel before cutover. **Behaviour change:** `newsletter_submit` now fires on a confirmed subscribe rather than on click (TICKET-080).
 
 **Acceptance criteria:**
 - [x] Form submits successfully to email provider — `/api/newsletter` → Flodesk (`src/lib/flodesk.js`); **live end-to-end submit still untested**
@@ -398,7 +398,7 @@ Connect homepage newsletter form and build `/updates` standalone page. Integrate
 - [x] Success and error messages on-brand — `.nl-status` in `global.css`, `role="status"` + `aria-live="polite"`, tone-styled for light and dark bands
 - [x] `/updates` page live with orientation line
 - [ ] Remaining CTA→segment assignments confirmed (D-24 — Kristina + WoeiJing)
-- [ ] Rate limiting on the public endpoint (`UPSTASH_*`)
+- [x] Rate limiting on the public endpoint (`@upstash/ratelimit` + Origin allowlist; set `UPSTASH_*` in host dashboards before production)
 
 ---
 
@@ -426,7 +426,7 @@ Text page at `/privacy` using `.band` + `.wrap` + `.body` typography. Documents 
 - [x] Linked from footer on every page
 - [x] Cookie & privacy compliance section: EU/UK/US regulatory table (GDPR, PECR, CCPA) per SECURITY-AND-ACCESS §5.1
 - [x] Per-tool disclosures: Cookiebot CMP, GA4, Microsoft Clarity, PostHog (cookieless), Sentry
-- [x] Footer includes **Cookie Preferences** link (Cookiebot re-open)
+- [x] Footer includes **Cookie Preferences** link (Cookiebot re-open) — **was ticked in error on 5 Aug; the footer had only a `/privacy` link and no re-open control at all. Genuinely shipped 7 Aug** as a sitewide `[data-cookie-prefs]` button, bound by `src/scripts/cookie-prefs.js`
 - [x] Cookiebot CMP attribution on `/privacy` (free tier requires the "Powered by Cookiebot" mark)
 - [ ] Cover newsletter, Keela and form data in the legal text — **D-08, Lorna + Finance/Legal**
 - [ ] Legal team sign-off on copy — **D-08**

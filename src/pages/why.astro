@@ -457,7 +457,9 @@ const shareMailto = `mailto:?subject=${encodeURIComponent(shareSubject)}&body=${
   function playInline(el: HTMLElement) {
     const id = el.dataset.yt;
     if (!id) return;
-    el.replaceChildren(createYoutubeIframe(id, { title: 'Teacher video' }));
+    const iframe = createYoutubeIframe(id, { title: 'Teacher video' });
+    if (!iframe) return;
+    el.replaceChildren(iframe);
     el.removeAttribute('role');
     el.removeAttribute('tabindex');
     el.style.cursor = 'default';

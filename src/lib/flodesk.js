@@ -80,10 +80,67 @@ export const KNOWN_SOURCES = Object.keys(SEGMENT_ENV_BY_SOURCE);
 
 const MAX_EMAIL = 254; // RFC 5321 practical ceiling
 const MAX_NAME = 100;
+/** Reject oversized JSON before parse / Flodesk — cold functions stay cheap. */
+export const MAX_BODY_BYTES = 8192;
 
 /** Pragmatic email check. Real validation is Flodesk's job (and the confirmation
  *  email's) — this only rejects obvious junk before we spend an API call. */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * Hosts allowed to POST /api/newsletter (Origin or Referer).
+ * Exact hosts plus Netlify / Vercel preview suffixes and local dev.
+ */
+const ALLOWED_ORIGIN_HOSTS = new Set([
+  'contentment.org',
+  'www.contentment.org',
+  'contentmentweb2.netlify.app',
+  'localhost',
+  '127.0.0.1',
+]);
+
+/**
+ * @param {string | undefined | null} originHeader
+ * @param {string | undefined | null} refererHeader
+ * @returns {boolean}
+ */
+export function isAllowedOrigin(originHeader, refererHeader) {
+  const candidates = [originHeader, refererHeader].filter(Boolean);
+  if (!candidates.length) return false;
+
+  for (const raw of candidates) {
+    try {
+      const url = new URL(String(raw));
+      const host = url.hostname.toLowerCase();
+      if (ALLOWED_ORIGIN_HOSTS.has(host)) return true;
+      if (host.endsWith('.netlify.app')) return true;
+      if (host.endsWith('.vercel.app')) return true;
+    } catch {
+      // ignore unparseable headers
+    }
+  }
+  return false;
+}
+
+/**
+ * Origin / Referer gate. Returns an error response shape when the request
+ * is not same-site (or an allowed preview host).
+ *
+ * @param {string | undefined | null} originHeader
+ * @param {string | undefined | null} refererHeader
+ * @returns {{status: number, json: object} | null}
+ */
+export function assertAllowedOrigin(originHeader, refererHeader) {
+  if (isAllowedOrigin(originHeader, refererHeader)) return null;
+  return {
+    status: 403,
+    json: {
+      ok: false,
+      error: 'forbidden_origin',
+      message: 'Something went wrong. Please try again.',
+    },
+  };
+}
 
 function clean(value, max) {
   return typeof value === 'string' ? value.trim().slice(0, max) : '';
@@ -262,7 +319,7 @@ export async function subscribe({ body, ip, env }) {
 }
 
 /**
- * Shared request guard for both wrappers: method + body parsing.
+ * Shared request guard for both wrappers: method + body size + JSON parse.
  * @returns {{error: {status: number, json: object}} | {body: object}}
  */
 export function parseRequest(method, rawBody) {
@@ -270,7 +327,32 @@ export function parseRequest(method, rawBody) {
     return { error: { status: 405, json: { ok: false, error: 'method_not_allowed' } } };
   }
 
-  if (rawBody && typeof rawBody === 'object') return { body: rawBody };
+  if (rawBody && typeof rawBody === 'object') {
+    let serialized;
+    try {
+      serialized = JSON.stringify(rawBody);
+    } catch {
+      return { error: { status: 400, json: { ok: false, error: 'invalid_json' } } };
+    }
+    if (Buffer.byteLength(serialized, 'utf8') > MAX_BODY_BYTES) {
+      return {
+        error: {
+          status: 413,
+          json: { ok: false, error: 'payload_too_large', message: 'Request too large.' },
+        },
+      };
+    }
+    return { body: rawBody };
+  }
+
+  if (typeof rawBody === 'string' && Buffer.byteLength(rawBody, 'utf8') > MAX_BODY_BYTES) {
+    return {
+      error: {
+        status: 413,
+        json: { ok: false, error: 'payload_too_large', message: 'Request too large.' },
+      },
+    };
+  }
 
   try {
     return { body: rawBody ? JSON.parse(rawBody) : {} };

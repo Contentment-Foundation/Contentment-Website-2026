@@ -77,8 +77,10 @@ export function initEventVideos() {
     function play() {
       if (el.classList.contains('playing')) return;
       const id = el.dataset.yt;
+      const iframe = createYoutubeIframe(id, { modest: true });
+      if (!iframe) return;
       // www.youtube.com (not nocookie) — avoids YouTube bot/sign-in wall on embeds
-      el.appendChild(createYoutubeIframe(id, { modest: true }));
+      el.appendChild(iframe);
       el.classList.add('playing');
       trackEvent('video_started', {
         page_section: 'events_recap',

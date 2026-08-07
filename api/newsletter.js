@@ -9,25 +9,37 @@
  * Verify this route once at Vercel cutover (TICKET-002 / FEAT-101): the Netlify
  * twin is what actually runs on today's preview.
  */
-import { parseRequest, subscribe } from '../src/lib/flodesk.js';
+import { assertAllowedOrigin, parseRequest, subscribe } from '../src/lib/flodesk.js';
+import { enforceRateLimit } from '../src/lib/ratelimit.js';
 
 export default async function handler(req, res) {
-  // Vercel parses JSON bodies automatically; parseRequest handles both shapes.
-  const parsed = parseRequest(req.method, req.body);
-
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Cache-Control', 'no-store');
 
-  if (parsed.error) {
-    return res.status(parsed.error.status).json(parsed.error.json);
+  const originGate = assertAllowedOrigin(req.headers.origin, req.headers.referer);
+  if (originGate) {
+    return res.status(originGate.status).json(originGate.json);
   }
 
+  // Prefer Vercel's trusted client IP; fall back to first XFF hop.
   const ip =
-    (req.headers['x-vercel-forwarded-for'] ||
+    (req.headers['x-real-ip'] ||
+      req.headers['x-vercel-forwarded-for'] ||
       req.headers['x-forwarded-for'] ||
       '')
       .split(',')[0]
-      .trim();
+      .trim() || 'unknown';
+
+  const limited = await enforceRateLimit(`api:newsletter:${ip}`, process.env);
+  if (limited) {
+    return res.status(limited.status).json(limited.json);
+  }
+
+  // Vercel parses JSON bodies automatically; parseRequest handles both shapes.
+  const parsed = parseRequest(req.method, req.body);
+  if (parsed.error) {
+    return res.status(parsed.error.status).json(parsed.error.json);
+  }
 
   const result = await subscribe({ body: parsed.body, ip, env: process.env });
 

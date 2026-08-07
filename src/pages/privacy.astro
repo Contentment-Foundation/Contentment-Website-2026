@@ -48,6 +48,18 @@ const TOOLS = [
     cookies: 'Strictly necessary',
     note: 'Works before you choose — required to remember (and withdraw) consent.',
   },
+  {
+    name: 'Flodesk',
+    role: 'Newsletter signup — email and optional first name from our forms.',
+    cookies: 'No (server-side API)',
+    note: 'Submitted over HTTPS to our /api/newsletter proxy, then stored in Flodesk. Double opt-in confirmation when enabled. See Flodesk\'s privacy policy for retention.',
+  },
+  {
+    name: 'Keela',
+    role: 'Donations and Homeroom giving — payment and donor details.',
+    cookies: 'Third-party checkout',
+    note: 'Card numbers and donor records stay on Keela\'s hosted checkout iframe; The Contentment Foundation never sees card data. See Keela\'s privacy policy for retention.',
+  },
 ];
 ---
 <BaseLayout
@@ -78,7 +90,7 @@ const TOOLS = [
       </p>
       <div class="pv-actions anim d3">
         {COOKIEBOT_ID && (
-          <button type="button" id="cfCookiePrefs" class="btn btn-primary">
+          <button type="button" data-cookie-prefs class="btn btn-primary">
             Cookie preferences <span class="arrow" aria-hidden="true">&rarr;</span>
           </button>
         )}
@@ -124,7 +136,7 @@ const TOOLS = [
       </p>
       {COOKIEBOT_ID && (
         <p class="anim d3 pv-inline-cta">
-          <button type="button" id="cfCookiePrefsSecondary" class="btn btn-primary">
+          <button type="button" data-cookie-prefs class="btn btn-primary">
             Cookie preferences <span class="arrow" aria-hidden="true">&rarr;</span>
           </button>
         </p>
@@ -264,19 +276,8 @@ const TOOLS = [
      Remove the .pv-status notice above once this lands.
      ============================================================ -->
 
-{COOKIEBOT_ID && (
-  <script is:inline>
-    // Re-opens the consent banner. Cookiebot.renew() is the documented API and
-    // works with our custom banner, since Cookiebot calls cfShowCookieBanner().
-    function cfOpenCookiePrefs() {
-      if (window.Cookiebot && typeof window.Cookiebot.renew === 'function') {
-        window.Cookiebot.renew();
-      }
-    }
-    document.getElementById('cfCookiePrefs')?.addEventListener('click', cfOpenCookiePrefs);
-    document.getElementById('cfCookiePrefsSecondary')?.addEventListener('click', cfOpenCookiePrefs);
-  </script>
-)}
+{/* The Cookie Preferences buttons above are bound sitewide by Footer.astro via
+    src/scripts/cookie-prefs.js — binding again here would double-fire. */}
 
 <script is:inline>
   // Expand / collapse tool detail panels — one open at a time.
