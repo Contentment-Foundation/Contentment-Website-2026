@@ -79,6 +79,19 @@ All ten events fire to **GA4 and PostHog** (never Clarity). Every one carries th
 
 ---
 
+### The PostHog Toolbar (heatmaps and click maps on the live site)
+
+PostHog has a **Toolbar** that overlays click maps and heatmaps directly on the real website — useful for "which CTA is actually being clicked" without building a dashboard first. Launch it from **PostHog → Toolbar**, then authorise the site.
+
+**It is not visible to visitors.** It only loads for someone who has launched it from the PostHog app; ordinary traffic never receives it. If you see it on the live site, that is your own browser session, not something the public sees.
+
+Two things to know:
+
+- **It needs `*.posthog.com` in the CSP `style-src`** (added 7 Aug 2026). Before that, the toolbar's script was allowed but its stylesheet was blocked, so it rendered as a column of giant unstyled icons over the footer. If it ever looks like that again, check `style-src` in `netlify.toml` / `vercel.json` first.
+- **It may need re-launching on each page load.** PostHog is configured `persistence: 'memory'` (cookieless), so it cannot durably store the toolbar token. That is a deliberate trade-off from [DECISION-007](./DECISIONS.md), not a fault.
+
+---
+
 ## 4. What these numbers cannot tell you
 
 Read this before quoting any figure in a report.
