@@ -91,7 +91,12 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
       gtag('js', new Date());
       gtag('config', GA_ID, { anonymize_ip: true });
     </script>
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+    {/* gtag.js is NOT loaded here. PRIOR CONSENT (7 Aug): denied-defaults Consent Mode
+        still LOADS Google's script and sends cookieless pings before the visitor has
+        chosen — that is the modelling posture, not prior consent. Under GDPR/ePrivacy
+        opt-in, transmitting an IP to Google before consent is itself processing. The
+        tag is now injected by the Cookiebot bridge below, only once statistics consent
+        is granted. The dataLayer queue above replays on load, so nothing is lost. */}
   </>
 )}
 
@@ -103,9 +108,9 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
       t = l.createElement(r);
       t.async = 1;
-      t.src = 'https://www.clarity.ms/tag/' + i;
-      y = l.getElementsByTagName(r)[0];
-      y.parentNode.insertBefore(t, y);
+      // src deliberately NOT set and the node NOT inserted — see the prior-consent note
+      // in the GA4 block. The stub below still queues consentv2 and any clarity() calls;
+      // the Cookiebot bridge injects the real tag once statistics consent is granted.
     })(window, document, 'clarity', 'script', CLARITY_ID);
 
     // Consent Mode default — DENIED until a CMP says otherwise, mirroring the
@@ -127,7 +132,7 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
 )}
 
 {COOKIEBOT_ID && (
-  <script is:inline>
+  <script is:inline define:vars={{ GA_ID, CLARITY_ID }}>
     // Cookiebot -> Consent Mode bridge, driving BOTH GA4 and Clarity off one banner.
     // Gated on the CMP rather than on GA4: this listener used to live inside the GA4
     // block, which meant that with GA4 unset there was no path to upgrade Clarity off
@@ -170,7 +175,26 @@ const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
         window.clarity('consentv2', {
           analytics_Storage: analyticsGranted,
           ad_Storage: marketingGranted,
-        });
+        }
+
+      // PRIOR CONSENT: inject the trackers only after the visitor has said yes.
+      // Idempotent — loadOnce() no-ops on repeat events (OnConsentReady fires on every
+      // page load for a returning visitor, so this runs more than once per session).
+      if (analyticsGranted === 'granted') {
+        loadOnce('ga4', 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID);
+        if (CLARITY_ID) loadOnce('clarity', 'https://www.clarity.ms/tag/' + CLARITY_ID);
+      }
+    }
+
+    const loaded = {};
+    function loadOnce(key, src) {
+      if (loaded[key]) return;
+      loaded[key] = true;
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = src;
+      document.head.appendChild(s);
+    });
       }
     }
 
