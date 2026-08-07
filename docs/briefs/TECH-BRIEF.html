@@ -509,7 +509,7 @@ Requires GCP <span class="c-teal">homeroom_members</span> table
         <tr><td>002</td><td>Cookie consent</td><td><strong>Cookiebot + GA4 Consent Mode v2 + cookieless PostHog (CMP was Cookiebot until 4 Aug 2026)</strong></td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
         <tr><td>003</td><td>Transactional email</td><td><strong>SendGrid</strong> (existing paid plan)</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
         <tr><td>004</td><td>Rate limiting</td><td><strong>@upstash/ratelimit</strong> + Upstash Redis</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
-        <tr><td>005</td><td>Image optimization</td><td>Astro &lt;Image /&gt; (<code>astro:assets</code>)</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
+        <tr><td>005</td><td>Image optimization</td><td>Astro &lt;Image /&gt; (<code>astro:assets</code>) — <strong>never implemented;</strong> images are plain <code>&lt;img&gt;</code> from <code>public/</code>, which Astro cannot optimise. Hand-converted to WebP 7 Aug (26 MB &rarr; 11 MB); no <code>srcset</code> yet</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
         <tr><td>006</td><td>Observability</td><td>Hybrid: Slack + Sentry + Vercel logs + PostHog</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
         <tr><td>007</td><td>PostHog hosting</td><td>PostHog Cloud (<code>us.i.posthog.com</code>)</td><td>Somesh Bhardwaj</td><td>14 Jul 2026</td></tr>
       </tbody>

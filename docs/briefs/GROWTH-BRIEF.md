@@ -52,7 +52,7 @@
 ```
 Step 1: Session start (any page)
 Step 2: Scrolls past hero (engagement > 10s or scroll depth > 40%)
-Step 3: Visits /why or /stories (belief deepening)
+Step 3: Visits /why or /our-impact (belief deepening)
 Step 4: Visits /give/monthly (intent)
 Step 5: cta_homeroom_click fires (conversion intent)
 Step 6: Returns from Keela (post-donation — track via UTM on Keela thank-you redirect)
@@ -91,7 +91,7 @@ Example: `https://contentment.org/give/monthly?utm_source=instagram&utm_medium=s
 ```
 DISCOVERY          LANDING           ENGAGING          CONVERTING        BELONGING
 ─────────────────────────────────────────────────────────────────────────────────
-Google search   → Any page        → /why or /stories → /give/monthly   → Welcome email
+Google search   → Any page        → /why or /our-impact → /give/monthly   → Welcome email
 Social share      Cold visitor      Scrolls proof       Keela checkout    Newsletter
 Word of mouth     Orientation       Educator story      Founding Member   Events
 Email forward     line visible      resonates           confirmation      Renewal
@@ -156,7 +156,7 @@ All titles ≤ 60 characters. All descriptions 140–160 characters.
 |------|-----------|-----------------|
 | **Home** `/` | The Contentment Foundation | We equip teachers with evidenced wellbeing practices. 325 schools. 12 countries. 86% of educators report real improvement. Join from $5/month. |
 | **Why Teacher Wellbeing** `/why` | Why Teacher Wellbeing Matters — TCF | Teacher burnout is a children problem, a future problem. See the Harvard research, the 86% outcome, and why wellbeing is the antidote. |
-| **Educator Stories** `/stories` | Educator Stories — The Contentment Foundation | Real teachers. Real transformation. Stories from 12 countries show what happens when educators are given the tools to tend to their own wellbeing. |
+| **Our Impact** `/our-impact` | Educator Stories — The Contentment Foundation | Real teachers. Real transformation. Stories from 12 countries show what happens when educators are given the tools to tend to their own wellbeing. |
 | **For Schools** `/schools` | School Wellbeing Partnerships — TCF | 9 in 10 partner schools in Hawaiʻi renewed. See how TCF's Four Pillars framework improves teacher wellbeing and student outcomes. Start a conversation. |
 | **Get Involved** `/give` | Get Involved — The Contentment Foundation | A movement for teachers needs more than money. It needs you. Join Homeroom, bring it to your school, spread the word, or experience it yourself. |
 | **Homeroom** `/give/monthly` | Join Homeroom — The Contentment Foundation | Nobody runs homeroom for teachers — until now. Become a Founding Member from $5/month and support teacher wellbeing worldwide. 100 Hearts. |
@@ -307,7 +307,7 @@ All titles ≤ 60 characters. All descriptions 140–160 characters.
 | **Navigational** | "Contentment Foundation" · "TCF teacher wellbeing" | Home | Low (own it) |
 | **Commercial** | "teacher wellbeing program" · "school wellbeing partnership" · "wellbeing program for schools" | `/schools` | Medium–High |
 | **Transactional** | "support teacher wellbeing" · "donate to teacher charity" · "teacher wellbeing charity" | `/give/monthly` | Low–Medium |
-| **Local** | "teacher wellbeing program Kenya" · "teacher wellbeing Bhutan" · "teacher wellbeing Hawaii" | `/stories` + story pages | Low |
+| **Local** | "teacher wellbeing program Kenya" · "teacher wellbeing Bhutan" · "teacher wellbeing Hawaii" | `/our-impact` + story pages | Low |
 
 ### Content clusters (hub and spoke)
 
@@ -328,9 +328,9 @@ Hub: /give (Get Involved)
 ### Internal linking rules
 
 - Every page links to `/why` (most shareable, strongest SEO signal)
-- Every educator story links back to `/stories` (index) and `/why`
+- Every educator story links back to `/our-impact` (index) and `/why`
 - `/schools` links to specific educator stories from the same region
-- Footer links: `/why` · `/stories` · `/give/monthly` · `/schools`
+- Footer links: `/why` · `/our-impact` · `/give/monthly` · `/schools`
 - Anchor text should be descriptive, never "click here" or "learn more"
 
 ### Backlink targets
@@ -411,7 +411,7 @@ AI search engines (Google AI Overviews, Perplexity, ChatGPT Search, Bing Copilot
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://contentment.org/</loc>           <priority>1.0</priority></url>
   <url><loc>https://contentment.org/why</loc>         <priority>0.9</priority></url>
-  <url><loc>https://contentment.org/stories</loc>     <priority>0.9</priority></url>
+  <url><loc>https://contentment.org/our-impact</loc>     <priority>0.9</priority></url>
   <url><loc>https://contentment.org/schools</loc>     <priority>0.8</priority></url>
   <url><loc>https://contentment.org/give</loc>        <priority>0.8</priority></url>
   <url><loc>https://contentment.org/give/monthly</loc><priority>0.9</priority></url>
@@ -489,7 +489,7 @@ Deploy to `contentment.org/llms.txt` (TICKET-081).
 |-------|--------|
 | CRO | Review Clarity recordings of /give/monthly; identify drop-off point |
 | SEO | Check GSC for impressions vs clicks; optimise titles on pages with high impressions + low CTR |
-| Content | Publish 2+ additional educator stories (improves /stories crawl depth + backlink targets) |
+| Content | Publish 2+ additional educator stories (improves /our-impact crawl depth + backlink targets) |
 | AIO | Ensure FAQPage schema live on /why and /give/monthly; check if TCF appears in AI Overviews |
 | Email | Review welcome email open rate; A/B test subject line |
 

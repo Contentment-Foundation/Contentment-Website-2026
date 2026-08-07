@@ -47,9 +47,9 @@ Browser
 | **Analytics** | GA4 + Microsoft Clarity + PostHog | See DECISION-001; Plausible dropped; GA4 = primary (existing account) |
 | **Cookie consent** | Cookiebot + GA4 Consent Mode v2 | DECISION-002 — signed off Somesh Bhardwaj, 14 Jul 2026 |
 | **Rate limiting** | @upstash/ratelimit + Upstash Redis | 5 req / 15 min / IP on all `/api/*` — DECISION-004 — signed off Somesh Bhardwaj, 14 Jul 2026 |
-| **Image optimization** | Astro `<Image />` (`astro:assets`) | Build-time WebP + srcset — DECISION-005 — signed off Somesh Bhardwaj, 14 Jul 2026 |
+| **Image optimization** | **Not implemented as specced** — hand-converted WebP | DECISION-005 chose Astro `<Image />` (`astro:assets`) for build-time WebP + srcset, but the build has never used it: every image is a plain `<img>` served from `public/`, which Astro copies verbatim and cannot optimise. Closed by hand on 7 Aug — all raster assets over 40 KB converted to WebP at a 2000px cap (26 MB → 11 MB) with intrinsic `width`/`height` on every tag. **No `srcset`**, so mobile still downloads desktop-sized images. Revisit in Phase 2 by moving assets to `src/assets/`; note CSS backgrounds cannot use `<Image />` at all |
 | **Observability** | Hybrid: Slack `#errors` + Sentry + Vercel logs + PostHog | DECISION-006 — signed off Somesh Bhardwaj, 14 Jul 2026 |
-| **PostHog hosting** | PostHog Cloud (`us.i.posthog.com`; `us.i.posthog.com` is an alias) | DECISION-007 — signed off Somesh Bhardwaj, 14 Jul 2026 |
+| **PostHog hosting** | PostHog Cloud (`us.i.posthog.com`; `app.posthog.com` is an alias) | DECISION-007 — signed off Somesh Bhardwaj, 14 Jul 2026 |
 | **Transactional email** | SendGrid (existing paid plan) | School inquiry notifications, magic links — DECISION-003 — signed off Somesh Bhardwaj, 14 Jul 2026 |
 | **Homeroom gate** | Vercel Edge Middleware | Phase 2 — shared password → rotating cookie; magic link if >500 members |
 | **Version control** | Git + GitHub | Vercel auto-deploys `main` to production; PR branches → preview URLs |
