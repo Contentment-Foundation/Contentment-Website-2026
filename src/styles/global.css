@@ -28,7 +28,7 @@ a{color:inherit;text-decoration:none}
 main:focus{outline:none}
 @media (prefers-reduced-motion:reduce){.skip-link{transition:none}}
 .wrap{max-width:1240px;margin:0 auto;padding:0 32px}
-.eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--ocean)}
+.eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--ocean-text)}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;gap:.55em;font-weight:600;font-size:1rem;padding:.95em 1.7em;border-radius:999px;border:1.5px solid transparent;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .25s,color .25s}
@@ -490,7 +490,7 @@ p.body+p.body{margin-top:1.1em}
 .hr-card img{width:100%;max-width:clamp(480px,40vw,920px);height:auto;display:block;border-radius:6px;
   box-shadow:0 26px 60px -28px rgba(2,55,79,.45)}
 .hr-ask{display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,1.8vw,24px);padding:clamp(44px,4vw,72px) clamp(38px,4.5vw,76px);min-height:100%;--hr-measure:46ch}
-.hr-ask .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--ocean);margin-bottom:6px}
+.hr-ask .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--ocean-text);margin-bottom:6px}
 .hr-ask h2{font-family:var(--display);font-weight:500;font-size:clamp(1.7rem,2.4vw,2.4rem);line-height:1.1;color:var(--deep);margin:0}
 .hr-ask p.lead{font-size:clamp(1.04rem,1.15vw,1.18rem);line-height:1.55;color:var(--slate);max-width:var(--hr-measure)}
 /* Match form + compliance note to the lead copy measure above */
@@ -546,7 +546,7 @@ p.body+p.body{margin-top:1.1em}
 .door .dbody{padding:24px 24px 26px;display:flex;flex-direction:column;flex:1;min-width:0}
 .door h3{font-family:var(--display);font-size:1.32rem;color:var(--deep);margin-bottom:8px;font-weight:600;overflow-wrap:break-word}
 .door p{font-size:.98rem;color:var(--slate);flex:1;overflow-wrap:break-word}
-.door .dlink{margin-top:16px;font-weight:600;color:var(--ocean);display:inline-flex;align-items:center;gap:.5em;font-size:.96rem}
+.door .dlink{margin-top:16px;font-weight:600;color:var(--ocean-text);display:inline-flex;align-items:center;gap:.5em;font-size:.96rem}
 .door .dlink .arrow{transition:transform .25s}
 .door:hover .dlink .arrow{transform:translateX(4px)}
 
@@ -602,7 +602,7 @@ footer .wrap{position:relative;z-index:1}
 .foot-brand{margin-bottom:18px;line-height:0}
 .foot-brand img{height:48px;width:auto;display:block}
 .foot-tag{font-family:var(--display);font-style:italic;font-size:1.25rem;color:#fff;max-width:22ch;line-height:1.35}
-.foot-col h4{color:#fff;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.foot-col h3{color:#fff;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
 .foot-col a{display:block;margin-bottom:6px;font-size:.95rem;line-height:1.35;transition:color .25s}
 .foot-col a:last-child{margin-bottom:0}
 .foot-col a:hover{color:var(--accent-mint)}
@@ -712,7 +712,7 @@ footer .wrap{position:relative;z-index:1}
   .foot-top > :first-child{grid-column:1 / -1}
   .foot-top > :last-child{grid-column:1 / -1}
   .foot-tag{font-size:1.12rem;max-width:28ch;margin-top:4px}
-  .foot-col h4{margin-bottom:8px;font-size:.72rem}
+  .foot-col h3{margin-bottom:8px;font-size:.72rem}
   .foot-col a{margin-bottom:4px;font-size:.88rem;line-height:1.3}
   .foot-social{margin-top:12px;gap:10px}
   .foot-social a{width:32px;height:32px}

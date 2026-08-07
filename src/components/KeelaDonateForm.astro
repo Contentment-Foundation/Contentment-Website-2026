@@ -65,7 +65,7 @@ const fallback = seams.donateFallback;
     text-align: center;
   }
   .keela-fallback a {
-    color: var(--ocean);
+    color: var(--ocean-text);
     font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -116,6 +116,23 @@ const fallback = seams.donateFallback;
     }
   }
 
+  // Keela's loader injects the <iframe> itself, with no `title`. An untitled frame is
+  // announced by screen readers as just "frame", giving no clue it is the donation form —
+  // flagged by Lighthouse on all three donate routes. We cannot change what their script
+  // emits, so we label it once it appears. Runs independently of the preset logic below,
+  // which only engages when the URL carries an amount.
+  function titleEmbed(wrap) {
+    const label = wrap.dataset.keelaForm || 'Donation form';
+    const apply = () => {
+      const iframe = wrap.querySelector('iframe:not([title])');
+      if (iframe) iframe.setAttribute('title', label);
+    };
+    apply();
+    const obs = new MutationObserver(apply);
+    obs.observe(wrap, { childList: true, subtree: true });
+    window.setTimeout(() => obs.disconnect(), 15000);
+  }
+
   function watchEmbed(wrap) {
     const preset = presetFromUrl();
     if (!preset || !wrap) return;
@@ -137,5 +154,8 @@ const fallback = seams.donateFallback;
     window.setTimeout(() => obs.disconnect(), 15000);
   }
 
-  document.querySelectorAll('.keela-embed-wrap[data-keela-base]').forEach(watchEmbed);
+  document.querySelectorAll('.keela-embed-wrap[data-keela-base]').forEach((wrap) => {
+    titleEmbed(wrap);
+    watchEmbed(wrap);
+  });
 </script>

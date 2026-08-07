@@ -62,17 +62,21 @@ const canonicalURL = new URL(cleanPath, Astro.site);
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  {/* PRE-LAUNCH-QA-AUDIT: this stylesheet was render-blocking on every route. `display=swap`
-      was already set, but that governs how the FONT behaves once the CSS arrives — it does
-      nothing about the round-trip to fonts.googleapis.com that blocks first paint.
-      Loaded async via the media="print" swap: the browser fetches it at low priority and
-      does not block rendering, then onload flips it to `all` and it applies. The <noscript>
-      copy keeps fonts working with JS disabled. */}
+  {/* Non-render-blocking font load. `display=swap` alone does not help: it governs the FONT
+      once the CSS arrives, not the round-trip to fonts.googleapis.com that blocked first paint.
+
+      `rel="preload" as="style"` rather than the `media="print"` trick. Both avoid blocking,
+      but media="print" is fetched at LOW priority, which widens the window where text is laid
+      out in fallback metrics before reflowing to Newsreader/Inter — and that reflow is layout
+      shift. Preload fetches at high priority and swaps to a stylesheet the moment it lands,
+      so the mismatch window is as short as it can be while staying non-blocking. Added 7 Aug
+      after the Lighthouse re-run showed desktop homepage CLS 0.671 that `.anim` cannot
+      explain (it only animates opacity/transform, both composited). */}
   <link
-    rel="stylesheet"
+    rel="preload"
+    as="style"
     href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=Varela+Round&family=Cedarville+Cursive&display=swap"
-    media="print"
-    onload="this.media='all';this.onload=null"
+    onload="this.rel='stylesheet';this.onload=null"
   >
   <noscript>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=Varela+Round&family=Cedarville+Cursive&display=swap">

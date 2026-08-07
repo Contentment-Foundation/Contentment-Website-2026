@@ -2,7 +2,13 @@
    (handoff/2026-07-29-dave-pages/0_HOME PAGE/contentment-homepage-V3-DEPLOY/index.html).
    Do not redesign during migration — see TECHNICAL-ARCHITECTURE.md §3. */
 :root{
-  --teal:#1FAFC0;--ocean:#0080B0;--deep:#024E70;--deep2:#02374f;--green:#4FA98C;
+  --teal:#1FAFC0;--ocean:#0080B0;
+  /* Small-text variant of --ocean. #0080B0 measures 4.45:1 on white and 4.27 on
+     --paper, both under the 4.5 WCAG AA floor for body text, so every .eyebrow on
+     the site was failing. #0075A1 clears 4.5 on white, --paper AND --mist while
+     staying visually indistinguishable at eyebrow sizes. --ocean is unchanged for
+     large text, icons and non-text use, so the brand colour is untouched. */
+  --ocean-text:#0075A1;--deep:#024E70;--deep2:#02374f;--green:#4FA98C;
   --slate:#3C3B43;--ink:#23252b;--paper:#FBFAF7;--paper2:#F2F0EA;--mist:#E8F1F2;
   --line:rgba(2,78,112,.12);--shadow:0 18px 50px -20px rgba(2,55,79,.35);
   --display:'Newsreader',Georgia,serif;--body:'Inter',system-ui,sans-serif;
